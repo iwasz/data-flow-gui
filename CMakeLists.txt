@@ -51,9 +51,9 @@ pkg_check_modules (GTK REQUIRED "gtk+-3.0")
 INCLUDE_DIRECTORIES (${GTK_INCLUDE_DIRS})
 link_directories(${GTK_LIBRARY_DIRS})
 
-#pkg_check_modules (PROTOBUF REQUIRED "protobuf")
-#INCLUDE_DIRECTORIES (${PROTOBUF_INCLUDE_DIRS})
-#link_directories(${PROTOBUF_LIBRARY_DIRS})
+pkg_check_modules (CLUTTER_GTK REQUIRED "clutter-gtk-1.0")
+INCLUDE_DIRECTORIES (${CLUTTER_GTK_INCLUDE_DIRS})
+link_directories(${CLUTTER_GTK_LIBRARY_DIRS})
 
 # +-------------------------------+
 # | Generate reflection database. |
@@ -70,6 +70,12 @@ LIST (APPEND SOURCES
         "src/main.cc"
         "src/MainView.cc"
         "src/MainView.h"
+        "src/clutter/iw_circle.c"
+        "src/clutter/iw_circle.h"
+        "src/clutter/iw_circular_node.c"
+        "src/clutter/iw_circular_node.h"
+        "src/clutter/iw_line.c"
+        "src/clutter/iw_line.h"
 )
 
 # Local includes (inside project).
@@ -82,6 +88,7 @@ TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} c++abi)
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} pthread)
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${Boost_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${TILIAE_LIBRARIES})
+TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${CLUTTER_GTK_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${GTK_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${GTKFORMS_LIBRARIES})
 
