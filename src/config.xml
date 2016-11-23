@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans init-method="init" id-method="contId">
+
+    <Config id="config">
+        <value set-as="logMappings">true</value>
+        <value set-as="useWidgetId">true</value>
+    </Config>
+
+  <!-- +===================================================+ -->
+  <!-- | Kontrolery i widoki                               | -->
+  <!-- +===================================================+ -->
+
+  <DummyController id="mainController" view="mainView" />
+  <MainView id="mainView" file="ui/main.ui" />
+
+
+
+</beans>
