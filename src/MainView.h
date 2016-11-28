@@ -10,11 +10,14 @@
 #define DF_MAINVIEW_H
 
 #include "view/BuilderView.h"
+#include "view/Circle.h"
 
 class __tiliae_reflect__ MainView : public GtkForms::BuilderView {
 public:
         virtual ~MainView () {}
         virtual void loadUi (GtkForms::App *app);
+
+        Circle *circle = nullptr;
 };
 
 #endif // MAINVIEW_H

@@ -72,19 +72,21 @@ struct _IwCircleClass {
 
 /* constructor - note this returns a ClutterActor instance */
 ClutterActor *iw_circle_new (void);
-void iw_circle_set_color (IwCircle *self, const ClutterColor *color);
 
-/* getter */
-//const gchar *iw_circle_get_text (IwCircle *self);
+void iw_circle_set_fill_color (IwCircle *self, const ClutterColor *color);
+ClutterColor *iw_circle_get_fill_color (IwCircle *self);
 
-///* setters - these are wrappers round functions
-// * which change properties of the internal actors
-// */
-//void iw_circle_set_text (IwCircle *self, const gchar *text);
+void iw_circle_set_stroke_color (IwCircle *self, const ClutterColor *color);
+ClutterColor *iw_circle_get_stroke_color (IwCircle *self);
 
-//void iw_circle_set_background_color (IwCircle *self, const ClutterColor *color);
+void iw_circle_set_stroke_width (IwCircle *self, gfloat w);
+gfloat iw_circle_get_stroke_width (IwCircle *self);
 
-//void iw_circle_set_text_color (IwCircle *self, const ClutterColor *color);
+void iw_circle_set_stroke_dash (IwCircle *self, gfloat w);
+gfloat iw_circle_get_stroke_dash (IwCircle *self);
+
+void iw_circle_set_fill (IwCircle *self, gboolean b);
+gboolean iw_circle_is_fill (IwCircle *self);
 
 #ifdef __cplusplus
 }

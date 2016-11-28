@@ -6,8 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <math.h>
 #include "iw_circle.h"
+#include <math.h>
 
 /**
  * SECTION:cb-button
@@ -36,7 +36,11 @@ G_DEFINE_TYPE (IwCircle, iw_circle, CLUTTER_TYPE_ACTOR);
  * (toggled on or off) or a background image
  */
 struct _IwCirclePrivate {
-        ClutterColor color;
+        ClutterColor fillColor;
+        ClutterColor strokeColor;
+        gboolean fill;
+        gfloat strokeWidth;
+        gfloat strokeDash;
         ClutterContent *canvas;
 };
 
@@ -63,7 +67,7 @@ static void iw_circle_finalize (GObject *gobject)
         G_OBJECT_CLASS (iw_circle_parent_class)->finalize (gobject);
 }
 
-static void star_actor_pick (ClutterActor *actor, const ClutterColor *pick_color)
+static void iw_circle_pick (ClutterActor *actor, const ClutterColor *pick_color)
 {
         if (!clutter_actor_should_pick_paint (actor)) return;
 
@@ -113,7 +117,7 @@ static void iw_circle_class_init (IwCircleClass *klass)
         //        actor_class->allocate = iw_circle_allocate;
         //        actor_class->paint = iw_circle_paint;
         //        actor_class->paint_node = iw_circle_paint_node;
-        actor_class->pick = star_actor_pick;
+        actor_class->pick = iw_circle_pick;
 
         g_type_class_add_private (klass, sizeof (IwCirclePrivate));
 }
@@ -156,7 +160,11 @@ static void iw_circle_init (IwCircle *self)
         //        clutter_actor_add_action (CLUTTER_ACTOR (self), priv->click_action);
 
         //        g_signal_connect (priv->click_action, "clicked", G_CALLBACK (iw_circle_clicked), NULL);
-        priv->color = *clutter_color_get_static (CLUTTER_COLOR_WHITE);
+        priv->fillColor = *clutter_color_get_static (CLUTTER_COLOR_WHITE);
+        priv->strokeColor = *clutter_color_get_static (CLUTTER_COLOR_BLACK);
+        priv->fill = FALSE;
+        priv->strokeDash = 0;
+        priv->strokeWidth = 3;
 
         priv->canvas = clutter_canvas_new ();
         //        clutter_canvas_set_size (CLUTTER_CANVAS (priv->canvas), 300, 300);
@@ -184,11 +192,69 @@ static void iw_circle_init (IwCircle *self)
  *
  * Set the color of the button's background
  */
-void iw_circle_set_color (IwCircle *self, const ClutterColor *color)
+void iw_circle_set_fill_color (IwCircle *self, const ClutterColor *color)
 {
         g_return_if_fail (IW_IS_CIRCLE (self));
-        self->priv->color = *color;
+        self->priv->fillColor = *color;
         clutter_content_invalidate (self->priv->canvas);
+}
+
+ClutterColor *iw_circle_get_fill_color (IwCircle *self)
+{
+        g_return_val_if_fail (IW_IS_CIRCLE (self), NULL);
+        return &self->priv->fillColor;
+}
+
+void iw_circle_set_stroke_color (IwCircle *self, const ClutterColor *color)
+{
+        g_return_if_fail (IW_IS_CIRCLE (self));
+        self->priv->strokeColor = *color;
+        clutter_content_invalidate (self->priv->canvas);
+}
+
+ClutterColor *iw_circle_get_stroke_color (IwCircle *self)
+{
+        g_return_val_if_fail (IW_IS_CIRCLE (self), NULL);
+        return &self->priv->strokeColor;
+}
+
+void iw_circle_set_stroke_width (IwCircle *self, gfloat w)
+{
+        g_return_if_fail (IW_IS_CIRCLE (self));
+        self->priv->strokeWidth = w;
+        clutter_content_invalidate (self->priv->canvas);
+}
+
+gfloat iw_circle_get_stroke_width (IwCircle *self)
+{
+        g_return_val_if_fail (IW_IS_CIRCLE (self), -1);
+        return self->priv->strokeWidth;
+}
+
+void iw_circle_set_stroke_dash (IwCircle *self, gfloat w)
+{
+        g_return_if_fail (IW_IS_CIRCLE (self));
+        self->priv->strokeDash = w;
+        clutter_content_invalidate (self->priv->canvas);
+}
+
+gfloat iw_circle_get_stroke_dash (IwCircle *self)
+{
+        g_return_val_if_fail (IW_IS_CIRCLE (self), -1);
+        return self->priv->strokeDash;
+}
+
+void iw_circle_set_fill (IwCircle *self, gboolean b)
+{
+        g_return_if_fail (IW_IS_CIRCLE (self));
+        self->priv->fill = b;
+        clutter_content_invalidate (self->priv->canvas);
+}
+
+gboolean iw_circle_is_fill (IwCircle *self)
+{
+        g_return_val_if_fail (IW_IS_CIRCLE (self), FALSE);
+        return self->priv->fill;
 }
 
 /**
@@ -211,23 +277,31 @@ static gboolean draw_circle (ClutterCanvas *canvas, cairo_t *cr, int width, int 
          */
         cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
         cairo_paint (cr);
-
         cairo_restore (cr);
-
         cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
 
-        /* scale the modelview to the size of the surface */
-        cairo_scale (cr, width, height);
-
         cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
-        cairo_set_line_width (cr, 0);
+        cairo_set_line_width (cr, priv->strokeWidth);
 
-        /* the black rail that holds the seconds indicator */
-        clutter_cairo_set_source_color (cr, &priv->color);
-        cairo_translate (cr, 0.5, 0.5);
+        if (priv->strokeDash > 0) {
+                double dashed1 = priv->strokeDash;
+                cairo_set_dash (cr, &dashed1, 1, 0);
+        }
+
+        gfloat radius = fmin (width, height) / 2.0;
+        cairo_translate (cr, radius, radius);
         // Prwevent clipping
-        cairo_arc (cr, 0, 0, 0.49, 0, G_PI * 2);
-        cairo_fill (cr);
+        cairo_arc (cr, 0, 0, radius - priv->strokeWidth / 2.0 - 1, 0, G_PI * 2);
+
+        if (priv->strokeWidth > 0) {
+                clutter_cairo_set_source_color (cr, &priv->strokeColor);
+                cairo_stroke (cr);
+        }
+
+        if (priv->fill) {
+                clutter_cairo_set_source_color (cr, &priv->fillColor);
+                cairo_fill (cr);
+        }
 
         /* we're done drawing */
         return TRUE;

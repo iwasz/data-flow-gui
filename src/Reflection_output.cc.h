@@ -228,6 +228,9 @@ void createReflectionDatabase_gtkFormsDemo ()
 			clazz->addMethod (new Method ("getMappingsByInput", createMethodWrapper (&GtkForms::AbstractView::getMappingsByInput)));
 			clazz->addMethod (new Method ("getMappingsByModelRange", createMethodWrapper (&GtkForms::AbstractView::getMappingsByModelRange)));
 			clazz->addMethod (new Method ("connectSignals", createMethodWrapper (&GtkForms::AbstractView::connectSignals)));
+			clazz->addMethod (new Method ("connectSignal", createMethodWrapper (&GtkForms::AbstractView::connectSignal)));
+			clazz->addMethod (new Method ("getControllerFromUi", createMethodWrapper (&GtkForms::AbstractView::getControllerFromUi)));
+			clazz->addMethod (new Method ("setControllerToUi", createMethodWrapper (&GtkForms::AbstractView::setControllerToUi)));
 			clazz->addMethod (new Method ("getController", createMethodWrapper (&GtkForms::AbstractView::getController)));
 			clazz->addMethod (new Method ("setController", createMethodWrapper (&GtkForms::AbstractView::setController)));
 			clazz->addMethod (new Method ("setConfig", createMethodWrapper (&GtkForms::AbstractView::setConfig)));
@@ -271,6 +274,37 @@ void createReflectionDatabase_gtkFormsDemo ()
 			clazz->addMethod (new Method ("destroyUi", createMethodWrapper (&GtkForms::BuilderView::destroyUi)));
 			clazz->addMethod (new Method ("getUiOrThrow", createMethodWrapper (&GtkForms::BuilderView::getUiOrThrow)));
 			clazz->addMethod (new Method ("connectSignals", createMethodWrapper (&GtkForms::BuilderView::connectSignals)));
+			clazz->addMethod (new Method ("connectSignal", createMethodWrapper (&GtkForms::BuilderView::connectSignal)));
+		}
+	}
+	{
+		Class *clazz = new Class ("Circle", typeid (Circle &), new Reflection::PtrDeleter <Circle>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Circle, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("setParent", createMethodWrapper (&Circle::setParent)));
+			clazz->addMethod (new Method ("getVisible", createMethodWrapper (&Circle::getVisible)));
+			clazz->addMethod (new Method ("setVisible", createMethodWrapper (&Circle::setVisible)));
+			clazz->addMethod (new Method ("isFill", createMethodWrapper (&Circle::isFill)));
+			clazz->addMethod (new Method ("setFill", createMethodWrapper (&Circle::setFill)));
+			clazz->addMethod (new Method ("getH", createMethodWrapper (&Circle::getH)));
+			clazz->addMethod (new Method ("setH", createMethodWrapper (&Circle::setH)));
+			clazz->addMethod (new Method ("getW", createMethodWrapper (&Circle::getW)));
+			clazz->addMethod (new Method ("setW", createMethodWrapper (&Circle::setW)));
+			clazz->addMethod (new Method ("getY", createMethodWrapper (&Circle::getY)));
+			clazz->addMethod (new Method ("setY", createMethodWrapper (&Circle::setY)));
+			clazz->addMethod (new Method ("getX", createMethodWrapper (&Circle::getX)));
+			clazz->addMethod (new Method ("setX", createMethodWrapper (&Circle::setX)));
+			clazz->addMethod (new Method ("getStrokeWidth", createMethodWrapper (&Circle::getStrokeWidth)));
+			clazz->addMethod (new Method ("setStrokeWidth", createMethodWrapper (&Circle::setStrokeWidth)));
+			clazz->addMethod (new Method ("getStrokeDash", createMethodWrapper (&Circle::getStrokeDash)));
+			clazz->addMethod (new Method ("setStrokeDash", createMethodWrapper (&Circle::setStrokeDash)));
+			clazz->addMethod (new Method ("getStrokeColor", createMethodWrapper (&Circle::getStrokeColor)));
+			clazz->addMethod (new Method ("setStrokeColor", createMethodWrapper (&Circle::setStrokeColor)));
+			clazz->addMethod (new Method ("getFillColor", createMethodWrapper (&Circle::getFillColor)));
+			clazz->addMethod (new Method ("setFillColor", createMethodWrapper (&Circle::setFillColor)));
 		}
 	}
 	{
@@ -281,7 +315,184 @@ void createReflectionDatabase_gtkFormsDemo ()
 		else {
 			clazz->addBaseClassName ("BuilderView");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <MainView, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addField (new Field ("circle", Reflection::createFieldWrapper (&MainView::circle)));
 			clazz->addMethod (new Method ("loadUi", createMethodWrapper (&MainView::loadUi)));
+		}
+	}
+	{
+		Class *clazz = new Class ("ISignalAdapter", typeid (GtkForms::ISignalAdapter &), new Reflection::PtrDeleter <GtkForms::ISignalAdapter>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("Object");
+			clazz->addMethod (new Method ("getSignal", createMethodWrapper (&GtkForms::ISignalAdapter::getSignal)));
+			clazz->addMethod (new Method ("getGObjectName", createMethodWrapper (&GtkForms::ISignalAdapter::getGObjectName)));
+			clazz->addMethod (new Method ("getWidgetId", createMethodWrapper (&GtkForms::ISignalAdapter::getWidgetId)));
+			clazz->addMethod (new Method ("adapt", createMethodWrapper (&GtkForms::ISignalAdapter::adapt)));
+		}
+	}
+	{
+		Class *clazz = new Class ("AbstractSignalAdapter", typeid (GtkForms::AbstractSignalAdapter &), new Reflection::PtrDeleter <GtkForms::AbstractSignalAdapter>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("ISignalAdapter");
+			clazz->addMethod (new Method ("getSignal", createMethodWrapper (&GtkForms::AbstractSignalAdapter::getSignal)));
+			clazz->addMethod (new Method ("getGObjectName", createMethodWrapper (&GtkForms::AbstractSignalAdapter::getGObjectName)));
+			clazz->addMethod (new Method ("getWidgetId", createMethodWrapper (&GtkForms::AbstractSignalAdapter::getWidgetId)));
+		}
+	}
+	{
+		Class *clazz = new Class ("SignalAdapterVector", typeid (GtkForms::SignalAdapterVector&), new PtrDeleter <GtkForms::SignalAdapterVector >);
+		if (!Manager::add (clazz)) {;
+			delete clazz;
+		}
+		else { 
+			IConstructorPointer *cp = Reflection::ConstructorPointerWrapper2 <GtkForms::SignalAdapterVector, void>::Level1Wrapper::newConstructorPointer ();
+			clazz->addConstructor (new Constructor (cp));
+
+			ICallableWrapper *w = new AddWrapper <GtkForms::SignalAdapterVector > ();
+			clazz->addMethod (new Method ("add", w));
+
+			w = new GetWrapper <GtkForms::SignalAdapterVector > ();
+			clazz->addMethod (new Method ("get", w));
+
+			w = new SetWrapper <GtkForms::SignalAdapterVector > ();
+			clazz->addMethod (new Method ("set", w));
+
+			w = new IteratorWrapper <GtkForms::SignalAdapterVector > ();
+			clazz->addMethod (new Method ("iterator", w));
+		}
+	}
+	{
+		Class *clazz = new Class ("IValidator", typeid (GtkForms::IValidator &), new Reflection::PtrDeleter <GtkForms::IValidator>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("Object");
+			clazz->addMethod (new Method ("validate", createMethodWrapper (&GtkForms::IValidator::validate)));
+			clazz->addMethod (new Method ("getModel", createMethodWrapper (&GtkForms::IValidator::getModel)));
+		}
+	}
+	{
+		Class *clazz = new Class ("ValidatorVector", typeid (GtkForms::ValidatorVector&), new PtrDeleter <GtkForms::ValidatorVector >);
+		if (!Manager::add (clazz)) {;
+			delete clazz;
+		}
+		else { 
+			IConstructorPointer *cp = Reflection::ConstructorPointerWrapper2 <GtkForms::ValidatorVector, void>::Level1Wrapper::newConstructorPointer ();
+			clazz->addConstructor (new Constructor (cp));
+
+			ICallableWrapper *w = new AddWrapper <GtkForms::ValidatorVector > ();
+			clazz->addMethod (new Method ("add", w));
+
+			w = new GetWrapper <GtkForms::ValidatorVector > ();
+			clazz->addMethod (new Method ("get", w));
+
+			w = new SetWrapper <GtkForms::ValidatorVector > ();
+			clazz->addMethod (new Method ("set", w));
+
+			w = new IteratorWrapper <GtkForms::ValidatorVector > ();
+			clazz->addMethod (new Method ("iterator", w));
+		}
+	}
+	{
+		Class *clazz = new Class ("AbstractAccessor", typeid (GtkForms::AbstractAccessor &), new Reflection::PtrDeleter <GtkForms::AbstractAccessor>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addMethod (new Method ("get", createMethodWrapper (&GtkForms::AbstractAccessor::get)));
+			clazz->addMethod (new Method ("set", createMethodWrapper (&GtkForms::AbstractAccessor::set)));
+			clazz->addMethod (new Method ("setSessionScope", createMethodWrapper (&GtkForms::AbstractAccessor::setSessionScope)));
+			clazz->addMethod (new Method ("setCurrentController", createMethodWrapper (&GtkForms::AbstractAccessor::setCurrentController)));
+		}
+	}
+	{
+		Class *clazz = new Class ("ControllerMap", typeid (GtkForms::ControllerMap&), new PtrDeleter <GtkForms::ControllerMap >);
+		if (!Manager::add (clazz)) {;
+			delete clazz;
+		}
+		else { 
+			IConstructorPointer *cp = Reflection::ConstructorPointerWrapper2 <GtkForms::ControllerMap, void>::Level1Wrapper::newConstructorPointer ();
+			clazz->addConstructor (new Constructor (cp));
+
+			ICallableWrapper *w = new AddWrapper <GtkForms::ControllerMap > ();
+			clazz->addMethod (new Method ("add", w));
+
+			w = new GetWrapper <GtkForms::ControllerMap > ();
+			clazz->addMethod (new Method ("get", w));
+
+			w = new SetWrapper <GtkForms::ControllerMap > ();
+			clazz->addMethod (new Method ("set", w));
+
+			w = new IteratorWrapper <GtkForms::ControllerMap > ();
+			clazz->addMethod (new Method ("iterator", w));
+		}
+	}
+	{
+		Class *clazz = new Class ("AbstractController", typeid (GtkForms::AbstractController &), new Reflection::PtrDeleter <GtkForms::AbstractController>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("Object");
+			clazz->addField (new Field ("validators", Reflection::createFieldWrapper (&GtkForms::AbstractController::validators)));
+			clazz->addField (new Field ("signalAdapters", Reflection::createFieldWrapper (&GtkForms::AbstractController::signalAdapters)));
+			clazz->addField (new Field ("loopDelayMs", Reflection::createFieldWrapper (&GtkForms::AbstractController::loopDelayMs)));
+			clazz->addField (new Field ("alsoOpen", Reflection::createFieldWrapper (&GtkForms::AbstractController::alsoOpen)));
+			clazz->addMethod (new Method ("set", createMethodWrapper (&GtkForms::AbstractController::set)));
+			clazz->addMethod (new Method ("get", createMethodWrapper (&GtkForms::AbstractController::get)));
+			clazz->addMethod (new Method ("setToSessionScope", createMethodWrapper (&GtkForms::AbstractController::setToSessionScope)));
+			clazz->addMethod (new Method ("clearControllerScope", createMethodWrapper (&GtkForms::AbstractController::clearControllerScope)));
+			clazz->addMethod (new Method ("getModelAccessor", createMethodWrapper (&GtkForms::AbstractController::getModelAccessor)));
+			clazz->addMethod (new Method ("open", createMethodWrapper (&GtkForms::AbstractController::open)));
+			clazz->addMethod (new Method ("openList", createMethodWrapper (&GtkForms::AbstractController::openList)));
+			clazz->addMethod (new Method ("closeThis", createMethodWrapper (&GtkForms::AbstractController::closeThis)));
+			clazz->addMethod (new Method ("close", createMethodWrapper (&GtkForms::AbstractController::close)));
+			clazz->addMethod (new Method ("closeList", createMethodWrapper (&GtkForms::AbstractController::closeList)));
+			clazz->addMethod (new Method ("replace", createMethodWrapper (&GtkForms::AbstractController::replace)));
+			clazz->addMethod (new Method ("getName", createMethodWrapper (&GtkForms::AbstractController::getName)));
+			clazz->addMethod (new Method ("contId", createMethodWrapper (&GtkForms::AbstractController::contId)));
+			clazz->addMethod (new Method ("findByName", createMethodWrapper (&GtkForms::AbstractController::findByName)));
+			clazz->addMethod (new Method ("validate", createMethodWrapper (&GtkForms::AbstractController::validate)));
+			clazz->addMethod (new Method ("getSignalAdapters", createMethodWrapper (&GtkForms::AbstractController::getSignalAdapters)));
+			clazz->addMethod (new Method ("getValidators", createMethodWrapper (&GtkForms::AbstractController::getValidators)));
+			clazz->addMethod (new Method ("refresh", createMethodWrapper (&GtkForms::AbstractController::refresh)));
+			clazz->addMethod (new Method ("submit", createMethodWrapper (&GtkForms::AbstractController::submit)));
+			clazz->addMethod (new Method ("onStart", createMethodWrapper (&GtkForms::AbstractController::onStart)));
+			clazz->addMethod (new Method ("onSubmit", createMethodWrapper (&GtkForms::AbstractController::onSubmit)));
+			clazz->addMethod (new Method ("onStop", createMethodWrapper (&GtkForms::AbstractController::onStop)));
+			clazz->addMethod (new Method ("getLoopDelayMs", createMethodWrapper (&GtkForms::AbstractController::getLoopDelayMs)));
+			clazz->addMethod (new Method ("getLastMs", createMethodWrapper (&GtkForms::AbstractController::getLastMs)));
+			clazz->addMethod (new Method ("performIdle", createMethodWrapper (&GtkForms::AbstractController::performIdle)));
+			clazz->addMethod (new Method ("onQuit", createMethodWrapper (&GtkForms::AbstractController::onQuit)));
+			clazz->addMethod (new Method ("onIdle", createMethodWrapper (&GtkForms::AbstractController::onIdle)));
+			clazz->addMethod (new Method ("getView", createMethodWrapper (&GtkForms::AbstractController::getView)));
+			clazz->addMethod (new Method ("setView", createMethodWrapper (&GtkForms::AbstractController::setView)));
+			clazz->addMethod (new Method ("getApp", createMethodWrapper (&GtkForms::AbstractController::getApp)));
+		}
+	}
+	{
+		Class *clazz = new Class ("MainController", typeid (MainController &), new Reflection::PtrDeleter <MainController>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("AbstractController");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <MainController, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("init", createMethodWrapper (&MainController::init)));
+			clazz->addMethod (new Method ("onStart", createMethodWrapper (&MainController::onStart)));
+			clazz->addMethod (new Method ("onSubmit", createMethodWrapper (&MainController::onSubmit)));
+			clazz->addMethod (new Method ("onIdle", createMethodWrapper (&MainController::onIdle)));
+			clazz->addMethod (new Method ("onStop", createMethodWrapper (&MainController::onStop)));
+			clazz->addMethod (new Method ("onNewNodeToolClicked", createMethodWrapper (&MainController::onNewNodeToolClicked)));
+			clazz->addMethod (new Method ("onStageClicked", createMethodWrapper (&MainController::onStageClicked)));
+			clazz->addMethod (new Method ("onReleased", createMethodWrapper (&MainController::onReleased)));
+			clazz->addMethod (new Method ("onMotion", createMethodWrapper (&MainController::onMotion)));
 		}
 	}
 }

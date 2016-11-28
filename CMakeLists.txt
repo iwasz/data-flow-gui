@@ -47,6 +47,18 @@ endif ()
 INCLUDE_DIRECTORIES (${GTKFORMS_INCLUDE_DIRS})
 link_directories(${GTKFORMS_LIBRARY_DIRS})
 
+pkg_check_modules (STATEMACHINE "state-machine")
+if (NOT STATEMACHINE_FOUND)
+        MESSAGE (STATUS "STATEMACHINE not installed, using local copy.")
+        SET (STATEMACHINE_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/../state-machine/src/")
+        SET (STATEMACHINE_LIBRARY_DIRS "${PROJECT_SOURCE_DIR}/../state-machine/build/src/")
+        SET (STATEMACHINE_LIBRARIES "statemachine")
+        MESSAGE (STATUS ${STATEMACHINE_INCLUDE_DIRS})
+        MESSAGE (STATUS ${STATEMACHINE_LIBRARY_DIRS})
+endif ()
+INCLUDE_DIRECTORIES (${STATEMACHINE_INCLUDE_DIRS})
+link_directories(${STATEMACHINE_LIBRARY_DIRS})
+
 pkg_check_modules (GTK REQUIRED "gtk+-3.0")
 INCLUDE_DIRECTORIES (${GTK_INCLUDE_DIRS})
 link_directories(${GTK_LIBRARY_DIRS})
@@ -70,12 +82,16 @@ LIST (APPEND SOURCES
         "src/main.cc"
         "src/MainView.cc"
         "src/MainView.h"
+        "src/MainController.cc"
+        "src/MainController.h"
         "src/clutter/iw_circle.c"
         "src/clutter/iw_circle.h"
         "src/clutter/iw_circular_node.c"
         "src/clutter/iw_circular_node.h"
         "src/clutter/iw_line.c"
         "src/clutter/iw_line.h"
+        "src/view/Circle.h"
+        "src/view/Circle.cc"
 )
 
 # Local includes (inside project).
@@ -91,11 +107,8 @@ TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${TILIAE_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${CLUTTER_GTK_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${GTK_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${GTKFORMS_LIBRARIES})
+TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${STATEMACHINE_LIBRARIES})
 
-#FILE (COPY "src/config.xml" DESTINATION ${CMAKE_BINARY_DIR})
-#FILE (COPY "ui" DESTINATION ${CMAKE_BINARY_DIR})
-
-# NIe działą!
 ADD_CUSTOM_COMMAND (OUTPUT "${CMAKE_BINARY_DIR}/config.xml"
                     COMMAND ln -s "src/config.xml" "${CMAKE_BINARY_DIR}/config.xml"
                     DEPENDS "src/config.xml")
