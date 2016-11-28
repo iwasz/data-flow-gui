@@ -21,10 +21,7 @@ Circle::Circle ()
 
 Circle::~Circle () {}
 
-void Circle::setParent (ClutterActor *parent)
-{
-        clutter_actor_add_child (parent, self);
-}
+void Circle::setParent (ClutterActor *parent) { clutter_actor_add_child (parent, self); }
 
 bool Circle::getVisible () const { return clutter_actor_is_visible (self); }
 

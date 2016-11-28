@@ -315,7 +315,6 @@ void createReflectionDatabase_gtkFormsDemo ()
 		else {
 			clazz->addBaseClassName ("BuilderView");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <MainView, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addField (new Field ("circle", Reflection::createFieldWrapper (&MainView::circle)));
 			clazz->addMethod (new Method ("loadUi", createMethodWrapper (&MainView::loadUi)));
 		}
 	}
@@ -490,8 +489,8 @@ void createReflectionDatabase_gtkFormsDemo ()
 			clazz->addMethod (new Method ("onIdle", createMethodWrapper (&MainController::onIdle)));
 			clazz->addMethod (new Method ("onStop", createMethodWrapper (&MainController::onStop)));
 			clazz->addMethod (new Method ("onNewNodeToolClicked", createMethodWrapper (&MainController::onNewNodeToolClicked)));
-			clazz->addMethod (new Method ("onStageClicked", createMethodWrapper (&MainController::onStageClicked)));
-			clazz->addMethod (new Method ("onReleased", createMethodWrapper (&MainController::onReleased)));
+			clazz->addMethod (new Method ("onStageClicked", createMethodWrapper (&MainController::onButtonPress)));
+			clazz->addMethod (new Method ("onReleased", createMethodWrapper (&MainController::onButtonRelease)));
 			clazz->addMethod (new Method ("onMotion", createMethodWrapper (&MainController::onMotion)));
 		}
 	}

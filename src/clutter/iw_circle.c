@@ -272,7 +272,8 @@ static gboolean draw_circle (ClutterCanvas *canvas, cairo_t *cr, int width, int 
 
         cairo_save (cr);
 
-        /* clear the contents of the canvas, to avoid painting
+        /*
+         * clear the contents of the canvas, to avoid painting
          * over the previous frame
          */
         cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
@@ -290,12 +291,11 @@ static gboolean draw_circle (ClutterCanvas *canvas, cairo_t *cr, int width, int 
 
         gfloat radius = fmin (width, height) / 2.0;
         cairo_translate (cr, radius, radius);
-        // Prwevent clipping
         cairo_arc (cr, 0, 0, radius - priv->strokeWidth / 2.0 - 1, 0, G_PI * 2);
 
         if (priv->strokeWidth > 0) {
                 clutter_cairo_set_source_color (cr, &priv->strokeColor);
-                cairo_stroke (cr);
+                cairo_stroke_preserve (cr);
         }
 
         if (priv->fill) {
@@ -303,7 +303,7 @@ static gboolean draw_circle (ClutterCanvas *canvas, cairo_t *cr, int width, int 
                 cairo_fill (cr);
         }
 
-        /* we're done drawing */
+        // we're done drawing
         return TRUE;
 }
 

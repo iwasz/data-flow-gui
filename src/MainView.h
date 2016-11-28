@@ -17,7 +17,10 @@ public:
         virtual ~MainView () {}
         virtual void loadUi (GtkForms::App *app);
 
-        Circle *circle = nullptr;
+
+private:
+
+        Circle *constructionCircle = nullptr;
 };
 
 #endif // MAINVIEW_H

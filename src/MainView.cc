@@ -101,8 +101,9 @@ void MainView::loadUi (GtkForms::App *app)
         /*---------------------------------------------------------------------------*/
 
         {
-                if (circle) {
-                        circle->setParent (stage);
+                if (constructionCircle) {
+                        constructionCircle->setVisible (false);
+                        constructionCircle->setParent (stage);
                 }
         }
 
@@ -140,7 +141,7 @@ static void on_stage_button_press (ClutterStage *stage, ClutterEvent *event, gpo
         ClutterActor *clicked = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
 
         if (clicked == CLUTTER_ACTOR (stage)) {
-                mc->onStageClicked (x, y);
+                mc->onButtonPress (x, y);
         }
 
         // hide the actor that was clicked
@@ -158,7 +159,7 @@ static void on_stage_button_release (ClutterStage *stage, ClutterEvent *event, g
         clutter_event_get_coords (event, &x, &y);
 
         // find which actor was clicked
-        mc->onReleased (x, y);
+        mc->onButtonRelease (x, y);
 }
 
 /*****************************************************************************/

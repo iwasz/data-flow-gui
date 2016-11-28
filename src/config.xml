@@ -12,8 +12,7 @@
 
   <MainController id="mainController" loopDelayMs="5" />
   <MainView id="mainView" file="ui/main.ui">
-<!--  <Circle set-as="circle" x="100" y="100" w="300" h="300" fill="true" strokeColor="66a182ff" />-->
-  <Circle set-as="circle" x="100" y="100" w="300" h="300" fill="true"  />
+<!--        <Circle set-as="circle" x="100" y="100" w="300" h="300" fill="false" strokeColor="#8d8d8dff" strokeDash="5" />-->
   </MainView>
 
 

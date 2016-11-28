@@ -26,8 +26,8 @@ public:
 
 
         void onNewNodeToolClicked (std::string const &name);
-        void onStageClicked (float x, float y);
-        void onReleased (float x, float y);
+        void onButtonPress (float x, float y);
+        void onButtonRelease (float x, float y);
         void onMotion (float x, float y);
 
 private:
