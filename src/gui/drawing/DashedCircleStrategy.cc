@@ -8,28 +8,31 @@
 
 #include "DashedCircleStrategy.h"
 
-static float startX;
-static float startY;
-
 void DashedCircleStrategy::onButtonPress (float x, float y)
 {
-        circle->setX (x);
-        circle->setY (y);
-        circle->setW (0);
-        circle->setH (0);
-        startX = x;
-        startY = y;
+        startPoint = Point (x, y);
+        endPoint = Point ();
+        circle->setPosition (Point (x, y));
+        circle->setSize (Dimension ());
         circle->setVisible (true);
 }
 
 /*****************************************************************************/
 
-void DashedCircleStrategy::onMotion (float x, float y)
+void DashedCircleStrategy::onMotion (float x, float y) { circle->setSize (Point (x, y) - startPoint); }
+
+/*****************************************************************************/
+
+void DashedCircleStrategy::onButtonRelease (float x, float y)
 {
-        circle->setW (x - startX);
-        circle->setH (y - startY);
+        circle->setVisible (false);
+        endPoint = Point (x, y);
 }
 
 /*****************************************************************************/
 
-void DashedCircleStrategy::onButtonRelease (float x, float y) { circle->setVisible (false); }
+void DashedCircleStrategy::reshape (IClutterActor *a)
+{
+        a->setPosition (startPoint);
+        a->setSize (endPoint - startPoint);
+}

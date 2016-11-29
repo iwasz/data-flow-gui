@@ -285,6 +285,39 @@ void createReflectionDatabase_gtkFormsDemo ()
 		else {
 			clazz->addBaseClassName ("Object");
 			clazz->addMethod (new Method ("getActor", createMethodWrapper (&IClutterActor::getActor)));
+			clazz->addMethod (new Method ("getVisible", createMethodWrapper (&IClutterActor::getVisible)));
+			clazz->addMethod (new Method ("setVisible", createMethodWrapper (&IClutterActor::setVisible)));
+			clazz->addMethod (new Method ("isFill", createMethodWrapper (&IClutterActor::isFill)));
+			clazz->addMethod (new Method ("setFill", createMethodWrapper (&IClutterActor::setFill)));
+			clazz->addMethod (new Method ("setPosition", createMethodWrapper (&IClutterActor::setPosition)));
+			clazz->addMethod (new Method ("getPosition", createMethodWrapper (&IClutterActor::getPosition)));
+			clazz->addMethod (new Method ("setSize", createMethodWrapper (&IClutterActor::setSize)));
+			clazz->addMethod (new Method ("getDimension", createMethodWrapper (&IClutterActor::getDimension)));
+			clazz->addMethod (new Method ("getStrokeWidth", createMethodWrapper (&IClutterActor::getStrokeWidth)));
+			clazz->addMethod (new Method ("setStrokeWidth", createMethodWrapper (&IClutterActor::setStrokeWidth)));
+			clazz->addMethod (new Method ("getStrokeDash", createMethodWrapper (&IClutterActor::getStrokeDash)));
+			clazz->addMethod (new Method ("setStrokeDash", createMethodWrapper (&IClutterActor::setStrokeDash)));
+			clazz->addMethod (new Method ("getStrokeColor", createMethodWrapper (&IClutterActor::getStrokeColor)));
+			clazz->addMethod (new Method ("setStrokeColor", createMethodWrapper (&IClutterActor::setStrokeColor)));
+			clazz->addMethod (new Method ("getFillColor", createMethodWrapper (&IClutterActor::getFillColor)));
+			clazz->addMethod (new Method ("setFillColor", createMethodWrapper (&IClutterActor::setFillColor)));
+		}
+	}
+	{
+		Class *clazz = new Class ("AbstractActor", typeid (AbstractActor &), new Reflection::PtrDeleter <AbstractActor>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("IClutterActor");
+			clazz->addMethod (new Method ("setParent", createMethodWrapper (&AbstractActor::setParent)));
+			clazz->addMethod (new Method ("getActor", createMethodWrapper (&AbstractActor::getActor)));
+			clazz->addMethod (new Method ("getVisible", createMethodWrapper (&AbstractActor::getVisible)));
+			clazz->addMethod (new Method ("setVisible", createMethodWrapper (&AbstractActor::setVisible)));
+			clazz->addMethod (new Method ("setPosition", createMethodWrapper (&AbstractActor::setPosition)));
+			clazz->addMethod (new Method ("getPosition", createMethodWrapper (&AbstractActor::getPosition)));
+			clazz->addMethod (new Method ("setSize", createMethodWrapper (&AbstractActor::setSize)));
+			clazz->addMethod (new Method ("getDimension", createMethodWrapper (&AbstractActor::getDimension)));
 		}
 	}
 	{
@@ -293,13 +326,20 @@ void createReflectionDatabase_gtkFormsDemo ()
 			delete clazz;
 		}
 		else {
-			clazz->addBaseClassName ("IClutterActor");
+			clazz->addBaseClassName ("AbstractActor");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Stage, void>::Level1Wrapper::newConstructorPointer ()));
 			clazz->addMethod (new Method ("init", createMethodWrapper (&Stage::init)));
 			clazz->addMethod (new Method ("getClutterWidget", createMethodWrapper (&Stage::getClutterWidget)));
-			clazz->addMethod (new Method ("getActor", createMethodWrapper (&Stage::getActor)));
-			clazz->addMethod (new Method ("getColor", createMethodWrapper (&Stage::getColor)));
-			clazz->addMethod (new Method ("setColor", createMethodWrapper (&Stage::setColor)));
+			clazz->addMethod (new Method ("isFill", createMethodWrapper (&Stage::isFill)));
+			clazz->addMethod (new Method ("setFill", createMethodWrapper (&Stage::setFill)));
+			clazz->addMethod (new Method ("getStrokeWidth", createMethodWrapper (&Stage::getStrokeWidth)));
+			clazz->addMethod (new Method ("setStrokeWidth", createMethodWrapper (&Stage::setStrokeWidth)));
+			clazz->addMethod (new Method ("getStrokeDash", createMethodWrapper (&Stage::getStrokeDash)));
+			clazz->addMethod (new Method ("setStrokeDash", createMethodWrapper (&Stage::setStrokeDash)));
+			clazz->addMethod (new Method ("getStrokeColor", createMethodWrapper (&Stage::getStrokeColor)));
+			clazz->addMethod (new Method ("setStrokeColor", createMethodWrapper (&Stage::setStrokeColor)));
+			clazz->addMethod (new Method ("getFillColor", createMethodWrapper (&Stage::getFillColor)));
+			clazz->addMethod (new Method ("setFillColor", createMethodWrapper (&Stage::setFillColor)));
 		}
 	}
 	{
@@ -325,6 +365,7 @@ void createReflectionDatabase_gtkFormsDemo ()
 			clazz->addMethod (new Method ("onButtonPress", createMethodWrapper (&IDrawStrategy::onButtonPress)));
 			clazz->addMethod (new Method ("onMotion", createMethodWrapper (&IDrawStrategy::onMotion)));
 			clazz->addMethod (new Method ("onButtonRelease", createMethodWrapper (&IDrawStrategy::onButtonRelease)));
+			clazz->addMethod (new Method ("reshape", createMethodWrapper (&IDrawStrategy::reshape)));
 		}
 	}
 	{
@@ -568,22 +609,10 @@ void createReflectionDatabase_gtkFormsDemo ()
 			delete clazz;
 		}
 		else {
-			clazz->addBaseClassName ("IClutterActor");
+			clazz->addBaseClassName ("AbstractActor");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Circle, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addMethod (new Method ("setParent", createMethodWrapper (&Circle::setParent)));
-			clazz->addMethod (new Method ("getActor", createMethodWrapper (&Circle::getActor)));
-			clazz->addMethod (new Method ("getVisible", createMethodWrapper (&Circle::getVisible)));
-			clazz->addMethod (new Method ("setVisible", createMethodWrapper (&Circle::setVisible)));
 			clazz->addMethod (new Method ("isFill", createMethodWrapper (&Circle::isFill)));
 			clazz->addMethod (new Method ("setFill", createMethodWrapper (&Circle::setFill)));
-			clazz->addMethod (new Method ("getH", createMethodWrapper (&Circle::getH)));
-			clazz->addMethod (new Method ("setH", createMethodWrapper (&Circle::setH)));
-			clazz->addMethod (new Method ("getW", createMethodWrapper (&Circle::getW)));
-			clazz->addMethod (new Method ("setW", createMethodWrapper (&Circle::setW)));
-			clazz->addMethod (new Method ("getY", createMethodWrapper (&Circle::getY)));
-			clazz->addMethod (new Method ("setY", createMethodWrapper (&Circle::setY)));
-			clazz->addMethod (new Method ("getX", createMethodWrapper (&Circle::getX)));
-			clazz->addMethod (new Method ("setX", createMethodWrapper (&Circle::setX)));
 			clazz->addMethod (new Method ("getStrokeWidth", createMethodWrapper (&Circle::getStrokeWidth)));
 			clazz->addMethod (new Method ("setStrokeWidth", createMethodWrapper (&Circle::setStrokeWidth)));
 			clazz->addMethod (new Method ("getStrokeDash", createMethodWrapper (&Circle::getStrokeDash)));
@@ -605,6 +634,7 @@ void createReflectionDatabase_gtkFormsDemo ()
 			clazz->addMethod (new Method ("onButtonPress", createMethodWrapper (&DashedCircleStrategy::onButtonPress)));
 			clazz->addMethod (new Method ("onMotion", createMethodWrapper (&DashedCircleStrategy::onMotion)));
 			clazz->addMethod (new Method ("onButtonRelease", createMethodWrapper (&DashedCircleStrategy::onButtonRelease)));
+			clazz->addMethod (new Method ("reshape", createMethodWrapper (&DashedCircleStrategy::reshape)));
 			clazz->addMethod (new Method ("getCircle", createMethodWrapper (&DashedCircleStrategy::getCircle)));
 			clazz->addMethod (new Method ("setCircle", createMethodWrapper (&DashedCircleStrategy::setCircle)));
 		}
@@ -620,6 +650,7 @@ void createReflectionDatabase_gtkFormsDemo ()
 			clazz->addMethod (new Method ("onButtonPress", createMethodWrapper (&DashedLineStrategy::onButtonPress)));
 			clazz->addMethod (new Method ("onMotion", createMethodWrapper (&DashedLineStrategy::onMotion)));
 			clazz->addMethod (new Method ("onButtonRelease", createMethodWrapper (&DashedLineStrategy::onButtonRelease)));
+			clazz->addMethod (new Method ("reshape", createMethodWrapper (&DashedLineStrategy::reshape)));
 		}
 	}
 }

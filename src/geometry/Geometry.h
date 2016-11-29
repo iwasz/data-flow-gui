@@ -5,16 +5,24 @@
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
-#ifndef IFACTORYSTRATEGY_H
-#define IFACTORYSTRATEGY_H
 
-#include <ReflectionParserAnnotation.h>
-#include <core/Object.h>
-#include <core/variant/Variant.h>
+#ifndef GEOMETRY_DF_POINT_H
+#define GEOMETRY_DF_POINT_H
 
-struct __tiliae_reflect__ IFactoryStrategy : public Core::Object {
-        virtual ~IFactoryStrategy () {}
-        virtual Core::Variant run (float x1, float y1, float x2, float y2) __tiliae_no_reflect__ = 0;
+struct Point {
+        Point () : x (0), y (0) {}
+        Point (float x, float y) : x (x), y (y) {}
+        float x;
+        float y;
 };
 
-#endif // IFACTORYSTRATEGY_H
+struct Dimension {
+        Dimension () : width (0), height (0) {}
+        Dimension (float w, float h) : width (w), height (h) {}
+        float width;
+        float height;
+};
+
+extern Dimension operator- (Point const &a, Point const &b);
+
+#endif // POINT_H

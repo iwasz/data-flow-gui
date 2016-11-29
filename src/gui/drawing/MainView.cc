@@ -53,6 +53,11 @@ void MainView::loadUi (GtkForms::App *app)
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
         connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('arc')");
 
+        item = gtk_tool_button_new (NULL, "Circle");
+        gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-media-record");
+        gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+        connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('circle')");
+
         /*---------------------------------------------------------------------------*/
 
         //        GtkWidget *clutter = gtk_clutter_embed_new ();

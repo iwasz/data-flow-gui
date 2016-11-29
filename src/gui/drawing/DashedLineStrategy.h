@@ -18,6 +18,12 @@ public:
         virtual void onButtonPress (float x, float y) { std::cerr << "POKAŻ kreseczkę " << x << ", " << y << std::endl; }
         virtual void onMotion (float x, float y) { std::cerr << "kreseczka " << x << ", " << y << std::endl; }
         virtual void onButtonRelease (float x, float y) { std::cerr << "UKRYJ kreseczkę " << x << ", " << y << std::endl; }
+        virtual void reshape (IClutterActor *a);
+
+private:
+
+        float startX = 0;
+        float startY = 0;
 };
 
 #endif // DASHEDLINESTRATEGY_H

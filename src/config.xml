@@ -16,6 +16,7 @@
 
         <DashedLineStrategy id="dashedLine" />
 
+        <Circle scope="prototype" id="circle" parent="@stage" fill="true" fillColor="#ff0000ff" visible="false" />
 
         <MainController id="mainController" loopDelayMs="5">
                 <ToolMap set-as="tools">
@@ -28,9 +29,12 @@
                       <Tool set-as="arc" drawStrategy="@dashedLine">
                               <ContainerFactoryStrategy set-as="factoryStrategy" beanName="arc" container="@#container" />
                       </Tool>
+                      <Tool set-as="circle" drawStrategy="@dashedCircle">
+                              <ContainerFactoryStrategy set-as="factoryStrategy" beanName="circle" container="@#container" />
+                      </Tool>
                 </ToolMap>
         </MainController>
 
-        <Stage id="stage" color="#ecececff"/>
+        <Stage id="stage" fillColor="#ecececff"/>
         <MainView id="mainView" file="ui/main.ui" stage="@stage" />
 </beans>

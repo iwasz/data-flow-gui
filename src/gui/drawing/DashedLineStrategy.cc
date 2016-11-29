@@ -7,3 +7,8 @@
  ****************************************************************************/
 
 #include "DashedLineStrategy.h"
+
+void DashedLineStrategy::reshape (IClutterActor *a)
+{
+
+}

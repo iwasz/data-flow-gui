@@ -16,7 +16,7 @@
 class __tiliae_reflect__ ContainerFactoryStrategy : public IFactoryStrategy {
 public:
         virtual ~ContainerFactoryStrategy () {}
-        virtual void run (float x1, float y1, float x2, float y2) __tiliae_no_reflect__;
+        virtual Core::Variant run (float x1, float y1, float x2, float y2) __tiliae_no_reflect__;
 
         std::string const &getBeanName () const { return beanName; }
         void setBeanName (const std::string &value) { beanName = value; }

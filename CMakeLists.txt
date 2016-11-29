@@ -105,6 +105,10 @@ LIST (APPEND SOURCES
         "src/view/Stage.h"
         "src/view/Stage.cc"
         "src/view/IClutterActor.h"
+        "src/view/AbstractActor.h"
+        "src/view/AbstractActor.cc"
+        "src/geometry/Geometry.h"
+        "src/geometry/Geometry.cc"
 )
 
 # Local includes (inside project).

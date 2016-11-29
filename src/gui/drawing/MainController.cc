@@ -7,19 +7,12 @@
  ****************************************************************************/
 
 #include "MainController.h"
+#include "view/IClutterActor.h"
 #include <App.h>
 #include <Logging.h>
 #include <StateMachine.h>
 
 static src::logger_mt &lg = logger::get ();
-
-/*****************************************************************************/
-
-class FactoryStrategy : public IFactoryStrategy {
-public:
-        virtual ~FactoryStrategy () {}
-        virtual void run (float x1, float y1, float x2, float y2) { std::cerr << "Factory " << x1 << "," << y1 << "," << x2 << "," << y2 << std::endl; }
-};
 
 /*****************************************************************************/
 
@@ -59,6 +52,9 @@ struct MainController::Impl {
         float startY = 0;
         IDrawStrategy *lastDrawStrategy = nullptr;
         IFactoryStrategy *currentFactoryStrategy = nullptr;
+
+        // Maybe other name and element type?
+        ClutterActorVector actors;
 };
 
 /*****************************************************************************/
@@ -116,8 +112,12 @@ void MainController::Impl::configureMachine ()
                 })
                 ->transition (IDLE)->when (eq ("stage.released"))->then ([this] (const char *, void *arg) {
                         Arguments *args = static_cast <Arguments *> (arg);
-                        lastDrawStrategy->onButtonRelease (startX, startY);
-                        currentFactoryStrategy->run (startX, startY, args->x, args->y);
+                        lastDrawStrategy->onButtonRelease (args->x, args->y);
+                        Core::Variant v = currentFactoryStrategy->run (startX, startY, args->x, args->y);
+                        IClutterActor *a = ocast <IClutterActor *> (v);
+                        lastDrawStrategy->reshape (a);
+                        a->setVisible (true);
+                        actors.push_back (std::shared_ptr <IClutterActor> (a));
                         return true;
                 });
 
