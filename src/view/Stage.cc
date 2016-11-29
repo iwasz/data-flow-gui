@@ -9,11 +9,13 @@
 #include "Stage.h"
 #include <core/Exception.h>
 
-void Stage::init ()
+Stage::Stage ()
 {
         clutterWidget = gtk_clutter_embed_new ();
         self = gtk_clutter_embed_get_stage (GTK_CLUTTER_EMBED (clutterWidget));
 }
+
+/*****************************************************************************/
 
 std::string Stage::getFillColor () const
 {
@@ -21,6 +23,8 @@ std::string Stage::getFillColor () const
         clutter_actor_get_background_color (self, &color);
         return std::string (clutter_color_to_string (&color));
 }
+
+/*****************************************************************************/
 
 void Stage::setFillColor (const std::string &color)
 {

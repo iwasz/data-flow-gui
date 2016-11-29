@@ -17,8 +17,9 @@
 
 class __tiliae_reflect__ Stage : public AbstractActor {
 public:
+
+        Stage ();
         virtual ~Stage () {}
-        void init ();
 
         GtkWidget *getClutterWidget () { return clutterWidget; }
         void setParent (IClutterActor *parent) { throw Core::Exception ("Not implemented"); }
@@ -39,7 +40,6 @@ public:
         virtual void setFillColor (const std::string &value);
 
 private:
-//        std::string color;
         GtkWidget *clutterWidget;
 };
 

@@ -328,8 +328,8 @@ void createReflectionDatabase_gtkFormsDemo ()
 		else {
 			clazz->addBaseClassName ("AbstractActor");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Stage, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addMethod (new Method ("init", createMethodWrapper (&Stage::init)));
 			clazz->addMethod (new Method ("getClutterWidget", createMethodWrapper (&Stage::getClutterWidget)));
+			clazz->addMethod (new Method ("setParent", createMethodWrapper (&Stage::setParent)));
 			clazz->addMethod (new Method ("isFill", createMethodWrapper (&Stage::isFill)));
 			clazz->addMethod (new Method ("setFill", createMethodWrapper (&Stage::setFill)));
 			clazz->addMethod (new Method ("getStrokeWidth", createMethodWrapper (&Stage::getStrokeWidth)));
