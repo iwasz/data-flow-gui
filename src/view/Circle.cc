@@ -8,6 +8,7 @@
 
 #include "Circle.h"
 #include "clutter/iw_circle.h"
+#include <core/Exception.h>
 
 Circle::Circle ()
 {
@@ -19,9 +20,7 @@ Circle::Circle ()
         clutter_actor_show (self);
 }
 
-Circle::~Circle () {}
-
-void Circle::setParent (ClutterActor *parent) { clutter_actor_add_child (parent, self); }
+void Circle::setParent (IClutterActor *parent) { clutter_actor_add_child (parent->getActor (), self); }
 
 bool Circle::getVisible () const { return clutter_actor_is_visible (self); }
 
@@ -72,7 +71,11 @@ std::string Circle::getStrokeColor () const
 void Circle::setStrokeColor (const std::string &value)
 {
         ClutterColor color;
-        clutter_color_from_string (&color, value.c_str ());
+
+        if (!clutter_color_from_string (&color, value.c_str ())) {
+                throw Core::Exception ("Wrong color string [" + value + "].");
+        }
+
         iw_circle_set_stroke_color (IW_CIRCLE (self), &color);
 }
 
@@ -85,6 +88,10 @@ std::string Circle::getFillColor () const
 void Circle::setFillColor (const std::string &value)
 {
         ClutterColor color;
-        clutter_color_from_string (&color, value.c_str ());
+
+        if (!clutter_color_from_string (&color, value.c_str ())) {
+                throw Core::Exception ("Wrong color string [" + value + "].");
+        }
+
         iw_circle_set_fill_color (IW_CIRCLE (self), &color);
 }

@@ -10,11 +10,27 @@
   <!-- | Kontrolery i widoki                               | -->
   <!-- +===================================================+ -->
 
-  <MainController id="mainController" loopDelayMs="5" />
-  <MainView id="mainView" file="ui/main.ui">
-<!--        <Circle set-as="circle" x="100" y="100" w="300" h="300" fill="false" strokeColor="#8d8d8dff" strokeDash="5" />-->
-  </MainView>
+        <DashedCircleStrategy id="dashedCircle">
+                <Circle set-as="circle" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" />
+        </DashedCircleStrategy>
+
+        <DashedLineStrategy id="dashedLine" />
 
 
+        <MainController id="mainController" loopDelayMs="5">
+                <ToolMap set-as="tools">
+                      <Tool set-as="addNode" drawStrategy="@dashedCircle">
+                              <ContainerFactoryStrategy set-as="factoryStrategy" beanName="addNode" container="@#container" />
+                      </Tool>
+                      <Tool set-as="copyNode" drawStrategy="@dashedCircle">
+                              <ContainerFactoryStrategy set-as="factoryStrategy" beanName="copyNode" container="@#container" />
+                      </Tool>
+                      <Tool set-as="arc" drawStrategy="@dashedLine">
+                              <ContainerFactoryStrategy set-as="factoryStrategy" beanName="arc" container="@#container" />
+                      </Tool>
+                </ToolMap>
+        </MainController>
 
+        <Stage id="stage" color="#ecececff"/>
+        <MainView id="mainView" file="ui/main.ui" stage="@stage" />
 </beans>

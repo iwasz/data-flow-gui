@@ -80,10 +80,20 @@ LIST (APPEND SOURCES "src/Reflection_output.cc.h")
 
 LIST (APPEND SOURCES
         "src/main.cc"
-        "src/MainView.cc"
-        "src/MainView.h"
-        "src/MainController.cc"
-        "src/MainController.h"
+        "src/gui/drawing/MainView.cc"
+        "src/gui/drawing/MainView.h"
+        "src/gui/drawing/MainController.cc"
+        "src/gui/drawing/MainController.h"
+        "src/gui/drawing/ContainerFactoryStrategy.cc"
+        "src/gui/drawing/ContainerFactoryStrategy.h"
+        "src/gui/drawing/DashedCircleStrategy.cc"
+        "src/gui/drawing/DashedCircleStrategy.h"
+        "src/gui/drawing/DashedLineStrategy.cc"
+        "src/gui/drawing/DashedLineStrategy.h"
+        "src/gui/drawing/IDrawStrategy.cc"
+        "src/gui/drawing/IDrawStrategy.h"
+        "src/gui/drawing/IFactoryStrategy.cc"
+        "src/gui/drawing/IFactoryStrategy.h"
         "src/clutter/iw_circle.c"
         "src/clutter/iw_circle.h"
         "src/clutter/iw_circular_node.c"
@@ -92,6 +102,9 @@ LIST (APPEND SOURCES
         "src/clutter/iw_line.h"
         "src/view/Circle.h"
         "src/view/Circle.cc"
+        "src/view/Stage.h"
+        "src/view/Stage.cc"
+        "src/view/IClutterActor.h"
 )
 
 # Local includes (inside project).

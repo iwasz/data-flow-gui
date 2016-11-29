@@ -41,12 +41,12 @@ void MainView::loadUi (GtkForms::App *app)
         GtkToolItem *item = gtk_tool_button_new (NULL, "Add");
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-add");
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-        connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('add')");
+        connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('addNode')");
 
         item = gtk_tool_button_new (NULL, "Copy");
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-go-forward");
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-        connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('copy')");
+        connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('copyNode')");
 
         item = gtk_tool_button_new (NULL, "Arc");
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-edit");
@@ -55,17 +55,22 @@ void MainView::loadUi (GtkForms::App *app)
 
         /*---------------------------------------------------------------------------*/
 
-        GtkWidget *clutter = gtk_clutter_embed_new ();
-        gtk_box_pack_start (GTK_BOX (cb), clutter, TRUE, TRUE, 0);
+        //        GtkWidget *clutter = gtk_clutter_embed_new ();
 
-        ClutterActor *stage = gtk_clutter_embed_get_stage (GTK_CLUTTER_EMBED (clutter));
-        ClutterColor stage_color = { 236, 236, 236, 255 };
-        clutter_actor_set_background_color (CLUTTER_ACTOR (stage), &stage_color);
+        if (!stage) {
+                throw Core::Exception ("No stage. Create stage first, and assign it to the 'stage' pointer.");
+        }
+
+        gtk_box_pack_start (GTK_BOX (cb), stage->getClutterWidget (), TRUE, TRUE, 0);
+
+        //        ClutterActor *stage = gtk_clutter_embed_get_stage (GTK_CLUTTER_EMBED (clutter));
+        //        ClutterColor stage_color = { 236, 236, 236, 255 };
+        //        clutter_actor_set_background_color (CLUTTER_ACTOR (stage), &stage_color);
 
         MainController *mc = dynamic_cast<MainController *> (getController ());
-        g_signal_connect (stage, "button-press-event", G_CALLBACK (on_stage_button_press), mc);
-        g_signal_connect (stage, "button-release-event", G_CALLBACK (on_stage_button_release), mc);
-        g_signal_connect (stage, "motion-event", G_CALLBACK (on_stage_motion), mc);
+        g_signal_connect (stage->getActor (), "button-press-event", G_CALLBACK (on_stage_button_press), mc);
+        g_signal_connect (stage->getActor (), "button-release-event", G_CALLBACK (on_stage_button_release), mc);
+        g_signal_connect (stage->getActor (), "motion-event", G_CALLBACK (on_stage_motion), mc);
 
         /*---------------------------------------------------------------------------*/
 
@@ -92,19 +97,10 @@ void MainView::loadUi (GtkForms::App *app)
                 ClutterColor port_color2 = { 209, 209, 209, 255 };
                 iw_circular_node_set_port_color (IW_CIRCULAR_NODE (circularNode), 2, &port_color2);
 
-                clutter_actor_add_child (stage, circularNode);
+                clutter_actor_add_child (stage->getActor (), circularNode);
 
                 ClutterAction *dragAction = clutter_drag_action_new ();
                 clutter_actor_add_action (circularNode, dragAction);
-        }
-
-        /*---------------------------------------------------------------------------*/
-
-        {
-                if (constructionCircle) {
-                        constructionCircle->setVisible (false);
-                        constructionCircle->setParent (stage);
-                }
         }
 
         /*---------------------------------------------------------------------------*/
@@ -116,7 +112,7 @@ void MainView::loadUi (GtkForms::App *app)
                 ClutterColor actor_color = { 0, 150, 198, 201 };
                 iw_line_set_color (IW_LINE (line), &actor_color);
                 clutter_actor_set_reactive (line, TRUE);
-                clutter_actor_add_child (stage, line);
+                clutter_actor_add_child (stage->getActor (), line);
 
                 ClutterAction *dragAction = clutter_drag_action_new ();
                 clutter_actor_add_action (line, dragAction);

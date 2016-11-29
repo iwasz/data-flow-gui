@@ -278,33 +278,28 @@ void createReflectionDatabase_gtkFormsDemo ()
 		}
 	}
 	{
-		Class *clazz = new Class ("Circle", typeid (Circle &), new Reflection::PtrDeleter <Circle>);
+		Class *clazz = new Class ("IClutterActor", typeid (IClutterActor &), new Reflection::PtrDeleter <IClutterActor>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
 		}
 		else {
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Circle, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addMethod (new Method ("setParent", createMethodWrapper (&Circle::setParent)));
-			clazz->addMethod (new Method ("getVisible", createMethodWrapper (&Circle::getVisible)));
-			clazz->addMethod (new Method ("setVisible", createMethodWrapper (&Circle::setVisible)));
-			clazz->addMethod (new Method ("isFill", createMethodWrapper (&Circle::isFill)));
-			clazz->addMethod (new Method ("setFill", createMethodWrapper (&Circle::setFill)));
-			clazz->addMethod (new Method ("getH", createMethodWrapper (&Circle::getH)));
-			clazz->addMethod (new Method ("setH", createMethodWrapper (&Circle::setH)));
-			clazz->addMethod (new Method ("getW", createMethodWrapper (&Circle::getW)));
-			clazz->addMethod (new Method ("setW", createMethodWrapper (&Circle::setW)));
-			clazz->addMethod (new Method ("getY", createMethodWrapper (&Circle::getY)));
-			clazz->addMethod (new Method ("setY", createMethodWrapper (&Circle::setY)));
-			clazz->addMethod (new Method ("getX", createMethodWrapper (&Circle::getX)));
-			clazz->addMethod (new Method ("setX", createMethodWrapper (&Circle::setX)));
-			clazz->addMethod (new Method ("getStrokeWidth", createMethodWrapper (&Circle::getStrokeWidth)));
-			clazz->addMethod (new Method ("setStrokeWidth", createMethodWrapper (&Circle::setStrokeWidth)));
-			clazz->addMethod (new Method ("getStrokeDash", createMethodWrapper (&Circle::getStrokeDash)));
-			clazz->addMethod (new Method ("setStrokeDash", createMethodWrapper (&Circle::setStrokeDash)));
-			clazz->addMethod (new Method ("getStrokeColor", createMethodWrapper (&Circle::getStrokeColor)));
-			clazz->addMethod (new Method ("setStrokeColor", createMethodWrapper (&Circle::setStrokeColor)));
-			clazz->addMethod (new Method ("getFillColor", createMethodWrapper (&Circle::getFillColor)));
-			clazz->addMethod (new Method ("setFillColor", createMethodWrapper (&Circle::setFillColor)));
+			clazz->addBaseClassName ("Object");
+			clazz->addMethod (new Method ("getActor", createMethodWrapper (&IClutterActor::getActor)));
+		}
+	}
+	{
+		Class *clazz = new Class ("Stage", typeid (Stage &), new Reflection::PtrDeleter <Stage>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("IClutterActor");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Stage, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("init", createMethodWrapper (&Stage::init)));
+			clazz->addMethod (new Method ("getClutterWidget", createMethodWrapper (&Stage::getClutterWidget)));
+			clazz->addMethod (new Method ("getActor", createMethodWrapper (&Stage::getActor)));
+			clazz->addMethod (new Method ("getColor", createMethodWrapper (&Stage::getColor)));
+			clazz->addMethod (new Method ("setColor", createMethodWrapper (&Stage::setColor)));
 		}
 	}
 	{
@@ -316,6 +311,29 @@ void createReflectionDatabase_gtkFormsDemo ()
 			clazz->addBaseClassName ("BuilderView");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <MainView, void>::Level1Wrapper::newConstructorPointer ()));
 			clazz->addMethod (new Method ("loadUi", createMethodWrapper (&MainView::loadUi)));
+			clazz->addMethod (new Method ("getStage", createMethodWrapper (&MainView::getStage)));
+			clazz->addMethod (new Method ("setStage", createMethodWrapper (&MainView::setStage)));
+		}
+	}
+	{
+		Class *clazz = new Class ("IDrawStrategy", typeid (IDrawStrategy &), new Reflection::PtrDeleter <IDrawStrategy>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("Object");
+			clazz->addMethod (new Method ("onButtonPress", createMethodWrapper (&IDrawStrategy::onButtonPress)));
+			clazz->addMethod (new Method ("onMotion", createMethodWrapper (&IDrawStrategy::onMotion)));
+			clazz->addMethod (new Method ("onButtonRelease", createMethodWrapper (&IDrawStrategy::onButtonRelease)));
+		}
+	}
+	{
+		Class *clazz = new Class ("IFactoryStrategy", typeid (IFactoryStrategy &), new Reflection::PtrDeleter <IFactoryStrategy>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("Object");
 		}
 	}
 	{
@@ -476,6 +494,40 @@ void createReflectionDatabase_gtkFormsDemo ()
 		}
 	}
 	{
+		Class *clazz = new Class ("Tool", typeid (Tool &), new Reflection::PtrDeleter <Tool>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Tool, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Tool, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addField (new Field ("drawStrategy", Reflection::createFieldWrapper (&Tool::drawStrategy)));
+			clazz->addField (new Field ("factoryStrategy", Reflection::createFieldWrapper (&Tool::factoryStrategy)));
+		}
+	}
+	{
+		Class *clazz = new Class ("ToolMap", typeid (ToolMap&), new PtrDeleter <ToolMap >);
+		if (!Manager::add (clazz)) {;
+			delete clazz;
+		}
+		else { 
+			IConstructorPointer *cp = Reflection::ConstructorPointerWrapper2 <ToolMap, void>::Level1Wrapper::newConstructorPointer ();
+			clazz->addConstructor (new Constructor (cp));
+
+			ICallableWrapper *w = new AddWrapper <ToolMap > ();
+			clazz->addMethod (new Method ("add", w));
+
+			w = new GetWrapper <ToolMap > ();
+			clazz->addMethod (new Method ("get", w));
+
+			w = new SetWrapper <ToolMap > ();
+			clazz->addMethod (new Method ("set", w));
+
+			w = new IteratorWrapper <ToolMap > ();
+			clazz->addMethod (new Method ("iterator", w));
+		}
+	}
+	{
 		Class *clazz = new Class ("MainController", typeid (MainController &), new Reflection::PtrDeleter <MainController>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
@@ -489,9 +541,85 @@ void createReflectionDatabase_gtkFormsDemo ()
 			clazz->addMethod (new Method ("onIdle", createMethodWrapper (&MainController::onIdle)));
 			clazz->addMethod (new Method ("onStop", createMethodWrapper (&MainController::onStop)));
 			clazz->addMethod (new Method ("onNewNodeToolClicked", createMethodWrapper (&MainController::onNewNodeToolClicked)));
-			clazz->addMethod (new Method ("onStageClicked", createMethodWrapper (&MainController::onButtonPress)));
-			clazz->addMethod (new Method ("onReleased", createMethodWrapper (&MainController::onButtonRelease)));
+			clazz->addMethod (new Method ("onButtonPress", createMethodWrapper (&MainController::onButtonPress)));
+			clazz->addMethod (new Method ("onButtonRelease", createMethodWrapper (&MainController::onButtonRelease)));
 			clazz->addMethod (new Method ("onMotion", createMethodWrapper (&MainController::onMotion)));
+			clazz->addMethod (new Method ("getTools", createMethodWrapper (&MainController::getTools)));
+			clazz->addMethod (new Method ("setTools", createMethodWrapper (&MainController::setTools)));
+		}
+	}
+	{
+		Class *clazz = new Class ("ContainerFactoryStrategy", typeid (ContainerFactoryStrategy &), new Reflection::PtrDeleter <ContainerFactoryStrategy>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("IFactoryStrategy");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <ContainerFactoryStrategy, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("getBeanName", createMethodWrapper (&ContainerFactoryStrategy::getBeanName)));
+			clazz->addMethod (new Method ("setBeanName", createMethodWrapper (&ContainerFactoryStrategy::setBeanName)));
+			clazz->addMethod (new Method ("getContainer", createMethodWrapper (&ContainerFactoryStrategy::getContainer)));
+			clazz->addMethod (new Method ("setContainer", createMethodWrapper (&ContainerFactoryStrategy::setContainer)));
+		}
+	}
+	{
+		Class *clazz = new Class ("Circle", typeid (Circle &), new Reflection::PtrDeleter <Circle>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("IClutterActor");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Circle, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("setParent", createMethodWrapper (&Circle::setParent)));
+			clazz->addMethod (new Method ("getActor", createMethodWrapper (&Circle::getActor)));
+			clazz->addMethod (new Method ("getVisible", createMethodWrapper (&Circle::getVisible)));
+			clazz->addMethod (new Method ("setVisible", createMethodWrapper (&Circle::setVisible)));
+			clazz->addMethod (new Method ("isFill", createMethodWrapper (&Circle::isFill)));
+			clazz->addMethod (new Method ("setFill", createMethodWrapper (&Circle::setFill)));
+			clazz->addMethod (new Method ("getH", createMethodWrapper (&Circle::getH)));
+			clazz->addMethod (new Method ("setH", createMethodWrapper (&Circle::setH)));
+			clazz->addMethod (new Method ("getW", createMethodWrapper (&Circle::getW)));
+			clazz->addMethod (new Method ("setW", createMethodWrapper (&Circle::setW)));
+			clazz->addMethod (new Method ("getY", createMethodWrapper (&Circle::getY)));
+			clazz->addMethod (new Method ("setY", createMethodWrapper (&Circle::setY)));
+			clazz->addMethod (new Method ("getX", createMethodWrapper (&Circle::getX)));
+			clazz->addMethod (new Method ("setX", createMethodWrapper (&Circle::setX)));
+			clazz->addMethod (new Method ("getStrokeWidth", createMethodWrapper (&Circle::getStrokeWidth)));
+			clazz->addMethod (new Method ("setStrokeWidth", createMethodWrapper (&Circle::setStrokeWidth)));
+			clazz->addMethod (new Method ("getStrokeDash", createMethodWrapper (&Circle::getStrokeDash)));
+			clazz->addMethod (new Method ("setStrokeDash", createMethodWrapper (&Circle::setStrokeDash)));
+			clazz->addMethod (new Method ("getStrokeColor", createMethodWrapper (&Circle::getStrokeColor)));
+			clazz->addMethod (new Method ("setStrokeColor", createMethodWrapper (&Circle::setStrokeColor)));
+			clazz->addMethod (new Method ("getFillColor", createMethodWrapper (&Circle::getFillColor)));
+			clazz->addMethod (new Method ("setFillColor", createMethodWrapper (&Circle::setFillColor)));
+		}
+	}
+	{
+		Class *clazz = new Class ("DashedCircleStrategy", typeid (DashedCircleStrategy &), new Reflection::PtrDeleter <DashedCircleStrategy>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("IDrawStrategy");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <DashedCircleStrategy, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("onButtonPress", createMethodWrapper (&DashedCircleStrategy::onButtonPress)));
+			clazz->addMethod (new Method ("onMotion", createMethodWrapper (&DashedCircleStrategy::onMotion)));
+			clazz->addMethod (new Method ("onButtonRelease", createMethodWrapper (&DashedCircleStrategy::onButtonRelease)));
+			clazz->addMethod (new Method ("getCircle", createMethodWrapper (&DashedCircleStrategy::getCircle)));
+			clazz->addMethod (new Method ("setCircle", createMethodWrapper (&DashedCircleStrategy::setCircle)));
+		}
+	}
+	{
+		Class *clazz = new Class ("DashedLineStrategy", typeid (DashedLineStrategy &), new Reflection::PtrDeleter <DashedLineStrategy>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("IDrawStrategy");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <DashedLineStrategy, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("onButtonPress", createMethodWrapper (&DashedLineStrategy::onButtonPress)));
+			clazz->addMethod (new Method ("onMotion", createMethodWrapper (&DashedLineStrategy::onMotion)));
+			clazz->addMethod (new Method ("onButtonRelease", createMethodWrapper (&DashedLineStrategy::onButtonRelease)));
 		}
 	}
 }

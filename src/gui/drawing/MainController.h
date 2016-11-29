@@ -9,10 +9,26 @@
 #ifndef MAIN_CONTROLLER_H_
 #define MAIN_CONTROLLER_H_
 
-#include <string>
-#include <controller/AbstractController.h>
+#include "IDrawStrategy.h"
+#include "IFactoryStrategy.h"
 #include <ReflectionParserAnnotation.h>
+#include <controller/AbstractController.h>
+#include <map>
+#include <string>
 
+/**
+ * Represents one tool that can be picked from left side toolbar.
+ */
+struct __tiliae_reflect__ Tool {
+        IDrawStrategy *drawStrategy;
+        IFactoryStrategy *factoryStrategy;
+};
+
+typedef __tiliae_reflect__ std::map<std::string, Tool> ToolMap;
+
+/**
+ * Controller for drawing new objects like nodes, arcs and the like.
+ */
 class __tiliae_reflect__ MainController : public GtkForms::AbstractController {
 public:
         MainController ();
@@ -24,13 +40,17 @@ public:
         virtual void onIdle ();
         virtual void onStop ();
 
-
         void onNewNodeToolClicked (std::string const &name);
         void onButtonPress (float x, float y);
         void onButtonRelease (float x, float y);
         void onMotion (float x, float y);
 
+        ToolMap const &getTools () const { return tools; }
+        void setTools (const ToolMap &value) { tools = value; }
+
 private:
+
+        ToolMap tools;
 
         struct Impl;
         Impl *impl;
