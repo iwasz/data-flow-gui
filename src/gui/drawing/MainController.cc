@@ -41,14 +41,6 @@ struct MainController::Impl {
 
         StringQueue inputQueue;
         StateMachine machine;
-
-        //        // TODO remove
-        //        DashedCircleStrategy dashedCircleStrategy;
-        //        DashedLineStrategy dashedLineStrategy;
-        //        FactoryStrategy factoryStrategy;
-        //        ToolMap tools = { { "add", { &dashedCircleStrategy, &factoryStrategy } },
-        //                          { "copy", { &dashedCircleStrategy, &factoryStrategy } },
-        //                          { "arc", { &dashedLineStrategy, &factoryStrategy } } };
         ToolMap *tools;
 
         /*
@@ -65,7 +57,6 @@ struct MainController::Impl {
         std::string currentTool;
         float startX = 0;
         float startY = 0;
-        //        IDrawPhaseStrategy *currentDrawPhase = nullptr;
         IDrawStrategy *lastDrawStrategy = nullptr;
         IFactoryStrategy *currentFactoryStrategy = nullptr;
 };
@@ -124,7 +115,9 @@ void MainController::Impl::configureMachine ()
                         return true;
                 })
                 ->transition (IDLE)->when (eq ("stage.released"))->then ([this] (const char *, void *arg) {
+                        Arguments *args = static_cast <Arguments *> (arg);
                         lastDrawStrategy->onButtonRelease (startX, startY);
+                        currentFactoryStrategy->run (startX, startY, args->x, args->y);
                         return true;
                 });
 
@@ -197,7 +190,9 @@ void MainController::onMotion (float x, float y)
         impl->pushMessage ("stage.motion", &impl->arguments);
 }
 
-/*****************************************************************************/
+/****************************************************************************/
+/* State machine low lewel deps.                                            */
+/****************************************************************************/
 
 uint32_t getCurrentMs ()
 {
