@@ -112,7 +112,11 @@ void MainController::Impl::configureMachine ()
                 })
                 ->transition (IDLE)->when (eq ("stage.released"))->then ([this] (const char *, void *arg) {
                         Arguments *args = static_cast <Arguments *> (arg);
-                        lastDrawStrategy->onButtonRelease (args->x, args->y);
+
+                        if (!lastDrawStrategy->onButtonRelease (args->x, args->y)) {
+                                return true;
+                        }
+
                         Core::Variant v = currentFactoryStrategy->run (startX, startY, args->x, args->y);
                         IClutterActor *a = ocast <IClutterActor *> (v);
                         lastDrawStrategy->reshape (a);

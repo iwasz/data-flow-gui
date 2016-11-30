@@ -102,6 +102,8 @@ LIST (APPEND SOURCES
         "src/clutter/iw_line.h"
         "src/view/Circle.h"
         "src/view/Circle.cc"
+        "src/view/Line.h"
+        "src/view/Line.cc"
         "src/view/Stage.h"
         "src/view/Stage.cc"
         "src/view/IClutterActor.h"

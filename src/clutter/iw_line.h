@@ -72,8 +72,21 @@ struct _IwLineClass {
 
 /* constructor - note this returns a ClutterActor instance */
 ClutterActor *iw_line_new (void);
-void iw_line_set_color (IwLine *self, const ClutterColor *color);
 
+void iw_line_set_stroke_color (IwLine *self, const ClutterColor *color);
+ClutterColor *iw_line_get_stroke_color (IwLine *self);
+
+void iw_line_set_stroke_width (IwLine *self, gfloat w);
+gfloat iw_line_get_stroke_width (IwLine *self);
+
+void iw_line_set_stroke_dash (IwLine *self, gfloat w);
+gfloat iw_line_get_stroke_dash (IwLine *self);
+
+void iw_line_set_point_a (IwLine *self, gfloat x, gfloat y);
+void iw_line_get_point_a (IwLine *self, gfloat *x, gfloat *y);
+
+void iw_line_set_point_b (IwLine *self, gfloat x, gfloat y);
+void iw_line_get_point_b (IwLine *self, gfloat *x, gfloat *y);
 
 #ifdef __cplusplus
 }

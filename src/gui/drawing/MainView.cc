@@ -115,7 +115,7 @@ void MainView::loadUi (GtkForms::App *app)
                 clutter_actor_set_size (line, 100, 100);
                 clutter_actor_set_position (line, 300, 100);
                 ClutterColor actor_color = { 0, 150, 198, 201 };
-                iw_line_set_color (IW_LINE (line), &actor_color);
+                iw_line_set_stroke_color (IW_LINE (line), &actor_color);
                 clutter_actor_set_reactive (line, TRUE);
                 clutter_actor_add_child (stage->getActor (), line);
 

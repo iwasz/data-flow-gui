@@ -23,10 +23,11 @@ void DashedCircleStrategy::onMotion (float x, float y) { circle->setSize (Point 
 
 /*****************************************************************************/
 
-void DashedCircleStrategy::onButtonRelease (float x, float y)
+bool DashedCircleStrategy::onButtonRelease(float x, float y)
 {
         circle->setVisible (false);
         endPoint = Point (x, y);
+        return  startPoint.x != endPoint.x && startPoint.y != endPoint.y;
 }
 
 /*****************************************************************************/

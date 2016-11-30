@@ -6,8 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <math.h>
 #include "iw_line.h"
+#include <math.h>
 
 /**
  * SECTION:cb-button
@@ -36,7 +36,11 @@ G_DEFINE_TYPE (IwLine, iw_line, CLUTTER_TYPE_ACTOR);
  * (toggled on or off) or a background image
  */
 struct _IwLinePrivate {
-        ClutterColor *color;
+        ClutterColor strokeColor;
+        gfloat strokeWidth;
+        gfloat strokeDash;
+        gfloat ax, ay;
+        gfloat bx, by;
         ClutterContent *canvas;
 };
 
@@ -55,9 +59,9 @@ static gboolean idle_resize (gpointer data);
  */
 static void iw_line_finalize (GObject *gobject)
 {
-        IwLinePrivate *priv = IW_LINE (gobject)->priv;
+        //        IwLinePrivate *priv = IW_LINE (gobject)->priv;
 
-        clutter_color_free (priv->color);
+        //        clutter_color_free (priv->color);
 
         /* call the parent class' finalize() method */
         G_OBJECT_CLASS (iw_line_parent_class)->finalize (gobject);
@@ -108,7 +112,7 @@ static void iw_line_class_init (IwLineClass *klass)
 
         // It still got destroyed even when I do not override the destroy method (like virtual function in C++).
         //        actor_class->allocate = iw_line_allocate;
-//        actor_class->paint = cb_button_paint;
+        //        actor_class->paint = cb_button_paint;
         //        actor_class->paint_node = iw_line_paint_node;
         actor_class->pick = iw_line_pick;
 
@@ -153,7 +157,9 @@ static void iw_line_init (IwLine *self)
         //        clutter_actor_add_action (CLUTTER_ACTOR (self), priv->click_action);
 
         //        g_signal_connect (priv->click_action, "clicked", G_CALLBACK (iw_line_clicked), NULL);
-        priv->color = clutter_color_new (0, 0, 0, 255);
+        priv->strokeColor = *clutter_color_get_static (CLUTTER_COLOR_BLACK);
+        priv->strokeDash = 0;
+        priv->strokeWidth = 3;
 
         priv->canvas = clutter_canvas_new ();
         //        clutter_canvas_set_size (CLUTTER_CANVAS (priv->canvas), 300, 300);
@@ -174,24 +180,85 @@ static void iw_line_init (IwLine *self)
  * on internal actors
  */
 
-/**
- * iw_line_set_background_color:
- * @self: a #IwLine
- * @color: the #ClutterColor to use for the button's background
- *
- * Set the color of the button's background
- */
-void iw_line_set_color (IwLine *self, const ClutterColor *color)
+void iw_line_set_stroke_color (IwLine *self, const ClutterColor *color)
 {
         g_return_if_fail (IW_IS_LINE (self));
-
-        // clutter_actor_set_background_color (self->priv->child, color);
-        self->priv->color->alpha = color->alpha;
-        self->priv->color->red = color->red;
-        self->priv->color->green = color->green;
-        self->priv->color->blue = color->blue;
-
+        self->priv->strokeColor = *color;
         clutter_content_invalidate (self->priv->canvas);
+}
+
+ClutterColor *iw_line_get_stroke_color (IwLine *self)
+{
+        g_return_val_if_fail (IW_IS_LINE (self), NULL);
+        return &self->priv->strokeColor;
+}
+
+void iw_line_set_stroke_width (IwLine *self, gfloat w)
+{
+        g_return_if_fail (IW_IS_LINE (self));
+        self->priv->strokeWidth = w;
+        clutter_content_invalidate (self->priv->canvas);
+}
+
+gfloat iw_line_get_stroke_width (IwLine *self)
+{
+        g_return_val_if_fail (IW_IS_LINE (self), -1);
+        return self->priv->strokeWidth;
+}
+
+void iw_line_set_stroke_dash (IwLine *self, gfloat w)
+{
+        g_return_if_fail (IW_IS_LINE (self));
+        self->priv->strokeDash = w;
+        clutter_content_invalidate (self->priv->canvas);
+}
+
+gfloat iw_line_get_stroke_dash (IwLine *self)
+{
+        g_return_val_if_fail (IW_IS_LINE (self), -1);
+        return self->priv->strokeDash;
+}
+
+static void iw_line_resize_accordingly (IwLine *self)
+{
+        if (self->priv->ax < self->priv->bx || self->priv->ay < self->priv->by) {
+                clutter_actor_set_position (CLUTTER_ACTOR (self), self->priv->ax, self->priv->ay);
+                clutter_actor_set_size (CLUTTER_ACTOR (self), self->priv->bx - self->priv->ax, self->priv->by - self->priv->ay);
+        }
+        else {
+                clutter_actor_set_position (CLUTTER_ACTOR (self), self->priv->bx, self->priv->by);
+                clutter_actor_set_size (CLUTTER_ACTOR (self), self->priv->ax - self->priv->bx, self->priv->ay - self->priv->by);
+        }
+}
+
+void iw_line_set_point_a (IwLine *self, gfloat x, gfloat y)
+{
+        g_return_if_fail (IW_IS_LINE (self));
+        self->priv->ax = x;
+        self->priv->ay = y;
+        iw_line_resize_accordingly (self);
+}
+
+void iw_line_get_point_a (IwLine *self, gfloat *x, gfloat *y)
+{
+        g_return_if_fail (IW_IS_LINE (self));
+        *x = self->priv->ax;
+        *y = self->priv->ay;
+}
+
+void iw_line_set_point_b (IwLine *self, gfloat x, gfloat y)
+{
+        g_return_if_fail (IW_IS_LINE (self));
+        self->priv->bx = x;
+        self->priv->by = y;
+        iw_line_resize_accordingly (self);
+}
+
+void iw_line_get_point_b (IwLine *self, gfloat *x, gfloat *y)
+{
+        g_return_if_fail (IW_IS_LINE (self));
+        *x = self->priv->bx;
+        *y = self->priv->by;
 }
 
 /**
@@ -223,46 +290,22 @@ static gboolean draw_line (ClutterCanvas *canvas, cairo_t *cr, int width, int he
         //        cairo_scale (cr, width, height);
 
         cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
-        cairo_set_line_width (cr, 5);
+        cairo_set_line_width (cr, priv->strokeWidth);
 
-        /* the black rail that holds the seconds indicator */
-        clutter_cairo_set_source_color (cr, priv->color);
+        if (priv->strokeDash > 0) {
+                double dashed1 = priv->strokeDash;
+                cairo_set_dash (cr, &dashed1, 1, 0);
+        }
+
+        clutter_cairo_set_source_color (cr, &priv->strokeColor);
+
         // Prevent clipping.
-        cairo_move_to (cr, 2.5, 2.5);
-        cairo_line_to (cr, 100 - 2.5, 100 - 2.5);
+        float margin = priv->strokeWidth / 2.0 + 0.5;
+        cairo_move_to (cr, margin, margin);
+        cairo_line_to (cr, width - margin, height - margin);
         cairo_stroke (cr);
-
-        /* we're done drawing */
         return TRUE;
 }
-
-// static guint idle_resize_id;
-
-// static gboolean idle_resize (gpointer data)
-//{
-//        ClutterActor *actor = data;
-//        float width, height;
-
-//        /* match the canvas size to the actor's */
-//        clutter_actor_get_size (actor, &width, &height);
-//        clutter_canvas_set_size (CLUTTER_CANVAS (clutter_actor_get_content (actor)), ceilf (width), ceilf (height));
-
-//        /* unset the guard */
-//        idle_resize_id = 0;
-
-//        /* remove the timeout */
-//        return G_SOURCE_REMOVE;
-//}
-
-// static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocation, ClutterAllocationFlags flags, gpointer user_data)
-//{
-//        /* throttle multiple actor allocations to one canvas resize; we use a guard
-//         * variable to avoid queueing multiple resize operations
-//         */
-//        if (idle_resize_id == 0) {
-//                idle_resize_id = clutter_threads_add_timeout (1000, idle_resize, actor);
-//        }
-//}
 
 static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocation, ClutterAllocationFlags flags, gpointer user_data)
 {

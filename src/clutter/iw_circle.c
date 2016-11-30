@@ -307,34 +307,6 @@ static gboolean draw_circle (ClutterCanvas *canvas, cairo_t *cr, int width, int 
         return TRUE;
 }
 
-// static guint idle_resize_id;
-
-// static gboolean idle_resize (gpointer data)
-//{
-//        ClutterActor *actor = data;
-//        float width, height;
-
-//        /* match the canvas size to the actor's */
-//        clutter_actor_get_size (actor, &width, &height);
-//        clutter_canvas_set_size (CLUTTER_CANVAS (clutter_actor_get_content (actor)), ceilf (width), ceilf (height));
-
-//        /* unset the guard */
-//        idle_resize_id = 0;
-
-//        /* remove the timeout */
-//        return G_SOURCE_REMOVE;
-//}
-
-// static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocation, ClutterAllocationFlags flags, gpointer user_data)
-//{
-//        /* throttle multiple actor allocations to one canvas resize; we use a guard
-//         * variable to avoid queueing multiple resize operations
-//         */
-//        if (idle_resize_id == 0) {
-//                idle_resize_id = clutter_threads_add_timeout (1000, idle_resize, actor);
-//        }
-//}
-
 static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocation, ClutterAllocationFlags flags, gpointer user_data)
 {
         clutter_canvas_set_size (CLUTTER_CANVAS (clutter_actor_get_content (actor)), ceilf (clutter_actor_box_get_width (allocation)),

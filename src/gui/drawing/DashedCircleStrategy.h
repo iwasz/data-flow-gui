@@ -17,7 +17,7 @@ public:
         virtual ~DashedCircleStrategy () {}
         virtual void onButtonPress (float x, float y);
         virtual void onMotion (float x, float y);
-        virtual void onButtonRelease (float x, float y);
+        virtual bool onButtonRelease (float x, float y);
         virtual void reshape (IClutterActor *a);
 
         Circle *getCircle () const { return circle; }

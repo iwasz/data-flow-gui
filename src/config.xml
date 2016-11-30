@@ -14,9 +14,12 @@
                 <Circle set-as="circle" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" />
         </DashedCircleStrategy>
 
-        <DashedLineStrategy id="dashedLine" />
+        <DashedLineStrategy id="dashedLine">
+                <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" />
+        </DashedLineStrategy>
 
         <Circle scope="prototype" id="circle" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false" />
+        <Line scope="prototype" id="arc" parent="@stage" strokeColor="#0096c6c9" visible="false" strokeWidth="20" />
 
         <MainController id="mainController" loopDelayMs="5">
                 <ToolMap set-as="tools">

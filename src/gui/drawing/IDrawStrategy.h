@@ -19,8 +19,8 @@ struct __tiliae_reflect__ IDrawStrategy : public Core::Object {
         virtual void onButtonPress (float x, float y) = 0;
         /// Mouse motion while button still pressed.
         virtual void onMotion (float x, float y) = 0;
-        /// Button released.
-        virtual void onButtonRelease (float x, float y) = 0;
+        /// Button released. Returns if creating an object with such dimensions makes even sense.
+        virtual bool onButtonRelease (float x, float y) = 0;
         /**
          * This get called after all 3 above, and after a factory kicked in, and created an *a.
          * It's purpose is to set *a it's final shape.

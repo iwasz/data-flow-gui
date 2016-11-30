@@ -8,22 +8,26 @@
 #ifndef DASHEDLINESTRATEGY_H
 #define DASHEDLINESTRATEGY_H
 
-#include <iostream>
-#include <ReflectionParserAnnotation.h>
+#include <view/Line.h>
 #include "IDrawStrategy.h"
+#include <ReflectionParserAnnotation.h>
+#include <iostream>
 
 class __tiliae_reflect__ DashedLineStrategy : public IDrawStrategy {
 public:
         virtual ~DashedLineStrategy () {}
-        virtual void onButtonPress (float x, float y) { std::cerr << "POKAŻ kreseczkę " << x << ", " << y << std::endl; }
-        virtual void onMotion (float x, float y) { std::cerr << "kreseczka " << x << ", " << y << std::endl; }
-        virtual void onButtonRelease (float x, float y) { std::cerr << "UKRYJ kreseczkę " << x << ", " << y << std::endl; }
+        virtual void onButtonPress (float x, float y);
+        virtual void onMotion (float x, float y);
+        virtual bool onButtonRelease (float x, float y);
         virtual void reshape (IClutterActor *a);
 
-private:
+        Line *getLine () const { return line; }
+        void setLine (Line *value) { line = value; }
 
-        float startX = 0;
-        float startY = 0;
+private:
+        Line *line = nullptr;
+        Point startPoint;
+        Point endPoint;
 };
 
 #endif // DASHEDLINESTRATEGY_H

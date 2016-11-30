@@ -6,28 +6,34 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef CLUTTER_DATA_FLOW_STAGE_H
-#define CLUTTER_DATA_FLOW_STAGE_H
+#ifndef VIEW_DATA_FLOW_LINE_H
+#define VIEW_DATA_FLOW_LINE_H
 
 #include "AbstractActor.h"
+#include "Stage.h"
 #include <ReflectionParserAnnotation.h>
-#include <clutter-gtk/clutter-gtk.h>
+#include <clutter/clutter.h>
 #include <string>
 
-class __tiliae_reflect__ Stage : public AbstractActor {
+class __tiliae_reflect__ Line : public AbstractActor {
 public:
+        Line ();
+        virtual ~Line () {}
 
-        Stage ();
-        virtual ~Stage () {}
+        void setPointA (Point const &p);
+        Point getPointA () const;
 
-        GtkWidget *getClutterWidget () { return clutterWidget; }
-        void setParent (IClutterActor *parent) { throw Core::Exception ("Not implemented"); }
+        void setPointB (Point const &p);
+        Point getPointB () const;
 
-        virtual std::string getFillColor () const;
-        virtual void setFillColor (const std::string &value);
+        float getStrokeWidth () const;
+        void setStrokeWidth (float value);
 
-private:
-        GtkWidget *clutterWidget;
+        float getStrokeDash () const;
+        void setStrokeDash (float value);
+
+        std::string getStrokeColor () const;
+        void setStrokeColor (const std::string &value);
 };
 
-#endif // STAGE_H
+#endif // LINE_H

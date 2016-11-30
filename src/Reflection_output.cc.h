@@ -284,15 +284,16 @@ void createReflectionDatabase_gtkFormsDemo ()
 		}
 		else {
 			clazz->addBaseClassName ("Object");
+			clazz->addMethod (new Method ("setParent", createMethodWrapper (&IClutterActor::setParent)));
 			clazz->addMethod (new Method ("getActor", createMethodWrapper (&IClutterActor::getActor)));
 			clazz->addMethod (new Method ("getVisible", createMethodWrapper (&IClutterActor::getVisible)));
 			clazz->addMethod (new Method ("setVisible", createMethodWrapper (&IClutterActor::setVisible)));
-			clazz->addMethod (new Method ("isFill", createMethodWrapper (&IClutterActor::isFill)));
-			clazz->addMethod (new Method ("setFill", createMethodWrapper (&IClutterActor::setFill)));
 			clazz->addMethod (new Method ("setPosition", createMethodWrapper (&IClutterActor::setPosition)));
 			clazz->addMethod (new Method ("getPosition", createMethodWrapper (&IClutterActor::getPosition)));
 			clazz->addMethod (new Method ("setSize", createMethodWrapper (&IClutterActor::setSize)));
 			clazz->addMethod (new Method ("getDimension", createMethodWrapper (&IClutterActor::getDimension)));
+			clazz->addMethod (new Method ("isFill", createMethodWrapper (&IClutterActor::isFill)));
+			clazz->addMethod (new Method ("setFill", createMethodWrapper (&IClutterActor::setFill)));
 			clazz->addMethod (new Method ("getStrokeWidth", createMethodWrapper (&IClutterActor::getStrokeWidth)));
 			clazz->addMethod (new Method ("setStrokeWidth", createMethodWrapper (&IClutterActor::setStrokeWidth)));
 			clazz->addMethod (new Method ("getStrokeDash", createMethodWrapper (&IClutterActor::getStrokeDash)));
@@ -310,6 +311,7 @@ void createReflectionDatabase_gtkFormsDemo ()
 		}
 		else {
 			clazz->addBaseClassName ("IClutterActor");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <AbstractActor, void>::Level1Wrapper::newConstructorPointer ()));
 			clazz->addMethod (new Method ("setParent", createMethodWrapper (&AbstractActor::setParent)));
 			clazz->addMethod (new Method ("getActor", createMethodWrapper (&AbstractActor::getActor)));
 			clazz->addMethod (new Method ("getVisible", createMethodWrapper (&AbstractActor::getVisible)));
@@ -318,6 +320,16 @@ void createReflectionDatabase_gtkFormsDemo ()
 			clazz->addMethod (new Method ("getPosition", createMethodWrapper (&AbstractActor::getPosition)));
 			clazz->addMethod (new Method ("setSize", createMethodWrapper (&AbstractActor::setSize)));
 			clazz->addMethod (new Method ("getDimension", createMethodWrapper (&AbstractActor::getDimension)));
+			clazz->addMethod (new Method ("isFill", createMethodWrapper (&AbstractActor::isFill)));
+			clazz->addMethod (new Method ("setFill", createMethodWrapper (&AbstractActor::setFill)));
+			clazz->addMethod (new Method ("getStrokeWidth", createMethodWrapper (&AbstractActor::getStrokeWidth)));
+			clazz->addMethod (new Method ("setStrokeWidth", createMethodWrapper (&AbstractActor::setStrokeWidth)));
+			clazz->addMethod (new Method ("getStrokeDash", createMethodWrapper (&AbstractActor::getStrokeDash)));
+			clazz->addMethod (new Method ("setStrokeDash", createMethodWrapper (&AbstractActor::setStrokeDash)));
+			clazz->addMethod (new Method ("getStrokeColor", createMethodWrapper (&AbstractActor::getStrokeColor)));
+			clazz->addMethod (new Method ("setStrokeColor", createMethodWrapper (&AbstractActor::setStrokeColor)));
+			clazz->addMethod (new Method ("getFillColor", createMethodWrapper (&AbstractActor::getFillColor)));
+			clazz->addMethod (new Method ("setFillColor", createMethodWrapper (&AbstractActor::setFillColor)));
 		}
 	}
 	{
@@ -330,14 +342,6 @@ void createReflectionDatabase_gtkFormsDemo ()
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Stage, void>::Level1Wrapper::newConstructorPointer ()));
 			clazz->addMethod (new Method ("getClutterWidget", createMethodWrapper (&Stage::getClutterWidget)));
 			clazz->addMethod (new Method ("setParent", createMethodWrapper (&Stage::setParent)));
-			clazz->addMethod (new Method ("isFill", createMethodWrapper (&Stage::isFill)));
-			clazz->addMethod (new Method ("setFill", createMethodWrapper (&Stage::setFill)));
-			clazz->addMethod (new Method ("getStrokeWidth", createMethodWrapper (&Stage::getStrokeWidth)));
-			clazz->addMethod (new Method ("setStrokeWidth", createMethodWrapper (&Stage::setStrokeWidth)));
-			clazz->addMethod (new Method ("getStrokeDash", createMethodWrapper (&Stage::getStrokeDash)));
-			clazz->addMethod (new Method ("setStrokeDash", createMethodWrapper (&Stage::setStrokeDash)));
-			clazz->addMethod (new Method ("getStrokeColor", createMethodWrapper (&Stage::getStrokeColor)));
-			clazz->addMethod (new Method ("setStrokeColor", createMethodWrapper (&Stage::setStrokeColor)));
 			clazz->addMethod (new Method ("getFillColor", createMethodWrapper (&Stage::getFillColor)));
 			clazz->addMethod (new Method ("setFillColor", createMethodWrapper (&Stage::setFillColor)));
 		}
@@ -640,6 +644,26 @@ void createReflectionDatabase_gtkFormsDemo ()
 		}
 	}
 	{
+		Class *clazz = new Class ("Line", typeid (Line &), new Reflection::PtrDeleter <Line>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("AbstractActor");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Line, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("setPointA", createMethodWrapper (&Line::setPointA)));
+			clazz->addMethod (new Method ("getPointA", createMethodWrapper (&Line::getPointA)));
+			clazz->addMethod (new Method ("setPointB", createMethodWrapper (&Line::setPointB)));
+			clazz->addMethod (new Method ("getPointB", createMethodWrapper (&Line::getPointB)));
+			clazz->addMethod (new Method ("getStrokeWidth", createMethodWrapper (&Line::getStrokeWidth)));
+			clazz->addMethod (new Method ("setStrokeWidth", createMethodWrapper (&Line::setStrokeWidth)));
+			clazz->addMethod (new Method ("getStrokeDash", createMethodWrapper (&Line::getStrokeDash)));
+			clazz->addMethod (new Method ("setStrokeDash", createMethodWrapper (&Line::setStrokeDash)));
+			clazz->addMethod (new Method ("getStrokeColor", createMethodWrapper (&Line::getStrokeColor)));
+			clazz->addMethod (new Method ("setStrokeColor", createMethodWrapper (&Line::setStrokeColor)));
+		}
+	}
+	{
 		Class *clazz = new Class ("DashedLineStrategy", typeid (DashedLineStrategy &), new Reflection::PtrDeleter <DashedLineStrategy>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
@@ -651,6 +675,8 @@ void createReflectionDatabase_gtkFormsDemo ()
 			clazz->addMethod (new Method ("onMotion", createMethodWrapper (&DashedLineStrategy::onMotion)));
 			clazz->addMethod (new Method ("onButtonRelease", createMethodWrapper (&DashedLineStrategy::onButtonRelease)));
 			clazz->addMethod (new Method ("reshape", createMethodWrapper (&DashedLineStrategy::reshape)));
+			clazz->addMethod (new Method ("getLine", createMethodWrapper (&DashedLineStrategy::getLine)));
+			clazz->addMethod (new Method ("setLine", createMethodWrapper (&DashedLineStrategy::setLine)));
 		}
 	}
 }
