@@ -69,11 +69,14 @@ static void iw_line_finalize (GObject *gobject)
 
 static void iw_line_pick (ClutterActor *actor, const ClutterColor *pick_color)
 {
-        if (!clutter_actor_should_pick_paint (actor)) return;
+        if (!clutter_actor_should_pick_paint (actor)) {
+                return;
+        }
 
         ClutterActorBox allocation = {
                 0,
         };
+
         gfloat width, height;
 
         clutter_actor_get_allocation_box (actor, &allocation);
@@ -83,12 +86,12 @@ static void iw_line_pick (ClutterActor *actor, const ClutterColor *pick_color)
 
         cogl_set_source_color4ub (pick_color->red, pick_color->green, pick_color->blue, pick_color->alpha);
 
-        /* create and store a path describing a star */
-        cogl_path_move_to (0 + 3, 0 - 3);
-        cogl_path_line_to (width + 3, height - 3);
-        cogl_path_line_to (width - 3, height + 3);
-        cogl_path_line_to (0 - 3, 0 + 3);
-        cogl_path_line_to (0 + 3, 0 - 3);
+        float m = IW_LINE (actor)->priv->strokeWidth / 2.0 + 0.5;
+        cogl_path_move_to (0 + m, 0 - m);
+        cogl_path_line_to (width + m, height - m);
+        cogl_path_line_to (width - m, height + m);
+        cogl_path_line_to (0 - m, 0 + m);
+        cogl_path_line_to (0 + m, 0 - m);
         cogl_path_fill ();
 }
 
