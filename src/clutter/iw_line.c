@@ -224,14 +224,13 @@ gfloat iw_line_get_stroke_dash (IwLine *self)
 
 static void iw_line_resize_accordingly (IwLine *self)
 {
-        if (self->priv->ax < self->priv->bx || self->priv->ay < self->priv->by) {
-                clutter_actor_set_position (CLUTTER_ACTOR (self), self->priv->ax, self->priv->ay);
-                clutter_actor_set_size (CLUTTER_ACTOR (self), self->priv->bx - self->priv->ax, self->priv->by - self->priv->ay);
-        }
-        else {
-                clutter_actor_set_position (CLUTTER_ACTOR (self), self->priv->bx, self->priv->by);
-                clutter_actor_set_size (CLUTTER_ACTOR (self), self->priv->ax - self->priv->bx, self->priv->ay - self->priv->by);
-        }
+        float px = fmin (self->priv->ax, self->priv->bx);
+        float py = fmin (self->priv->ay, self->priv->by);
+        clutter_actor_set_position (CLUTTER_ACTOR (self), px, py);
+
+        float qx = fmax (self->priv->ax, self->priv->bx);
+        float qy = fmax (self->priv->ay, self->priv->by);
+        clutter_actor_set_size (CLUTTER_ACTOR (self), qx - px, qy - py);
 }
 
 void iw_line_set_point_a (IwLine *self, gfloat x, gfloat y)
@@ -304,8 +303,30 @@ static gboolean draw_line (ClutterCanvas *canvas, cairo_t *cr, int width, int he
 
         // Prevent clipping.
         float margin = priv->strokeWidth / 2.0 + 0.5;
-        cairo_move_to (cr, margin, margin);
-        cairo_line_to (cr, width - margin, height - margin);
+
+        float ax = priv->ax;
+        float ay = priv->ay;
+        float bx = priv->bx;
+        float by = priv->by;
+
+        if (ax < bx && ay < by) {
+                cairo_move_to (cr, margin, margin);
+                cairo_line_to (cr, width - margin, height - margin);
+        }
+        else if (ax > bx && ay > by) {
+                cairo_move_to (cr, width - margin, height - margin);
+                cairo_line_to (cr, margin, margin);
+        }
+
+        else if (ax > bx && ay < by) {
+                cairo_move_to (cr, width - margin, margin);
+                cairo_line_to (cr, margin, height - margin);
+        }
+        else if (ax < bx && ay > by) {
+                cairo_move_to (cr, margin, height - margin);
+                cairo_line_to (cr, width - margin, margin);
+        }
+
         cairo_stroke (cr);
         return TRUE;
 }
