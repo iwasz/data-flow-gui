@@ -59,6 +59,18 @@ endif ()
 INCLUDE_DIRECTORIES (${STATEMACHINE_INCLUDE_DIRS})
 link_directories(${STATEMACHINE_LIBRARY_DIRS})
 
+pkg_check_modules (DATAFLOW "data-flow")
+if (NOT DATAFLOW_FOUND)
+        MESSAGE (STATUS "DATAFLOW not installed, using local copy.")
+        SET (DATAFLOW_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/../data-flow/src/core/")
+        SET (DATAFLOW_LIBRARY_DIRS "${PROJECT_SOURCE_DIR}/../data-flow/build/")
+        SET (DATAFLOW_LIBRARIES "dataflow")
+        MESSAGE (STATUS ${DATAFLOW_INCLUDE_DIRS})
+        MESSAGE (STATUS ${DATAFLOW_LIBRARY_DIRS})
+endif ()
+INCLUDE_DIRECTORIES (${DATAFLOW_INCLUDE_DIRS})
+link_directories(${DATAFLOW_LIBRARY_DIRS})
+
 pkg_check_modules (GTK REQUIRED "gtk+-3.0")
 INCLUDE_DIRECTORIES (${GTK_INCLUDE_DIRS})
 link_directories(${GTK_LIBRARY_DIRS})
@@ -106,11 +118,16 @@ LIST (APPEND SOURCES
         "src/view/Line.cc"
         "src/view/Stage.h"
         "src/view/Stage.cc"
+        "src/view/CircularNode.h"
+        "src/view/CircularNode.cc"
         "src/view/IClutterActor.h"
         "src/view/AbstractActor.h"
         "src/view/AbstractActor.cc"
         "src/geometry/Geometry.h"
         "src/geometry/Geometry.cc"
+        "src/model/IDFNode.h"
+        "src/model/DFNode.h"
+        "src/model/DFNode.cc"
 )
 
 # Local includes (inside project).
@@ -127,6 +144,7 @@ TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${CLUTTER_GTK_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${GTK_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${GTKFORMS_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${STATEMACHINE_LIBRARIES})
+TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${DATAFLOW_LIBRARIES})
 
 ADD_CUSTOM_COMMAND (OUTPUT "${CMAKE_BINARY_DIR}/config.xml"
                     COMMAND ln -s "src/config.xml" "${CMAKE_BINARY_DIR}/config.xml"

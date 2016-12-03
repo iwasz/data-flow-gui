@@ -44,6 +44,8 @@ GType iw_circular_node_get_type (void);
 /* get the IwCircularNodeClass structure for a IwCircularNode obj */
 #define IW_CIRCULAR_NODE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), IW_TYPE_CIRCULAR_NODE, IwCircularNodeClass))
 
+#define MAX_PORTS_NO 16
+
 /*
  * Private instance fields; see
  * http://www.gotw.ca/gotw/024.htm for the rationale
@@ -73,6 +75,7 @@ struct _IwCircularNodeClass {
 /* constructor - note this returns a ClutterActor instance */
 ClutterActor *iw_circular_node_new (void);
 void iw_circular_node_set_color (IwCircularNode *self, const ClutterColor *color);
+
 void iw_circular_node_set_port_color (IwCircularNode *self, int i, const ClutterColor *color);
 void iw_circular_node_set_port_angle (IwCircularNode *self, int i, float angle);
 void iw_circular_node_set_port_size (IwCircularNode *self, int i, float s);

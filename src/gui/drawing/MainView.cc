@@ -80,52 +80,7 @@ void MainView::loadUi (GtkForms::App *app)
         /*---------------------------------------------------------------------------*/
 
         {
-                ClutterActor *circularNode = iw_circular_node_new ();
-                clutter_actor_set_position (circularNode, 100, 300);
-                iw_circular_node_set_radius (IW_CIRCULAR_NODE (circularNode), 75);
-                ClutterColor actor_color = { 0, 150, 198, 201 };
-                iw_circular_node_set_color (IW_CIRCULAR_NODE (circularNode), &actor_color);
-                clutter_actor_set_reactive (circularNode, TRUE);
-
-                iw_circular_node_set_ports_no (IW_CIRCULAR_NODE (circularNode), 3);
-                iw_circular_node_set_port_angle (IW_CIRCULAR_NODE (circularNode), 0, G_PI - 0.5);
-                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (circularNode), 0, 0.4);
-                ClutterColor port_color = { 141, 141, 141, 255 };
-                iw_circular_node_set_port_color (IW_CIRCULAR_NODE (circularNode), 0, &port_color);
-
-                iw_circular_node_set_port_angle (IW_CIRCULAR_NODE (circularNode), 1, G_PI + 0.5);
-                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (circularNode), 1, 0.4);
-                iw_circular_node_set_port_color (IW_CIRCULAR_NODE (circularNode), 1, &port_color);
-
-                iw_circular_node_set_port_angle (IW_CIRCULAR_NODE (circularNode), 2, 2 * G_PI);
-                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (circularNode), 2, 0.4);
-                ClutterColor port_color2 = { 209, 209, 209, 255 };
-                iw_circular_node_set_port_color (IW_CIRCULAR_NODE (circularNode), 2, &port_color2);
-
-                clutter_actor_add_child (stage->getActor (), circularNode);
-
-                ClutterAction *dragAction = clutter_drag_action_new ();
-                clutter_actor_add_action (circularNode, dragAction);
         }
-
-        /*---------------------------------------------------------------------------*/
-
-        {
-                ClutterActor *line = iw_line_new ();
-                clutter_actor_set_size (line, 100, 100);
-                clutter_actor_set_position (line, 300, 100);
-                ClutterColor actor_color = { 0, 150, 198, 201 };
-                iw_line_set_stroke_color (IW_LINE (line), &actor_color);
-                clutter_actor_set_reactive (line, TRUE);
-                clutter_actor_add_child (stage->getActor (), line);
-
-                ClutterAction *dragAction = clutter_drag_action_new ();
-                clutter_actor_add_action (line, dragAction);
-        }
-
-        /*---------------------------------------------------------------------------*/
-        // Warning! This causes problems:
-        // clutter_actor_show (stage);
 }
 
 /*****************************************************************************/
@@ -140,6 +95,11 @@ static void on_stage_button_press (ClutterStage *stage, ClutterEvent *event, gpo
 
         // find which actor was clicked
         ClutterActor *clicked = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
+
+        // Pobrać model
+        // Czy to jest arc.
+        // Czy to jest port (jeśli port, to porty będzie wiedział do jakiego node należy). Numer portu.
+        //
 
         if (clicked == CLUTTER_ACTOR (stage)) {
                 mc->onButtonPress (x, y);

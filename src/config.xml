@@ -19,7 +19,7 @@
         </DashedLineStrategy>
 
         <Circle scope="prototype" id="circle" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false" />
-        <Line scope="prototype" id="arc" parent="@stage" strokeColor="#0096c6c9" visible="false" strokeWidth="20" />
+        <Line scope="prototype" id="arc" parent="@stage" strokeColor="#0096c6c9" visible="false" strokeWidth="1" />
 
         <MainController id="mainController" loopDelayMs="5">
                 <ToolMap set-as="tools">

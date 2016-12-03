@@ -28,8 +28,6 @@ struct _IwCircularNodePort {
 
 typedef struct _IwCircularNodePort IwCircularNodePort;
 
-#define MAX_PORTS_NO 16
-
 /*
  * Private structures.
  */
