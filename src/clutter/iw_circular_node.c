@@ -6,8 +6,9 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <math.h>
 #include "iw_circular_node.h"
+#include "iw_circle.h"
+#include <math.h>
 
 /* convenience macro for GType implementations; see:
  * http://library.gnome.org/devel/gobject/2.27/gobject-Type-Information.html#G-DEFINE-TYPE:CAPS
@@ -24,6 +25,7 @@ struct _IwCircularNodePort {
         float angle;
         float size;
         ClutterColor color;
+        ClutterActor *actor;
 };
 
 typedef struct _IwCircularNodePort IwCircularNodePort;
@@ -35,6 +37,10 @@ struct _IwCircularNodePrivate {
         ClutterColor color;
         ClutterContent *canvas;
         float radius;
+
+        ClutterLayoutManager *layout;
+        ClutterActor *box;
+        ClutterActor *mainCircle;
 
         int portsNo;
         IwCircularNodePort ports[MAX_PORTS_NO];
@@ -123,7 +129,6 @@ static void iw_circular_node_class_init (IwCircularNodeClass *klass)
 static void iw_circular_node_init (IwCircularNode *self)
 {
         IwCircularNodePrivate *priv;
-        ClutterLayoutManager *layout;
 
         priv = self->priv = IW_CIRCULAR_NODE_GET_PRIVATE (self);
         priv->portsNo = 0;
@@ -157,18 +162,52 @@ static void iw_circular_node_init (IwCircularNode *self)
 
         //        g_signal_connect (priv->click_action, "clicked", G_CALLBACK (iw_circular_node_clicked), NULL);
         priv->color = *clutter_color_get_static (CLUTTER_COLOR_WHITE);
-        priv->canvas = clutter_canvas_new ();
-        //        clutter_canvas_set_size (CLUTTER_CANVAS (priv->canvas), 300, 300);
-        clutter_actor_set_content (CLUTTER_ACTOR (self), priv->canvas);
-        clutter_actor_set_content_scaling_filters (CLUTTER_ACTOR (self), CLUTTER_SCALING_FILTER_TRILINEAR, CLUTTER_SCALING_FILTER_LINEAR);
-        g_object_unref (priv->canvas);
 
-        /* connect our drawing code */
-        g_signal_connect (priv->canvas, "draw", G_CALLBACK (do_draw), priv);
-        /* invalidate the canvas, so that we can draw before the main loop starts */
-        clutter_content_invalidate (priv->canvas);
+        /*
+                priv->canvas = clutter_canvas_new ();
+                //        clutter_canvas_set_size (CLUTTER_CANVAS (priv->canvas), 300, 300);
+                clutter_actor_set_content (CLUTTER_ACTOR (self), priv->canvas);
+                clutter_actor_set_content_scaling_filters (CLUTTER_ACTOR (self), CLUTTER_SCALING_FILTER_TRILINEAR, CLUTTER_SCALING_FILTER_LINEAR);
+                g_object_unref (priv->canvas);
 
-        g_signal_connect (CLUTTER_ACTOR (self), "allocation-changed", G_CALLBACK (on_actor_resize), NULL);
+                // connect our drawing code
+                g_signal_connect (priv->canvas, "draw", G_CALLBACK (do_draw), priv);
+                //  invalidate the canvas, so that we can draw before the main loop starts
+                clutter_content_invalidate (priv->canvas);
+        */
+
+        //        priv->layout = clutter_bin_layout_new (CLUTTER_BIN_ALIGNMENT_CENTER, CLUTTER_BIN_ALIGNMENT_CENTER);
+        priv->layout = clutter_fixed_layout_new ();
+
+        /* the main container; this actor will use the BinLayout to lay
+         * out its children; we use the anchor point to keep it centered
+         * on the same position even when we change its size
+         */
+        priv->box = clutter_actor_new ();
+        clutter_actor_set_layout_manager (priv->box, priv->layout);
+        clutter_actor_set_reactive (priv->box, TRUE);
+        clutter_actor_add_child (CLUTTER_ACTOR (self), priv->box);
+
+        priv->mainCircle = iw_circle_new ();
+        clutter_actor_set_size (CLUTTER_ACTOR (priv->mainCircle), 100, 100);
+        clutter_actor_add_child (CLUTTER_ACTOR (priv->box), priv->mainCircle);
+
+        //        for (int i = 0; i < priv->portsNo; ++i) {
+        //                priv->circle1 = iw_circle_new ();
+        //                clutter_actor_set_size (CLUTTER_ACTOR (priv->circle1), priv->ports[i].size, priv->ports[i].size);
+        //                iw_circle_set_fill_color (IW_CIRCLE (priv->circle1), &priv->ports[i].color);
+
+        //                float r = 60;
+        //                float phi = priv->ports[i].angle;
+
+        //                clutter_actor_set_position (CLUTTER_ACTOR (priv->circle1), r * cos (phi) + 50 - 10, r * sin (phi) + 50 - 10);
+        //                clutter_actor_add_child (CLUTTER_ACTOR (priv->box), priv->circle1);
+
+        ////                clutter_cairo_set_source_color (cr, &priv->ports[i].color);
+        ////                cairo_arc (cr, 0, 0, priv->radius - PORT_LINE_WIDTH / 2 - 1, priv->ports[i].angle - priv->ports[i].size / 2,
+        ////                           priv->ports[i].angle + priv->ports[i].size / 2);
+        ////                cairo_stroke (cr);
+        //        }
 }
 
 /*****************************************************************************/
@@ -264,6 +303,12 @@ void iw_circular_node_set_ports_no (IwCircularNode *self, int i)
 {
         g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
         self->priv->portsNo = i;
+
+        for (int i = 0; i < self->priv->portsNo; ++i) {
+                self->priv->ports[i].actor = iw_circle_new ();
+                iw_circle_set_fill (IW_CIRCLE (self->priv->ports[i].actor), TRUE);
+                clutter_actor_add_child (CLUTTER_ACTOR (self->priv->box), self->priv->ports[i].actor);
+        }
 }
 
 /*****************************************************************************/
@@ -271,8 +316,7 @@ void iw_circular_node_set_ports_no (IwCircularNode *self, int i)
 void iw_circular_node_set_port_color (IwCircularNode *self, int i, const ClutterColor *color)
 {
         g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        self->priv->ports[i].color = *color;
-        clutter_content_invalidate (self->priv->canvas);
+        iw_circle_set_fill_color (IW_CIRCLE (self->priv->ports[i].actor), color);
 }
 
 /*****************************************************************************/
@@ -281,7 +325,8 @@ void iw_circular_node_set_port_angle (IwCircularNode *self, int i, float angle)
 {
         g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
         self->priv->ports[i].angle = angle;
-        clutter_content_invalidate (self->priv->canvas);
+        float r = clutter_actor_get_width (self->priv->mainCircle) / 2;
+        clutter_actor_set_position (self->priv->ports[i].actor, r * cos (angle) + 50 - 10, r * sin (angle) + 50 - 10);
 }
 
 /*****************************************************************************/
@@ -291,8 +336,9 @@ void iw_circular_node_set_port_size (IwCircularNode *self, int i, float s)
         g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
         g_return_if_fail (i >= 0);
         g_return_if_fail (i < self->priv->portsNo);
-        self->priv->ports[i].size = s;
-        clutter_content_invalidate (self->priv->canvas);
+        //        self->priv->ports[i].size = s;
+        //        clutter_content_invalidate (self->priv->canvas);
+        clutter_actor_set_size (CLUTTER_ACTOR (self->priv->ports[i].actor), s, s);
 }
 
 /*****************************************************************************/
