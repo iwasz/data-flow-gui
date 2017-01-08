@@ -47,42 +47,24 @@ void Circle::setStrokeDash (float value) { iw_circle_set_stroke_dash (IW_CIRCLE 
 
 /*****************************************************************************/
 
-std::string Circle::getStrokeColor () const
-{
-        ClutterColor *color = iw_circle_get_stroke_color (IW_CIRCLE (self));
-        return std::string (clutter_color_to_string (color));
-}
+Color Circle::getStrokeColor () const { return Color (iw_circle_get_stroke_color (IW_CIRCLE (self))); }
 
 /*****************************************************************************/
 
-void Circle::setStrokeColor (const std::string &value)
+Color Circle::getFillColor () const { return Color (iw_circle_get_fill_color (IW_CIRCLE (self))); }
+
+/*****************************************************************************/
+
+void Circle::setStrokeColor (const Color &value)
 {
-        ClutterColor color;
-
-        if (!clutter_color_from_string (&color, value.c_str ())) {
-                throw Core::Exception ("Wrong color string [" + value + "].");
-        }
-
+        ClutterColor color = Color::toClutterColor (value);
         iw_circle_set_stroke_color (IW_CIRCLE (self), &color);
 }
 
 /*****************************************************************************/
 
-std::string Circle::getFillColor () const
+void Circle::setFillColor (const Color &value)
 {
-        ClutterColor *color = iw_circle_get_fill_color (IW_CIRCLE (self));
-        return std::string (clutter_color_to_string (color));
-}
-
-/*****************************************************************************/
-
-void Circle::setFillColor (const std::string &value)
-{
-        ClutterColor color;
-
-        if (!clutter_color_from_string (&color, value.c_str ())) {
-                throw Core::Exception ("Wrong color string [" + value + "].");
-        }
-
+        ClutterColor color = Color::toClutterColor (value);
         iw_circle_set_fill_color (IW_CIRCLE (self), &color);
 }

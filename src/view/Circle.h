@@ -29,11 +29,11 @@ public:
         float getStrokeDash () const;
         void setStrokeDash (float value);
 
-        std::string getStrokeColor () const;
-        void setStrokeColor (const std::string &value);
+        Color getStrokeColor () const;
+        void setStrokeColor (const Color &value);
 
-        std::string getFillColor () const;
-        void setFillColor (const std::string &value);
+        Color getFillColor () const;
+        void setFillColor (const Color &value);
 };
 
 #endif // CIRCLE_H

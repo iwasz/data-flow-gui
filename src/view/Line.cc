@@ -63,21 +63,15 @@ void Line::setStrokeDash (float value) { iw_line_set_stroke_dash (IW_LINE (self)
 
 /*****************************************************************************/
 
-std::string Line::getStrokeColor () const
+Color Line::getStrokeColor() const
 {
-        ClutterColor *color = iw_line_get_stroke_color (IW_LINE (self));
-        return std::string (clutter_color_to_string (color));
+        return Color (iw_line_get_stroke_color (IW_LINE (self)));
 }
 
 /*****************************************************************************/
 
-void Line::setStrokeColor (const std::string &value)
+void Line::setStrokeColor (const Color &value)
 {
-        ClutterColor color;
-
-        if (!clutter_color_from_string (&color, value.c_str ())) {
-                throw Core::Exception ("Wrong color string [" + value + "].");
-        }
-
+        ClutterColor color = Color::toClutterColor (value);
         iw_line_set_stroke_color (IW_LINE (self), &color);
 }

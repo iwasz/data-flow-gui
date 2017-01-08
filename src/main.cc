@@ -6,16 +6,15 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <GtkForms.h>
-#include <gtk/gtk.h>
 #include <clutter-gtk/clutter-gtk.h>
-#include <Tiliae.h>
+#include <gtk/gtk.h>
+#include "DataFlowApp.h"
 
 //// TODO czemu to musi tu być? Czemu tiliaeparser zamienia bool na to _Bool?
 #define _Bool bool
-#include "Reflection_output_tiliae.cc.h"
-#include "Reflection_output_gtkforms.cc.h"
 #include "Reflection_output.cc.h"
+#include "Reflection_output_gtkforms.cc.h"
+#include "Reflection_output_tiliae.cc.h"
 
 /*****************************************************************************/
 
@@ -27,6 +26,7 @@ int main (int argc, char **argv)
                 g_error ("Unable to initialize GtkClutter");
         }
 
-        GtkForms::App app{ "config.xml", "mainController" };
+        DataFlowApp app;
+        app.init ("config.xml", "mainController");
         gtk_main ();
 }

@@ -37,11 +37,11 @@ public:
         virtual float getStrokeDash () const { throw Core::Exception ("Not implemented"); }
         virtual void setStrokeDash (float value) { throw Core::Exception ("Not implemented"); }
 
-        virtual std::string getStrokeColor () const { throw Core::Exception ("Not implemented"); }
-        virtual void setStrokeColor (const std::string &value) { throw Core::Exception ("Not implemented"); }
+        virtual Color getStrokeColor () const { throw Core::Exception ("Not implemented"); }
+        virtual void setStrokeColor (const Color &value) { throw Core::Exception ("Not implemented"); }
 
-        virtual std::string getFillColor () const { throw Core::Exception ("Not implemented"); }
-        virtual void setFillColor (const std::string &value) { throw Core::Exception ("Not implemented"); }
+        virtual Color getFillColor () const { throw Core::Exception ("Not implemented"); }
+        virtual void setFillColor (const Color &value) { throw Core::Exception ("Not implemented"); }
 
 protected:
 

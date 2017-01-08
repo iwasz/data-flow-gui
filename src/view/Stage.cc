@@ -17,22 +17,17 @@ Stage::Stage ()
 
 /*****************************************************************************/
 
-std::string Stage::getFillColor () const
+Color Stage::getFillColor() const
 {
         ClutterColor color;
         clutter_actor_get_background_color (self, &color);
-        return std::string (clutter_color_to_string (&color));
+        return Color (&color);
 }
 
 /*****************************************************************************/
 
-void Stage::setFillColor (const std::string &color)
+void Stage::setFillColor (const Color &value)
 {
-        ClutterColor stageColor;
-
-        if (!clutter_color_from_string (&stageColor, color.c_str ())) {
-                throw Core::Exception ("Wrong color string [" + color + "].");
-        }
-
-        clutter_actor_set_background_color (self, &stageColor);
+        ClutterColor color = Color::toClutterColor (value);
+        clutter_actor_set_background_color (self, &color);
 }

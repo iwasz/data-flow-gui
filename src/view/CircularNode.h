@@ -19,7 +19,7 @@ class __tiliae_reflect__ Port {
 public:
         float angle;
         float size;
-        std::string color;
+        Color color;
 };
 
 typedef __tiliae_reflect__ std::vector<Port> PortVector;
@@ -33,8 +33,7 @@ public:
         virtual ~CircularNode () {}
         void init ();
 
-        PortVector getPorts () const { return ports; }
-        void setPorts (const PortVector &value) { ports = value; }
+        PortVector &getPorts () { return ports; }
 
         /*---------------------------------------------------------------------------*/
 
@@ -47,13 +46,13 @@ public:
         float getStrokeDash () const;
         void setStrokeDash (float value);
 
-        std::string getStrokeColor () const;
-        void setStrokeColor (const std::string &value);
+        Color getStrokeColor () const;
+        void setStrokeColor (const Color &value);
 
-        std::string getFillColor () const;
-        void setFillColor (const std::string &value);
+        Color getFillColor () const;
+        void setFillColor (const Color &value);
 
-private:
+ private:
         PortVector ports;
 };
 

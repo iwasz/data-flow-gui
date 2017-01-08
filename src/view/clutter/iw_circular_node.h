@@ -12,6 +12,7 @@
 
 /* include any dependencies */
 #include <clutter/clutter.h>
+#include "iw_circle.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -74,12 +75,25 @@ struct _IwCircularNodeClass {
 
 /* constructor - note this returns a ClutterActor instance */
 ClutterActor *iw_circular_node_new (void);
-void iw_circular_node_set_color (IwCircularNode *self, const ClutterColor *color);
+
+void iw_circular_node_set_fill_color (IwCircularNode *self, const ClutterColor *color);
+ClutterColor *iw_circular_node_get_fill_color (IwCircularNode *self);
+
+void iw_circular_node_set_stroke_color (IwCircularNode *self, const ClutterColor *color);
+ClutterColor *iw_circular_node_get_stroke_color (IwCircularNode *self);
+
+void iw_circular_node_set_stroke_width (IwCircularNode *self, gfloat w);
+gfloat iw_circular_node_get_stroke_width (IwCircularNode *self);
+
+void iw_circular_node_set_stroke_dash (IwCircularNode *self, gfloat w);
+gfloat iw_circular_node_get_stroke_dash (IwCircularNode *self);
+
+void iw_circular_node_set_fill (IwCircularNode *self, gboolean b);
+gboolean iw_circular_node_is_fill (IwCircularNode *self);
 
 void iw_circular_node_set_port_color (IwCircularNode *self, int i, const ClutterColor *color);
 void iw_circular_node_set_port_angle (IwCircularNode *self, int i, float angle);
 void iw_circular_node_set_port_size (IwCircularNode *self, int i, float s);
-void iw_circular_node_set_radius (IwCircularNode *self, float r);
 void iw_circular_node_set_ports_no (IwCircularNode *self, int i);
 
 #ifdef __cplusplus

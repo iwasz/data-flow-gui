@@ -92,6 +92,8 @@ LIST (APPEND SOURCES "src/Reflection_output.cc.h")
 
 LIST (APPEND SOURCES
         "src/main.cc"
+        "src/DataFlowApp.h"
+        "src/DataFlowApp.cc"
         "src/gui/drawing/MainView.cc"
         "src/gui/drawing/MainView.h"
         "src/gui/drawing/MainController.cc"
@@ -123,8 +125,10 @@ LIST (APPEND SOURCES
         "src/view/IClutterActor.h"
         "src/view/AbstractActor.h"
         "src/view/AbstractActor.cc"
-        "src/geometry/Geometry.h"
-        "src/geometry/Geometry.cc"
+        "src/primitives/Geometry.h"
+        "src/primitives/Geometry.cc"
+        "src/primitives/Color.h"
+        "src/primitives/Color.cc"
         "src/model/IDFNode.h"
         "src/model/DFNode.h"
         "src/model/DFNode.cc"

@@ -34,9 +34,9 @@ typedef struct _IwCircularNodePort IwCircularNodePort;
  * Private structures.
  */
 struct _IwCircularNodePrivate {
-        ClutterColor color;
-        ClutterContent *canvas;
-        float radius;
+        //        ClutterColor color;
+        //        ClutterContent *canvas;
+        //        float radius;
 
         ClutterLayoutManager *layout;
         ClutterActor *box;
@@ -161,7 +161,7 @@ static void iw_circular_node_init (IwCircularNode *self)
         //        clutter_actor_add_action (CLUTTER_ACTOR (self), priv->click_action);
 
         //        g_signal_connect (priv->click_action, "clicked", G_CALLBACK (iw_circular_node_clicked), NULL);
-        priv->color = *clutter_color_get_static (CLUTTER_COLOR_WHITE);
+        //        priv->color = *clutter_color_get_static (CLUTTER_COLOR_WHITE);
 
         /*
                 priv->canvas = clutter_canvas_new ();
@@ -212,6 +212,7 @@ static void iw_circular_node_init (IwCircularNode *self)
 
 /*****************************************************************************/
 
+#if 0
 static gboolean do_draw (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data)
 {
         IwCircularNodePrivate *priv = (IwCircularNodePrivate *)data;
@@ -248,6 +249,7 @@ static gboolean do_draw (ClutterCanvas *canvas, cairo_t *cr, int width, int heig
         /* we're done drawing */
         return TRUE;
 }
+#endif
 
 // static guint idle_resize_id;
 
@@ -290,11 +292,66 @@ static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocat
 
 /*****************************************************************************/
 
-void iw_circular_node_set_color (IwCircularNode *self, const ClutterColor *color)
+void iw_circular_node_set_fill_color (IwCircularNode *self, const ClutterColor *color)
 {
         g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        self->priv->color = *color;
-        clutter_content_invalidate (self->priv->canvas);
+        iw_circle_set_fill_color (IW_CIRCLE (self->priv->mainCircle), color);
+}
+
+ClutterColor *iw_circular_node_get_fill_color (IwCircularNode *self)
+{
+        g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), NULL);
+        return iw_circle_get_fill_color (IW_CIRCLE (self->priv->mainCircle));
+}
+
+/*****************************************************************************/
+
+void iw_circular_node_set_stroke_color (IwCircularNode *self, const ClutterColor *color)
+{
+        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
+        iw_circle_set_stroke_color (IW_CIRCLE (self->priv->mainCircle), color);
+}
+
+ClutterColor *iw_circular_node_get_stroke_color (IwCircularNode *self)
+{
+        g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), NULL);
+        return iw_circle_get_stroke_color (IW_CIRCLE (self->priv->mainCircle));
+}
+
+void iw_circular_node_set_stroke_width (IwCircularNode *self, gfloat w)
+{
+        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
+        iw_circle_set_stroke_width (IW_CIRCLE (self->priv->mainCircle), w);
+}
+
+gfloat iw_circular_node_get_stroke_width (IwCircularNode *self)
+{
+        g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), -1);
+        return iw_circle_get_stroke_width (IW_CIRCLE (self->priv->mainCircle));
+}
+
+void iw_circular_node_set_stroke_dash (IwCircularNode *self, gfloat w)
+{
+        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
+        iw_circle_set_stroke_dash (IW_CIRCLE (self->priv->mainCircle), w);
+}
+
+gfloat iw_circular_node_get_stroke_dash (IwCircularNode *self)
+{
+        g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), -1);
+        return iw_circle_get_stroke_dash (IW_CIRCLE (self->priv->mainCircle));
+}
+
+void iw_circular_node_set_fill (IwCircularNode *self, gboolean b)
+{
+        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
+        iw_circle_set_fill (IW_CIRCLE (self->priv->mainCircle), b);
+}
+
+gboolean iw_circular_node_is_fill (IwCircularNode *self)
+{
+        g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), FALSE);
+        return iw_circle_is_fill (IW_CIRCLE (self->priv->mainCircle));
 }
 
 /*****************************************************************************/
@@ -307,6 +364,7 @@ void iw_circular_node_set_ports_no (IwCircularNode *self, int i)
         for (int i = 0; i < self->priv->portsNo; ++i) {
                 self->priv->ports[i].actor = iw_circle_new ();
                 iw_circle_set_fill (IW_CIRCLE (self->priv->ports[i].actor), TRUE);
+                iw_circle_set_stroke_width (IW_CIRCLE (self->priv->ports[i].actor), 0);
                 clutter_actor_add_child (CLUTTER_ACTOR (self->priv->box), self->priv->ports[i].actor);
         }
 }
@@ -349,8 +407,8 @@ ClutterActor *iw_circular_node_new (void) { return g_object_new (IW_TYPE_CIRCULA
 
 void iw_circular_node_set_radius (IwCircularNode *self, float r)
 {
-        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        self->priv->radius = r;
-        clutter_actor_set_size (CLUTTER_ACTOR (self), r * 2, r * 2);
-        clutter_content_invalidate (self->priv->canvas);
+        //        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
+        //        self->priv->radius = r;
+        //        clutter_actor_set_size (CLUTTER_ACTOR (self), r * 2, r * 2);
+        //        clutter_content_invalidate (self->priv->canvas);
 }

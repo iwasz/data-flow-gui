@@ -6,7 +6,5 @@
 #include "view/Circle.h"
 #include "view/Line.h"
 #include "view/Stage.h"
-
-
-
+#include "view/CircularNode.h"
 

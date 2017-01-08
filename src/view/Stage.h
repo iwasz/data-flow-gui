@@ -23,8 +23,8 @@ public:
         GtkWidget *getClutterWidget () { return clutterWidget; }
         void setParent (IClutterActor *parent) { throw Core::Exception ("Not implemented"); }
 
-        virtual std::string getFillColor () const;
-        virtual void setFillColor (const std::string &value);
+        virtual Color getFillColor () const;
+        virtual void setFillColor (const Color &value);
 
 private:
         GtkWidget *clutterWidget;

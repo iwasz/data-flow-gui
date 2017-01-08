@@ -15,7 +15,8 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "geometry/Geometry.h"
+#include "primitives/Geometry.h"
+#include "primitives/Color.h"
 
 struct __tiliae_reflect__ IClutterActor : public Core::Object {
         virtual ~IClutterActor () {}
@@ -41,11 +42,11 @@ struct __tiliae_reflect__ IClutterActor : public Core::Object {
         virtual float getStrokeDash () const = 0;
         virtual void setStrokeDash (float value) = 0;
 
-        virtual std::string getStrokeColor () const = 0;
-        virtual void setStrokeColor (const std::string &value) = 0;
+        virtual Color getStrokeColor () const = 0;
+        virtual void setStrokeColor (const Color &value) = 0;
 
-        virtual std::string getFillColor () const = 0;
-        virtual void setFillColor (const std::string &value) = 0;
+        virtual Color getFillColor () const = 0;
+        virtual void setFillColor (const Color &value) = 0;
 };
 
 typedef std::vector <std::shared_ptr <IClutterActor>> ClutterActorVector;
