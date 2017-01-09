@@ -28,10 +28,10 @@
         </CircularNode>
 
         <CircularNode scope="prototype" id="copyNode" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
-            <Port add-to="ports" angle="2.6415" color="#d1d1d1ff" size="20" />
-            <Port add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20" />
-            <Port add-to="ports" angle="3.6415" color="#d1d1d1ff" size="20" />
-            <Port add-to="ports" angle="6.283" color="#8d8d8dff" size="20" />
+            <Port add-to="ports" angle="2.6415" color="#d1d1d1ff" size="50" />
+            <Port add-to="ports" angle="3.1415" color="#d1d1d1ff" size="50" />
+            <Port add-to="ports" angle="3.6415" color="#d1d1d1ff" size="50" />
+            <Port add-to="ports" angle="6.283" color="#8d8d8dff" size="50" />
         </CircularNode>
 
         <MainController id="mainController" loopDelayMs="5">
