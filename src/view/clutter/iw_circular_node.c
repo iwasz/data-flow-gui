@@ -92,30 +92,27 @@ static void iw_circular_node_allocate (ClutterActor *actor, const ClutterActorBo
 
 /*****************************************************************************/
 
-static void star_actor_pick (ClutterActor *actor, const ClutterColor *pick_color)
+// TODO Duplicated code (iw_circle has the same). How to delegate pick metod to mainCircle->pick?
+static void iw_circular_node_pick (ClutterActor *actor, const ClutterColor *pick_color)
 {
-        if (!clutter_actor_should_pick_paint (actor)) return;
+        if (!clutter_actor_should_pick_paint (actor)) {
+                return;
+        }
+
+        IwCircularNodePrivate *priv = IW_CIRCULAR_NODE_GET_PRIVATE (actor);
 
         ClutterActorBox allocation = {
                 0,
         };
         gfloat width, height;
 
-        clutter_actor_get_allocation_box (actor, &allocation);
+        clutter_actor_get_allocation_box (priv->mainCircle, &allocation);
         clutter_actor_box_get_size (&allocation, &width, &height);
 
         cogl_path_new ();
 
         cogl_set_source_color4ub (pick_color->red, pick_color->green, pick_color->blue, pick_color->alpha);
 
-        /* create and store a path describing a star */
-        //        cogl_path_move_to (width * 0.5, 0);
-        //        cogl_path_line_to (width, height * 0.75);
-        //        cogl_path_line_to (0, height * 0.75);
-        //        cogl_path_move_to (width * 0.5, height);
-        //        cogl_path_line_to (0, height * 0.25);
-        //        cogl_path_line_to (width, height * 0.25);
-        //        cogl_path_line_to (width * 0.5, height);
         cogl_path_ellipse (width / 2.0, height / 2.0, width / 2.0, height / 2.0);
         cogl_path_fill ();
 }
@@ -134,14 +131,8 @@ static void iw_circular_node_class_init (IwCircularNodeClass *klass)
         GParamSpec *pspec;
 
         gobject_class->finalize = iw_circular_node_finalize;
-        //        gobject_class->set_property = iw_circular_node_set_property;
-        //        gobject_class->get_property = iw_circular_node_get_property;
-
-        // It still got destroyed even when I do not override the destroy method (like virtual function in C++).
         actor_class->allocate = iw_circular_node_allocate;
-        //        actor_class->paint = iw_circular_node_paint;
-        //        actor_class->paint_node = iw_circular_node_paint_node;
-        actor_class->pick = star_actor_pick;
+        actor_class->pick = iw_circular_node_pick;
 
         g_type_class_add_private (klass, sizeof (IwCircularNodePrivate));
 }
@@ -161,50 +152,6 @@ static void iw_circular_node_init (IwCircularNode *self)
         clutter_actor_set_background_color(self, &c);
 #endif
 
-        //        clutter_actor_set_reactive (CLUTTER_ACTOR (self), TRUE);
-
-        /* the only child of this actor is a ClutterBox with a
-         * ClutterBinLayout: painting and allocation of the actor basically
-         * involves painting and allocating this child box
-         */
-        //        layout = clutter_bin_layout_new (CLUTTER_BIN_ALIGNMENT_CENTER, CLUTTER_BIN_ALIGNMENT_CENTER);
-
-        //        priv->child = clutter_actor_new ();
-        //        clutter_actor_set_layout_manager (priv->child, layout);
-
-        //        /* set the parent of the ClutterBox to this instance */
-        //        clutter_actor_add_child (CLUTTER_ACTOR (self), priv->child);
-
-        //        /* add text label to the button; see the ClutterText API docs
-        //         * for more information about available properties
-        //         */
-        //        priv->label = g_object_new (CLUTTER_TYPE_TEXT, "line-alignment", PANGO_ALIGN_CENTER, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
-
-        //        clutter_actor_add_child (priv->child, priv->label);
-
-        //        /* add a ClutterClickAction on this actor, so we can proxy its
-        //         * "clicked" signal into a signal from this actor
-        //         */
-        //        priv->click_action = clutter_click_action_new ();
-        //        clutter_actor_add_action (CLUTTER_ACTOR (self), priv->click_action);
-
-        //        g_signal_connect (priv->click_action, "clicked", G_CALLBACK (iw_circular_node_clicked), NULL);
-        //        priv->color = *clutter_color_get_static (CLUTTER_COLOR_WHITE);
-
-        /*
-                priv->canvas = clutter_canvas_new ();
-                //        clutter_canvas_set_size (CLUTTER_CANVAS (priv->canvas), 300, 300);
-                clutter_actor_set_content (CLUTTER_ACTOR (self), priv->canvas);
-                clutter_actor_set_content_scaling_filters (CLUTTER_ACTOR (self), CLUTTER_SCALING_FILTER_TRILINEAR, CLUTTER_SCALING_FILTER_LINEAR);
-                g_object_unref (priv->canvas);
-
-                // connect our drawing code
-                g_signal_connect (priv->canvas, "draw", G_CALLBACK (do_draw), priv);
-                //  invalidate the canvas, so that we can draw before the main loop starts
-                clutter_content_invalidate (priv->canvas);
-        */
-
-        //        priv->layout = clutter_bin_layout_new (CLUTTER_BIN_ALIGNMENT_CENTER, CLUTTER_BIN_ALIGNMENT_CENTER);
         priv->layout = clutter_fixed_layout_new ();
 
         /* the main container; this actor will use the BinLayout to lay
@@ -224,98 +171,14 @@ static void iw_circular_node_init (IwCircularNode *self)
         // clutter_actor_set_size (CLUTTER_ACTOR (priv->mainCircle), 100, 100);
         clutter_actor_add_child (CLUTTER_ACTOR (priv->box), priv->mainCircle);
 
-        //        for (int i = 0; i < priv->portsNo; ++i) {
-        //                priv->circle1 = iw_circle_new ();
-        //                clutter_actor_set_size (CLUTTER_ACTOR (priv->circle1), priv->ports[i].size, priv->ports[i].size);
-        //                iw_circle_set_fill_color (IW_CIRCLE (priv->circle1), &priv->ports[i].color);
-
-        //                float r = 60;
-        //                float phi = priv->ports[i].angle;
-
-        //                clutter_actor_set_position (CLUTTER_ACTOR (priv->circle1), r * cos (phi) + 50 - 10, r * sin (phi) + 50 - 10);
-        //                clutter_actor_add_child (CLUTTER_ACTOR (priv->box), priv->circle1);
-
-        ////                clutter_cairo_set_source_color (cr, &priv->ports[i].color);
-        ////                cairo_arc (cr, 0, 0, priv->radius - PORT_LINE_WIDTH / 2 - 1, priv->ports[i].angle - priv->ports[i].size / 2,
-        ////                           priv->ports[i].angle + priv->ports[i].size / 2);
-        ////                cairo_stroke (cr);
-        //        }
-
         g_signal_connect (CLUTTER_ACTOR (self), "allocation-changed", G_CALLBACK (on_actor_resize), NULL);
 
-        //        This does not work as expected. It gets called when object is moved.
-        //        g_signal_connect (CLUTTER_ACTOR (self), "notify::width", G_CALLBACK (on_dimension_changed), NULL);
-        //        g_signal_connect (CLUTTER_ACTOR (self), "notify::height", G_CALLBACK (on_dimension_changed), NULL);
+        // TODO This does not work as expected. It gets called when object is moved.
+        // g_signal_connect (CLUTTER_ACTOR (self), "notify::width", G_CALLBACK (on_dimension_changed), NULL);
+        // g_signal_connect (CLUTTER_ACTOR (self), "notify::height", G_CALLBACK (on_dimension_changed), NULL);
 }
 
 /*****************************************************************************/
-
-#if 0
-static gboolean do_draw (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data)
-{
-        IwCircularNodePrivate *priv = (IwCircularNodePrivate *)data;
-
-        cairo_save (cr);
-
-        /* clear the contents of the canvas, to avoid painting
-         * over the previous frame
-         */
-        cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-        cairo_paint (cr);
-        cairo_restore (cr);
-        cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-
-        cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
-        cairo_set_line_width (cr, 0);
-
-#define PORT_LINE_WIDTH 5
-
-        /* the black rail that holds the seconds indicator */
-        clutter_cairo_set_source_color (cr, &priv->color);
-        cairo_translate (cr, priv->radius, priv->radius);
-        cairo_arc (cr, 0, 0, priv->radius - PORT_LINE_WIDTH - PORT_LINE_WIDTH / 2 - 1, 0, G_PI * 2);
-        cairo_fill (cr);
-
-        cairo_set_line_width (cr, PORT_LINE_WIDTH);
-        for (int i = 0; i < priv->portsNo; ++i) {
-                clutter_cairo_set_source_color (cr, &priv->ports[i].color);
-                cairo_arc (cr, 0, 0, priv->radius - PORT_LINE_WIDTH / 2 - 1, priv->ports[i].angle - priv->ports[i].size / 2,
-                           priv->ports[i].angle + priv->ports[i].size / 2);
-                cairo_stroke (cr);
-        }
-
-        /* we're done drawing */
-        return TRUE;
-}
-#endif
-
-// static guint idle_resize_id;
-
-// static gboolean idle_resize (gpointer data)
-//{
-//        ClutterActor *actor = data;
-//        float width, height;
-
-//        /* match the canvas size to the actor's */
-//        clutter_actor_get_size (actor, &width, &height);
-//        clutter_canvas_set_size (CLUTTER_CANVAS (clutter_actor_get_content (actor)), ceilf (width), ceilf (height));
-
-//        /* unset the guard */
-//        idle_resize_id = 0;
-
-//        /* remove the timeout */
-//        return G_SOURCE_REMOVE;
-//}
-
-// static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocation, ClutterAllocationFlags flags, gpointer user_data)
-//{
-//        /* throttle multiple actor allocations to one canvas resize; we use a guard
-//         * variable to avoid queueing multiple resize operations
-//         */
-//        if (idle_resize_id == 0) {
-//                idle_resize_id = clutter_threads_add_timeout (1000, idle_resize, actor);
-//        }
-//}
 
 void on_dimension_changed (GObject *gobject, GParamSpec *pspec, gpointer user_data)
 {
@@ -341,6 +204,8 @@ void on_dimension_changed (GObject *gobject, GParamSpec *pspec, gpointer user_da
         clutter_actor_set_size (priv->mainCircle, d, d);
 }
 
+/*****************************************************************************/
+
 /// TODO this handler gets called on move, which is inefficient. It should be called only when dimensions are changed.
 static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocation, ClutterAllocationFlags flags, gpointer user_data)
 {
@@ -362,18 +227,16 @@ static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocat
         clutter_actor_set_size (priv->mainCircle, d, d);
 }
 
-/* public API */
-/* examples of public API functions which wrap functions
- * on internal actors
- */
-
 /*****************************************************************************/
+// public API
 
 void iw_circular_node_set_fill_color (IwCircularNode *self, const ClutterColor *color)
 {
         g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
         iw_circle_set_fill_color (IW_CIRCLE (self->priv->mainCircle), color);
 }
+
+/*****************************************************************************/
 
 ClutterColor *iw_circular_node_get_fill_color (IwCircularNode *self)
 {
@@ -477,5 +340,3 @@ void iw_circular_node_set_port_size (IwCircularNode *self, int i, float s)
 /*****************************************************************************/
 
 ClutterActor *iw_circular_node_new (void) { return g_object_new (IW_TYPE_CIRCULAR_NODE, NULL); }
-
-/*****************************************************************************/

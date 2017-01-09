@@ -96,7 +96,7 @@ void MainController::Impl::configureMachine ()
                         currentFactoryStrategy = (*tools)[currentTool].factoryStrategy;
                         return true;
                 })
-                ->transition (DRAW)->when (eq ("stage.clicked"))->then ([this] (const char *, void *arg) {
+                ->transition (DRAW)->when (eq ("stage.press"))->then ([this] (const char *, void *arg) {
                         Arguments *args = static_cast <Arguments *> (arg);
                         startX = args->x;
                         startY = args->y;
@@ -110,7 +110,7 @@ void MainController::Impl::configureMachine ()
                         lastDrawStrategy->onMotion (args->x, args->y);
                         return true;
                 })
-                ->transition (IDLE)->when (eq ("stage.released"))->then ([this] (const char *, void *arg) {
+                ->transition (IDLE)->when (eq ("stage.release"))->then ([this] (const char *, void *arg) {
                         Arguments *args = static_cast <Arguments *> (arg);
 
                         if (!lastDrawStrategy->onButtonRelease (args->x, args->y)) {
@@ -173,7 +173,7 @@ void MainController::onButtonPress (float x, float y)
 {
         impl->arguments.x = x;
         impl->arguments.y = y;
-        impl->pushMessage ("stage.clicked", &impl->arguments);
+        impl->pushMessage ("stage.press", &impl->arguments);
 }
 
 /*****************************************************************************/
@@ -182,7 +182,7 @@ void MainController::onButtonRelease (float x, float y)
 {
         impl->arguments.x = x;
         impl->arguments.y = y;
-        impl->pushMessage ("stage.released", &impl->arguments);
+        impl->pushMessage ("stage.release", &impl->arguments);
 }
 
 /*****************************************************************************/
