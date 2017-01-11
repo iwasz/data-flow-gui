@@ -8,4 +8,12 @@
 
 #include "LineConnector.h"
 
-void LineConnector::onMoveAnchor (float x, float y, Side s) {}
+void LineConnector::onMoveAnchor (float x, float y, Side s)
+{
+        if (s == A) {
+                setPointA (Point (x, y));
+        }
+        else {
+                setPointB (Point (x, y));
+        }
+}

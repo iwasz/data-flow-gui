@@ -196,7 +196,8 @@ void MainController::onMotion (float x, float y)
 
 void MainController::onDummyMethod ()
 {
-
+        lc->connect (na->getAnchor (2), IConnector::A);
+        lc->connect (nb->getAnchor (0), IConnector::B);
 }
 
 /****************************************************************************/
@@ -217,4 +218,3 @@ void transitionPrint (uint8_t) {}
 /*****************************************************************************/
 
 void transitionIndicate () {}
-
