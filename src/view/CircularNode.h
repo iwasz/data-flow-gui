@@ -24,6 +24,18 @@ public:
 
 typedef __tiliae_reflect__ std::vector<Port> PortVector;
 
+/*****************************************************************************/
+
+
+
+
+
+
+
+
+
+/*****************************************************************************/
+
 /**
  * This is only a view.
  */
@@ -52,7 +64,7 @@ public:
         Color getFillColor () const;
         void setFillColor (const Color &value);
 
- private:
+private:
         PortVector ports;
 };
 
