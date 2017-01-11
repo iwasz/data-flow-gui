@@ -34,7 +34,7 @@
             <Port add-to="ports" angle="6.283" color="#8d8d8dff" size="50" />
         </CircularNode>
 
-        <Line scope="prototype" id="lineConnector" parent="@stage" strokeColor="#0096c6c9" visible="false" strokeWidth="5" />
+        <LineConnector scope="prototype" id="lineConnector" parent="@stage" strokeColor="#0096c6c9" visible="false" strokeWidth="5" />
 
         <MainController id="mainController" loopDelayMs="5">
                 <ToolMap set-as="tools">
@@ -57,7 +57,7 @@
 
                 <addNode set-as="na" visible="true"/>
                 <addNode set-as="nb" visible="true"/>
-<!--                <lineConnector set-as="lc" visible="true"/>-->
+                <lineConnector set-as="lc" visible="true"/>
         </MainController>
 
         <Stage id="stage" fillColor="#ecececff"/>
