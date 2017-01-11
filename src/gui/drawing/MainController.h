@@ -16,6 +16,11 @@
 #include <map>
 #include <string>
 
+#if 1
+#include "view/CircularNode.h"
+#include "view/LineConnector.h"
+#endif
+
 /**
  * Represents one tool that can be picked from left side toolbar.
  */
@@ -47,6 +52,13 @@ public:
 
         ToolMap const &getTools () const { return tools; }
         void setTools (const ToolMap &value) { tools = value; }
+
+#if 1
+        void onDummyMethod ();
+        CircularNode *na;
+        CircularNode *nb;
+        LineConnector *lc;
+#endif
 
 private:
 

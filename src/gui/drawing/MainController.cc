@@ -194,6 +194,11 @@ void MainController::onMotion (float x, float y)
         impl->pushMessage ("stage.motion", &impl->arguments);
 }
 
+void MainController::onDummyMethod ()
+{
+
+}
+
 /****************************************************************************/
 /* State machine low lewel deps.                                            */
 /****************************************************************************/
@@ -212,3 +217,4 @@ void transitionPrint (uint8_t) {}
 /*****************************************************************************/
 
 void transitionIndicate () {}
+

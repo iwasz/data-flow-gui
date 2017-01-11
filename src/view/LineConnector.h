@@ -6,18 +6,16 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "Anchor.h"
+#ifndef LINECONNECTOR_H
+#define LINECONNECTOR_H
 
-void Anchor::connect (IConnector *c, IConnector::Side s) { connections.push_back ({ s, c }); /* TODO notify x, y*/ }
-void Anchor::disconnect (IConnector *c, IConnector::Side s) { /* TODO */}
+#include "Line.h"
+#include "AbstractConnector.h"
 
-void Anchor::notifyMoveAnchor (float x, float y)
-{
-        for (Connection &c : connections) {
-                c.connector->onMoveAnchor (x, y, c.side);
-        }
-}
+class __tiliae_reflect__ LineConnector : public Line, public AbstractConnector {
+public:
+        virtual ~LineConnector () {}
+        virtual void onMoveAnchor (float x, float y, Side s);
+};
 
-// void Anchor::notifyConnectAnchor (float x, float y) {}
-
-// void Anchor::notifyDisconnectAnchor (float x, float y) {}
+#endif // LINECONNECTOR_H

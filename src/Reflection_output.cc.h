@@ -539,6 +539,127 @@ void createReflectionDatabase_gtkFormsDemo ()
 		}
 	}
 	{
+		Class *clazz = new Class ("IConnector", typeid (IConnector &), new Reflection::PtrDeleter <IConnector>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addMethod (new Method ("connect", createMethodWrapper (&IConnector::connect)));
+			clazz->addMethod (new Method ("disconnect", createMethodWrapper (&IConnector::disconnect)));
+			clazz->addMethod (new Method ("onMoveAnchor", createMethodWrapper (&IConnector::onMoveAnchor)));
+		}
+	}
+	{
+		Class *clazz = new Class ("IConnectable", typeid (IConnectable &), new Reflection::PtrDeleter <IConnectable>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+		}
+	}
+	{
+		Class *clazz = new Class ("Port", typeid (Port &), new Reflection::PtrDeleter <Port>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Port, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addField (new Field ("angle", Reflection::createFieldWrapper (&Port::angle)));
+			clazz->addField (new Field ("size", Reflection::createFieldWrapper (&Port::size)));
+			clazz->addField (new Field ("color", Reflection::createFieldWrapper (&Port::color)));
+			clazz->addField (new Field ("anchor", Reflection::createFieldWrapper (&Port::anchor)));
+		}
+	}
+	{
+		Class *clazz = new Class ("PortVector", typeid (PortVector&), new PtrDeleter <PortVector >);
+		if (!Manager::add (clazz)) {;
+			delete clazz;
+		}
+		else { 
+			IConstructorPointer *cp = Reflection::ConstructorPointerWrapper2 <PortVector, void>::Level1Wrapper::newConstructorPointer ();
+			clazz->addConstructor (new Constructor (cp));
+
+			ICallableWrapper *w = new AddWrapper <PortVector > ();
+			clazz->addMethod (new Method ("add", w));
+
+			w = new GetWrapper <PortVector > ();
+			clazz->addMethod (new Method ("get", w));
+
+			w = new SetWrapper <PortVector > ();
+			clazz->addMethod (new Method ("set", w));
+
+			w = new IteratorWrapper <PortVector > ();
+			clazz->addMethod (new Method ("iterator", w));
+		}
+	}
+	{
+		Class *clazz = new Class ("CircularNode", typeid (CircularNode &), new Reflection::PtrDeleter <CircularNode>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("AbstractActor");
+			clazz->addBaseClassName ("IConnectable");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <CircularNode, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("init", createMethodWrapper (&CircularNode::init)));
+			clazz->addMethod (new Method ("getPorts", createMethodWrapper (&CircularNode::getPorts)));
+			clazz->addMethod (new Method ("isFill", createMethodWrapper (&CircularNode::isFill)));
+			clazz->addMethod (new Method ("setFill", createMethodWrapper (&CircularNode::setFill)));
+			clazz->addMethod (new Method ("getStrokeWidth", createMethodWrapper (&CircularNode::getStrokeWidth)));
+			clazz->addMethod (new Method ("setStrokeWidth", createMethodWrapper (&CircularNode::setStrokeWidth)));
+			clazz->addMethod (new Method ("getStrokeDash", createMethodWrapper (&CircularNode::getStrokeDash)));
+			clazz->addMethod (new Method ("setStrokeDash", createMethodWrapper (&CircularNode::setStrokeDash)));
+			clazz->addMethod (new Method ("getStrokeColor", createMethodWrapper (&CircularNode::getStrokeColor)));
+			clazz->addMethod (new Method ("setStrokeColor", createMethodWrapper (&CircularNode::setStrokeColor)));
+			clazz->addMethod (new Method ("getFillColor", createMethodWrapper (&CircularNode::getFillColor)));
+			clazz->addMethod (new Method ("setFillColor", createMethodWrapper (&CircularNode::setFillColor)));
+			clazz->addMethod (new Method ("onAllocate", createMethodWrapper (&CircularNode::onAllocate)));
+		}
+	}
+	{
+		Class *clazz = new Class ("Line", typeid (Line &), new Reflection::PtrDeleter <Line>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("AbstractActor");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Line, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("setPointA", createMethodWrapper (&Line::setPointA)));
+			clazz->addMethod (new Method ("getPointA", createMethodWrapper (&Line::getPointA)));
+			clazz->addMethod (new Method ("setPointB", createMethodWrapper (&Line::setPointB)));
+			clazz->addMethod (new Method ("getPointB", createMethodWrapper (&Line::getPointB)));
+			clazz->addMethod (new Method ("getStrokeWidth", createMethodWrapper (&Line::getStrokeWidth)));
+			clazz->addMethod (new Method ("setStrokeWidth", createMethodWrapper (&Line::setStrokeWidth)));
+			clazz->addMethod (new Method ("getStrokeDash", createMethodWrapper (&Line::getStrokeDash)));
+			clazz->addMethod (new Method ("setStrokeDash", createMethodWrapper (&Line::setStrokeDash)));
+			clazz->addMethod (new Method ("getStrokeColor", createMethodWrapper (&Line::getStrokeColor)));
+			clazz->addMethod (new Method ("setStrokeColor", createMethodWrapper (&Line::setStrokeColor)));
+		}
+	}
+	{
+		Class *clazz = new Class ("AbstractConnector", typeid (AbstractConnector &), new Reflection::PtrDeleter <AbstractConnector>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("IConnector");
+			clazz->addMethod (new Method ("connect", createMethodWrapper (&AbstractConnector::connect)));
+			clazz->addMethod (new Method ("disconnect", createMethodWrapper (&AbstractConnector::disconnect)));
+		}
+	}
+	{
+		Class *clazz = new Class ("LineConnector", typeid (LineConnector &), new Reflection::PtrDeleter <LineConnector>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("Line");
+			clazz->addBaseClassName ("AbstractConnector");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <LineConnector, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("onMoveAnchor", createMethodWrapper (&LineConnector::onMoveAnchor)));
+		}
+	}
+	{
 		Class *clazz = new Class ("Tool", typeid (Tool &), new Reflection::PtrDeleter <Tool>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
@@ -580,6 +701,9 @@ void createReflectionDatabase_gtkFormsDemo ()
 		else {
 			clazz->addBaseClassName ("AbstractController");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <MainController, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addField (new Field ("na", Reflection::createFieldWrapper (&MainController::na)));
+			clazz->addField (new Field ("nb", Reflection::createFieldWrapper (&MainController::nb)));
+			clazz->addField (new Field ("lc", Reflection::createFieldWrapper (&MainController::lc)));
 			clazz->addMethod (new Method ("init", createMethodWrapper (&MainController::init)));
 			clazz->addMethod (new Method ("onStart", createMethodWrapper (&MainController::onStart)));
 			clazz->addMethod (new Method ("onSubmit", createMethodWrapper (&MainController::onSubmit)));
@@ -591,6 +715,7 @@ void createReflectionDatabase_gtkFormsDemo ()
 			clazz->addMethod (new Method ("onMotion", createMethodWrapper (&MainController::onMotion)));
 			clazz->addMethod (new Method ("getTools", createMethodWrapper (&MainController::getTools)));
 			clazz->addMethod (new Method ("setTools", createMethodWrapper (&MainController::setTools)));
+			clazz->addMethod (new Method ("onDummyMethod", createMethodWrapper (&MainController::onDummyMethod)));
 		}
 	}
 	{
@@ -644,26 +769,6 @@ void createReflectionDatabase_gtkFormsDemo ()
 		}
 	}
 	{
-		Class *clazz = new Class ("Line", typeid (Line &), new Reflection::PtrDeleter <Line>);
-		if (!Manager::add (clazz)) {
-			delete clazz;
-		}
-		else {
-			clazz->addBaseClassName ("AbstractActor");
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Line, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addMethod (new Method ("setPointA", createMethodWrapper (&Line::setPointA)));
-			clazz->addMethod (new Method ("getPointA", createMethodWrapper (&Line::getPointA)));
-			clazz->addMethod (new Method ("setPointB", createMethodWrapper (&Line::setPointB)));
-			clazz->addMethod (new Method ("getPointB", createMethodWrapper (&Line::getPointB)));
-			clazz->addMethod (new Method ("getStrokeWidth", createMethodWrapper (&Line::getStrokeWidth)));
-			clazz->addMethod (new Method ("setStrokeWidth", createMethodWrapper (&Line::setStrokeWidth)));
-			clazz->addMethod (new Method ("getStrokeDash", createMethodWrapper (&Line::getStrokeDash)));
-			clazz->addMethod (new Method ("setStrokeDash", createMethodWrapper (&Line::setStrokeDash)));
-			clazz->addMethod (new Method ("getStrokeColor", createMethodWrapper (&Line::getStrokeColor)));
-			clazz->addMethod (new Method ("setStrokeColor", createMethodWrapper (&Line::setStrokeColor)));
-		}
-	}
-	{
 		Class *clazz = new Class ("DashedLineStrategy", typeid (DashedLineStrategy &), new Reflection::PtrDeleter <DashedLineStrategy>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
@@ -677,62 +782,6 @@ void createReflectionDatabase_gtkFormsDemo ()
 			clazz->addMethod (new Method ("reshape", createMethodWrapper (&DashedLineStrategy::reshape)));
 			clazz->addMethod (new Method ("getLine", createMethodWrapper (&DashedLineStrategy::getLine)));
 			clazz->addMethod (new Method ("setLine", createMethodWrapper (&DashedLineStrategy::setLine)));
-		}
-	}
-	{
-		Class *clazz = new Class ("Port", typeid (Port &), new Reflection::PtrDeleter <Port>);
-		if (!Manager::add (clazz)) {
-			delete clazz;
-		}
-		else {
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Port, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addField (new Field ("angle", Reflection::createFieldWrapper (&Port::angle)));
-			clazz->addField (new Field ("size", Reflection::createFieldWrapper (&Port::size)));
-			clazz->addField (new Field ("color", Reflection::createFieldWrapper (&Port::color)));
-		}
-	}
-	{
-		Class *clazz = new Class ("PortVector", typeid (PortVector&), new PtrDeleter <PortVector >);
-		if (!Manager::add (clazz)) {;
-			delete clazz;
-		}
-		else { 
-			IConstructorPointer *cp = Reflection::ConstructorPointerWrapper2 <PortVector, void>::Level1Wrapper::newConstructorPointer ();
-			clazz->addConstructor (new Constructor (cp));
-
-			ICallableWrapper *w = new AddWrapper <PortVector > ();
-			clazz->addMethod (new Method ("add", w));
-
-			w = new GetWrapper <PortVector > ();
-			clazz->addMethod (new Method ("get", w));
-
-			w = new SetWrapper <PortVector > ();
-			clazz->addMethod (new Method ("set", w));
-
-			w = new IteratorWrapper <PortVector > ();
-			clazz->addMethod (new Method ("iterator", w));
-		}
-	}
-	{
-		Class *clazz = new Class ("CircularNode", typeid (CircularNode &), new Reflection::PtrDeleter <CircularNode>);
-		if (!Manager::add (clazz)) {
-			delete clazz;
-		}
-		else {
-			clazz->addBaseClassName ("AbstractActor");
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <CircularNode, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addMethod (new Method ("init", createMethodWrapper (&CircularNode::init)));
-			clazz->addMethod (new Method ("getPorts", createMethodWrapper (&CircularNode::getPorts)));
-			clazz->addMethod (new Method ("isFill", createMethodWrapper (&CircularNode::isFill)));
-			clazz->addMethod (new Method ("setFill", createMethodWrapper (&CircularNode::setFill)));
-			clazz->addMethod (new Method ("getStrokeWidth", createMethodWrapper (&CircularNode::getStrokeWidth)));
-			clazz->addMethod (new Method ("setStrokeWidth", createMethodWrapper (&CircularNode::setStrokeWidth)));
-			clazz->addMethod (new Method ("getStrokeDash", createMethodWrapper (&CircularNode::getStrokeDash)));
-			clazz->addMethod (new Method ("setStrokeDash", createMethodWrapper (&CircularNode::setStrokeDash)));
-			clazz->addMethod (new Method ("getStrokeColor", createMethodWrapper (&CircularNode::getStrokeColor)));
-			clazz->addMethod (new Method ("setStrokeColor", createMethodWrapper (&CircularNode::setStrokeColor)));
-			clazz->addMethod (new Method ("getFillColor", createMethodWrapper (&CircularNode::getFillColor)));
-			clazz->addMethod (new Method ("setFillColor", createMethodWrapper (&CircularNode::setFillColor)));
 		}
 	}
 }

@@ -10,36 +10,29 @@
 #define CIRCULARNODE_H
 
 #include "AbstractActor.h"
+#include "IConnectable.h"
 #include <vector>
 
 /**
- * This is only a view.
+ * This is only a view. Represents a port (place on a node you can connect a connector to).
  */
 class __tiliae_reflect__ Port {
 public:
         float angle;
         float size;
         Color color;
+        Anchor anchor;
 };
 
+/**
+ * Collection of ports.
+ */
 typedef __tiliae_reflect__ std::vector<Port> PortVector;
-
-/*****************************************************************************/
-
-
-
-
-
-
-
-
-
-/*****************************************************************************/
 
 /**
  * This is only a view.
  */
-class __tiliae_reflect__ CircularNode : public AbstractActor {
+class __tiliae_reflect__ CircularNode : public AbstractActor, public IConnectable {
 public:
         CircularNode ();
         virtual ~CircularNode () {}
@@ -63,6 +56,13 @@ public:
 
         Color getFillColor () const;
         void setFillColor (const Color &value);
+
+        virtual Anchor *getAnchor (size_t i) __tiliae_no_reflect__;
+        virtual Anchor const *getAnchor (size_t i) const __tiliae_no_reflect__;
+
+        /*---------------------------------------------------------------------------*/
+
+        virtual void onAllocate (Box const &b);
 
 private:
         PortVector ports;

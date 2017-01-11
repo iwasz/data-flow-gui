@@ -48,15 +48,25 @@ void MainView::loadUi (GtkForms::App *app)
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
         connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('copyNode')");
 
-        item = gtk_tool_button_new (NULL, "Arc");
+        item = gtk_tool_button_new (NULL, "Line");
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-edit");
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-        connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('arc')");
+        connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('line')");
 
         item = gtk_tool_button_new (NULL, "Circle");
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-media-record");
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
         connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('circle')");
+
+        item = gtk_tool_button_new (NULL, "LineConnector");
+        gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-edit");
+        gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+        connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('lineConnector')");
+
+        item = gtk_tool_button_new (NULL, "Connect");
+        gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-edit");
+        gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+        connectSignal (item, "clicked", "$controller.onDummyMethod ()");
 
         /*---------------------------------------------------------------------------*/
 

@@ -15,15 +15,12 @@
 /**
  * @brief The AbstractConnector class
  */
-class AbstractConnector : public IConnector {
+class __tiliae_reflect__  AbstractConnector : public IConnector {
 public:
         virtual ~AbstractConnector () {}
 
-        virtual void connectA (Anchor *an) { an->connect (this, Anchor::A); a = an; }
-        virtual void connectB (Anchor *an) { an->connect (this, Anchor::B); b = an; }
-
-        virtual void disconnectA () { a->disconnect (this, Anchor::A); a = nullptr; }
-        virtual void disconnectB () { b->disconnect (this, Anchor::B); b = nullptr; }
+        virtual void connect (Anchor *an, Side s);
+        virtual void disconnect (Side s);
 
 private:
 

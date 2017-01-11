@@ -19,7 +19,7 @@
         </DashedLineStrategy>
 
         <Circle scope="prototype" id="circle" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false" />
-        <Line scope="prototype" id="arc" parent="@stage" strokeColor="#0096c6c9" visible="false" strokeWidth="1" />
+        <Line scope="prototype" id="line" parent="@stage" strokeColor="#0096c6c9" visible="false" strokeWidth="1" />
 
         <CircularNode scope="prototype" id="addNode" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
             <Port add-to="ports" angle="2.6415" color="#d1d1d1ff" size="20" />
@@ -34,6 +34,8 @@
             <Port add-to="ports" angle="6.283" color="#8d8d8dff" size="50" />
         </CircularNode>
 
+        <Line scope="prototype" id="lineConnector" parent="@stage" strokeColor="#0096c6c9" visible="false" strokeWidth="5" />
+
         <MainController id="mainController" loopDelayMs="5">
                 <ToolMap set-as="tools">
                       <Tool set-as="addNode" drawStrategy="@dashedCircle">
@@ -42,13 +44,20 @@
                       <Tool set-as="copyNode" drawStrategy="@dashedCircle">
                               <ContainerFactoryStrategy set-as="factoryStrategy" beanName="copyNode" container="@#container" />
                       </Tool>
-                      <Tool set-as="arc" drawStrategy="@dashedLine">
-                              <ContainerFactoryStrategy set-as="factoryStrategy" beanName="arc" container="@#container" />
+                      <Tool set-as="line" drawStrategy="@dashedLine">
+                              <ContainerFactoryStrategy set-as="factoryStrategy" beanName="line" container="@#container" />
                       </Tool>
                       <Tool set-as="circle" drawStrategy="@dashedCircle">
                               <ContainerFactoryStrategy set-as="factoryStrategy" beanName="circle" container="@#container" />
                       </Tool>
+                      <Tool set-as="lineConnector" drawStrategy="@dashedLine">
+                              <ContainerFactoryStrategy set-as="factoryStrategy" beanName="lineConnector" container="@#container" />
+                      </Tool>
                 </ToolMap>
+
+                <addNode set-as="na" visible="true"/>
+                <addNode set-as="nb" visible="true"/>
+<!--                <lineConnector set-as="lc" visible="true"/>-->
         </MainController>
 
         <Stage id="stage" fillColor="#ecececff"/>
