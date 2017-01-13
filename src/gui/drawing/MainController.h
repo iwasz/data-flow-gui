@@ -49,6 +49,8 @@ public:
         void onButtonPress (Point p, Core::Object *o);
         void onButtonRelease (Point p, Core::Object *o);
         void onMotion (Point p, Core::Object *o);
+        void onEnter (Point p, Object *o);
+        void onLeave (Point p, Object *o);
 
         ToolMap const &getTools () const { return tools; }
         void setTools (const ToolMap &value) { tools = value; }

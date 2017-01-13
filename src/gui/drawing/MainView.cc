@@ -21,6 +21,8 @@
 static void on_stage_button_press (ClutterStage *stage, ClutterEvent *event, gpointer data);
 static void on_stage_button_release (ClutterStage *stage, ClutterEvent *event, gpointer data);
 static void on_stage_motion (ClutterStage *stage, ClutterEvent *event, gpointer data);
+static void on_stage_enter (ClutterStage *stage, ClutterEvent *event, gpointer data);
+static void on_stage_leave (ClutterStage *stage, ClutterEvent *event, gpointer data);
 
 /*****************************************************************************/
 
@@ -77,6 +79,9 @@ void MainView::loadUi (GtkForms::App *app)
                 throw Core::Exception ("No stage. Create stage first, and assign it to the 'stage' pointer.");
         }
 
+        // Does not have any effect. Why?
+        // clutter_stage_set_motion_events_enabled (CLUTTER_STAGE (stage->getActor ()), FALSE);
+
         gtk_box_pack_start (GTK_BOX (cb), stage->getClutterWidget (), TRUE, TRUE, 0);
 
         //        ClutterActor *stage = gtk_clutter_embed_get_stage (GTK_CLUTTER_EMBED (clutter));
@@ -87,6 +92,8 @@ void MainView::loadUi (GtkForms::App *app)
         g_signal_connect (stage->getActor (), "button-press-event", G_CALLBACK (on_stage_button_press), mc);
         g_signal_connect (stage->getActor (), "button-release-event", G_CALLBACK (on_stage_button_release), mc);
         g_signal_connect (stage->getActor (), "motion-event", G_CALLBACK (on_stage_motion), mc);
+        g_signal_connect (stage->getActor (), "enter-event", G_CALLBACK (on_stage_enter), mc);
+        g_signal_connect (stage->getActor (), "leave-event", G_CALLBACK (on_stage_leave), mc);
 
         /*---------------------------------------------------------------------------*/
 
@@ -130,8 +137,18 @@ EventData processEvent (ClutterStage *stage, ClutterEvent *event)
         gfloat y = 0;
         clutter_event_get_coords (event, &x, &y);
 
-        ClutterActor *actor = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
-        Core::Object *cActor = static_cast<Core::Object *> (g_object_get_data (G_OBJECT (actor), CPP_IMPLEMENTATION_KEY));
+        //        ClutterActor *actor = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
+        ClutterActor *actor = clutter_event_get_source (event);
+        Core::Object *cActor = nullptr;
+
+        do {
+                cActor = static_cast<Core::Object *> (g_object_get_data (G_OBJECT (actor), CPP_IMPLEMENTATION_KEY));
+
+                if (cActor) {
+                        break;
+                }
+
+        } while ((actor = clutter_actor_get_parent (actor)) != CLUTTER_ACTOR (stage));
 
         return EventData (Point (x, y), cActor);
 }
@@ -161,4 +178,42 @@ void on_stage_motion (ClutterStage *stage, ClutterEvent *event, gpointer data)
         MainController *mc = static_cast<MainController *> (data);
         EventData t = processEvent (stage, event);
         mc->onMotion (t.first, t.second);
+}
+
+/*****************************************************************************/
+
+void on_stage_enter (ClutterStage *stage, ClutterEvent *event, gpointer data)
+{
+        MainController *mc = static_cast<MainController *> (data);
+        EventData t = processEvent (stage, event);
+
+        if (clutter_event_get_source (event) != CLUTTER_ACTOR (stage)) {
+                gfloat x = 0;
+                gfloat y = 0;
+                clutter_event_get_coords (event, &x, &y);
+                ClutterActor *actor = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
+                std::cerr << "enter : Core::Obj " << typeid (*t.second).name () << ", pointer_at " << actor << ", source " << clutter_event_get_source (event)
+                          << std::endl;
+
+                mc->onEnter (t.first, t.second);
+        }
+}
+
+/*****************************************************************************/
+
+void on_stage_leave (ClutterStage *stage, ClutterEvent *event, gpointer data)
+{
+        MainController *mc = static_cast<MainController *> (data);
+        EventData t = processEvent (stage, event);
+
+        if (clutter_event_get_source (event) != CLUTTER_ACTOR (stage)) {
+                gfloat x = 0;
+                gfloat y = 0;
+                clutter_event_get_coords (event, &x, &y);
+                ClutterActor *actor = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
+                std::cerr << "leave : Core::Obj " << typeid (*t.second).name () << ", pointer_at " << actor << ", source " << clutter_event_get_source (event)
+                          << std::endl;
+
+                mc->onLeave (t.first, t.second);
+        }
 }

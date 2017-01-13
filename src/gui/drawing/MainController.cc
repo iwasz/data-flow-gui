@@ -21,6 +21,7 @@ enum MachineStates {
         TOOL_SELECTED, // Toolbox clicked, tool picked.
         DRAW,          // Creating a new object by drawing something
         //        END_DRAW       // Creating a new object by drawing something
+        MOVE,
 };
 
 /*****************************************************************************/
@@ -28,6 +29,7 @@ enum MachineStates {
 struct MainController::Impl {
 
         Impl (ToolMap *t) : inputQueue (STRING_QUEUE_SIZE), machine (&inputQueue), tools (t) {}
+        ~Impl () {}
 
         void configureMachine ();
         void pushMessage (std::string const &msg, void *arg);
@@ -51,13 +53,16 @@ struct MainController::Impl {
                 /// Name of curently selected tool (arc, node etc).
                 std::string currentTool;
                 /// Coordinates of first point of current "gesture".
-//                Point startPoint;
+                //                Point startPoint;
                 /// Object (already on stage, usually an actor) we clicked when started drawing our new object.
-//                Core::Object *startObject;
+                //                Core::Object *startObject;
                 /// Draw strategy draws shapes just prior to actual object creation.
                 IDrawStrategy *currentDrawStrategy = nullptr;
                 /// This strategy creates the object we are drawing.
                 IFactoryStrategy *currentFactoryStrategy = nullptr;
+
+                ClutterActor *movingActor = nullptr;
+                ClutterAction *dragAction = nullptr;
         } vars;
 
         // Maybe other name and element type?
@@ -66,10 +71,36 @@ struct MainController::Impl {
 
 /*****************************************************************************/
 
+// void MainController::Impl::pushMessage (std::string const &m, void *arg)
+//{
+//        if (!inputQueue.push_back ()) {
+//                return;
+//        }
+
+//        StringQueue::Element *el = inputQueue.back ();
+
+//        if (!el) {
+//                return;
+//        }
+
+//        strncpy (el->data, m.c_str (), STRING_QUEUE_BUFFER_SIZE);
+//        el->arg = arg;
+//}
+
 void MainController::Impl::pushMessage (std::string const &m, void *arg)
 {
-        inputQueue.push_back ();
+
         StringQueue::Element *el = inputQueue.back ();
+
+        if (!el) {
+                if (!inputQueue.push_back ()) {
+                        return;
+                }
+        }
+
+        el = inputQueue.back ();
+        assert (el);
+
         strncpy (el->data, m.c_str (), STRING_QUEUE_BUFFER_SIZE);
         el->arg = arg;
 }
@@ -81,13 +112,16 @@ void MainController::Impl::configureMachine ()
         /* clang-format off */
         machine.state (IDLE, State::INITIAL)
                 ->entry ([this] (const char *, void *arg) {
-                        // vars.startPoint = Point ();
                         vars.currentTool = "";
                         vars.currentDrawStrategy = nullptr;
                         vars.currentFactoryStrategy = nullptr;
                         return true;
                 })
-                ->transition (TOOL_SELECTED)->when (eq ("selected.tool"));
+                ->transition (TOOL_SELECTED)->when (eq ("selected.tool"))
+                ->transition (MOVE)->when (eq ("stage.enter"))
+
+                        // Tylko żeby wyczyścićkolejkę. TODO usunąć to
+                        ->transition (IDLE)->when (eq ("stage.motion"));
 
         machine.state (TOOL_SELECTED)
                 ->entry ([this] (const char *, void *arg) {
@@ -129,6 +163,56 @@ void MainController::Impl::configureMachine ()
                         return true;
                 });
 
+        machine.state (MOVE)
+                ->entry ([this] (const char *, void *arg) {
+                        Arguments *args = static_cast <Arguments *> (arg);
+                        IClutterActor *act;
+                        if (!(act = dynamic_cast <IClutterActor *> (args->object))) {
+                                return true;
+                        }
+
+                        if (dynamic_cast <Stage *> (act)) {
+                                return true;
+                        }
+
+                        std::cerr << "Enter. Applying drag." << std::endl;
+                        vars.movingActor = act->getActor();
+                        vars.dragAction = clutter_drag_action_new ();
+                        clutter_actor_add_action (vars.movingActor, vars.dragAction);
+                        return true;
+                })
+                        // Tylko żeby wyczyścićkolejkę. TODO usunąć to
+                        //->transition (MOVE)->when (eq ("stage.motion"))
+
+//                ->transition (MOVE)->when (eq ("stage.motion"))->then ([this] (const char *, void *arg) {
+//                        Arguments *args = static_cast <Arguments *> (arg);
+
+//                        IClutterActor *act;
+//                        if (!(act = dynamic_cast <IClutterActor *> (args->object))) {
+//                                return true;
+//                        }
+
+//                        if (dynamic_cast <Stage *> (act)) {
+//                                return true;
+//                        }
+
+//                        act->setPosition (args->p);
+//                        return true;
+//                })
+
+
+                ->transition (IDLE)->when (eq ("stage.leave"))->then ([this] (const char *, void *arg) {
+                        //Arguments *args = static_cast <Arguments *> (arg);
+
+                        if (vars.movingActor) {
+                                clutter_actor_remove_action (vars.movingActor, vars.dragAction);
+                                vars.movingActor = nullptr;
+                        }
+                        std::cerr << "Leave....." << std::endl;
+
+                        return true;
+                });
+
         /* clang-format on */
 }
 
@@ -159,7 +243,7 @@ void MainController::onStop () {}
 
 /****************************************************************************/
 
-void MainController::onIdle () { impl->machine.run (); }
+void MainController::onIdle () { /*impl->machine.run ();*/}
 
 /****************************************************************************/
 /* Drawing events                                                           */
@@ -169,6 +253,7 @@ void MainController::onNewNodeToolClicked (std::string const &name)
 {
         impl->arguments.tool = name;
         impl->pushMessage ("selected.tool", &impl->arguments);
+        impl->machine.run ();
 }
 
 /*****************************************************************************/
@@ -178,6 +263,7 @@ void MainController::onButtonPress (Point p, Object *o)
         impl->arguments.p = p;
         impl->arguments.object = o;
         impl->pushMessage ("stage.press", &impl->arguments);
+        impl->machine.run ();
 }
 
 /*****************************************************************************/
@@ -187,6 +273,7 @@ void MainController::onButtonRelease (Point p, Object *o)
         impl->arguments.p = p;
         impl->arguments.object = o;
         impl->pushMessage ("stage.release", &impl->arguments);
+        impl->machine.run ();
 }
 
 /*****************************************************************************/
@@ -196,12 +283,35 @@ void MainController::onMotion (Point p, Object *o)
         impl->arguments.p = p;
         impl->arguments.object = o;
         impl->pushMessage ("stage.motion", &impl->arguments);
+        impl->machine.run ();
+}
+
+/*****************************************************************************/
+
+void MainController::onEnter (Point p, Object *o)
+{
+        impl->arguments.p = p;
+        impl->arguments.object = o;
+        impl->pushMessage ("stage.enter", &impl->arguments);
+        impl->machine.run ();
+}
+
+/*****************************************************************************/
+
+void MainController::onLeave (Point p, Object *o)
+{
+        impl->arguments.p = p;
+        impl->arguments.object = o;
+        impl->pushMessage ("stage.leave", &impl->arguments);
+        impl->machine.run ();
 }
 
 /*****************************************************************************/
 
 void MainController::onDummyMethod ()
 {
+        na->setSize (Dimension (100, 100));
+        nb->setSize (Dimension (300, 300));
         lc->connect (na->getAnchor (2), IConnector::A);
         lc->connect (nb->getAnchor (0), IConnector::B);
 }
@@ -218,8 +328,8 @@ uint32_t getCurrentMs ()
 
 /*****************************************************************************/
 
-// void transitionPrint (uint8_t name) { BOOST_LOG (lg) << "State changed to [" << (int)name << "]"; }
-void transitionPrint (uint8_t) {}
+void transitionPrint (uint8_t name) { BOOST_LOG (lg) << "State changed to [" << (int)name << "]"; }
+// void transitionPrint (uint8_t) {}
 
 /*****************************************************************************/
 

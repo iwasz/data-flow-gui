@@ -332,17 +332,22 @@ gboolean iw_circular_node_is_fill (IwCircularNode *self)
 
 /*****************************************************************************/
 
+static gboolean portMotionEvent (ClutterActor *actor, ClutterEvent *event, gpointer user_data) { return CLUTTER_EVENT_STOP; }
+
 void iw_circular_node_set_ports_no (IwCircularNode *self, int i)
 {
         g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
         self->priv->portsNo = i;
 
         for (int i = 0; i < self->priv->portsNo; ++i) {
-                self->priv->ports[i].actor = iw_circle_new ();
-                iw_circle_set_fill (IW_CIRCLE (self->priv->ports[i].actor), TRUE);
-                iw_circle_set_stroke_width (IW_CIRCLE (self->priv->ports[i].actor), 0);
-                clutter_actor_add_child (CLUTTER_ACTOR (self->priv->mainCircle), self->priv->ports[i].actor);
-                // clutter_actor_set_reactive (self->priv->ports[i].actor, TRUE);
+                ClutterActor *a = self->priv->ports[i].actor = iw_circle_new ();
+                iw_circle_set_fill (IW_CIRCLE (a), TRUE);
+                iw_circle_set_stroke_width (IW_CIRCLE (a), 0);
+                clutter_actor_add_child (CLUTTER_ACTOR (self->priv->mainCircle), a);
+                clutter_actor_set_reactive (a, TRUE);
+//                g_signal_connect (a, "motion-event", G_CALLBACK (portMotionEvent), NULL);
+//                g_signal_connect (a, "button-press-event", G_CALLBACK (portMotionEvent), NULL);
+//                g_signal_connect (a, "button-release-event", G_CALLBACK (portMotionEvent), NULL);
         }
 }
 
