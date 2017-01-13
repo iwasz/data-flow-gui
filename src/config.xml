@@ -58,10 +58,6 @@
                               <ContainerFactoryStrategy set-as="factoryStrategy" beanName="lineConnector" container="@#container" />
                       </Tool>
                 </ToolMap>
-
-                <addNode set-as="na" visible="true"/>
-                <addNode set-as="nb" visible="true"/>
-                <lineConnector set-as="lc" visible="true"/>
         </MainController>
 
         <Stage id="stage" fillColor="#ecececff"/>

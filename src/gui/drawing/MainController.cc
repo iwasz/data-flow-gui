@@ -8,6 +8,7 @@
 
 #include "MainController.h"
 #include "view/IClutterActor.h"
+#include "view/Stage.h"
 #include <App.h>
 #include <Logging.h>
 #include <StateMachine.h>
@@ -277,16 +278,6 @@ void MainController::onLeave (Point p, Object *o)
         impl->arguments.p = p;
         impl->arguments.object = o;
         impl->pushMessage ("stage.leave", &impl->arguments);
-}
-
-/*****************************************************************************/
-
-void MainController::onDummyMethod ()
-{
-        na->setSize (Dimension (100, 100));
-        nb->setSize (Dimension (300, 300));
-        lc->connect (na->getAnchor (2), IConnector::A);
-        lc->connect (nb->getAnchor (0), IConnector::B);
 }
 
 /****************************************************************************/
