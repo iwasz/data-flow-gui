@@ -47,6 +47,7 @@ struct _IwCirclePrivate {
 static gboolean draw_circle (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data);
 static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocation, ClutterAllocationFlags flags, gpointer user_data);
 static gboolean idle_resize (gpointer data);
+static void iw_circle_allocate (ClutterActor *actor, const ClutterActorBox *box, ClutterAllocationFlags flags);
 
 /* from http://mail.gnome.org/archives/gtk-devel-list/2004-July/msg00158.html:
  *
@@ -69,7 +70,9 @@ static void iw_circle_finalize (GObject *gobject)
 
 static void iw_circle_pick (ClutterActor *actor, const ClutterColor *pick_color)
 {
-        if (!clutter_actor_should_pick_paint (actor)) return;
+        if (!clutter_actor_should_pick_paint (actor)) {
+                return;
+        }
 
         ClutterActorBox allocation = {
                 0,
@@ -80,19 +83,13 @@ static void iw_circle_pick (ClutterActor *actor, const ClutterColor *pick_color)
         clutter_actor_box_get_size (&allocation, &width, &height);
 
         cogl_path_new ();
-
         cogl_set_source_color4ub (pick_color->red, pick_color->green, pick_color->blue, pick_color->alpha);
-
-        /* create and store a path describing a star */
-        //        cogl_path_move_to (width * 0.5, 0);
-        //        cogl_path_line_to (width, height * 0.75);
-        //        cogl_path_line_to (0, height * 0.75);
-        //        cogl_path_move_to (width * 0.5, height);
-        //        cogl_path_line_to (0, height * 0.25);
-        //        cogl_path_line_to (width, height * 0.25);
-        //        cogl_path_line_to (width * 0.5, height);
         cogl_path_ellipse (width / 2.0, height / 2.0, width / 2.0, height / 2.0);
         cogl_path_fill ();
+
+        for (ClutterActor *iter = clutter_actor_get_first_child (actor); iter != NULL; iter = clutter_actor_get_next_sibling (iter)) {
+                clutter_actor_paint (iter);
+        }
 }
 
 /* GObject class and instance initialization functions; note that
@@ -114,11 +111,11 @@ static void iw_circle_class_init (IwCircleClass *klass)
         //        gobject_class->get_property = iw_circle_get_property;
 
         // It still got destroyed even when I do not override the destroy method (like virtual function in C++).
-        //        actor_class->allocate = iw_circle_allocate;
+        actor_class->allocate = iw_circle_allocate;
         //        actor_class->paint = iw_circle_paint;
         //        actor_class->paint_node = iw_circle_paint_node;
 
-        //        actor_class->pick = iw_circle_pick;
+        actor_class->pick = iw_circle_pick;
 
         g_type_class_add_private (klass, sizeof (IwCirclePrivate));
 }
@@ -133,43 +130,15 @@ static void iw_circle_init (IwCircle *self)
 
         priv = self->priv = IW_CIRCLE_GET_PRIVATE (self);
 
-        //        clutter_actor_set_reactive (CLUTTER_ACTOR (self), TRUE);
-
-        /* the only child of this actor is a ClutterBox with a
-         * ClutterBinLayout: painting and allocation of the actor basically
-         * involves painting and allocating this child box
-         */
-        //        layout = clutter_bin_layout_new (CLUTTER_BIN_ALIGNMENT_CENTER, CLUTTER_BIN_ALIGNMENT_CENTER);
-
-        //        priv->child = clutter_actor_new ();
-        //        clutter_actor_set_layout_manager (priv->child, layout);
-
-        //        /* set the parent of the ClutterBox to this instance */
-        //        clutter_actor_add_child (CLUTTER_ACTOR (self), priv->child);
-
-        //        /* add text label to the button; see the ClutterText API docs
-        //         * for more information about available properties
-        //         */
-        //        priv->label = g_object_new (CLUTTER_TYPE_TEXT, "line-alignment", PANGO_ALIGN_CENTER, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
-
-        //        clutter_actor_add_child (priv->child, priv->label);
-
-        //        /* add a ClutterClickAction on this actor, so we can proxy its
-        //         * "clicked" signal into a signal from this actor
-        //         */
-        //        priv->click_action = clutter_click_action_new ();
-        //        clutter_actor_add_action (CLUTTER_ACTOR (self), priv->click_action);
-
-        //        g_signal_connect (priv->click_action, "clicked", G_CALLBACK (iw_circle_clicked), NULL);
         priv->fillColor = *clutter_color_get_static (CLUTTER_COLOR_WHITE);
         priv->strokeColor = *clutter_color_get_static (CLUTTER_COLOR_BLACK);
         priv->fill = FALSE;
         priv->strokeDash = 0;
         priv->strokeWidth = 3;
 
-#if 1
+#if 0
         static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
-        clutter_actor_set_background_color (self, &c);
+        clutter_actor_set_background_color (CLUTTER_ACTOR (self), &c);
 #endif
 
         priv->canvas = clutter_canvas_new ();
@@ -263,14 +232,21 @@ gboolean iw_circle_is_fill (IwCircle *self)
         return self->priv->fill;
 }
 
-/**
- * iw_circle_new:
- *
- * Creates a new #IwCircle instance
- *
- * Returns: a new #IwCircle
- */
+static void iw_circle_allocate (ClutterActor *actor, const ClutterActorBox *box, ClutterAllocationFlags flags)
+{
+        ClutterActorBox newBox = *box;
+        float dia = fmin (clutter_actor_box_get_width (box), clutter_actor_box_get_height (box));
+        newBox.x2 = newBox.x1 + dia;
+        newBox.y2 = newBox.y1 + dia;
+        ClutterAllocationFlags newFlags = flags | CLUTTER_DELEGATE_LAYOUT;
+        clutter_actor_set_allocation (actor, &newBox, newFlags);
+}
+
+/*****************************************************************************/
+
 ClutterActor *iw_circle_new (void) { return g_object_new (IW_TYPE_CIRCLE, NULL); }
+
+/*****************************************************************************/
 
 static gboolean draw_circle (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data)
 {

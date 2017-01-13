@@ -159,6 +159,14 @@ void on_stage_button_press (ClutterStage *stage, ClutterEvent *event, gpointer d
 {
         MainController *mc = static_cast<MainController *> (data);
         EventData t = processEvent (stage, event);
+#if 0
+        gfloat x = 0;
+        gfloat y = 0;
+        clutter_event_get_coords (event, &x, &y);
+        ClutterActor *actor = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
+        std::cerr << "press : Core::Obj " << typeid (*t.second).name () << ", pointer_at " << actor << ", source " << clutter_event_get_source (event)
+                  << std::endl;
+#endif
         mc->onButtonPress (t.first, t.second);
 }
 
@@ -188,13 +196,14 @@ void on_stage_enter (ClutterStage *stage, ClutterEvent *event, gpointer data)
         EventData t = processEvent (stage, event);
 
         if (clutter_event_get_source (event) != CLUTTER_ACTOR (stage)) {
+#if 0
                 gfloat x = 0;
                 gfloat y = 0;
                 clutter_event_get_coords (event, &x, &y);
                 ClutterActor *actor = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
                 std::cerr << "enter : Core::Obj " << typeid (*t.second).name () << ", pointer_at " << actor << ", source " << clutter_event_get_source (event)
                           << std::endl;
-
+#endif
                 mc->onEnter (t.first, t.second);
         }
 }
@@ -207,13 +216,14 @@ void on_stage_leave (ClutterStage *stage, ClutterEvent *event, gpointer data)
         EventData t = processEvent (stage, event);
 
         if (clutter_event_get_source (event) != CLUTTER_ACTOR (stage)) {
+#if 0
                 gfloat x = 0;
                 gfloat y = 0;
                 clutter_event_get_coords (event, &x, &y);
                 ClutterActor *actor = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
                 std::cerr << "leave : Core::Obj " << typeid (*t.second).name () << ", pointer_at " << actor << ", source " << clutter_event_get_source (event)
                           << std::endl;
-
+#endif
                 mc->onLeave (t.first, t.second);
         }
 }

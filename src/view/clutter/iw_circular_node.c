@@ -99,7 +99,6 @@ static void iw_circular_node_allocate (ClutterActor *actor, const ClutterActorBo
 
 /*****************************************************************************/
 
-// TODO Duplicated code (iw_circle has the same). How to delegate pick metod to mainCircle->pick?
 static void iw_circular_node_pick (ClutterActor *actor, const ClutterColor *pick_color)
 {
 

@@ -18,11 +18,10 @@ static src::logger_mt &lg = logger::get ();
 /*****************************************************************************/
 
 enum MachineStates {
-        IDLE,          // Nothing is happening
-        TOOL_SELECTED, // Toolbox clicked, tool picked.
-        DRAW,          // Creating a new object by drawing something
-        //        END_DRAW       // Creating a new object by drawing something
-        MOVE,
+        IDLE,          /// Nothing is happening
+        TOOL_SELECTED, /// Toolbox clicked, tool picked.
+        DRAW,          /// Creating a new object by drawing something
+        MOVE,          /// Moving an object around.
 };
 
 /*****************************************************************************/
@@ -62,6 +61,7 @@ struct MainController::Impl {
                 /// This strategy creates the object we are drawing.
                 IFactoryStrategy *currentFactoryStrategy = nullptr;
 
+                // TODO encapsulate this in a strategy
                 ClutterActor *movingActor = nullptr;
                 ClutterAction *dragAction = nullptr;
         } vars;
@@ -98,10 +98,9 @@ void MainController::Impl::configureMachine ()
                         return true;
                 })
                 ->transition (TOOL_SELECTED)->when (eq ("selected.tool"))
-                ->transition (MOVE)->when (eq ("stage.enter"))
+                ->transition (MOVE)->when (eq ("stage.enter"));
 
-                        // Tylko żeby wyczyścićkolejkę. TODO usunąć to
-                        ->transition (IDLE)->when (eq ("stage.motion"));
+        /*---------------------------------------------------------------------------*/
 
         machine.state (TOOL_SELECTED)
                 ->entry ([this] (const char *, void *arg) {
@@ -121,6 +120,8 @@ void MainController::Impl::configureMachine ()
                         vars.currentDrawStrategy->onButtonPress (args->p, args->object);
                         return true;
                 });
+
+        /*---------------------------------------------------------------------------*/
 
         machine.state (DRAW)
                 ->transition (DRAW)->when (eq ("stage.motion"))->then ([this] (const char *, void *arg) {
@@ -143,7 +144,10 @@ void MainController::Impl::configureMachine ()
                         return true;
                 });
 
+        /*---------------------------------------------------------------------------*/
+
         machine.state (MOVE)
+                        // TODO do strategii!
                 ->entry ([this] (const char *, void *arg) {
                         Arguments *args = static_cast <Arguments *> (arg);
                         IClutterActor *act;
@@ -155,40 +159,16 @@ void MainController::Impl::configureMachine ()
                                 return true;
                         }
 
-                        std::cerr << "Enter. Applying drag." << std::endl;
                         vars.movingActor = act->getActor();
                         vars.dragAction = clutter_drag_action_new ();
                         clutter_actor_add_action (vars.movingActor, vars.dragAction);
                         return true;
                 })
-                        // Tylko żeby wyczyścićkolejkę. TODO usunąć to
-                        //->transition (MOVE)->when (eq ("stage.motion"))
-
-//                ->transition (MOVE)->when (eq ("stage.motion"))->then ([this] (const char *, void *arg) {
-//                        Arguments *args = static_cast <Arguments *> (arg);
-
-//                        IClutterActor *act;
-//                        if (!(act = dynamic_cast <IClutterActor *> (args->object))) {
-//                                return true;
-//                        }
-
-//                        if (dynamic_cast <Stage *> (act)) {
-//                                return true;
-//                        }
-
-//                        act->setPosition (args->p);
-//                        return true;
-//                })
-
-
                 ->transition (IDLE)->when (eq ("stage.leave"))->then ([this] (const char *, void *arg) {
-                        //Arguments *args = static_cast <Arguments *> (arg);
-
                         if (vars.movingActor) {
                                 clutter_actor_remove_action (vars.movingActor, vars.dragAction);
                                 vars.movingActor = nullptr;
                         }
-                        std::cerr << "Leave....." << std::endl;
 
                         return true;
                 });
@@ -223,7 +203,17 @@ void MainController::onStop () {}
 
 /****************************************************************************/
 
-void MainController::onIdle () { /*impl->machine.run ();*/}
+/*
+ * This state machine engine was menat to be used in asynchronouch environments, thus
+ * the queue and running the machine in a loop. In this program though, I wanted to use
+ * the state machine synchronously (since everything interesing me is running in one
+ * thread here), so I run the machine instantly after sending it a message (see
+ * MainController::Impl::pushMessage), but it is not enough. Sometimes StateMachine::run
+ * must be run a few times (not only one) to enable multiple transitions caused by one event
+ * (this is the case sometimes). So I consider the following method a workaround, and
+ * it should be fixed someday, but state machind would have to be modified.
+ */
+void MainController::onIdle () { impl->machine.run (); }
 
 /****************************************************************************/
 /* Drawing events                                                           */
@@ -292,8 +282,8 @@ uint32_t getCurrentMs ()
 
 /*****************************************************************************/
 
-void transitionPrint (uint8_t name) { BOOST_LOG (lg) << "State changed to [" << (int)name << "]"; }
-// void transitionPrint (uint8_t) {}
+// void transitionPrint (uint8_t name) { BOOST_LOG (lg) << "State changed to [" << (int)name << "]"; }
+void transitionPrint (uint8_t) {}
 
 /*****************************************************************************/
 
