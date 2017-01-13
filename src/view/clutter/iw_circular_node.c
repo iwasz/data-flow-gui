@@ -107,16 +107,16 @@ static void iw_circular_node_pick (ClutterActor *actor, const ClutterColor *pick
                 return;
         }
 
-        // for (ClutterActor *iter = priv->first_child; iter != NULL; iter = iter->priv->next_sibling) {
-
-        for (ClutterActor *iter = clutter_actor_get_first_child (actor); iter != NULL; iter = clutter_actor_get_next_sibling (iter)) {
-                clutter_actor_paint (iter);
-        }
-
-        return;
+        //        for (ClutterActor *iter = clutter_actor_get_first_child (actor); iter != NULL; iter = clutter_actor_get_next_sibling (iter)) {
+        //                clutter_actor_paint (iter);
+        //        }
 
         IwCircularNodePrivate *priv = IW_CIRCULAR_NODE_GET_PRIVATE (actor);
+        clutter_actor_paint (priv->mainCircle);
+        return;
 
+#if 0
+        IwCircularNodePrivate *priv = IW_CIRCULAR_NODE_GET_PRIVATE (actor);
         ClutterActorBox allocation = {
                 0,
         };
@@ -131,6 +131,7 @@ static void iw_circular_node_pick (ClutterActor *actor, const ClutterColor *pick
 
         cogl_path_ellipse (width / 2.0, height / 2.0, width / 2.0, height / 2.0);
         cogl_path_fill ();
+#endif
 }
 
 /* GObject class and instance initialization functions; note that
@@ -184,6 +185,7 @@ static void iw_circular_node_init (IwCircularNode *self)
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->box);
 
         priv->mainCircle = iw_circle_new ();
+        clutter_actor_set_reactive (priv->mainCircle, TRUE);
         // clutter_actor_set_size (CLUTTER_ACTOR (priv->mainCircle), 100, 100);
         clutter_actor_add_child (CLUTTER_ACTOR (priv->box), priv->mainCircle);
 
@@ -340,7 +342,7 @@ void iw_circular_node_set_ports_no (IwCircularNode *self, int i)
                 iw_circle_set_fill (IW_CIRCLE (self->priv->ports[i].actor), TRUE);
                 iw_circle_set_stroke_width (IW_CIRCLE (self->priv->ports[i].actor), 0);
                 clutter_actor_add_child (CLUTTER_ACTOR (self->priv->box), self->priv->ports[i].actor);
-                clutter_actor_set_reactive (self->priv->ports[i].actor, TRUE);
+                // clutter_actor_set_reactive (self->priv->ports[i].actor, TRUE);
         }
 }
 

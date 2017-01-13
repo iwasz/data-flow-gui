@@ -6,8 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "view/Port.h"
 #include "DashedLineConnectorStrategy.h"
+#include "view/Port.h"
 
 void DashedLineConnectorStrategy::onButtonPress (Point p, Object *o)
 {
@@ -49,8 +49,8 @@ void DashedLineConnectorStrategy::reshape (IClutterActor *a)
         lc->setPointA (startPoint);
         lc->setPointB (endPoint);
 
-        Port *pa = dynamic_cast <Port *> (startObject);
-        Port *pb = dynamic_cast <Port *> (endObject);
+        Port *pa = dynamic_cast<Port *> (startObject);
+        Port *pb = dynamic_cast<Port *> (endObject);
 
         if (!pa || !pb) {
                 return;
