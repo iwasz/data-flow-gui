@@ -117,6 +117,7 @@ static void iw_circle_class_init (IwCircleClass *klass)
         //        actor_class->allocate = iw_circle_allocate;
         //        actor_class->paint = iw_circle_paint;
         //        actor_class->paint_node = iw_circle_paint_node;
+
         actor_class->pick = iw_circle_pick;
 
         g_type_class_add_private (klass, sizeof (IwCirclePrivate));

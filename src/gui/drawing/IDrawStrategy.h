@@ -16,11 +16,11 @@
 struct __tiliae_reflect__ IDrawStrategy : public Core::Object {
         virtual ~IDrawStrategy () {}
         /// When mouse mutton is pressed for the first time after the tool was selected.
-        virtual void onButtonPress (float x, float y) = 0;
+        virtual void onButtonPress (Point p, Core::Object *o) = 0;
         /// Mouse motion while button still pressed.
-        virtual void onMotion (float x, float y) = 0;
+        virtual void onMotion (Point p, Core::Object *o) = 0;
         /// Button released. Returns if creating an object with such dimensions makes even sense.
-        virtual bool onButtonRelease (float x, float y) = 0;
+        virtual bool onButtonRelease (Point p, Core::Object *o) = 0;
         /**
          * This get called after all 3 above, and after a factory kicked in, and created an *a.
          * It's purpose is to set *a it's final shape.

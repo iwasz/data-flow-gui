@@ -6,29 +6,32 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef DASHEDCIRCLESTRATEGY_H
-#define DASHEDCIRCLESTRATEGY_H
+#ifndef DASHEDLINES_CONNECTOR_TRATEGY_H
+#define DASHEDLINES_CONNECTOR_TRATEGY_H
 
 #include "IDrawStrategy.h"
-#include "view/Circle.h"
 #include <ReflectionParserAnnotation.h>
+#include <iostream>
+#include <view/LineConnector.h>
+#include <view/Line.h>
 
-class __tiliae_reflect__ DashedCircleStrategy : public IDrawStrategy {
+class __tiliae_reflect__ DashedLineConnectorStrategy : public IDrawStrategy {
 public:
-        virtual ~DashedCircleStrategy () {}
+        virtual ~DashedLineConnectorStrategy () {}
         virtual void onButtonPress (Point p, Core::Object *o);
         virtual void onMotion (Point p, Core::Object *o);
         virtual bool onButtonRelease (Point p, Core::Object *o);
         virtual void reshape (IClutterActor *a);
 
-        Circle *getCircle () const { return circle; }
-        void setCircle (Circle *value) { circle = value; }
+        Line *getLine () const { return line; }
+        void setLine (Line *value) { line = value; }
 
 private:
-
-        Circle *circle = nullptr;
+        Line *line = nullptr;
         Point startPoint;
         Point endPoint;
+        Core::Object *startObject = nullptr;
+        Core::Object *endObject = nullptr;
 };
 
-#endif // DASHEDCIRCLESTRATEGY_H
+#endif // DASHEDLINESTRATEGY_H

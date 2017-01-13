@@ -18,6 +18,10 @@
                 <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" />
         </DashedLineStrategy>
 
+        <DashedLineConnectorStrategy id="dashedLineConnector">
+                <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" />
+        </DashedLineConnectorStrategy>
+
         <Circle scope="prototype" id="circle" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false" />
         <Line scope="prototype" id="line" parent="@stage" strokeColor="#0096c6c9" visible="false" strokeWidth="1" />
 
@@ -34,7 +38,7 @@
             <Port add-to="ports" angle="6.283" color="#8d8d8dff" size="50" />
         </CircularNode>
 
-        <LineConnector scope="prototype" id="lineConnector" parent="@stage" strokeColor="#0096c6c9" visible="false" strokeWidth="5" />
+        <LineConnector scope="prototype" id="lineConnector" parent="@stage" strokeColor="#d1d1d1ff" visible="false" strokeWidth="5" />
 
         <MainController id="mainController" loopDelayMs="5">
                 <ToolMap set-as="tools">
@@ -50,7 +54,7 @@
                       <Tool set-as="circle" drawStrategy="@dashedCircle">
                               <ContainerFactoryStrategy set-as="factoryStrategy" beanName="circle" container="@#container" />
                       </Tool>
-                      <Tool set-as="lineConnector" drawStrategy="@dashedLine">
+                      <Tool set-as="lineConnector" drawStrategy="@dashedLineConnector">
                               <ContainerFactoryStrategy set-as="factoryStrategy" beanName="lineConnector" container="@#container" />
                       </Tool>
                 </ToolMap>

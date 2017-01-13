@@ -8,6 +8,7 @@
 
 #include "MainView.h"
 #include "MainController.h"
+#include "view/abstractActor.h"
 #include "view/clutter/iw_circle.h"
 #include "view/clutter/iw_circular_node.h"
 #include "view/clutter/iw_line.h"
@@ -89,88 +90,75 @@ void MainView::loadUi (GtkForms::App *app)
 
         /*---------------------------------------------------------------------------*/
 
-//        {
-//                ClutterActor *circularNode = iw_circular_node_new ();
-//                clutter_actor_set_position (circularNode, 100, 300);
-//                iw_circular_node_set_radius (IW_CIRCULAR_NODE (circularNode), 75);
-//                ClutterColor actor_color = { 0, 150, 198, 201 };
-//                iw_circular_node_set_color (IW_CIRCULAR_NODE (circularNode), &actor_color);
-//                clutter_actor_set_reactive (circularNode, TRUE);
+        //        {
+        //                ClutterActor *circularNode = iw_circular_node_new ();
+        //                clutter_actor_set_position (circularNode, 100, 300);
+        //                iw_circular_node_set_radius (IW_CIRCULAR_NODE (circularNode), 75);
+        //                ClutterColor actor_color = { 0, 150, 198, 201 };
+        //                iw_circular_node_set_color (IW_CIRCULAR_NODE (circularNode), &actor_color);
+        //                clutter_actor_set_reactive (circularNode, TRUE);
 
-//                iw_circular_node_set_ports_no (IW_CIRCULAR_NODE (circularNode), 3);
-//                iw_circular_node_set_port_angle (IW_CIRCULAR_NODE (circularNode), 0, G_PI - 0.5);
-//                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (circularNode), 0, 20);
-//                ClutterColor port_color = { 141, 141, 141, 255 };
-//                iw_circular_node_set_port_color (IW_CIRCULAR_NODE (circularNode), 0, &port_color);
+        //                iw_circular_node_set_ports_no (IW_CIRCULAR_NODE (circularNode), 3);
+        //                iw_circular_node_set_port_angle (IW_CIRCULAR_NODE (circularNode), 0, G_PI - 0.5);
+        //                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (circularNode), 0, 20);
+        //                ClutterColor port_color = { 141, 141, 141, 255 };
+        //                iw_circular_node_set_port_color (IW_CIRCULAR_NODE (circularNode), 0, &port_color);
 
-//                iw_circular_node_set_port_angle (IW_CIRCULAR_NODE (circularNode), 1, G_PI + 0.5);
-//                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (circularNode), 1, 20);
-//                iw_circular_node_set_port_color (IW_CIRCULAR_NODE (circularNode), 1, &port_color);
+        //                iw_circular_node_set_port_angle (IW_CIRCULAR_NODE (circularNode), 1, G_PI + 0.5);
+        //                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (circularNode), 1, 20);
+        //                iw_circular_node_set_port_color (IW_CIRCULAR_NODE (circularNode), 1, &port_color);
 
-//                iw_circular_node_set_port_angle (IW_CIRCULAR_NODE (circularNode), 2, 2 * G_PI);
-//                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (circularNode), 2, 20);
-//                ClutterColor port_color2 = { 209, 209, 209, 255 };
-//                iw_circular_node_set_port_color (IW_CIRCULAR_NODE (circularNode), 2, &port_color2);
+        //                iw_circular_node_set_port_angle (IW_CIRCULAR_NODE (circularNode), 2, 2 * G_PI);
+        //                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (circularNode), 2, 20);
+        //                ClutterColor port_color2 = { 209, 209, 209, 255 };
+        //                iw_circular_node_set_port_color (IW_CIRCULAR_NODE (circularNode), 2, &port_color2);
 
-//                clutter_actor_add_child (stage->getActor (), circularNode);
+        //                clutter_actor_add_child (stage->getActor (), circularNode);
 
-//                ClutterAction *dragAction = clutter_drag_action_new ();
-//                clutter_actor_add_action (circularNode, dragAction);
-//        }
+        //                ClutterAction *dragAction = clutter_drag_action_new ();
+        //                clutter_actor_add_action (circularNode, dragAction);
+        //        }
 }
 
 /*****************************************************************************/
 
-static void on_stage_button_press (ClutterStage *stage, ClutterEvent *event, gpointer data)
+typedef std::pair<Point, Core::Object *> EventData;
+
+EventData processEvent (ClutterStage *stage, ClutterEvent *event)
 {
-        MainController *mc = static_cast<MainController *> (data);
-        // find out which part of the screen was clicked
         gfloat x = 0;
         gfloat y = 0;
         clutter_event_get_coords (event, &x, &y);
 
-        // find which actor was clicked
-        ClutterActor *clicked = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
+        ClutterActor *actor = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
+        Core::Object *cActor = static_cast<Core::Object *> (g_object_get_data (G_OBJECT (actor), CPP_IMPLEMENTATION_KEY));
 
-        // Pobrać model
-        // Czy to jest arc.
-        // Czy to jest port (jeśli port, to porty będzie wiedział do jakiego node należy). Numer portu.
-        //
-
-        if (clicked == CLUTTER_ACTOR (stage)) {
-                mc->onButtonPress (x, y);
-        }
-
-        // hide the actor that was clicked
-        //        clutter_actor_hide (clicked);
+        return EventData (Point (x, y), cActor);
 }
 
 /*****************************************************************************/
 
-static void on_stage_button_release (ClutterStage *stage, ClutterEvent *event, gpointer data)
+void on_stage_button_press (ClutterStage *stage, ClutterEvent *event, gpointer data)
 {
         MainController *mc = static_cast<MainController *> (data);
-        // find out which part of the screen was clicked
-        gfloat x = 0;
-        gfloat y = 0;
-        clutter_event_get_coords (event, &x, &y);
-
-        // find which actor was clicked
-        mc->onButtonRelease (x, y);
+        EventData t = processEvent (stage, event);
+        mc->onButtonPress (t.first, t.second);
 }
 
 /*****************************************************************************/
 
-static void on_stage_motion (ClutterStage *stage, ClutterEvent *event, gpointer data)
+void on_stage_button_release (ClutterStage *stage, ClutterEvent *event, gpointer data)
 {
         MainController *mc = static_cast<MainController *> (data);
-        // find out which part of the screen was clicked
-        gfloat x = 0;
-        gfloat y = 0;
-        clutter_event_get_coords (event, &x, &y);
+        EventData t = processEvent (stage, event);
+        mc->onButtonRelease (t.first, t.second);
+}
 
-        // ClutterActor *motion = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
+/*****************************************************************************/
 
-        // find which actor was clicked
-        mc->onMotion (x, y);
+void on_stage_motion (ClutterStage *stage, ClutterEvent *event, gpointer data)
+{
+        MainController *mc = static_cast<MainController *> (data);
+        EventData t = processEvent (stage, event);
+        mc->onMotion (t.first, t.second);
 }

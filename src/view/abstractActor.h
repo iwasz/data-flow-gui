@@ -6,13 +6,9 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <iostream>
-#include "ContainerFactoryStrategy.h"
+#ifndef C_ABSTRACTACTOR_H
+#define C_ABSTRACTACTOR_H
 
-Core::Variant ContainerFactoryStrategy::run (/*Point const &a, Core::Object *oa, Point const &b, Core::Object *ob*/)
-{
-        return container->getBean (beanName);
-}
+#define CPP_IMPLEMENTATION_KEY "cppImplKey"
 
-
-
+#endif // ABSTRACTACTOR_H

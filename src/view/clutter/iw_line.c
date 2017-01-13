@@ -69,6 +69,8 @@ static void iw_line_finalize (GObject *gobject)
 
 static void iw_line_pick (ClutterActor *actor, const ClutterColor *pick_color)
 {
+        return;
+
         if (!clutter_actor_should_pick_paint (actor)) {
                 return;
         }

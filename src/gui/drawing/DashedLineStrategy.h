@@ -16,9 +16,9 @@
 class __tiliae_reflect__ DashedLineStrategy : public IDrawStrategy {
 public:
         virtual ~DashedLineStrategy () {}
-        virtual void onButtonPress (float x, float y);
-        virtual void onMotion (float x, float y);
-        virtual bool onButtonRelease (float x, float y);
+        virtual void onButtonPress (Point p, Core::Object *o);
+        virtual void onMotion (Point p, Core::Object *o);
+        virtual bool onButtonRelease (Point p, Core::Object *o);
         virtual void reshape (IClutterActor *a);
 
         Line *getLine () const { return line; }

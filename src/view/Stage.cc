@@ -13,6 +13,7 @@ Stage::Stage ()
 {
         clutterWidget = gtk_clutter_embed_new ();
         self = gtk_clutter_embed_get_stage (GTK_CLUTTER_EMBED (clutterWidget));
+        setCppImplementation ();
 }
 
 /*****************************************************************************/

@@ -42,16 +42,23 @@ struct MainController::Impl {
          */
         struct Arguments {
                 std::string tool;
-                float x;
-                float y;
+                Point p;
+                Core::Object *object;
         } arguments;
 
-        // External state. Used directly in the drawing events (onMove, onRelease).
-        std::string currentTool;
-        float startX = 0;
-        float startY = 0;
-        IDrawStrategy *lastDrawStrategy = nullptr;
-        IFactoryStrategy *currentFactoryStrategy = nullptr;
+        /// Additional state. Used directly in the drawing events (onMove, onRelease).
+        struct {
+                /// Name of curently selected tool (arc, node etc).
+                std::string currentTool;
+                /// Coordinates of first point of current "gesture".
+//                Point startPoint;
+                /// Object (already on stage, usually an actor) we clicked when started drawing our new object.
+//                Core::Object *startObject;
+                /// Draw strategy draws shapes just prior to actual object creation.
+                IDrawStrategy *currentDrawStrategy = nullptr;
+                /// This strategy creates the object we are drawing.
+                IFactoryStrategy *currentFactoryStrategy = nullptr;
+        } vars;
 
         // Maybe other name and element type?
         ClutterActorVector actors;
@@ -74,11 +81,10 @@ void MainController::Impl::configureMachine ()
         /* clang-format off */
         machine.state (IDLE, State::INITIAL)
                 ->entry ([this] (const char *, void *arg) {
-                        startX = 0;
-                        startY = 0;
-                        currentTool = "";
-                        lastDrawStrategy = nullptr;
-                        currentFactoryStrategy = nullptr;
+                        // vars.startPoint = Point ();
+                        vars.currentTool = "";
+                        vars.currentDrawStrategy = nullptr;
+                        vars.currentFactoryStrategy = nullptr;
                         return true;
                 })
                 ->transition (TOOL_SELECTED)->when (eq ("selected.tool"));
@@ -86,40 +92,38 @@ void MainController::Impl::configureMachine ()
         machine.state (TOOL_SELECTED)
                 ->entry ([this] (const char *, void *arg) {
                         Arguments *args = static_cast <Arguments *> (arg);
-                        currentTool = args->tool;
+                        vars.currentTool = args->tool;
 
-                        if (tools->find (currentTool) == tools->end ()) {
-                                throw Core::Exception ("No such tool : [" + currentTool + "]");
+                        if (tools->find (vars.currentTool) == tools->end ()) {
+                                throw Core::Exception ("No such tool : [" + vars.currentTool + "]");
                         }
 
-                        lastDrawStrategy = (*tools)[currentTool].drawStrategy;
-                        currentFactoryStrategy = (*tools)[currentTool].factoryStrategy;
+                        vars.currentDrawStrategy = (*tools)[vars.currentTool].drawStrategy;
+                        vars.currentFactoryStrategy = (*tools)[vars.currentTool].factoryStrategy;
                         return true;
                 })
                 ->transition (DRAW)->when (eq ("stage.press"))->then ([this] (const char *, void *arg) {
                         Arguments *args = static_cast <Arguments *> (arg);
-                        startX = args->x;
-                        startY = args->y;
-                        lastDrawStrategy->onButtonPress (startX, startY);
+                        vars.currentDrawStrategy->onButtonPress (args->p, args->object);
                         return true;
                 });
 
         machine.state (DRAW)
                 ->transition (DRAW)->when (eq ("stage.motion"))->then ([this] (const char *, void *arg) {
                         Arguments *args = static_cast <Arguments *> (arg);
-                        lastDrawStrategy->onMotion (args->x, args->y);
+                        vars.currentDrawStrategy->onMotion (args->p, args->object);
                         return true;
                 })
                 ->transition (IDLE)->when (eq ("stage.release"))->then ([this] (const char *, void *arg) {
                         Arguments *args = static_cast <Arguments *> (arg);
 
-                        if (!lastDrawStrategy->onButtonRelease (args->x, args->y)) {
+                        if (!vars.currentDrawStrategy->onButtonRelease (args->p, args->object)) {
                                 return true;
                         }
 
-                        Core::Variant v = currentFactoryStrategy->run (startX, startY, args->x, args->y);
+                        Core::Variant v = vars.currentFactoryStrategy->run (/*vars.startX, vars.startY, args->x, args->y*/);
                         IClutterActor *a = ocast <IClutterActor *> (v);
-                        lastDrawStrategy->reshape (a);
+                        vars.currentDrawStrategy->reshape (a);
                         a->setVisible (true);
                         actors.push_back (std::shared_ptr <IClutterActor> (a));
                         return true;
@@ -169,30 +173,32 @@ void MainController::onNewNodeToolClicked (std::string const &name)
 
 /*****************************************************************************/
 
-void MainController::onButtonPress (float x, float y)
+void MainController::onButtonPress (Point p, Object *o)
 {
-        impl->arguments.x = x;
-        impl->arguments.y = y;
+        impl->arguments.p = p;
+        impl->arguments.object = o;
         impl->pushMessage ("stage.press", &impl->arguments);
 }
 
 /*****************************************************************************/
 
-void MainController::onButtonRelease (float x, float y)
+void MainController::onButtonRelease (Point p, Object *o)
 {
-        impl->arguments.x = x;
-        impl->arguments.y = y;
+        impl->arguments.p = p;
+        impl->arguments.object = o;
         impl->pushMessage ("stage.release", &impl->arguments);
 }
 
 /*****************************************************************************/
 
-void MainController::onMotion (float x, float y)
+void MainController::onMotion (Point p, Object *o)
 {
-        impl->arguments.x = x;
-        impl->arguments.y = y;
+        impl->arguments.p = p;
+        impl->arguments.object = o;
         impl->pushMessage ("stage.motion", &impl->arguments);
 }
+
+/*****************************************************************************/
 
 void MainController::onDummyMethod ()
 {

@@ -3,9 +3,9 @@
 #include "gui/drawing/ContainerFactoryStrategy.h"
 #include "gui/drawing/DashedCircleStrategy.h"
 #include "gui/drawing/DashedLineStrategy.h"
+#include "gui/drawing/DashedLineConnectorStrategy.h"
 #include "view/Circle.h"
 #include "view/Line.h"
 #include "view/LineConnector.h"
 #include "view/Stage.h"
 #include "view/CircularNode.h"
-

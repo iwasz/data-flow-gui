@@ -6,13 +6,5 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include <iostream>
-#include "ContainerFactoryStrategy.h"
-
-Core::Variant ContainerFactoryStrategy::run (/*Point const &a, Core::Object *oa, Point const &b, Core::Object *ob*/)
-{
-        return container->getBean (beanName);
-}
-
-
+#include "Port.h"
 

@@ -11,6 +11,7 @@
 
 #include <core/Exception.h>
 #include "IClutterActor.h"
+#include "abstractActor.h"
 
 class __tiliae_reflect__ AbstractActor : public IClutterActor {
 public:
@@ -42,6 +43,9 @@ public:
 
         virtual Color getFillColor () const { throw Core::Exception ("Not implemented"); }
         virtual void setFillColor (const Color &value) { throw Core::Exception ("Not implemented"); }
+
+        /// Stores this into self as g_object value.
+        virtual void setCppImplementation ();
 
 protected:
 

@@ -6,12 +6,17 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "DashedLineStrategy.h"
+#include "view/Port.h"
+#include "DashedLineConnectorStrategy.h"
 
-void DashedLineStrategy::onButtonPress (Point p, Object *o)
+void DashedLineConnectorStrategy::onButtonPress (Point p, Object *o)
 {
         startPoint = p;
         endPoint = Point ();
+
+        startObject = o;
+        endObject = nullptr;
+
         line->setPointA (startPoint);
         line->setPointB (startPoint);
         line->setVisible (true);
@@ -19,27 +24,38 @@ void DashedLineStrategy::onButtonPress (Point p, Object *o)
 
 /*****************************************************************************/
 
-void DashedLineStrategy::onMotion (Point p, Object *o) { line->setPointB (p); }
+void DashedLineConnectorStrategy::onMotion (Point p, Object *o) { line->setPointB (p); }
 
 /*****************************************************************************/
 
-bool DashedLineStrategy::onButtonRelease (Point p, Object *o)
+bool DashedLineConnectorStrategy::onButtonRelease (Point p, Object *o)
 {
         line->setVisible (false);
         endPoint = p;
+        endObject = o;
         return startPoint.x != endPoint.x || startPoint.y != endPoint.y;
 }
 
 /*****************************************************************************/
 
-void DashedLineStrategy::reshape (IClutterActor *a)
+void DashedLineConnectorStrategy::reshape (IClutterActor *a)
 {
-        Line *l = dynamic_cast<Line *> (a);
+        LineConnector *lc = dynamic_cast<LineConnector *> (a);
 
-        if (!l) {
+        if (!lc) {
                 throw Core::Exception ("DashedLineStrategy::reshape could not cast actor to Line *");
         }
 
-        l->setPointA (startPoint);
-        l->setPointB (endPoint);
+        lc->setPointA (startPoint);
+        lc->setPointB (endPoint);
+
+        Port *pa = dynamic_cast <Port *> (startObject);
+        Port *pb = dynamic_cast <Port *> (endObject);
+
+        if (!pa || !pb) {
+                return;
+        }
+
+        lc->connect (&pa->anchor, IConnector::A);
+        lc->connect (&pb->anchor, IConnector::B);
 }

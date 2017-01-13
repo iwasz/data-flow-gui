@@ -11,23 +11,8 @@
 
 #include "AbstractActor.h"
 #include "IConnectable.h"
+#include "Port.h"
 #include <vector>
-
-/**
- * This is only a view. Represents a port (place on a node you can connect a connector to).
- */
-class __tiliae_reflect__ Port {
-public:
-        float angle;
-        float size;
-        Color color;
-        Anchor anchor;
-};
-
-/**
- * Collection of ports.
- */
-typedef __tiliae_reflect__ std::vector<Port> PortVector;
 
 /**
  * This is only a view.

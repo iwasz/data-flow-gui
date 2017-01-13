@@ -46,9 +46,9 @@ public:
         virtual void onStop ();
 
         void onNewNodeToolClicked (std::string const &name);
-        void onButtonPress (float x, float y);
-        void onButtonRelease (float x, float y);
-        void onMotion (float x, float y);
+        void onButtonPress (Point p, Core::Object *o);
+        void onButtonRelease (Point p, Core::Object *o);
+        void onMotion (Point p, Core::Object *o);
 
         ToolMap const &getTools () const { return tools; }
         void setTools (const ToolMap &value) { tools = value; }

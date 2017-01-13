@@ -30,10 +30,7 @@ void AbstractActor::setVisible (bool value)
 
 /*****************************************************************************/
 
-void AbstractActor::setPosition (Point const &p)
-{
-        clutter_actor_set_position(self, p.x, p.y);
-}
+void AbstractActor::setPosition (Point const &p) { clutter_actor_set_position (self, p.x, p.y); }
 
 /*****************************************************************************/
 
@@ -46,10 +43,7 @@ Point AbstractActor::getPosition () const
 
 /*****************************************************************************/
 
-void AbstractActor::setSize (Dimension const &d)
-{
-        clutter_actor_set_size(self, d.width, d.height);
-}
+void AbstractActor::setSize (Dimension const &d) { clutter_actor_set_size (self, d.width, d.height); }
 
 /*****************************************************************************/
 
@@ -58,4 +52,11 @@ Dimension AbstractActor::getDimension () const
         Dimension d;
         clutter_actor_get_size (self, &d.width, &d.height);
         return d;
+}
+
+/*****************************************************************************/
+
+void AbstractActor::setCppImplementation ()
+{
+        g_object_set_data (G_OBJECT (self), CPP_IMPLEMENTATION_KEY, this);
 }

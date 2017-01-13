@@ -16,6 +16,7 @@ CircularNode::CircularNode ()
         ClutterAction *dragAction = clutter_drag_action_new ();
         clutter_actor_add_action (self, dragAction);
         iw_circular_node_set_user_data (IW_CIRCULAR_NODE (self), this);
+        setCppImplementation ();
 }
 
 /*****************************************************************************/

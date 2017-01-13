@@ -8,9 +8,8 @@
 
 #include "iw_circular_node.h"
 #include "iw_circle.h"
+#include "view/abstractActor.h"
 #include <math.h>
-
-#define USER_DATA_KEY "userDataDf"
 
 /* convenience macro for GType implementations; see:
  * http://library.gnome.org/devel/gobject/2.27/gobject-Type-Information.html#G-DEFINE-TYPE:CAPS
@@ -69,6 +68,8 @@ static void iw_circular_node_finalize (GObject *gobject)
         G_OBJECT_CLASS (iw_circular_node_parent_class)->finalize (gobject);
 }
 
+/*****************************************************************************/
+
 static void iw_circular_node_allocate (ClutterActor *actor, const ClutterActorBox *box, ClutterAllocationFlags flags)
 {
         IwCircularNodePrivate *priv = IW_CIRCULAR_NODE (actor)->priv;
@@ -101,9 +102,18 @@ static void iw_circular_node_allocate (ClutterActor *actor, const ClutterActorBo
 // TODO Duplicated code (iw_circle has the same). How to delegate pick metod to mainCircle->pick?
 static void iw_circular_node_pick (ClutterActor *actor, const ClutterColor *pick_color)
 {
+
         if (!clutter_actor_should_pick_paint (actor)) {
                 return;
         }
+
+        // for (ClutterActor *iter = priv->first_child; iter != NULL; iter = iter->priv->next_sibling) {
+
+        for (ClutterActor *iter = clutter_actor_get_first_child (actor); iter != NULL; iter = clutter_actor_get_next_sibling (iter)) {
+                clutter_actor_paint (iter);
+        }
+
+        return;
 
         IwCircularNodePrivate *priv = IW_CIRCULAR_NODE_GET_PRIVATE (actor);
 
@@ -330,6 +340,7 @@ void iw_circular_node_set_ports_no (IwCircularNode *self, int i)
                 iw_circle_set_fill (IW_CIRCLE (self->priv->ports[i].actor), TRUE);
                 iw_circle_set_stroke_width (IW_CIRCLE (self->priv->ports[i].actor), 0);
                 clutter_actor_add_child (CLUTTER_ACTOR (self->priv->box), self->priv->ports[i].actor);
+                clutter_actor_set_reactive (self->priv->ports[i].actor, TRUE);
         }
 }
 
@@ -367,7 +378,7 @@ ClutterActor *iw_circular_node_new (void) { return g_object_new (IW_TYPE_CIRCULA
 
 /*****************************************************************************/
 
-void iw_circular_node_set_user_data (IwCircularNode *self, void *p)  { self->priv->userData = p; }
+void iw_circular_node_set_user_data (IwCircularNode *self, void *p) { self->priv->userData = p; }
 
 /*****************************************************************************/
 
@@ -378,7 +389,7 @@ void *iw_circular_node_get_user_data (IwCircularNode *self) { return self->priv-
 void iw_circular_node_set_port_user_data (IwCircularNode *self, int i, void *p)
 {
         g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        g_object_set_data (G_OBJECT (self->priv->ports[i].actor), USER_DATA_KEY, p);
+        g_object_set_data (G_OBJECT (self->priv->ports[i].actor), CPP_IMPLEMENTATION_KEY, p);
 }
 
 /*****************************************************************************/
@@ -386,5 +397,5 @@ void iw_circular_node_set_port_user_data (IwCircularNode *self, int i, void *p)
 void *iw_circular_node_get_port_user_data (IwCircularNode *self, int i)
 {
         g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), NULL);
-        return g_object_get_data (G_OBJECT (self->priv->ports[i].actor), USER_DATA_KEY);
+        return g_object_get_data (G_OBJECT (self->priv->ports[i].actor), CPP_IMPLEMENTATION_KEY);
 }

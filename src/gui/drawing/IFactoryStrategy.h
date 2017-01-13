@@ -14,7 +14,7 @@
 
 struct __tiliae_reflect__ IFactoryStrategy : public Core::Object {
         virtual ~IFactoryStrategy () {}
-        virtual Core::Variant run (float x1, float y1, float x2, float y2) __tiliae_no_reflect__ = 0;
+        virtual Core::Variant run (/*Point const &a, Core::Object *oa, Point const &b, Core::Object *ob*/) __tiliae_no_reflect__ = 0;
 };
 
 #endif // IFACTORYSTRATEGY_H

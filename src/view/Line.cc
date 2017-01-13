@@ -17,6 +17,7 @@ Line::Line ()
 
         ClutterAction *dragAction = clutter_drag_action_new ();
         clutter_actor_add_action (self, dragAction);
+        setCppImplementation ();
 }
 
 /*****************************************************************************/
