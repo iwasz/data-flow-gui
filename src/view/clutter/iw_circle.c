@@ -118,7 +118,7 @@ static void iw_circle_class_init (IwCircleClass *klass)
         //        actor_class->paint = iw_circle_paint;
         //        actor_class->paint_node = iw_circle_paint_node;
 
-        actor_class->pick = iw_circle_pick;
+        //        actor_class->pick = iw_circle_pick;
 
         g_type_class_add_private (klass, sizeof (IwCirclePrivate));
 }
@@ -166,6 +166,11 @@ static void iw_circle_init (IwCircle *self)
         priv->fill = FALSE;
         priv->strokeDash = 0;
         priv->strokeWidth = 3;
+
+#if 1
+        static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
+        clutter_actor_set_background_color (self, &c);
+#endif
 
         priv->canvas = clutter_canvas_new ();
         //        clutter_canvas_set_size (CLUTTER_CANVAS (priv->canvas), 300, 300);

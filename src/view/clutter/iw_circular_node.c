@@ -37,7 +37,7 @@ typedef struct _IwCircularNodePort IwCircularNodePort;
  */
 struct _IwCircularNodePrivate {
         ClutterLayoutManager *layout;
-        ClutterActor *box;
+        //        ClutterActor *box;
         ClutterActor *mainCircle;
         void *userData;
 
@@ -93,7 +93,7 @@ static void iw_circular_node_allocate (ClutterActor *actor, const ClutterActorBo
         childBox.x2 = clutter_actor_box_get_width (box);
         childBox.y2 = clutter_actor_box_get_height (box);
 
-        clutter_actor_allocate (priv->box, &childBox, flags);
+        clutter_actor_allocate (priv->mainCircle, &childBox, flags);
         circularNodeOnAllocate (priv->userData, box->x1, box->y1, box->x2, box->y2);
 }
 
@@ -107,12 +107,12 @@ static void iw_circular_node_pick (ClutterActor *actor, const ClutterColor *pick
                 return;
         }
 
-        //        for (ClutterActor *iter = clutter_actor_get_first_child (actor); iter != NULL; iter = clutter_actor_get_next_sibling (iter)) {
-        //                clutter_actor_paint (iter);
-        //        }
+        for (ClutterActor *iter = clutter_actor_get_first_child (actor); iter != NULL; iter = clutter_actor_get_next_sibling (iter)) {
+                clutter_actor_paint (iter);
+        }
 
-        IwCircularNodePrivate *priv = IW_CIRCULAR_NODE_GET_PRIVATE (actor);
-        clutter_actor_paint (priv->mainCircle);
+        //        IwCircularNodePrivate *priv = IW_CIRCULAR_NODE_GET_PRIVATE (actor);
+        //        clutter_actor_paint (priv->mainCircle);
         return;
 
 #if 0
@@ -171,23 +171,23 @@ static void iw_circular_node_init (IwCircularNode *self)
 
         priv->layout = clutter_fixed_layout_new ();
 
-        /* the main container; this actor will use the BinLayout to lay
-         * out its children; we use the anchor point to keep it centered
-         * on the same position even when we change its size
-         */
-        priv->box = clutter_actor_new ();
+/* the main container; this actor will use the BinLayout to lay
+ * out its children; we use the anchor point to keep it centered
+ * on the same position even when we change its size
+ */
+//        priv->box = clutter_actor_new ();
 #if 0
         clutter_actor_set_background_color(priv->box, &c);
 #endif
 
-        clutter_actor_set_layout_manager (priv->box, priv->layout);
-        clutter_actor_set_reactive (priv->box, TRUE);
-        clutter_actor_add_child (CLUTTER_ACTOR (self), priv->box);
+        //        clutter_actor_set_layout_manager (priv->box, priv->layout);
+        //        clutter_actor_set_reactive (priv->box, TRUE);
+        //        clutter_actor_add_child (CLUTTER_ACTOR (self), priv->box);
 
         priv->mainCircle = iw_circle_new ();
+        clutter_actor_set_layout_manager (priv->mainCircle, priv->layout);
         clutter_actor_set_reactive (priv->mainCircle, TRUE);
-        // clutter_actor_set_size (CLUTTER_ACTOR (priv->mainCircle), 100, 100);
-        clutter_actor_add_child (CLUTTER_ACTOR (priv->box), priv->mainCircle);
+        clutter_actor_add_child (CLUTTER_ACTOR (self), priv->mainCircle);
 
         g_signal_connect (CLUTTER_ACTOR (self), "allocation-changed", G_CALLBACK (on_actor_resize), NULL);
 
@@ -341,7 +341,7 @@ void iw_circular_node_set_ports_no (IwCircularNode *self, int i)
                 self->priv->ports[i].actor = iw_circle_new ();
                 iw_circle_set_fill (IW_CIRCLE (self->priv->ports[i].actor), TRUE);
                 iw_circle_set_stroke_width (IW_CIRCLE (self->priv->ports[i].actor), 0);
-                clutter_actor_add_child (CLUTTER_ACTOR (self->priv->box), self->priv->ports[i].actor);
+                clutter_actor_add_child (CLUTTER_ACTOR (self->priv->mainCircle), self->priv->ports[i].actor);
                 // clutter_actor_set_reactive (self->priv->ports[i].actor, TRUE);
         }
 }
