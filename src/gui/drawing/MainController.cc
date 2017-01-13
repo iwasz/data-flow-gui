@@ -71,38 +71,17 @@ struct MainController::Impl {
 
 /*****************************************************************************/
 
-// void MainController::Impl::pushMessage (std::string const &m, void *arg)
-//{
-//        if (!inputQueue.push_back ()) {
-//                return;
-//        }
-
-//        StringQueue::Element *el = inputQueue.back ();
-
-//        if (!el) {
-//                return;
-//        }
-
-//        strncpy (el->data, m.c_str (), STRING_QUEUE_BUFFER_SIZE);
-//        el->arg = arg;
-//}
-
+// Run machine synchronously.
 void MainController::Impl::pushMessage (std::string const &m, void *arg)
 {
-
-        StringQueue::Element *el = inputQueue.back ();
-
-        if (!el) {
-                if (!inputQueue.push_back ()) {
-                        return;
-                }
+        if (!inputQueue.back ()) {
+                inputQueue.push_back ();
         }
 
-        el = inputQueue.back ();
-        assert (el);
-
+        StringQueue::Element *el = inputQueue.back ();
         strncpy (el->data, m.c_str (), STRING_QUEUE_BUFFER_SIZE);
         el->arg = arg;
+        machine.run ();
 }
 
 /*****************************************************************************/
@@ -253,7 +232,6 @@ void MainController::onNewNodeToolClicked (std::string const &name)
 {
         impl->arguments.tool = name;
         impl->pushMessage ("selected.tool", &impl->arguments);
-        impl->machine.run ();
 }
 
 /*****************************************************************************/
@@ -263,7 +241,6 @@ void MainController::onButtonPress (Point p, Object *o)
         impl->arguments.p = p;
         impl->arguments.object = o;
         impl->pushMessage ("stage.press", &impl->arguments);
-        impl->machine.run ();
 }
 
 /*****************************************************************************/
@@ -273,7 +250,6 @@ void MainController::onButtonRelease (Point p, Object *o)
         impl->arguments.p = p;
         impl->arguments.object = o;
         impl->pushMessage ("stage.release", &impl->arguments);
-        impl->machine.run ();
 }
 
 /*****************************************************************************/
@@ -283,7 +259,6 @@ void MainController::onMotion (Point p, Object *o)
         impl->arguments.p = p;
         impl->arguments.object = o;
         impl->pushMessage ("stage.motion", &impl->arguments);
-        impl->machine.run ();
 }
 
 /*****************************************************************************/
@@ -293,7 +268,6 @@ void MainController::onEnter (Point p, Object *o)
         impl->arguments.p = p;
         impl->arguments.object = o;
         impl->pushMessage ("stage.enter", &impl->arguments);
-        impl->machine.run ();
 }
 
 /*****************************************************************************/
@@ -303,7 +277,6 @@ void MainController::onLeave (Point p, Object *o)
         impl->arguments.p = p;
         impl->arguments.object = o;
         impl->pushMessage ("stage.leave", &impl->arguments);
-        impl->machine.run ();
 }
 
 /*****************************************************************************/
