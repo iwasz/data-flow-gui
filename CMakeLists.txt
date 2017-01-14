@@ -110,6 +110,8 @@ LIST (APPEND SOURCES
         "src/gui/drawing/IDrawStrategy.h"
         "src/gui/drawing/IFactoryStrategy.cc"
         "src/gui/drawing/IFactoryStrategy.h"
+        "src/gui/drawing/MoveStrategy.cc"
+        "src/gui/drawing/MoveStrategy.h"
         "src/view/clutter/iw_circle.c"
         "src/view/clutter/iw_circle.h"
         "src/view/clutter/iw_circular_node.c"

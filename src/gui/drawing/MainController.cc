@@ -7,6 +7,7 @@
  ****************************************************************************/
 
 #include "MainController.h"
+#include "MoveStrategy.h"
 #include "view/IClutterActor.h"
 #include "view/Stage.h"
 #include <App.h>
@@ -37,6 +38,7 @@ struct MainController::Impl {
         StringQueue inputQueue;
         StateMachine machine;
         ToolMap *tools;
+        MoveStrategy moveStrategy;
 
         /*
          * Additional arguments for state machine. Pointer to this struct is passed
@@ -60,10 +62,6 @@ struct MainController::Impl {
                 IDrawStrategy *currentDrawStrategy = nullptr;
                 /// This strategy creates the object we are drawing.
                 IFactoryStrategy *currentFactoryStrategy = nullptr;
-
-                // TODO encapsulate this in a strategy
-                ClutterActor *movingActor = nullptr;
-                ClutterAction *dragAction = nullptr;
         } vars;
 
         // Maybe other name and element type?
@@ -147,29 +145,14 @@ void MainController::Impl::configureMachine ()
         /*---------------------------------------------------------------------------*/
 
         machine.state (MOVE)
-                        // TODO do strategii!
                 ->entry ([this] (const char *, void *arg) {
                         Arguments *args = static_cast <Arguments *> (arg);
-                        IClutterActor *act;
-                        if (!(act = dynamic_cast <IClutterActor *> (args->object))) {
-                                return true;
-                        }
-
-                        if (dynamic_cast <Stage *> (act)) {
-                                return true;
-                        }
-
-                        vars.movingActor = act->getActor();
-                        vars.dragAction = clutter_drag_action_new ();
-                        clutter_actor_add_action (vars.movingActor, vars.dragAction);
+                        moveStrategy.onEnter (args->p, args->object);
                         return true;
                 })
                 ->transition (IDLE)->when (eq ("stage.leave"))->then ([this] (const char *, void *arg) {
-                        if (vars.movingActor) {
-                                clutter_actor_remove_action (vars.movingActor, vars.dragAction);
-                                vars.movingActor = nullptr;
-                        }
-
+                        Arguments *args = static_cast <Arguments *> (arg);
+                        moveStrategy.onLeave (args->p, args->object);
                         return true;
                 });
 
