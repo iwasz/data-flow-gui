@@ -19,6 +19,8 @@ void AbstractConnector::connect (Anchor *an, Side s)
         else {
                 b = an;
         }
+
+        onConnectAnchor (an->getPosition (), s);
 }
 
 /*****************************************************************************/
@@ -28,8 +30,10 @@ void AbstractConnector::disconnect (Side s)
         a->disconnect (this, A);
         if (s == A) {
                 a = nullptr;
+                onDisconnectAnchor (a->getPosition (), s);
         }
         else {
                 b = nullptr;
+                onDisconnectAnchor (b->getPosition (), s);
         }
 }

@@ -9,16 +9,21 @@
 #ifndef DATA_FLOW_ANCHOR_H
 #define DATA_FLOW_ANCHOR_H
 
-#include <vector>
-#include <memory>
 #include "IConnector.h"
+#include "primitives/Geometry.h"
+#include <memory>
+#include <vector>
+
+struct IAnchorPositionProvider {
+        virtual ~IAnchorPositionProvider () {}
+        virtual Point getPosition () const = 0;
+};
 
 /**
- * @brief The Anchor class
+ * The logic behind anchors.
  */
 class Anchor {
 public:
-
         struct Connection {
                 IConnector::Side side;
                 IConnector *connector;
@@ -27,18 +32,20 @@ public:
         typedef std::vector<Connection> ConnectionVector;
         friend class AbstractConnector;
 
-//        void notifyConnectAnchor (float x, float y);
-        void notifyMoveAnchor (float x, float y);
-//        void notifyDisconnectAnchor (float x, float y);
+        void notifyMoveAnchor (Point const &p);
+
+        Point getPosition () const { return apProvider->getPosition (); }
+
+        void setApProvider (std::shared_ptr<IAnchorPositionProvider> value) { apProvider = value; }
 
 private:
-
         void connect (IConnector *c, IConnector::Side s);
         void disconnect (IConnector *c, IConnector::Side s);
 
         ConnectionVector connections;
+        std::shared_ptr<IAnchorPositionProvider> apProvider;
 };
 
-typedef std::vector <std::unique_ptr<Anchor>> AnchorVector;
+typedef std::vector<std::unique_ptr<Anchor>> AnchorVector;
 
 #endif // ANCHOR_H

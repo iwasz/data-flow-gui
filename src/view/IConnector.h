@@ -9,6 +9,7 @@
 #ifndef ICONNECTOR_H
 #define ICONNECTOR_H
 
+#include "primitives/Geometry.h"
 #include <ReflectionParserAnnotation.h>
 
 class Anchor;
@@ -28,7 +29,9 @@ struct __tiliae_reflect__ IConnector {
 
         // Event handlers
 
-        virtual void onMoveAnchor (float x, float y, Side s) = 0;
+        virtual void onConnectAnchor (Point const &p, Side s) = 0;
+        virtual void onMoveAnchor (Point const &p, Side s) = 0;
+        virtual void onDisconnectAnchor (Point const &p, Side s) = 0;
 };
 
 #endif // ICONNECTOR_H

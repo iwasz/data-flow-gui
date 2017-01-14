@@ -9,12 +9,32 @@
 #include "CircularNode.h"
 #include "clutter/iw_circular_node.h"
 
+/*****************************************************************************/
+
+class CircularNodeAnchorPositionProvider : public IAnchorPositionProvider {
+public:
+        CircularNodeAnchorPositionProvider (int i, IwCircularNode *self) : i (i), self (self) {}
+        virtual ~CircularNodeAnchorPositionProvider () {}
+        virtual Point getPosition () const
+        {
+                float px, py;
+                iw_circular_node_get_port_absolute_position (self, i, &px, &py);
+                return Point (px, py);
+        }
+
+private:
+        int i;
+        IwCircularNode *self;
+};
+
+/*****************************************************************************/
+
 CircularNode::CircularNode ()
 {
         self = iw_circular_node_new ();
         clutter_actor_set_reactive (self, TRUE);
-//        ClutterAction *dragAction = clutter_drag_action_new ();
-//        clutter_actor_add_action (self, dragAction);
+        //        ClutterAction *dragAction = clutter_drag_action_new ();
+        //        clutter_actor_add_action (self, dragAction);
         iw_circular_node_set_user_data (IW_CIRCULAR_NODE (self), this);
         setCppImplementation ();
 }
@@ -32,6 +52,7 @@ void CircularNode::init ()
                 ClutterColor c = p.color.toClutterColor ();
                 iw_circular_node_set_port_color (IW_CIRCULAR_NODE (self), i, &c);
                 iw_circular_node_set_port_user_data (IW_CIRCULAR_NODE (self), i, &p);
+                p.anchor.setApProvider (std::make_shared<CircularNodeAnchorPositionProvider> (i, IW_CIRCULAR_NODE (self)));
                 ++i;
         }
 }
@@ -115,7 +136,7 @@ void CircularNode::onAllocate (Box const &)
                 float px = 0;
                 float py = 0;
                 iw_circular_node_get_port_absolute_position (IW_CIRCULAR_NODE (self), i, &px, &py);
-                p.anchor.notifyMoveAnchor (px, py);
+                p.anchor.notifyMoveAnchor (Point (px, py));
                 ++i;
         }
 }

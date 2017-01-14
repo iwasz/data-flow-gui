@@ -15,7 +15,8 @@
 #include <vector>
 
 /**
- * This is only a view. Represents a port (place on a node you can connect a connector to).
+ * The view for anchors. This is only a view. Represents a port (place on a node you can
+ * connect a connector to).
  */
 class __tiliae_reflect__ Port : public Core::Object {
 public:

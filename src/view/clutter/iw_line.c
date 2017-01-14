@@ -69,8 +69,6 @@ static void iw_line_finalize (GObject *gobject)
 
 static void iw_line_pick (ClutterActor *actor, const ClutterColor *pick_color)
 {
-        return;
-
         if (!clutter_actor_should_pick_paint (actor)) {
                 return;
         }
@@ -95,6 +93,10 @@ static void iw_line_pick (ClutterActor *actor, const ClutterColor *pick_color)
         cogl_path_line_to (0 - m, 0 + m);
         cogl_path_line_to (0 + m, 0 - m);
         cogl_path_fill ();
+
+        for (ClutterActor *iter = clutter_actor_get_first_child (actor); iter != NULL; iter = clutter_actor_get_next_sibling (iter)) {
+                clutter_actor_paint (iter);
+        }
 }
 
 /* GObject class and instance initialization functions; note that
@@ -134,34 +136,11 @@ static void iw_line_init (IwLine *self)
 
         priv = self->priv = IW_LINE_GET_PRIVATE (self);
 
-        //        clutter_actor_set_reactive (CLUTTER_ACTOR (self), TRUE);
+#if 0
+        static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
+        clutter_actor_set_background_color (CLUTTER_ACTOR (self), &c);
+#endif
 
-        /* the only child of this actor is a ClutterBox with a
-         * ClutterBinLayout: painting and allocation of the actor basically
-         * involves painting and allocating this child box
-         */
-        //        layout = clutter_bin_layout_new (CLUTTER_BIN_ALIGNMENT_CENTER, CLUTTER_BIN_ALIGNMENT_CENTER);
-
-        //        priv->child = clutter_actor_new ();
-        //        clutter_actor_set_layout_manager (priv->child, layout);
-
-        //        /* set the parent of the ClutterBox to this instance */
-        //        clutter_actor_add_child (CLUTTER_ACTOR (self), priv->child);
-
-        //        /* add text label to the button; see the ClutterText API docs
-        //         * for more information about available properties
-        //         */
-        //        priv->label = g_object_new (CLUTTER_TYPE_TEXT, "line-alignment", PANGO_ALIGN_CENTER, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
-
-        //        clutter_actor_add_child (priv->child, priv->label);
-
-        //        /* add a ClutterClickAction on this actor, so we can proxy its
-        //         * "clicked" signal into a signal from this actor
-        //         */
-        //        priv->click_action = clutter_click_action_new ();
-        //        clutter_actor_add_action (CLUTTER_ACTOR (self), priv->click_action);
-
-        //        g_signal_connect (priv->click_action, "clicked", G_CALLBACK (iw_line_clicked), NULL);
         priv->strokeColor = *clutter_color_get_static (CLUTTER_COLOR_BLACK);
         priv->strokeDash = 0;
         priv->strokeWidth = 3;
@@ -226,13 +205,14 @@ gfloat iw_line_get_stroke_dash (IwLine *self)
 
 static void iw_line_resize_accordingly (IwLine *self)
 {
+        float lw = self->priv->strokeWidth;
         float px = fmin (self->priv->ax, self->priv->bx);
         float py = fmin (self->priv->ay, self->priv->by);
-        clutter_actor_set_position (CLUTTER_ACTOR (self), px, py);
+        clutter_actor_set_position (CLUTTER_ACTOR (self), px - lw, py - lw);
 
         float qx = fmax (self->priv->ax, self->priv->bx);
         float qy = fmax (self->priv->ay, self->priv->by);
-        clutter_actor_set_size (CLUTTER_ACTOR (self), qx - px, qy - py);
+        clutter_actor_set_size (CLUTTER_ACTOR (self), qx - px + 2 * lw, qy - py + 2 * lw);
 }
 
 void iw_line_set_point_a (IwLine *self, gfloat x, gfloat y)
@@ -304,7 +284,7 @@ static gboolean draw_line (ClutterCanvas *canvas, cairo_t *cr, int width, int he
         clutter_cairo_set_source_color (cr, &priv->strokeColor);
 
         // Prevent clipping.
-        float margin = priv->strokeWidth / 2.0 + 0.5;
+        float margin = priv->strokeWidth /*/ 2.0 + 0.5*/;
 
         float ax = priv->ax;
         float ay = priv->ay;
