@@ -49,6 +49,7 @@ struct _IwLinePrivate {
 static gboolean draw_line (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data);
 static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocation, ClutterAllocationFlags flags, gpointer user_data);
 static gboolean idle_resize (gpointer data);
+static void iw_line_resize_accordingly (IwLine *self);
 
 /* from http://mail.gnome.org/archives/gtk-devel-list/2004-July/msg00158.html:
  *
@@ -128,9 +129,17 @@ static void iw_line_class_init (IwLineClass *klass)
         g_type_class_add_private (klass, sizeof (IwLinePrivate));
 }
 
-/* object init: create a private structure and pack
- * composed ClutterActors into it
- */
+/*****************************************************************************/
+
+void on_text_changed (ClutterText *self, gpointer user_data)
+{
+        /*printf ("%s\n", clutter_text_get_text (self));*/
+        IwLine *line = (IwLine *)user_data;
+        iw_line_resize_accordingly (line);
+}
+
+/*****************************************************************************/
+
 static void iw_line_init (IwLine *self)
 {
         IwLinePrivate *priv;
@@ -140,6 +149,10 @@ static void iw_line_init (IwLine *self)
         priv->strokeColor = *clutter_color_get_static (CLUTTER_COLOR_BLACK);
         priv->strokeDash = 0;
         priv->strokeWidth = 1;
+        priv->ax = 0;
+        priv->ay = 0;
+        priv->bx = 0;
+        priv->by = 0;
 
         priv->canvas = clutter_canvas_new ();
         clutter_actor_set_content (CLUTTER_ACTOR (self), priv->canvas);
@@ -152,6 +165,10 @@ static void iw_line_init (IwLine *self)
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->label);
         clutter_text_set_font_name (CLUTTER_TEXT (priv->label), "18px");
         clutter_text_set_editable (CLUTTER_TEXT (priv->label), TRUE);
+        clutter_text_set_selectable (CLUTTER_TEXT (priv->label), TRUE);
+        clutter_text_set_single_line_mode (CLUTTER_TEXT (priv->label), TRUE);
+        clutter_actor_set_reactive (priv->label, TRUE);
+        g_signal_connect (priv->label, "text-changed", G_CALLBACK (on_text_changed), self);
 
 #if 0
         static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
@@ -234,8 +251,9 @@ static void iw_line_resize_accordingly (IwLine *self)
         clutter_actor_set_size (CLUTTER_ACTOR (self), qx - px + 2 * lw, qy - py + 2 * lw);
 
         if (self->priv->text != NULL && ax != bx) {
-                float angle = atan ((self->priv->ay - self->priv->by) / (self->priv->ax - self->priv->bx));
+                float angle = atan ((ay - by) / (ax - bx));
                 clutter_actor_set_rotation_angle (self->priv->label, CLUTTER_Z_AXIS, angle * 180 / M_PI);
+                // printf ("%f, %f, %f, %f, %f\n", angle, ax, ay, bx, by);
 
                 double c = cos (angle);
                 double s = sin (angle);
@@ -252,6 +270,13 @@ static void iw_line_resize_accordingly (IwLine *self)
                 float h = clutter_actor_get_height (CLUTTER_ACTOR (self)) - py;
                 clutter_actor_set_position (CLUTTER_ACTOR (self->priv->label), w / 2, h / 2);
         }
+        else {
+                float tw = clutter_actor_get_width (CLUTTER_ACTOR (self->priv->label));
+                clutter_actor_set_position (CLUTTER_ACTOR (self->priv->label), -tw / 2.0, self->priv->strokeWidth);
+        }
+
+        clutter_text_set_editable (CLUTTER_TEXT (self->priv->label), TRUE);
+        // clutter_actor_grab_key_focus (self->priv->label);
 }
 
 /*****************************************************************************/

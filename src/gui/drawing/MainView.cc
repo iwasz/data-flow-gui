@@ -23,6 +23,7 @@ static void on_stage_button_release (ClutterStage *stage, ClutterEvent *event, g
 static void on_stage_motion (ClutterStage *stage, ClutterEvent *event, gpointer data);
 static void on_stage_enter (ClutterStage *stage, ClutterEvent *event, gpointer data);
 static void on_stage_leave (ClutterStage *stage, ClutterEvent *event, gpointer data);
+static gboolean button_callback_clutter (GtkWidget *widget, GdkEvent *event, gpointer callback_data);
 
 /*****************************************************************************/
 
@@ -34,42 +35,51 @@ void MainView::loadUi (GtkForms::App *app)
         gtk_window_maximize (mainWindow);
 
         GtkBox *cb = GTK_BOX (getUiOrThrow ("content"));
+        gtk_widget_set_focus_on_click (GTK_WIDGET (cb), TRUE);
 
         GtkWidget *palette = gtk_tool_palette_new ();
         gtk_box_pack_start (GTK_BOX (cb), palette, FALSE, TRUE, 0);
+        //        gtk_widget_set_can_focus (palette, FALSE);
 
         GtkWidget *group = gtk_tool_item_group_new ("Test Category");
         gtk_container_add (GTK_CONTAINER (palette), group);
+        //        gtk_widget_set_can_focus (group, FALSE);
 
         GtkToolItem *item = gtk_tool_button_new (NULL, "Add");
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-add");
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+        //        gtk_widget_set_can_focus (GTK_WIDGET (item), FALSE);
         connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('addNode')");
 
         item = gtk_tool_button_new (NULL, "Copy");
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-go-forward");
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+        //        gtk_widget_set_can_focus (GTK_WIDGET (item), FALSE);
         connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('copyNode')");
 
         item = gtk_tool_button_new (NULL, "Line");
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-edit");
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+        //        gtk_widget_set_can_focus (GTK_WIDGET (item), FALSE);
         connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('line')");
 
         item = gtk_tool_button_new (NULL, "Circle");
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-media-record");
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+        //        gtk_widget_set_can_focus (GTK_WIDGET (item), FALSE);
         connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('circle')");
 
         item = gtk_tool_button_new (NULL, "LineConnector");
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-edit");
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+        //        gtk_widget_set_can_focus (GTK_WIDGET (item), FALSE);
         connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('lineConnector')");
 
         item = gtk_tool_button_new (NULL, "Connect");
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-edit");
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-        connectSignal (item, "clicked", "$controller.onDummyMethod ()");
+        //        gtk_widget_set_can_focus (GTK_WIDGET (item), FALSE);
+        // connectSignal (item, "clicked", "$controller.onDummyMethod ()");
 
         /*---------------------------------------------------------------------------*/
 
@@ -83,6 +93,10 @@ void MainView::loadUi (GtkForms::App *app)
         // clutter_stage_set_motion_events_enabled (CLUTTER_STAGE (stage->getActor ()), FALSE);
 
         gtk_box_pack_start (GTK_BOX (cb), stage->getClutterWidget (), TRUE, TRUE, 0);
+        gtk_widget_set_can_focus (stage->getClutterWidget (), TRUE);
+        gtk_widget_set_can_default (stage->getClutterWidget (), TRUE);
+        gtk_widget_set_focus_on_click (stage->getClutterWidget (), TRUE);
+        gtk_widget_grab_focus (stage->getClutterWidget ());
 
         //        ClutterActor *stage = gtk_clutter_embed_get_stage (GTK_CLUTTER_EMBED (clutter));
         //        ClutterColor stage_color = { 236, 236, 236, 255 };
@@ -94,6 +108,7 @@ void MainView::loadUi (GtkForms::App *app)
         g_signal_connect (stage->getActor (), "motion-event", G_CALLBACK (on_stage_motion), mc);
         g_signal_connect (stage->getActor (), "enter-event", G_CALLBACK (on_stage_enter), mc);
         g_signal_connect (stage->getActor (), "leave-event", G_CALLBACK (on_stage_leave), mc);
+        g_signal_connect (stage->getClutterWidget (), "button_press_event", G_CALLBACK (button_callback_clutter), nullptr);
 
         /*---------------------------------------------------------------------------*/
 
@@ -124,6 +139,17 @@ void MainView::loadUi (GtkForms::App *app)
 
         //                ClutterAction *dragAction = clutter_drag_action_new ();
         //                clutter_actor_add_action (circularNode, dragAction);
+        //        }
+
+        //        {
+        //                ClutterActor *label = clutter_text_new ();
+        //                clutter_actor_add_child (stage->getActor (), label);
+        //                clutter_actor_set_position (label, 100, 300);
+        //                clutter_text_set_text (CLUTTER_TEXT (label), "Hello, World!");
+        //                clutter_text_set_font_name (CLUTTER_TEXT (label), "18px");
+        //                clutter_text_set_editable (CLUTTER_TEXT (label), TRUE);
+        //                clutter_text_set_selectable (CLUTTER_TEXT (label), TRUE);
+        //                clutter_actor_set_reactive (label, TRUE);
         //        }
 }
 
@@ -226,4 +252,13 @@ void on_stage_leave (ClutterStage *stage, ClutterEvent *event, gpointer data)
 #endif
                 mc->onLeave (t.first, t.second);
         }
+}
+
+/*****************************************************************************/
+
+static gboolean button_callback_clutter (GtkWidget *widget, GdkEvent *event, gpointer callback_data)
+{
+        gtk_widget_grab_focus (widget);
+        gboolean handled = FALSE;
+        return handled;
 }
