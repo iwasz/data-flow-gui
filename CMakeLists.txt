@@ -118,6 +118,8 @@ LIST (APPEND SOURCES
         "src/view/clutter/iw_circular_node.h"
         "src/view/clutter/iw_line.c"
         "src/view/clutter/iw_line.h"
+        "src/view/clutter/iw_line_connector.c"
+        "src/view/clutter/iw_line_connector.h"
         "src/view/Circle.h"
         "src/view/Circle.cc"
         "src/view/Line.h"
