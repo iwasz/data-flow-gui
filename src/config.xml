@@ -36,7 +36,8 @@
             <Port add-to="ports" angle="6.283" color="#8d8d8dff" size="20" />
         </CircularNode>
 
-        <LineConnector scope="prototype" id="lineConnector" parent="@stage" strokeColor="#d1d1d1ff" visible="false" strokeWidth="5" />
+        <LineConnector scope="prototype" id="lineConnector" parent="@stage" strokeColor="#d1d1d1ff"
+                fontColor="#8d8d8dff" visible="false" strokeWidth="5" text="0" textEditable="true" />
 
         <MainController id="mainController" loopDelayMs="5">
                 <ToolMap set-as="tools">
@@ -59,5 +60,5 @@
         </MainController>
 
         <Stage id="stage" fillColor="#ecececff"/>
-        <MainView id="mainView" file="ui/main.ui" stage="@stage" />
+        <MainView id="mainView" file="ui/main-palette2.ui" stage="@stage" />
 </beans>

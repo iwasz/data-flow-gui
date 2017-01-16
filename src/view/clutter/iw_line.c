@@ -43,7 +43,7 @@ struct _IwLinePrivate {
         gfloat bx, by;
         ClutterContent *canvas;
         ClutterActor *label;
-        gchar *text;
+        //        gchar *text;
 };
 
 static gboolean draw_line (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data);
@@ -69,6 +69,8 @@ static void iw_line_finalize (GObject *gobject)
         /* call the parent class' finalize() method */
         G_OBJECT_CLASS (iw_line_parent_class)->finalize (gobject);
 }
+
+/*****************************************************************************/
 
 static void iw_line_pick (ClutterActor *actor, const ClutterColor *pick_color)
 {
@@ -159,12 +161,12 @@ static void iw_line_init (IwLine *self)
         clutter_actor_set_content_scaling_filters (CLUTTER_ACTOR (self), CLUTTER_SCALING_FILTER_TRILINEAR, CLUTTER_SCALING_FILTER_LINEAR);
         g_object_unref (priv->canvas);
 
-        priv->text = "Hello world!"; /* NULL */
+        // priv->text = "Hello world!"; /* NULL */
         priv->label = clutter_text_new ();
-        clutter_text_set_text (CLUTTER_TEXT (priv->label), "Hello, World!");
+        // clutter_text_set_text (CLUTTER_TEXT (priv->label), "Hello, World!");
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->label);
         clutter_text_set_font_name (CLUTTER_TEXT (priv->label), "18px");
-        clutter_text_set_editable (CLUTTER_TEXT (priv->label), TRUE);
+        clutter_text_set_editable (CLUTTER_TEXT (priv->label), FALSE);
         clutter_text_set_selectable (CLUTTER_TEXT (priv->label), TRUE);
         clutter_text_set_single_line_mode (CLUTTER_TEXT (priv->label), TRUE);
         clutter_actor_set_reactive (priv->label, TRUE);
@@ -250,7 +252,7 @@ static void iw_line_resize_accordingly (IwLine *self)
         float qy = fmax (ay, by);
         clutter_actor_set_size (CLUTTER_ACTOR (self), qx - px + 2 * lw, qy - py + 2 * lw);
 
-        if (self->priv->text != NULL && ax != bx) {
+        if (clutter_text_get_text (CLUTTER_TEXT (self->priv->label)) != NULL && ax != bx) {
                 float angle = atan ((ay - by) / (ax - bx));
                 clutter_actor_set_rotation_angle (self->priv->label, CLUTTER_Z_AXIS, angle * 180 / M_PI);
                 // printf ("%f, %f, %f, %f, %f\n", angle, ax, ay, bx, by);
@@ -276,7 +278,6 @@ static void iw_line_resize_accordingly (IwLine *self)
         }
 
         clutter_text_set_editable (CLUTTER_TEXT (self->priv->label), TRUE);
-        // clutter_actor_grab_key_focus (self->priv->label);
 }
 
 /*****************************************************************************/
@@ -388,4 +389,68 @@ static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocat
 {
         clutter_canvas_set_size (CLUTTER_CANVAS (clutter_actor_get_content (actor)), ceilf (clutter_actor_box_get_width (allocation)),
                                  ceilf (clutter_actor_box_get_height (allocation)));
+}
+
+/*****************************************************************************/
+
+const gchar *iw_line_get_text (IwLine *self)
+{
+        g_return_val_if_fail (IW_IS_LINE (self), NULL);
+        return clutter_text_get_text (CLUTTER_TEXT (self->priv->label));
+}
+
+/*****************************************************************************/
+
+void iw_line_set_text (IwLine *self, const gchar *s)
+{
+        g_return_if_fail (IW_IS_LINE (self));
+        clutter_text_set_text (CLUTTER_TEXT (self->priv->label), s);
+}
+
+/*****************************************************************************/
+
+const gchar *iw_line_get_font (IwLine *self)
+{
+        g_return_val_if_fail (IW_IS_LINE (self), NULL);
+        return clutter_text_get_font_name (CLUTTER_TEXT (self->priv->label));
+}
+
+/*****************************************************************************/
+
+void iw_line_set_font (IwLine *self, const gchar *s)
+{
+        g_return_if_fail (IW_IS_LINE (self));
+        clutter_text_set_font_name (CLUTTER_TEXT (self->priv->label), s);
+}
+
+/*****************************************************************************/
+
+void iw_line_get_font_color (IwLine *self, ClutterColor *color)
+{
+        g_return_if_fail (IW_IS_LINE (self));
+        return clutter_text_get_color (CLUTTER_TEXT (self->priv->label), color);
+}
+
+/*****************************************************************************/
+
+void iw_line_set_font_color (IwLine *self, const ClutterColor *c)
+{
+        g_return_if_fail (IW_IS_LINE (self));
+        clutter_text_set_color (CLUTTER_TEXT (self->priv->label), c);
+}
+
+/*****************************************************************************/
+
+gboolean iw_line_is_editable (IwLine *self)
+{
+        g_return_val_if_fail (IW_IS_LINE (self), FALSE);
+        return clutter_text_get_editable (CLUTTER_TEXT (self->priv->label));
+}
+
+/*****************************************************************************/
+
+void iw_line_set_editable (IwLine *self, gboolean b)
+{
+        g_return_if_fail (IW_IS_LINE (self));
+        clutter_text_set_editable (CLUTTER_TEXT (self->priv->label), b);
 }

@@ -140,57 +140,130 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolPalette" id="toolPalette">
+              <object class="GtkToolPalette" id="drawing_tool_palette">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkToolItemGroup">
-                    <property name="visible">True</property>
+                  <object class="GtkToolItemGroup" id="left_tools">
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">test</property>
+                    <property name="label" translatable="yes">Left</property>
                     <child>
-                      <object class="GtkToolButton">
-                        <property name="visible">True</property>
+                      <object class="GtkRadioToolButton" id="left_rect_select_tool">
                         <property name="can_focus">False</property>
-                        <property name="is_important">True</property>
-                        <property name="label_widget">image1</property>
-                        <property name="icon_name">document-open</property>
+                        <property name="tooltip_text" translatable="yes">Makes rectangle selections (key: s)</property>
+                        <property name="label" translatable="yes">Rectangle Selection</property>
+                        <property name="icon_name">stock-tool-rect-select</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkToolButton">
-                        <property name="visible">True</property>
+                      <object class="GtkRadioToolButton" id="left_pencil_tool">
                         <property name="can_focus">False</property>
-                        <property name="is_important">True</property>
-                        <property name="label" translatable="yes">toolbutton</property>
-                        <property name="icon_name">document-open</property>
+                        <property name="tooltip_text" translatable="yes">Draws pixels (key: p)</property>
+                        <property name="label" translatable="yes">Pencil</property>
+                        <property name="icon_name">stock-tool-pencil</property>
+                        <property name="active">True</property>
+                        <property name="group">left_rect_select_tool</property>
                       </object>
                       <packing>
                         <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkToolButton">
-                        <property name="visible">True</property>
+                      <object class="GtkRadioToolButton" id="left_eraser_tool">
                         <property name="can_focus">False</property>
-                        <property name="is_important">True</property>
-                        <property name="icon_name">document-open</property>
+                        <property name="tooltip_text" translatable="yes">Erases pixels (key: e)</property>
+                        <property name="label" translatable="yes">Eraser</property>
+                        <property name="icon_name">stock-tool-eraser</property>
+                        <property name="group">left_rect_select_tool</property>
                       </object>
                       <packing>
                         <property name="position">2</property>
                       </packing>
                     </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolItemGroup">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Test2</property>
+                    <child>
+                      <object class="GtkRadioToolButton" id="left_bucket_tool">
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Fills regions with a single color (key: f)</property>
+                        <property name="label" translatable="yes">Bucket</property>
+                        <property name="icon_name">stock-tool-bucket-fill</property>
+                        <property name="group">left_rect_select_tool</property>
+                      </object>
+                      <packing>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioToolButton" id="left_move_tool">
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Moved selected regions (key: m)</property>
+                        <property name="label" translatable="yes">Move</property>
+                        <property name="icon_name">stock-tool-move</property>
+                        <property name="group">left_rect_select_tool</property>
+                      </object>
+                      <packing>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioToolButton" id="left_line_tool">
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Draws straight lines (key: l)</property>
+                        <property name="label" translatable="yes">Line</property>
+                        <property name="icon_name">stock-tool-line</property>
+                        <property name="group">left_rect_select_tool</property>
+                      </object>
+                      <packing>
+                        <property name="position">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioToolButton" id="left_rectangle_tool">
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Draws rectangles (key: r)</property>
+                        <property name="label" translatable="yes">Rectangle</property>
+                        <property name="icon_name">stock-tool-rectangle</property>
+                        <property name="group">left_rect_select_tool</property>
+                      </object>
+                      <packing>
+                        <property name="position">6</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioToolButton" id="left_ellipse_tool">
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Draws ellipses (key: o)</property>
+                        <property name="label" translatable="yes">Ellipse</property>
+                        <property name="icon_name">stock-tool-ellipse</property>
+                        <property name="group">left_rect_select_tool</property>
+                      </object>
+                      <packing>
+                        <property name="position">7</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioToolButton" id="left_color_picker_tool">
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Selects colors from the document (key: k)</property>
+                        <property name="label" translatable="yes">Color Picker</property>
+                        <property name="icon_name">stock-tool-color-picker</property>
+                        <property name="group">left_rect_select_tool</property>
+                      </object>
+                      <packing>
+                        <property name="position">8</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioToolButton" id="left_zoom_tool">
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Zooms in the document (key: z)</property>
+                        <property name="label" translatable="yes">Zoom</property>
+                        <property name="icon_name">stock-tool-zoom</property>
+                        <property name="group">left_rect_select_tool</property>
+                      </object>
+                      <packing>
+                        <property name="position">9</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>

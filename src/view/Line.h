@@ -34,6 +34,20 @@ public:
 
         Color getStrokeColor () const;
         void setStrokeColor (const Color &value);
+
+        /*---------------------------------------------------------------------------*/
+
+        std::string getText () const;
+        void setText (std::string const t);
+
+        std::string getFont () const;
+        void setFont (std::string const t);
+
+        Color getFontColor () const;
+        void setFontColor (const Color &value);
+
+        bool isTextEditable () const;
+        void setTextEditable (bool b);
 };
 
 #endif // LINE_H

@@ -88,6 +88,19 @@ void iw_line_get_point_a (IwLine *self, gfloat *x, gfloat *y);
 void iw_line_set_point_b (IwLine *self, gfloat x, gfloat y);
 void iw_line_get_point_b (IwLine *self, gfloat *x, gfloat *y);
 
+
+const gchar *iw_line_get_text (IwLine *self);
+void iw_line_set_text (IwLine *self, const gchar *s);
+
+const gchar *iw_line_get_font (IwLine *self);
+void iw_line_set_font (IwLine *self, const gchar *s);
+
+void iw_line_get_font_color (IwLine *self, ClutterColor *color);
+void iw_line_set_font_color (IwLine *self, const ClutterColor *c);
+
+gboolean iw_line_is_editable (IwLine *self);
+void iw_line_set_editable (IwLine *self, gboolean b);
+
 #ifdef __cplusplus
 }
 #endif
