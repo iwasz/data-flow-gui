@@ -10,14 +10,14 @@
 #define CIRCULARNODE_H
 
 #include "AbstractActor.h"
+#include "AbstractNodeView.h"
 #include "IConnectable.h"
 #include "Port.h"
 #include <vector>
-
 /**
  * This is only a view.
  */
-class __tiliae_reflect__ CircularNode : public AbstractActor, public IConnectable {
+class __tiliae_reflect__ CircularNode : public AbstractActor, public IConnectable, public AbstractNodeView {
 public:
         CircularNode ();
         virtual ~CircularNode () {}

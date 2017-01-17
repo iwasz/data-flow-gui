@@ -6,21 +6,19 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef DF_GRAPHIC_NODE_H
-#define DF_GRAPHIC_NODE_H
+#ifndef ABSTRACTNODEVIEW_H
+#define ABSTRACTNODEVIEW_H
 
-#include <core/INode.h>
-#include "IDFNode.h"
+#include "INodeView.h"
 
-class __tiliae_reflect__ DFNode : public IDFNode {
+class __tiliae_reflect__ AbstractNodeView : public INodeView {
 public:
-        virtual ~DFNode () {}
+        virtual ~AbstractNodeView () {}
+        std::shared_ptr<flow::INode> getNode () { return std::move (node); }
+        void setNode (std::shared_ptr<flow::INode> n) { node = std::move (n); }
 
 private:
-
-        flow::INode *node;
-//        I
+        std::shared_ptr<flow::INode> node;
 };
 
-
-#endif // NODE_H
+#endif // ABSTRACTNODEVIEW_H

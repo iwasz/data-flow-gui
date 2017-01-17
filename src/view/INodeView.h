@@ -6,21 +6,21 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef DF_GRAPHIC_NODE_H
-#define DF_GRAPHIC_NODE_H
+#ifndef DF_FLOW_INODEVIEW_FOR_LIFE_H
+#define DF_FLOW_INODEVIEW_FOR_LIFE_H
 
+#include <ReflectionParserAnnotation.h>
 #include <core/INode.h>
-#include "IDFNode.h"
+#include <core/Object.h>
+#include <memory>
 
-class __tiliae_reflect__ DFNode : public IDFNode {
-public:
-        virtual ~DFNode () {}
-
-private:
-
-        flow::INode *node;
-//        I
+/**
+ * Representing a visual container for a flow::INode.
+ */
+struct __tiliae_reflect__ INodeView : public virtual Core::Object {
+        virtual ~INodeView () {}
+        virtual std::shared_ptr<flow::INode> getNode () = 0;
+        virtual void setNode (std::shared_ptr<flow::INode> n) = 0;
 };
 
-
-#endif // NODE_H
+#endif // INODEVIEW_H

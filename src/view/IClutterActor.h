@@ -18,7 +18,7 @@
 #include "primitives/Geometry.h"
 #include "primitives/Color.h"
 
-struct __tiliae_reflect__ IClutterActor : public Core::Object {
+struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
         virtual ~IClutterActor () {}
 
         virtual void setParent (IClutterActor *parent) = 0;
