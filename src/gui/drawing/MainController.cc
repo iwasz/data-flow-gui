@@ -134,7 +134,7 @@ void MainController::Impl::configureMachine ()
                                 return true;
                         }
 
-                        Core::Variant v = vars.currentFactoryStrategy->run (/*vars.startX, vars.startY, args->x, args->y*/);
+                        Core::Variant v = vars.currentFactoryStrategy->run ();
                         IClutterActor *a = ocast <IClutterActor *> (v);
                         vars.currentDrawStrategy->reshape (a);
                         a->setVisible (true);

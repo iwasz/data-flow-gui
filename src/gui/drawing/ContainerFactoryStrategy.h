@@ -10,13 +10,17 @@
 #define CONTAINERFACTORYSTRATEGY_H
 
 #include "IFactoryStrategy.h"
+#include <Program.h>
 #include <ReflectionParserAnnotation.h>
 #include <container/Container.h>
 
+/**
+ * Facory strategy which only creates a bean from the container.
+ */
 class __tiliae_reflect__ ContainerFactoryStrategy : public IFactoryStrategy {
 public:
         virtual ~ContainerFactoryStrategy () {}
-        virtual Core::Variant run (/*Point const &a, Core::Object *oa, Point const &b, Core::Object *ob*/) __tiliae_no_reflect__;
+        virtual Core::Variant run () __tiliae_no_reflect__;
 
         std::string const &getBeanName () const { return beanName; }
         void setBeanName (const std::string &value) { beanName = value; }
@@ -26,7 +30,24 @@ public:
 
 private:
         std::string beanName;
-        Container::BeanFactoryContainer *container;
+        Container::BeanFactoryContainer *container = nullptr;
+};
+
+/**
+ * Creates a bean, like ContainerFactoryStrategy do, but in addition it tries to cast
+ * this newly created bean to INodeView, get the flow::INode and insert it into the
+ * Program.
+ */
+class __tiliae_reflect__ NodeContainerFactoryStrategy : public ContainerFactoryStrategy {
+public:
+        virtual ~NodeContainerFactoryStrategy () {}
+        virtual Core::Variant run () __tiliae_no_reflect__;
+
+        flow::Program *getProgram () const { return program; }
+        void setProgram (flow::Program *value) { program = value; }
+
+private:
+        flow::Program *program = nullptr;
 };
 
 #endif // CONTAINERFACTORYSTRATEGY_H

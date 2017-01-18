@@ -11,6 +11,7 @@
 
 #include "IDrawStrategy.h"
 #include "IFactoryStrategy.h"
+#include <Program.h>
 #include <ReflectionParserAnnotation.h>
 #include <controller/AbstractController.h>
 #include <map>
@@ -50,9 +51,12 @@ public:
         ToolMap const &getTools () const { return tools; }
         void setTools (const ToolMap &value) { tools = value; }
 
-private:
+        flow::Program *getProgram () const { return program; }
+        void setProgram (flow::Program *value) { program = value; }
 
+private:
         ToolMap tools;
+        flow::Program *program = nullptr;
 
         struct Impl;
         Impl *impl;

@@ -44,18 +44,22 @@
         </CircularNode>
 
         <LineConnector scope="prototype" id="lineConnector" parent="@stage" strokeColor="#d1d1d1ff"
-                fontColor="#8d8d8dff" visible="false" strokeWidth="5" text="0" textEditable="true" />
+                fontColor="#8d8d8dff" visible="false" strokeWidth="5" text="0" textEditable="true">
+                <Arc set-as="arc"/>
+        </LineConnector>
 
-        <MainController id="mainController" loopDelayMs="5">
+        <Program id="program" />
+
+        <MainController id="mainController" loopDelayMs="5" program="@program">
                 <ToolMap set-as="tools">
                       <Tool set-as="addNode" drawStrategy="@dashedCircle">
-                              <ContainerFactoryStrategy set-as="factoryStrategy" beanName="addNode" container="@#container" />
+                              <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="addNode" container="@#container" program="@program" />
                       </Tool>
                       <Tool set-as="copyNode" drawStrategy="@dashedCircle">
-                              <ContainerFactoryStrategy set-as="factoryStrategy" beanName="copyNode" container="@#container" />
+                              <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="copyNode" container="@#container" program="@program" />
                       </Tool>
                       <Tool set-as="consoleNode" drawStrategy="@dashedCircle">
-                              <ContainerFactoryStrategy set-as="factoryStrategy" beanName="consoleNode" container="@#container" />
+                              <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="consoleNode" container="@#container" program="@program" />
                       </Tool>
                       <Tool set-as="line" drawStrategy="@dashedLine">
                               <ContainerFactoryStrategy set-as="factoryStrategy" beanName="line" container="@#container" />

@@ -5,22 +5,19 @@
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
+#ifndef ABSTRACTARCVIEW_H
+#define ABSTRACTARCVIEW_H
 
-#ifndef LINECONNECTOR_H
-#define LINECONNECTOR_H
+#include "IArcView.h"
 
-#include "AbstractArcView.h"
-#include "AbstractConnector.h"
-#include "Line.h"
-
-class __tiliae_reflect__ LineConnector : public Line, public AbstractConnector, public AbstractArcView {
+class __tiliae_reflect__ AbstractArcView : public IArcView {
 public:
-        LineConnector ();
-        virtual ~LineConnector () {}
+        virtual ~AbstractArcView () {}
+        std::shared_ptr<flow::Arc> getArc () { return std::move (arc); }
+        void setArc (std::shared_ptr<flow::Arc> a) { arc = std::move (a); }
 
-        virtual void onConnectAnchor (Point const &p, Side s) { onMoveAnchor (p, s); }
-        virtual void onMoveAnchor (Point const &p, Side s);
-        void virtual onDisconnectAnchor (Point const &p, Side s) { onMoveAnchor (p, s); }
+private:
+        std::shared_ptr<flow::Arc> arc;
 };
 
-#endif // LINECONNECTOR_H
+#endif // ABSTRACTARCVIEW_H
