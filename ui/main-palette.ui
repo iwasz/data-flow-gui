@@ -2,294 +2,192 @@
 <!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkImage" id="image1">
+  <object class="GtkImage" id="addIcon">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-edit</property>
+    <property name="pixbuf">ic_add_circle_black_24dp.png</property>
   </object>
-  
-  
-                      <object class="GtkRadioToolButton" id="toolButton">
-                        <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Draws straight lines (key: l)</property>
-                        <property name="label" translatable="yes">Line</property>
-                        <property name="icon_name">stock-tool-line</property>
-                        <property name="group">left_rect_select_tool</property>
-                      </object>
-  
-  
+  <object class="GtkImage" id="circleIcon">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">ic_account_circle_black_24dp.png</property>
+  </object>
+  <object class="GtkImage" id="consoleIcon">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">ic_insert_comment_black_24dp.png</property>
+  </object>
+  <object class="GtkImage" id="copyIcon">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">ic_content_copy_black_24dp.png</property>
+  </object>
+  <object class="GtkImage" id="lineConnectorIcon">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">ic_timeline_black_24dp.png</property>
+  </object>
+  <object class="GtkImage" id="lineIcon">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">ic_gesture_black_24dp.png</property>
+  </object>
   <object class="GtkWindow" id="mainView">
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkBox" id="content">
+      <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <child>
-          <object class="GtkBox">
+          <object class="GtkMenuBar">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkGrid">
+              <object class="GtkMenuItem">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_homogeneous">True</property>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">add</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <signal name="clicked" handler="$controller.onNewNodeClicked ('add')" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">button</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">button</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">button</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">button</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">button</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">button</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">button</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">button</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">2</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolPalette" id="drawing_tool_palette">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkToolItemGroup" id="left_tools">
+                <property name="label" translatable="yes">_File</property>
+                <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Left</property>
                     <child>
-                      <object class="GtkRadioToolButton" id="left_rect_select_tool">
+                      <object class="GtkImageMenuItem">
+                        <property name="label">gtk-new</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">toolbutton</property>
                         <property name="use_underline">True</property>
-                        <property name="stock_id">gtk-justify-center</property>
+                        <property name="use_stock">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkRadioToolButton" id="left_pencil_tool">
+                      <object class="GtkImageMenuItem">
+                        <property name="label">gtk-open</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Draws pixels (key: p)</property>
-                        <property name="label" translatable="yes">Pencil</property>
-                        <property name="icon_name">stock-tool-pencil</property>
-                        <property name="active">True</property>
-                        <property name="group">left_rect_select_tool</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioToolButton" id="left_eraser_tool">
+                      <object class="GtkImageMenuItem">
+                        <property name="label">gtk-save</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Erases pixels (key: e)</property>
-                        <property name="label" translatable="yes">Eraser</property>
-                        <property name="icon_name">stock-tool-eraser</property>
-                        <property name="group">left_rect_select_tool</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
                       </object>
-                      <packing>
-                        <property name="position">2</property>
-                      </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioToolButton" id="left_bucket_tool">
+                      <object class="GtkImageMenuItem">
+                        <property name="label">gtk-save-as</property>
+                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Fills regions with a single color (key: f)</property>
-                        <property name="label" translatable="yes">Bucket</property>
-                        <property name="icon_name">stock-tool-bucket-fill</property>
-                        <property name="group">left_rect_select_tool</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
                       </object>
-                      <packing>
-                        <property name="position">3</property>
-                      </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioToolButton" id="left_move_tool">
+                      <object class="GtkSeparatorMenuItem">
+                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Moved selected regions (key: m)</property>
-                        <property name="label" translatable="yes">Move</property>
-                        <property name="icon_name">stock-tool-move</property>
-                        <property name="group">left_rect_select_tool</property>
                       </object>
-                      <packing>
-                        <property name="position">4</property>
-                      </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioToolButton" id="left_line_tool">
+                      <object class="GtkImageMenuItem">
+                        <property name="label">gtk-quit</property>
+                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Draws straight lines (key: l)</property>
-                        <property name="label" translatable="yes">Line</property>
-                        <property name="icon_name">stock-tool-line</property>
-                        <property name="group">left_rect_select_tool</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
                       </object>
-                      <packing>
-                        <property name="position">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioToolButton" id="left_rectangle_tool">
-                        <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Draws rectangles (key: r)</property>
-                        <property name="label" translatable="yes">Rectangle</property>
-                        <property name="icon_name">stock-tool-rectangle</property>
-                        <property name="group">left_rect_select_tool</property>
-                      </object>
-                      <packing>
-                        <property name="position">6</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioToolButton" id="left_ellipse_tool">
-                        <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Draws ellipses (key: o)</property>
-                        <property name="label" translatable="yes">Ellipse</property>
-                        <property name="icon_name">stock-tool-ellipse</property>
-                        <property name="group">left_rect_select_tool</property>
-                      </object>
-                      <packing>
-                        <property name="position">7</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioToolButton" id="left_color_picker_tool">
-                        <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Selects colors from the document (key: k)</property>
-                        <property name="label" translatable="yes">Color Picker</property>
-                        <property name="icon_name">stock-tool-color-picker</property>
-                        <property name="group">left_rect_select_tool</property>
-                      </object>
-                      <packing>
-                        <property name="position">8</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioToolButton" id="left_zoom_tool">
-                        <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Zooms in the document (key: z)</property>
-                        <property name="label" translatable="yes">Zoom</property>
-                        <property name="icon_name">stock-tool-zoom</property>
-                        <property name="group">left_rect_select_tool</property>
-                      </object>
-                      <packing>
-                        <property name="position">9</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuItem">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_Edit</property>
+                <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkImageMenuItem">
+                        <property name="label">gtk-cut</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem">
+                        <property name="label">gtk-copy</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem">
+                        <property name="label">gtk-paste</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem">
+                        <property name="label">gtk-delete</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_View</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_Help</property>
+                <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkImageMenuItem">
+                        <property name="label">gtk-about</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
             </child>
           </object>
           <packing>
@@ -299,31 +197,149 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="GtkToolbar">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkToolbar">
+              <object class="GtkToolButton">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="label" translatable="yes">__glade_unnamed_22</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-media-play</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">__glade_unnamed_23</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-media-stop</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="content">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkToolPalette" id="drawing_tool_palette">
+                <property name="width_request">171</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkToolButton">
+                  <object class="GtkToolItemGroup" id="left_tools">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">toolbutton</property>
-                    <property name="use_underline">True</property>
-                    <property name="stock_id">gtk-justify-center</property>
+                    <property name="label" translatable="yes">Nodes</property>
+                    <child>
+                      <object class="GtkToolButton" id="addButton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">toolbutton</property>
+                        <property name="use_underline">True</property>
+                        <property name="icon_widget">addIcon</property>
+                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('addNode')" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="copyButton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Draws pixels (key: p)</property>
+                        <property name="label" translatable="yes">Pencil</property>
+                        <property name="icon_widget">copyIcon</property>
+                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('copyNode')" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="consoleButton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Erases pixels (key: e)</property>
+                        <property name="label" translatable="yes">Eraser</property>
+                        <property name="icon_widget">consoleIcon</property>
+                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('consoleNode')" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolItemGroup">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Primitives</property>
+                    <property name="label" translatable="yes">Primitives</property>
+                    <child>
+                      <object class="GtkToolButton" id="lineConnectorButton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">toolbutton</property>
+                        <property name="use_underline">True</property>
+                        <property name="icon_widget">lineConnectorIcon</property>
+                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('lineConnector')" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="lineButton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">toolbutton</property>
+                        <property name="use_underline">True</property>
+                        <property name="icon_widget">lineIcon</property>
+                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('line')" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="circleButton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">toolbutton</property>
+                        <property name="use_underline">True</property>
+                        <property name="icon_widget">circleIcon</property>
+                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('circle')" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
                   </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
+                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -332,9 +348,9 @@
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>
