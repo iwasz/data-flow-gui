@@ -37,49 +37,58 @@ void MainView::loadUi (GtkForms::App *app)
         GtkBox *cb = GTK_BOX (getUiOrThrow ("content"));
         gtk_widget_set_focus_on_click (GTK_WIDGET (cb), TRUE);
 
-        GtkWidget *palette = gtk_tool_palette_new ();
-        gtk_box_pack_start (GTK_BOX (cb), palette, FALSE, TRUE, 0);
-        //        gtk_widget_set_can_focus (palette, FALSE);
+        GtkWidget *p = GTK_WIDGET (getUiOrThrow ("drawing_tool_palette"));
+        gtk_widget_show_all (p);
+
+        GtkWidget *g = GTK_WIDGET (getUiOrThrow ("left_tools"));
+        gtk_widget_show (g);
+        gtk_widget_show_all (g);
+
+        GtkWidget *w = GTK_WIDGET (getUiOrThrow ("left_rect_select_tool"));
+        gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (w), "gtk-add");
+        //        gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (g), GTK_TOOL_ITEM (w), -1);
+        gtk_widget_show (w);
+
+        /*---------------------------------------------------------------------------*/
+
+//        GtkWidget *palette = gtk_tool_palette_new ();
+//        gtk_box_pack_start (GTK_BOX (cb), palette, FALSE, TRUE, 0);
 
         GtkWidget *group = gtk_tool_item_group_new ("Test Category");
-        gtk_container_add (GTK_CONTAINER (palette), group);
-        //        gtk_widget_set_can_focus (group, FALSE);
+        gtk_container_add (GTK_CONTAINER (p), group);
 
         GtkToolItem *item = gtk_tool_button_new (NULL, "Add");
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-add");
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-        //        gtk_widget_set_can_focus (GTK_WIDGET (item), FALSE);
         connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('addNode')");
+
+//        This works, so items are loaded.
+//        item = GTK_TOOL_ITEM (getUiOrThrow ("toolButton"));
+//        gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
 
         item = gtk_tool_button_new (NULL, "Copy");
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-go-forward");
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-        //        gtk_widget_set_can_focus (GTK_WIDGET (item), FALSE);
         connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('copyNode')");
 
         item = gtk_tool_button_new (NULL, "Line");
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-edit");
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-        //        gtk_widget_set_can_focus (GTK_WIDGET (item), FALSE);
         connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('line')");
 
         item = gtk_tool_button_new (NULL, "Circle");
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-media-record");
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-        //        gtk_widget_set_can_focus (GTK_WIDGET (item), FALSE);
         connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('circle')");
 
         item = gtk_tool_button_new (NULL, "LineConnector");
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-edit");
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-        //        gtk_widget_set_can_focus (GTK_WIDGET (item), FALSE);
         connectSignal (item, "clicked", "$controller.onNewNodeToolClicked ('lineConnector')");
 
         item = gtk_tool_button_new (NULL, "Connect");
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "gtk-edit");
         gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-        //        gtk_widget_set_can_focus (GTK_WIDGET (item), FALSE);
-        // connectSignal (item, "clicked", "$controller.onDummyMethod ()");
 
         /*---------------------------------------------------------------------------*/
 

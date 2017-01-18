@@ -7,6 +7,17 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-edit</property>
   </object>
+  
+  
+                      <object class="GtkRadioToolButton" id="toolButton">
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Draws straight lines (key: l)</property>
+                        <property name="label" translatable="yes">Line</property>
+                        <property name="icon_name">stock-tool-line</property>
+                        <property name="group">left_rect_select_tool</property>
+                      </object>
+  
+  
   <object class="GtkWindow" id="mainView">
     <property name="can_focus">False</property>
     <child>
@@ -145,18 +156,21 @@
                 <property name="can_focus">False</property>
                 <child>
                   <object class="GtkToolItemGroup" id="left_tools">
+                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Left</property>
                     <child>
                       <object class="GtkRadioToolButton" id="left_rect_select_tool">
+                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Makes rectangle selections (key: s)</property>
-                        <property name="label" translatable="yes">Rectangle Selection</property>
-                        <property name="icon_name">stock-tool-rect-select</property>
+                        <property name="label" translatable="yes">toolbutton</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-justify-center</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkRadioToolButton" id="left_pencil_tool">
+                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Draws pixels (key: p)</property>
                         <property name="label" translatable="yes">Pencil</property>
@@ -170,6 +184,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioToolButton" id="left_eraser_tool">
+                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Erases pixels (key: e)</property>
                         <property name="label" translatable="yes">Eraser</property>
