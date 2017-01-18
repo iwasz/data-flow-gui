@@ -39,6 +39,7 @@ struct MainController::Impl {
         StateMachine machine;
         ToolMap *tools;
         MoveStrategy moveStrategy;
+        flow::Program *program = nullptr;
 
         /*
          * Additional arguments for state machine. Pointer to this struct is passed
@@ -252,6 +253,18 @@ void MainController::onLeave (Point p, Object *o)
         impl->arguments.object = o;
         impl->pushMessage ("stage.leave", &impl->arguments);
 }
+
+/*****************************************************************************/
+
+flow::Program *MainController::getProgram () const { return impl->program; }
+
+/*****************************************************************************/
+
+void MainController::setProgram (flow::Program *value) { impl->program = value; }
+
+/*****************************************************************************/
+
+void MainController::onProgramRun () { impl->program->run (); }
 
 /****************************************************************************/
 /* State machine low lewel deps.                                            */

@@ -14,21 +14,40 @@
 #include <ReflectionParserAnnotation.h>
 #include <vector>
 
+struct INodeView;
+
 /**
  * The view for anchors. This is only a view. Represents a port (place on a node you can
  * connect a connector to).
  */
 class __tiliae_reflect__ Port : public Core::Object {
 public:
-        float angle;
-        float size;
+        virtual ~Port () {}
+        virtual bool isInput () const = 0;
+
+        float angle = 0.0;
+        float size = 0.0;
         Color color;
         Anchor anchor;
+        INodeView *nodeView = nullptr;
+        int number = 0;
+};
+
+class __tiliae_reflect__ InputPort : public Port {
+public:
+        virtual ~InputPort () {}
+        virtual bool isInput () const { return true; }
+};
+
+class __tiliae_reflect__ OutputPort : public Port {
+public:
+        virtual ~OutputPort () {}
+        virtual bool isInput () const { return false; }
 };
 
 /**
  * Collection of ports.
  */
-typedef __tiliae_reflect__ std::vector<Port> PortVector;
+typedef __tiliae_reflect__ std::vector<std::shared_ptr<Port>> PortVector;
 
 #endif // PORT_H

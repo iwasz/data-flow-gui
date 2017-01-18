@@ -207,6 +207,7 @@
                 <property name="label" translatable="yes">__glade_unnamed_22</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-play</property>
+                <signal name="clicked" handler="$controller.onProgramRun ()" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>

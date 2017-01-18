@@ -14,6 +14,7 @@ Line::Line ()
 {
         self = iw_line_new ();
         clutter_actor_set_reactive (self, TRUE);
+        iw_line_set_user_data (IW_LINE (self), this);
         setCppImplementation ();
 }
 

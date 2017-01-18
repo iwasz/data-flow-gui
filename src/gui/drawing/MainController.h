@@ -48,15 +48,16 @@ public:
         void onEnter (Point p, Object *o);
         void onLeave (Point p, Object *o);
 
+        void onProgramRun ();
+
         ToolMap const &getTools () const { return tools; }
         void setTools (const ToolMap &value) { tools = value; }
 
-        flow::Program *getProgram () const { return program; }
-        void setProgram (flow::Program *value) { program = value; }
+        flow::Program *getProgram() const;
+        void setProgram(flow::Program *value);
 
 private:
         ToolMap tools;
-        flow::Program *program = nullptr;
 
         struct Impl;
         Impl *impl;

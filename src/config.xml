@@ -26,26 +26,26 @@
         <Line scope="prototype" id="line" parent="@stage" strokeColor="#0096c6c9" visible="false" strokeWidth="1" />
 
         <CircularNode scope="prototype" id="addNode" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
-            <Port add-to="ports" angle="2.6415" color="#d1d1d1ff" size="20" />
-            <Port add-to="ports" angle="3.6415" color="#d1d1d1ff" size="20" />
-            <Port add-to="ports" angle="6.283" color="#8d8d8dff" size="20" />
+            <InputPort scope="prototype" add-to="ports" angle="2.6415" color="#d1d1d1ff" size="20" />
+            <InputPort scope="prototype" add-to="ports" angle="3.6415" color="#d1d1d1ff" size="20" />
+            <OutputPort scope="prototype" add-to="ports" angle="6.283" color="#8d8d8dff" size="20" />
             <Add scope="prototype" set-as="node" />
         </CircularNode>
 
         <CircularNode scope="prototype" id="copyNode" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
-            <Port add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20" />
-            <Port add-to="ports" angle="6.283" color="#8d8d8dff" size="20" />
+            <InputPort scope="prototype" add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20" />
+            <OutputPort scope="prototype" add-to="ports" angle="6.283" color="#8d8d8dff" size="20" />
             <Copy scope="prototype" set-as="node" />
         </CircularNode>
 
         <CircularNode scope="prototype" id="consoleNode" parent="@stage" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">
-            <Port add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20" />
+            <InputPort scope="prototype" add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20" />
             <Console scope="prototype" set-as="node" />
         </CircularNode>
 
         <LineConnector scope="prototype" id="lineConnector" parent="@stage" strokeColor="#d1d1d1ff"
                 fontColor="#8d8d8dff" visible="false" strokeWidth="5" text="0" textEditable="true">
-                <Arc set-as="arc"/>
+                <Arc scope="prototype" set-as="arc"/>
         </LineConnector>
 
         <Program id="program" />

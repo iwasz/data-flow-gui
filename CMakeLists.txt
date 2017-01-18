@@ -140,7 +140,6 @@ LIST (APPEND SOURCES
         "src/view/AbstractConnector.cc"
         "src/view/LineConnector.h"
         "src/view/LineConnector.cc"
-        "src/view/IConnectable.h"
         "src/view/INodeView.h"
         "src/view/AbstractNodeView.h"
         "src/view/AbstractNodeView.cc"
@@ -151,9 +150,6 @@ LIST (APPEND SOURCES
         "src/primitives/Geometry.cc"
         "src/primitives/Color.h"
         "src/primitives/Color.cc"
-        "src/model/IDFNode.h"
-        "src/model/DFNode.h"
-        "src/model/DFNode.cc"
 )
 
 # Local includes (inside project).

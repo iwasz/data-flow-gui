@@ -43,13 +43,14 @@ struct _IwLinePrivate {
         gfloat bx, by;
         ClutterContent *canvas;
         ClutterActor *label;
-        //        gchar *text;
+        void *userData;
 };
 
 static gboolean draw_line (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data);
 static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocation, ClutterAllocationFlags flags, gpointer user_data);
 static gboolean idle_resize (gpointer data);
 static void iw_line_resize_accordingly (IwLine *self);
+void onTextChanged (void *lineConnector, const char *text);
 
 /* from http://mail.gnome.org/archives/gtk-devel-list/2004-July/msg00158.html:
  *
@@ -138,6 +139,8 @@ void on_text_changed (ClutterText *self, gpointer user_data)
         /*printf ("%s\n", clutter_text_get_text (self));*/
         IwLine *line = (IwLine *)user_data;
         iw_line_resize_accordingly (line);
+
+        onTextChanged (line->priv->userData, clutter_text_get_text (self));
 }
 
 /*****************************************************************************/
@@ -453,4 +456,20 @@ void iw_line_set_editable (IwLine *self, gboolean b)
 {
         g_return_if_fail (IW_IS_LINE (self));
         clutter_text_set_editable (CLUTTER_TEXT (self->priv->label), b);
+}
+
+/*****************************************************************************/
+
+void iw_line_set_user_data (IwLine *self, void *p)
+{
+        g_return_if_fail (IW_IS_LINE (self));
+        self->priv->userData = p;
+}
+
+/*****************************************************************************/
+
+void *iw_line_get_user_data (IwLine *self)
+{
+        g_return_val_if_fail (IW_IS_LINE (self), NULL);
+        return self->priv->userData;
 }

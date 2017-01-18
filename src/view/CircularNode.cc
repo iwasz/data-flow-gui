@@ -33,8 +33,6 @@ CircularNode::CircularNode ()
 {
         self = iw_circular_node_new ();
         clutter_actor_set_reactive (self, TRUE);
-        //        ClutterAction *dragAction = clutter_drag_action_new ();
-        //        clutter_actor_add_action (self, dragAction);
         iw_circular_node_set_user_data (IW_CIRCULAR_NODE (self), this);
         setCppImplementation ();
 }
@@ -43,18 +41,20 @@ CircularNode::CircularNode ()
 
 void CircularNode::init ()
 {
-        iw_circular_node_set_ports_no (IW_CIRCULAR_NODE (self), ports.size ());
+        iw_circular_node_set_ports_no (IW_CIRCULAR_NODE (self), getPorts ().size ());
 
-        int i = 0;
-        for (Port &p : ports) {
-                iw_circular_node_set_port_angle (IW_CIRCULAR_NODE (self), i, p.angle);
-                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (self), i, p.size);
-                ClutterColor c = p.color.toClutterColor ();
-                iw_circular_node_set_port_color (IW_CIRCULAR_NODE (self), i, &c);
-                iw_circular_node_set_port_user_data (IW_CIRCULAR_NODE (self), i, &p);
-                p.anchor.setApProvider (std::make_shared<CircularNodeAnchorPositionProvider> (i, IW_CIRCULAR_NODE (self)));
-                ++i;
+        int portNumber = 0;
+        for (std::shared_ptr<Port> p : getPorts ()) {
+                iw_circular_node_set_port_angle (IW_CIRCULAR_NODE (self), portNumber, p->angle);
+                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (self), portNumber, p->size);
+                ClutterColor c = p->color.toClutterColor ();
+                iw_circular_node_set_port_color (IW_CIRCULAR_NODE (self), portNumber, &c);
+                iw_circular_node_set_port_user_data (IW_CIRCULAR_NODE (self), portNumber, p.get ());
+                p->anchor.setApProvider (std::make_shared<CircularNodeAnchorPositionProvider> (portNumber, IW_CIRCULAR_NODE (self)));
+                ++portNumber;
         }
+
+        glueInit ();
 }
 
 /*****************************************************************************/
@@ -107,36 +107,14 @@ void CircularNode::setFillColor (const Color &value)
 
 /*****************************************************************************/
 
-Anchor *CircularNode::getAnchor (size_t i)
-{
-        if (i >= ports.size ()) {
-                throw Core::Exception ("CircularNode::getAnchor no sucho node");
-        }
-
-        return &ports[i].anchor;
-}
-
-/*****************************************************************************/
-
-Anchor const *CircularNode::getAnchor (size_t i) const
-{
-        if (i >= ports.size ()) {
-                throw Core::Exception ("CircularNode::getAnchor no sucho node");
-        }
-
-        return &ports[i].anchor;
-}
-
-/*****************************************************************************/
-
 void CircularNode::onAllocate (Box const &)
 {
         int i = 0;
-        for (Port &p : ports) {
+        for (std::shared_ptr<Port> p : getPorts ()) {
                 float px = 0;
                 float py = 0;
                 iw_circular_node_get_port_absolute_position (IW_CIRCULAR_NODE (self), i, &px, &py);
-                p.anchor.notifyMoveAnchor (Point (px, py));
+                p->anchor.notifyMoveAnchor (Point (px, py));
                 ++i;
         }
 }

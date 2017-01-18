@@ -19,6 +19,7 @@
  */
 struct __tiliae_reflect__ INodeView : public virtual Core::Object {
         virtual ~INodeView () {}
+
         virtual std::shared_ptr<flow::INode> getNode () = 0;
         virtual void setNode (std::shared_ptr<flow::INode> n) = 0;
 };

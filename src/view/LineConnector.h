@@ -20,7 +20,8 @@ public:
 
         virtual void onConnectAnchor (Point const &p, Side s) { onMoveAnchor (p, s); }
         virtual void onMoveAnchor (Point const &p, Side s);
-        void virtual onDisconnectAnchor (Point const &p, Side s) { onMoveAnchor (p, s); }
+        virtual void onDisconnectAnchor (Point const &p, Side s) { onMoveAnchor (p, s); }
+        virtual void onTextChanged (std::string const &text);
 };
 
 #endif // LINECONNECTOR_H
