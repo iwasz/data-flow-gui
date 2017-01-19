@@ -204,10 +204,11 @@
               <object class="GtkToolButton">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Run program</property>
                 <property name="label" translatable="yes">__glade_unnamed_22</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-play</property>
-                <signal name="clicked" handler="$controller.onProgramRun ()" swapped="no"/>
+                <signal name="clicked" handler="$controller.onProgramRun (true)" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -218,9 +219,11 @@
               <object class="GtkToolButton">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Stop program</property>
                 <property name="label" translatable="yes">__glade_unnamed_23</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-stop</property>
+                <signal name="clicked" handler="$controller.onProgramRun (false)" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -253,7 +256,8 @@
                       <object class="GtkToolButton" id="addButton">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">toolbutton</property>
+                        <property name="tooltip_text" translatable="yes">Sum</property>
+                        <property name="label" translatable="yes">Sum</property>
                         <property name="use_underline">True</property>
                         <property name="icon_widget">addIcon</property>
                         <signal name="clicked" handler="$controller.onNewNodeToolClicked ('addNode')" swapped="no"/>
@@ -263,8 +267,8 @@
                       <object class="GtkToolButton" id="copyButton">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Draws pixels (key: p)</property>
-                        <property name="label" translatable="yes">Pencil</property>
+                        <property name="tooltip_text" translatable="yes">Copy</property>
+                        <property name="label" translatable="yes">Copy</property>
                         <property name="icon_widget">copyIcon</property>
                         <signal name="clicked" handler="$controller.onNewNodeToolClicked ('copyNode')" swapped="no"/>
                       </object>
@@ -276,8 +280,8 @@
                       <object class="GtkToolButton" id="consoleButton">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Erases pixels (key: e)</property>
-                        <property name="label" translatable="yes">Eraser</property>
+                        <property name="tooltip_text" translatable="yes">Console</property>
+                        <property name="label" translatable="yes">Console</property>
                         <property name="icon_widget">consoleIcon</property>
                         <signal name="clicked" handler="$controller.onNewNodeToolClicked ('consoleNode')" swapped="no"/>
                       </object>
@@ -300,7 +304,8 @@
                       <object class="GtkToolButton" id="lineConnectorButton">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">toolbutton</property>
+                        <property name="tooltip_text" translatable="yes">Line connector</property>
+                        <property name="label" translatable="yes">Line connector</property>
                         <property name="use_underline">True</property>
                         <property name="icon_widget">lineConnectorIcon</property>
                         <signal name="clicked" handler="$controller.onNewNodeToolClicked ('lineConnector')" swapped="no"/>
@@ -310,7 +315,8 @@
                       <object class="GtkToolButton" id="lineButton">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">toolbutton</property>
+                        <property name="tooltip_text" translatable="yes">Line</property>
+                        <property name="label" translatable="yes">Line</property>
                         <property name="use_underline">True</property>
                         <property name="icon_widget">lineIcon</property>
                         <signal name="clicked" handler="$controller.onNewNodeToolClicked ('line')" swapped="no"/>
@@ -323,7 +329,8 @@
                       <object class="GtkToolButton" id="circleButton">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">toolbutton</property>
+                        <property name="tooltip_text" translatable="yes">Circle</property>
+                        <property name="label" translatable="yes">Circle</property>
                         <property name="use_underline">True</property>
                         <property name="icon_widget">circleIcon</property>
                         <signal name="clicked" handler="$controller.onNewNodeToolClicked ('circle')" swapped="no"/>

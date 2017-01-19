@@ -48,7 +48,7 @@ public:
         void onEnter (Point p, Object *o);
         void onLeave (Point p, Object *o);
 
-        void onProgramRun ();
+        void onProgramRun (bool run);
 
         ToolMap const &getTools () const { return tools; }
         void setTools (const ToolMap &value) { tools = value; }

@@ -40,6 +40,7 @@ struct MainController::Impl {
         ToolMap *tools;
         MoveStrategy moveStrategy;
         flow::Program *program = nullptr;
+        bool runProgram = false;
 
         /*
          * Additional arguments for state machine. Pointer to this struct is passed
@@ -197,7 +198,13 @@ void MainController::onStop () {}
  * (this is the case sometimes). So I consider the following method a workaround, and
  * it should be fixed someday, but state machind would have to be modified.
  */
-void MainController::onIdle () { impl->machine.run (); }
+void MainController::onIdle ()
+{
+        impl->machine.run ();
+        if (impl->runProgram) {
+                impl->program->step ();
+        }
+}
 
 /****************************************************************************/
 /* Drawing events                                                           */
@@ -264,7 +271,7 @@ void MainController::setProgram (flow::Program *value) { impl->program = value; 
 
 /*****************************************************************************/
 
-void MainController::onProgramRun () { impl->program->run (); }
+void MainController::onProgramRun (bool run) { impl->runProgram = run; }
 
 /****************************************************************************/
 /* State machine low lewel deps.                                            */
