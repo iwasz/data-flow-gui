@@ -12,6 +12,11 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">ic_account_circle_black_24dp.png</property>
   </object>
+  <object class="GtkImage" id="circleIcon1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">ic_account_circle_black_24dp.png</property>
+  </object>
   <object class="GtkImage" id="consoleIcon">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -337,6 +342,20 @@
                       </object>
                       <packing>
                         <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="rectButton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Circle</property>
+                        <property name="label" translatable="yes">Circle</property>
+                        <property name="use_underline">True</property>
+                        <property name="icon_widget">circleIcon1</property>
+                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('rect')" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                   </object>

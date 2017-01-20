@@ -6,34 +6,34 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "DashedCircleStrategy.h"
+#include "ShapeDrawStrategy.h"
 
-void DashedCircleStrategy::onButtonPress (Point p, Core::Object *o)
+void ShapeDrawStrategy::onButtonPress (Point p, Core::Object *o)
 {
         startPoint = p;
         endPoint = Point ();
 
-        circle->setPosition (p);
-        circle->setSize (Dimension ());
-        circle->setVisible (true);
+        actor->setPosition (p);
+        actor->setSize (Dimension ());
+        actor->setVisible (true);
 }
 
 /*****************************************************************************/
 
-void DashedCircleStrategy::onMotion (Point p, Core::Object *o) { circle->setSize (p - startPoint); }
+void ShapeDrawStrategy::onMotion (Point p, Core::Object *o) { actor->setSize (p - startPoint); }
 
 /*****************************************************************************/
 
-bool DashedCircleStrategy::onButtonRelease(Point p, Object *o)
+bool ShapeDrawStrategy::onButtonRelease (Point p, Object *o)
 {
-        circle->setVisible (false);
+        actor->setVisible (false);
         endPoint = p;
-        return  startPoint.x != endPoint.x && startPoint.y != endPoint.y;
+        return startPoint.x != endPoint.x && startPoint.y != endPoint.y;
 }
 
 /*****************************************************************************/
 
-void DashedCircleStrategy::reshape (IClutterActor *a)
+void ShapeDrawStrategy::reshape (IClutterActor *a)
 {
         a->setPosition (startPoint);
         a->setSize (endPoint - startPoint);

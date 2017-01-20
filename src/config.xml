@@ -10,9 +10,13 @@
   <!-- | Kontrolery i widoki                               | -->
   <!-- +===================================================+ -->
 
-        <DashedCircleStrategy id="dashedCircle">
-                <Circle set-as="circle" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" />
-        </DashedCircleStrategy>
+        <ShapeDrawStrategy id="dashedCircle">
+                <Circle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" />
+        </ShapeDrawStrategy>
+
+        <ShapeDrawStrategy id="dashedRect">
+                <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" />
+        </ShapeDrawStrategy>
 
         <DashedLineStrategy id="dashedLine">
                 <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="3" />
@@ -23,6 +27,7 @@
         </DashedLineConnectorStrategy>
 
         <Circle scope="prototype" id="circle" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false" />
+        <Rectangle scope="prototype" id="rect" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false" />
         <Line scope="prototype" id="line" parent="@stage" strokeColor="#0096c6c9" visible="false" strokeWidth="1" />
 
         <CircularNode scope="prototype" id="addNode" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
@@ -69,6 +74,9 @@
                       </Tool>
                       <Tool set-as="lineConnector" drawStrategy="@dashedLineConnector">
                               <ContainerFactoryStrategy set-as="factoryStrategy" beanName="lineConnector" container="@#container" />
+                      </Tool>
+                      <Tool set-as="rect" drawStrategy="@dashedRect">
+                              <ContainerFactoryStrategy set-as="factoryStrategy" beanName="rect" container="@#container" />
                       </Tool>
                 </ToolMap>
         </MainController>

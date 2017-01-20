@@ -6,27 +6,26 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef DASHEDCIRCLESTRATEGY_H
-#define DASHEDCIRCLESTRATEGY_H
+#ifndef SHAPE_DRAW_STRATEGY_H
+#define SHAPE_DRAW_STRATEGY_H
 
 #include "IDrawStrategy.h"
 #include "view/Circle.h"
 #include <ReflectionParserAnnotation.h>
 
-class __tiliae_reflect__ DashedCircleStrategy : public IDrawStrategy {
+class __tiliae_reflect__ ShapeDrawStrategy : public IDrawStrategy {
 public:
-        virtual ~DashedCircleStrategy () {}
+        virtual ~ShapeDrawStrategy () {}
         virtual void onButtonPress (Point p, Core::Object *o);
         virtual void onMotion (Point p, Core::Object *o);
         virtual bool onButtonRelease (Point p, Core::Object *o);
         virtual void reshape (IClutterActor *a);
 
-        Circle *getCircle () const { return circle; }
-        void setCircle (Circle *value) { circle = value; }
+        AbstractActor *getActor () const { return actor; }
+        void setActor (AbstractActor *value) { actor = value; }
 
 private:
-
-        Circle *circle = nullptr;
+        AbstractActor *actor = nullptr;
         Point startPoint;
         Point endPoint;
 };
