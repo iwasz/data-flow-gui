@@ -9,16 +9,21 @@
 #ifndef GEOMETRY_DF_POINT_H
 #define GEOMETRY_DF_POINT_H
 
+#include <ReflectionParserAnnotation.h>
+#include <string>
+
 struct Point {
         Point () : x (0), y (0) {}
         Point (float x, float y) : x (x), y (y) {}
+        //        Point (std::)
         float x;
         float y;
 };
 
-struct Dimension {
+struct __tiliae_reflect__ Dimension {
         Dimension () : width (0), height (0) {}
         Dimension (float w, float h) : width (w), height (h) {}
+        Dimension (std::string const &s);
         float width;
         float height;
 };

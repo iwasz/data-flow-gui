@@ -28,7 +28,7 @@ bool ShapeDrawStrategy::onButtonRelease (Point p, Object *o)
 {
         actor->setVisible (false);
         endPoint = p;
-        return startPoint.x != endPoint.x && startPoint.y != endPoint.y;
+        return (startPoint.x != endPoint.x && startPoint.y != endPoint.y) || (minSize.height && minSize.width);
 }
 
 /*****************************************************************************/
@@ -36,5 +36,17 @@ bool ShapeDrawStrategy::onButtonRelease (Point p, Object *o)
 void ShapeDrawStrategy::reshape (IClutterActor *a)
 {
         a->setPosition (startPoint);
-        a->setSize (endPoint - startPoint);
+        Dimension size = endPoint - startPoint;
+
+        if (minSize.height > 0 || minSize.width > 0) {
+                if (size.height < minSize.height) {
+                        size.height = minSize.height;
+                }
+
+                if (size.width < minSize.width) {
+                        size.width = minSize.width;
+                }
+        }
+
+        a->setSize (size);
 }

@@ -24,10 +24,14 @@ public:
         AbstractActor *getActor () const { return actor; }
         void setActor (AbstractActor *value) { actor = value; }
 
+        Dimension getMinSize () const { return minSize; }
+        void setMinSize (const Dimension &value) { minSize = value; }
+
 private:
         AbstractActor *actor = nullptr;
         Point startPoint;
         Point endPoint;
+        Dimension minSize;
 };
 
 #endif // DASHEDCIRCLESTRATEGY_H

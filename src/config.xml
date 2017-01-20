@@ -14,6 +14,10 @@
                 <Circle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" />
         </ShapeDrawStrategy>
 
+        <ShapeDrawStrategy id="dashedCircleMinSize" minSize="100, 100">
+                <Circle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" />
+        </ShapeDrawStrategy>
+
         <ShapeDrawStrategy id="dashedRect">
                 <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" />
         </ShapeDrawStrategy>
@@ -57,13 +61,13 @@
 
         <MainController id="mainController" loopDelayMs="5" program="@program">
                 <ToolMap set-as="tools">
-                      <Tool set-as="addNode" drawStrategy="@dashedCircle">
+                      <Tool set-as="addNode" drawStrategy="@dashedCircleMinSize">
                               <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="addNode" container="@#container" program="@program" />
                       </Tool>
-                      <Tool set-as="copyNode" drawStrategy="@dashedCircle">
+                      <Tool set-as="copyNode" drawStrategy="@dashedCircleMinSize">
                               <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="copyNode" container="@#container" program="@program" />
                       </Tool>
-                      <Tool set-as="consoleNode" drawStrategy="@dashedCircle">
+                      <Tool set-as="consoleNode" drawStrategy="@dashedCircleMinSize">
                               <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="consoleNode" container="@#container" program="@program" />
                       </Tool>
                       <Tool set-as="line" drawStrategy="@dashedLine">

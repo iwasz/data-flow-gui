@@ -15,7 +15,7 @@
   <object class="GtkImage" id="circleIcon1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">ic_account_circle_black_24dp.png</property>
+    <property name="pixbuf">ic_settings_overscan_black_24dp.png</property>
   </object>
   <object class="GtkImage" id="consoleIcon">
     <property name="visible">True</property>
