@@ -14,9 +14,7 @@
                 <Circle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" />
         </ShapeDrawStrategy>
 
-        <ShapeDrawStrategy id="dashedCircleMinSize" minSize="100, 100">
-                <Circle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" />
-        </ShapeDrawStrategy>
+        <dashedCircle id="dashedCircleMinSize" minSize="100, 100"/>
 
         <ShapeDrawStrategy id="dashedRect">
                 <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" />

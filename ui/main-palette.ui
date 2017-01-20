@@ -7,6 +7,11 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">ic_add_circle_black_24dp.png</property>
   </object>
+  <object class="GtkImage" id="addIcon1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">ic_tab_unselected_black_24dp.png</property>
+  </object>
   <object class="GtkImage" id="circleIcon">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -257,6 +262,17 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Nodes</property>
+                    <child>
+                      <object class="GtkToolButton" id="selectButton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Sum</property>
+                        <property name="label" translatable="yes">Sum</property>
+                        <property name="use_underline">True</property>
+                        <property name="icon_widget">addIcon1</property>
+                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('select')" swapped="no"/>
+                      </object>
+                    </child>
                     <child>
                       <object class="GtkToolButton" id="addButton">
                         <property name="visible">True</property>

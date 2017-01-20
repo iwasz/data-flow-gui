@@ -115,6 +115,8 @@ void MainController::Impl::configureMachine ()
                         vars.currentFactoryStrategy = (*tools)[vars.currentTool].factoryStrategy;
                         return true;
                 })
+                ->transition (TOOL_SELECTED)->when (eq ("selected.tool"))
+                ->transition (IDLE)->when (eq ("selected.select"))
                 ->transition (DRAW)->when (eq ("stage.press"))->then ([this] (const char *, void *arg) {
                         Arguments *args = static_cast <Arguments *> (arg);
                         vars.currentDrawStrategy->onButtonPress (args->p, args->object);
@@ -212,8 +214,13 @@ void MainController::onIdle ()
 
 void MainController::onNewNodeToolClicked (std::string const &name)
 {
-        impl->arguments.tool = name;
-        impl->pushMessage ("selected.tool", &impl->arguments);
+        if (name == "select") {
+                impl->pushMessage ("selected.select", &impl->arguments);
+        }
+        else {
+                impl->arguments.tool = name;
+                impl->pushMessage ("selected.tool", &impl->arguments);
+        }
 }
 
 /*****************************************************************************/
