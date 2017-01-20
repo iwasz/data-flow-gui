@@ -33,7 +33,7 @@ bool ShapeDrawStrategy::onButtonRelease (Point p, Object *o)
 
 /*****************************************************************************/
 
-void ShapeDrawStrategy::reshape (IClutterActor *a)
+void ShapeDrawStrategy::onObjectCreated (IClutterActor *a)
 {
         a->setPosition (startPoint);
         Dimension size = endPoint - startPoint;

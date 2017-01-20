@@ -102,6 +102,8 @@ LIST (APPEND SOURCES
         "src/gui/drawing/ContainerFactoryStrategy.h"
         "src/gui/drawing/ShapeDrawStrategy.cc"
         "src/gui/drawing/ShapeDrawStrategy.h"
+        "src/gui/drawing/RectangularSelectorStrategy.cc"
+        "src/gui/drawing/RectangularSelectorStrategy.h"
         "src/gui/drawing/DashedLineStrategy.cc"
         "src/gui/drawing/DashedLineStrategy.h"
         "src/gui/drawing/DashedLineConnectorStrategy.h"

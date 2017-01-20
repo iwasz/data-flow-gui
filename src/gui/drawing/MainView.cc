@@ -12,6 +12,7 @@
 #include "view/clutter/iw_circle.h"
 #include "view/clutter/iw_circular_node.h"
 #include "view/clutter/iw_line.h"
+#include "view/clutter/iw_rectangle.h"
 #include <clutter-gtk/clutter-gtk.h>
 #include <clutter/clutter.h>
 #include <gtk/gtk.h>
@@ -95,6 +96,21 @@ void MainView::loadUi (GtkForms::App *app)
         //                clutter_text_set_editable (CLUTTER_TEXT (label), TRUE);
         //                clutter_text_set_selectable (CLUTTER_TEXT (label), TRUE);
         //                clutter_actor_set_reactive (label, TRUE);
+        //        }
+
+        //        {
+        //                ClutterActor *rect = iw_rectangle_new ();
+        //                clutter_actor_add_child (stage->getActor (), rect);
+        //                clutter_actor_set_position (rect, 100, 300);
+        //                clutter_actor_set_size (rect, 600, 600);
+        //                clutter_actor_set_reactive (rect, TRUE);
+        //                ClutterAction *dragAction = clutter_drag_action_new ();
+        //                clutter_actor_add_action (rect, dragAction);
+
+        //                ClutterActor *circle = iw_circle_new ();
+        //                clutter_actor_add_child (rect, circle);
+        //                clutter_actor_set_position (circle, 100, 100);
+        //                clutter_actor_set_size (circle, 400, 400);
         //        }
 }
 

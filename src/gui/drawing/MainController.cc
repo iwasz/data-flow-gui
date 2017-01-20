@@ -7,11 +7,14 @@
  ****************************************************************************/
 
 #include "MainController.h"
+#include "IDrawStrategy.h"
+#include "IFactoryStrategy.h"
 #include "MoveStrategy.h"
-#include "view/IClutterActor.h"
+#include "view/Rectangle.h"
 #include "view/Stage.h"
 #include <App.h>
 #include <Logging.h>
+#include <Program.h>
 #include <StateMachine.h>
 
 static src::logger_mt &lg = logger::get ();
@@ -41,6 +44,7 @@ struct MainController::Impl {
         MoveStrategy moveStrategy;
         flow::Program *program = nullptr;
         bool runProgram = false;
+        Rectangle *rectangularSelector = nullptr;
 
         /*
          * Additional arguments for state machine. Pointer to this struct is passed
@@ -98,7 +102,16 @@ void MainController::Impl::configureMachine ()
                         return true;
                 })
                 ->transition (TOOL_SELECTED)->when (eq ("selected.tool"))
-                ->transition (MOVE)->when (eq ("stage.enter"));
+                ->transition (MOVE)->when (eq ("stage.enter"))
+                ->transition (DRAW)->when (eq ("stage.press"))->then ([this] (const char *, void *arg) {
+                        Arguments *args = static_cast <Arguments *> (arg);
+                        vars.currentTool = "select";
+                        vars.currentDrawStrategy = (*tools)[vars.currentTool].drawStrategy;
+                        vars.currentFactoryStrategy = (*tools)[vars.currentTool].factoryStrategy;
+                        vars.currentDrawStrategy->onButtonPress (args->p, args->object);
+                        return true;
+                });
+
 
         /*---------------------------------------------------------------------------*/
 
@@ -140,7 +153,7 @@ void MainController::Impl::configureMachine ()
 
                         Core::Variant v = vars.currentFactoryStrategy->run ();
                         IClutterActor *a = ocast <IClutterActor *> (v);
-                        vars.currentDrawStrategy->reshape (a);
+                        vars.currentDrawStrategy->onObjectCreated (a);
                         a->setVisible (true);
                         actors.push_back (std::shared_ptr <IClutterActor> (a));
                         return true;
@@ -279,6 +292,14 @@ void MainController::setProgram (flow::Program *value) { impl->program = value; 
 /*****************************************************************************/
 
 void MainController::onProgramRun (bool run) { impl->runProgram = run; }
+
+/*****************************************************************************/
+
+Rectangle *MainController::getRectangularSelector () const { return impl->rectangularSelector; }
+
+/*****************************************************************************/
+
+void MainController::setRectangularSelector (Rectangle *value) { impl->rectangularSelector = value; }
 
 /****************************************************************************/
 /* State machine low lewel deps.                                            */

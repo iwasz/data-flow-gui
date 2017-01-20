@@ -19,7 +19,7 @@ public:
         virtual void onButtonPress (Point p, Core::Object *o);
         virtual void onMotion (Point p, Core::Object *o);
         virtual bool onButtonRelease (Point p, Core::Object *o);
-        virtual void reshape (IClutterActor *a);
+        virtual void onObjectCreated (IClutterActor *a);
 
         Line *getLine () const { return line; }
         void setLine (Line *value) { line = value; }

@@ -4,6 +4,7 @@
 #include "gui/drawing/ShapeDrawStrategy.h"
 #include "gui/drawing/DashedLineStrategy.h"
 #include "gui/drawing/DashedLineConnectorStrategy.h"
+#include "gui/drawing/RectangularSelectorStrategy.h"
 #include "view/Circle.h"
 #include "view/Rectangle.h"
 #include "view/Line.h"

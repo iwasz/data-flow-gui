@@ -19,7 +19,7 @@ public:
         virtual void onButtonPress (Point p, Core::Object *o);
         virtual void onMotion (Point p, Core::Object *o);
         virtual bool onButtonRelease (Point p, Core::Object *o);
-        virtual void reshape (IClutterActor *a);
+        virtual void onObjectCreated (IClutterActor *a);
 
         AbstractActor *getActor () const { return actor; }
         void setActor (AbstractActor *value) { actor = value; }
@@ -27,7 +27,7 @@ public:
         Dimension getMinSize () const { return minSize; }
         void setMinSize (const Dimension &value) { minSize = value; }
 
-private:
+protected:
         AbstractActor *actor = nullptr;
         Point startPoint;
         Point endPoint;

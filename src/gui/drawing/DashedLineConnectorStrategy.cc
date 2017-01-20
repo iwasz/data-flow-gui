@@ -40,7 +40,7 @@ bool DashedLineConnectorStrategy::onButtonRelease (Point p, Object *o)
 
 /*****************************************************************************/
 
-void DashedLineConnectorStrategy::reshape (IClutterActor *a)
+void DashedLineConnectorStrategy::onObjectCreated (IClutterActor *a)
 {
         LineConnector *lc = dynamic_cast<LineConnector *> (a);
 

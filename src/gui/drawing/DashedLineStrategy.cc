@@ -32,7 +32,7 @@ bool DashedLineStrategy::onButtonRelease (Point p, Object *o)
 
 /*****************************************************************************/
 
-void DashedLineStrategy::reshape (IClutterActor *a)
+void DashedLineStrategy::onObjectCreated (IClutterActor *a)
 {
         Line *l = dynamic_cast<Line *> (a);
 

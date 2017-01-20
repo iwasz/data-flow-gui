@@ -25,7 +25,7 @@ struct __tiliae_reflect__ IDrawStrategy : public Core::Object {
          * This get called after all 3 above, and after a factory kicked in, and created an *a.
          * It's purpose is to set *a it's final shape.
          */
-        virtual void reshape (IClutterActor *a) = 0;
+        virtual void onObjectCreated (IClutterActor *a) = 0;
 };
 
 #endif // IDRAWSTRATEGY_H

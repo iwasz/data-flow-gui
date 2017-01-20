@@ -1,88 +1,97 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <beans init-method="init" id-method="contId">
-
-    <Config id="config">
-        <value set-as="logMappings">true</value>
-        <value set-as="useWidgetId">true</value>
-    </Config>
+  <Config id="config">
+    <value set-as="logMappings">true</value>
+    <value set-as="useWidgetId">true</value>
+  </Config>
 
   <!-- +===================================================+ -->
   <!-- | Kontrolery i widoki                               | -->
   <!-- +===================================================+ -->
 
-        <ShapeDrawStrategy id="dashedCircle">
-                <Circle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" />
-        </ShapeDrawStrategy>
+  <ShapeDrawStrategy id="dashedCircle">
+    <Circle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false"/>
+  </ShapeDrawStrategy>
 
-        <dashedCircle id="dashedCircleMinSize" minSize="100, 100"/>
+  <dashedCircle id="dashedCircleMinSize" minSize="100, 100"/>
 
-        <ShapeDrawStrategy id="dashedRect">
-                <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" />
-        </ShapeDrawStrategy>
+  <ShapeDrawStrategy id="dashedRect">
+    <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false"/>
+  </ShapeDrawStrategy>
 
-        <DashedLineStrategy id="dashedLine">
-                <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="3" />
-        </DashedLineStrategy>
+  <Rectangle id="rectangularSelector" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="10" visible="false"/>
+  <RectangularSelectorStrategy id="selectionDashedRect" rectangularSelector="@rectangularSelector">
+    <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="5" visible="false"/>
+  </RectangularSelectorStrategy>
 
-        <DashedLineConnectorStrategy id="dashedLineConnector">
-                <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="3" />
-        </DashedLineConnectorStrategy>
 
-        <Circle scope="prototype" id="circle" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false" />
-        <Rectangle scope="prototype" id="rect" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false" />
-        <Line scope="prototype" id="line" parent="@stage" strokeColor="#0096c6c9" visible="false" strokeWidth="1" />
+  <DashedLineStrategy id="dashedLine">
+    <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="3"/>
+  </DashedLineStrategy>
 
-        <CircularNode scope="prototype" id="addNode" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
-            <InputPort scope="prototype" add-to="ports" angle="2.6415" color="#d1d1d1ff" size="20" />
-            <InputPort scope="prototype" add-to="ports" angle="3.6415" color="#d1d1d1ff" size="20" />
-            <OutputPort scope="prototype" add-to="ports" angle="6.283" color="#8d8d8dff" size="20" />
-            <Add scope="prototype" set-as="node" />
-        </CircularNode>
+  <DashedLineConnectorStrategy id="dashedLineConnector">
+    <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="3"/>
+  </DashedLineConnectorStrategy>
 
-        <CircularNode scope="prototype" id="copyNode" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
-            <InputPort scope="prototype" add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20" />
-            <OutputPort scope="prototype" add-to="ports" angle="6.283" color="#8d8d8dff" size="20" />
-            <Copy scope="prototype" set-as="node" />
-        </CircularNode>
+  <Circle scope="prototype" id="circle" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>
+  <Rectangle scope="prototype" id="rect" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>
+  <Line scope="prototype" id="line" parent="@stage" strokeColor="#0096c6c9" visible="false" strokeWidth="1"/>
 
-        <CircularNode scope="prototype" id="consoleNode" parent="@stage" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">
-            <InputPort scope="prototype" add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20" />
-            <Console scope="prototype" set-as="node" />
-        </CircularNode>
+  <CircularNode scope="prototype" id="addNode" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
+    <InputPort scope="prototype" add-to="ports" angle="2.6415" color="#d1d1d1ff" size="20"/>
+    <InputPort scope="prototype" add-to="ports" angle="3.6415" color="#d1d1d1ff" size="20"/>
+    <OutputPort scope="prototype" add-to="ports" angle="6.283" color="#8d8d8dff" size="20"/>
+    <Add scope="prototype" set-as="node"/>
+  </CircularNode>
 
-        <LineConnector scope="prototype" id="lineConnector" parent="@stage" strokeColor="#d1d1d1ff"
-                fontColor="#8d8d8dff" visible="false" strokeWidth="5" text="0" textEditable="true">
-                <Arc scope="prototype" set-as="arc"/>
-        </LineConnector>
+  <CircularNode scope="prototype" id="copyNode" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
+    <InputPort scope="prototype" add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20"/>
+    <OutputPort scope="prototype" add-to="ports" angle="6.283" color="#8d8d8dff" size="20"/>
+    <Copy scope="prototype" set-as="node"/>
+  </CircularNode>
 
-        <Program id="program" />
+  <CircularNode scope="prototype" id="consoleNode" parent="@stage" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">
+    <InputPort scope="prototype" add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20"/>
+    <Console scope="prototype" set-as="node"/>
+  </CircularNode>
 
-        <MainController id="mainController" loopDelayMs="5" program="@program">
-                <ToolMap set-as="tools">
-                      <Tool set-as="addNode" drawStrategy="@dashedCircleMinSize">
-                              <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="addNode" container="@#container" program="@program" />
-                      </Tool>
-                      <Tool set-as="copyNode" drawStrategy="@dashedCircleMinSize">
-                              <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="copyNode" container="@#container" program="@program" />
-                      </Tool>
-                      <Tool set-as="consoleNode" drawStrategy="@dashedCircleMinSize">
-                              <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="consoleNode" container="@#container" program="@program" />
-                      </Tool>
-                      <Tool set-as="line" drawStrategy="@dashedLine">
-                              <ContainerFactoryStrategy set-as="factoryStrategy" beanName="line" container="@#container" />
-                      </Tool>
-                      <Tool set-as="circle" drawStrategy="@dashedCircle">
-                              <ContainerFactoryStrategy set-as="factoryStrategy" beanName="circle" container="@#container" />
-                      </Tool>
-                      <Tool set-as="lineConnector" drawStrategy="@dashedLineConnector">
-                              <ContainerFactoryStrategy set-as="factoryStrategy" beanName="lineConnector" container="@#container" />
-                      </Tool>
-                      <Tool set-as="rect" drawStrategy="@dashedRect">
-                              <ContainerFactoryStrategy set-as="factoryStrategy" beanName="rect" container="@#container" />
-                      </Tool>
-                </ToolMap>
-        </MainController>
+  <LineConnector scope="prototype" id="lineConnector" parent="@stage" strokeColor="#d1d1d1ff" fontColor="#8d8d8dff" visible="false" strokeWidth="5" text="0" textEditable="true">
+    <Arc scope="prototype" set-as="arc"/>
+  </LineConnector>
 
-        <Stage id="stage" fillColor="#ecececff"/>
-        <MainView id="mainView" file="ui/main-palette.ui" stage="@stage" loadWholeFile="true" />
+  <Program id="program"/>
+
+  <MainController id="mainController" loopDelayMs="5" program="@program">
+    <ToolMap set-as="tools">
+      <Tool set-as="select" drawStrategy="@selectionDashedRect">
+        <ContainerFactoryStrategy set-as="factoryStrategy" beanName="rect" container="@#container"/>
+      </Tool>
+      <Tool set-as="addNode" drawStrategy="@dashedCircleMinSize">
+        <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="addNode" container="@#container" program="@program"/>
+      </Tool>
+      <Tool set-as="copyNode" drawStrategy="@dashedCircleMinSize">
+        <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="copyNode" container="@#container" program="@program"/>
+      </Tool>
+      <Tool set-as="consoleNode" drawStrategy="@dashedCircleMinSize">
+        <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="consoleNode" container="@#container" program="@program"/>
+      </Tool>
+      <Tool set-as="line" drawStrategy="@dashedLine">
+        <ContainerFactoryStrategy set-as="factoryStrategy" beanName="line" container="@#container"/>
+      </Tool>
+      <Tool set-as="circle" drawStrategy="@dashedCircle">
+        <ContainerFactoryStrategy set-as="factoryStrategy" beanName="circle" container="@#container"/>
+      </Tool>
+      <Tool set-as="lineConnector" drawStrategy="@dashedLineConnector">
+        <ContainerFactoryStrategy set-as="factoryStrategy" beanName="lineConnector" container="@#container"/>
+      </Tool>
+      <Tool set-as="rect" drawStrategy="@dashedRect">
+        <ContainerFactoryStrategy set-as="factoryStrategy" beanName="rect" container="@#container"/>
+      </Tool>
+    </ToolMap>
+    <ref set-as="rectangularSelector" bean="rectangularSelector"/>
+  </MainController>
+
+  <Stage id="stage" fillColor="#ecececff"/>
+
+  <MainView id="mainView" file="ui/main-palette.ui" stage="@stage" loadWholeFile="true"/>
 </beans>
