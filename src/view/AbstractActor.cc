@@ -14,7 +14,7 @@ void AbstractActor::setParent (IClutterActor *parent) { clutter_actor_add_child 
 
 /*****************************************************************************/
 
-bool AbstractActor::getVisible () const { return clutter_actor_is_visible (self); }
+bool AbstractActor::isVisible () const { return clutter_actor_is_visible (self); }
 
 /*****************************************************************************/
 
@@ -56,7 +56,17 @@ Dimension AbstractActor::getDimension () const
 
 /*****************************************************************************/
 
-void AbstractActor::setCppImplementation ()
+void AbstractActor::setCppImplementation () { g_object_set_data (G_OBJECT (self), CPP_IMPLEMENTATION_KEY, this); }
+
+/*****************************************************************************/
+
+Box AbstractActor::getBoundingBox () const
 {
-        g_object_set_data (G_OBJECT (self), CPP_IMPLEMENTATION_KEY, this);
+
+        ClutterActorBox actorBox;
+        if (!clutter_actor_get_paint_box (self, &actorBox)) {
+                throw Core::Exception ("AbstractActor::getBoundingBox : !clutter_actor_get_paint_box");
+        }
+
+        return Box (Point (actorBox.x1, actorBox.y1), Point (actorBox.x2, actorBox.y2));
 }

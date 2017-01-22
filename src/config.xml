@@ -19,11 +19,10 @@
     <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false"/>
   </ShapeDrawStrategy>
 
-  <Rectangle id="rectangularSelector" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="10" visible="false"/>
+  <Rectangle id="rectangularSelector" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="10" visible="false" selectable="false"/>
   <RectangularSelectorStrategy id="selectionDashedRect" rectangularSelector="@rectangularSelector">
     <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="5" visible="false"/>
   </RectangularSelectorStrategy>
-
 
   <DashedLineStrategy id="dashedLine">
     <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="3"/>
@@ -63,9 +62,7 @@
 
   <MainController id="mainController" loopDelayMs="5" program="@program">
     <ToolMap set-as="tools">
-      <Tool set-as="select" drawStrategy="@selectionDashedRect">
-        <ContainerFactoryStrategy set-as="factoryStrategy" beanName="rect" container="@#container"/>
-      </Tool>
+      <Tool set-as="select" drawStrategy="@selectionDashedRect"/>
       <Tool set-as="addNode" drawStrategy="@dashedCircleMinSize">
         <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="addNode" container="@#container" program="@program"/>
       </Tool>

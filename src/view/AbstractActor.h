@@ -20,8 +20,11 @@ public:
         virtual void setParent (IClutterActor *parent);
         virtual ClutterActor *getActor () { return self; }
 
-        virtual bool getVisible () const;
+        virtual bool isVisible () const;
         virtual void setVisible (bool value);
+
+        virtual bool isSelectable () const { return selectable; }
+        virtual void setSelectable (bool value) { selectable = value; }
 
         virtual void setPosition (Point const &p);
         virtual Point getPosition () const;
@@ -44,12 +47,15 @@ public:
         virtual Color getFillColor () const { throw Core::Exception ("Not implemented"); }
         virtual void setFillColor (const Color &value) { throw Core::Exception ("Not implemented"); }
 
+        virtual Box getBoundingBox () const;
+
         /// Stores this into self as g_object value.
         virtual void setCppImplementation ();
 
 protected:
 
         ClutterActor *self = 0;
+        bool selectable = true;
 };
 
 #endif // ABSTRACTACTOR_H

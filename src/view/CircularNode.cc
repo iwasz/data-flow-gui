@@ -124,5 +124,5 @@ void CircularNode::onAllocate (Box const &)
 extern "C" void circularNodeOnAllocate (void *circularNode, float x1, float y1, float x2, float y2)
 {
         CircularNode *cn = static_cast<CircularNode *> (circularNode);
-        cn->onAllocate (Box (x1, y1, x2, y2));
+        cn->onAllocate (Box (Point (x1, y1), Point (x2, y2)));
 }

@@ -151,11 +151,19 @@ void MainController::Impl::configureMachine ()
                                 return true;
                         }
 
-                        Core::Variant v = vars.currentFactoryStrategy->run ();
-                        IClutterActor *a = ocast <IClutterActor *> (v);
+                        IClutterActor *a = nullptr;
+                        if (vars.currentFactoryStrategy) {
+                                Core::Variant v = vars.currentFactoryStrategy->run ();
+                                a = ocast <IClutterActor *> (v);
+                        }
+
                         vars.currentDrawStrategy->onObjectCreated (a);
-                        a->setVisible (true);
-                        actors.push_back (std::shared_ptr <IClutterActor> (a));
+
+                        if (a) {
+                                a->setVisible (true);
+                                actors.push_back (std::shared_ptr <IClutterActor> (a));
+                        }
+
                         return true;
                 });
 

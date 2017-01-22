@@ -24,8 +24,11 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
         virtual void setParent (IClutterActor *parent) = 0;
         virtual ClutterActor *getActor () = 0;
 
-        virtual bool getVisible () const = 0;
+        virtual bool isVisible () const = 0;
         virtual void setVisible (bool value) = 0;
+
+        virtual bool isSelectable () const = 0;
+        virtual void setSelectable (bool value) = 0;
 
         virtual void setPosition (Point const &p) = 0;
         virtual Point getPosition () const = 0;
@@ -47,6 +50,8 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
 
         virtual Color getFillColor () const = 0;
         virtual void setFillColor (const Color &value) = 0;
+
+        virtual Box getBoundingBox () const = 0;
 };
 
 typedef std::vector <std::shared_ptr <IClutterActor>> ClutterActorVector;
