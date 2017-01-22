@@ -90,6 +90,7 @@
     </ToolMap>
     <ref set-as="rectangularSelector" bean="rectangularSelector"/>
     <ref set-as="selectedActors" bean="selectedActors"/>
+    <ref set-as="stage" bean="stage"/>
   </MainController>
 
   <Stage id="stage" fillColor="#ecececff"/>

@@ -15,8 +15,6 @@ class Rectangle;
 
 /**
  * Responsible for drawing the selection rectangle, and managing sleected objects.
- * TODO selecting single objects by clicking on them
- * TODO Expanding existing selection with modifier key (Shift/Ctrl + select).
  */
 class __tiliae_reflect__ RectangularSelectorStrategy : public ShapeDrawStrategy {
 public:

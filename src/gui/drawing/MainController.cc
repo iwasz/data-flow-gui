@@ -45,6 +45,7 @@ struct MainController::Impl {
         flow::Program *program = nullptr;
         bool runProgram = false;
         Rectangle *rectangularSelector = nullptr;
+        Stage *stage = nullptr;
 
         /*
          * Additional arguments for state machine. Pointer to this struct is passed
@@ -290,6 +291,21 @@ void MainController::onLeave (Point p, Object *o)
 
 /*****************************************************************************/
 
+void MainController::onZoom (std::string const &action)
+{
+        if (action == "in") {
+                impl->stage->zoomIn ();
+        }
+        else if (action == "out") {
+                impl->stage->zoomOut ();
+        }
+        else if (action == "1") {
+                impl->stage->zoom (1.0);
+        }
+}
+
+/*****************************************************************************/
+
 flow::Program *MainController::getProgram () const { return impl->program; }
 
 /*****************************************************************************/
@@ -315,6 +331,14 @@ ClutterActorVector *MainController::getSelectedActors () { return impl->selected
 /*****************************************************************************/
 
 void MainController::setSelectedActors (ClutterActorVector *value) { impl->selectedActors = value; }
+
+/*****************************************************************************/
+
+Stage *MainController::getStage () const { return impl->stage; }
+
+/*****************************************************************************/
+
+void MainController::setStage (Stage *value) { impl->stage = value; }
 
 /****************************************************************************/
 /* State machine low lewel deps.                                            */

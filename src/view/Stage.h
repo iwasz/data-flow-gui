@@ -22,12 +22,19 @@ public:
 
         GtkWidget *getClutterWidget () { return clutterWidget; }
         void setParent (IClutterActor *parent) { throw Core::Exception ("Not implemented"); }
+        virtual ClutterActor *getActor () { return scale; }
 
         virtual Color getFillColor () const;
         virtual void setFillColor (const Color &value);
 
+        void zoomIn ();
+        void zoomOut ();
+        void zoom (double f);
+
 private:
+
         GtkWidget *clutterWidget;
+        ClutterActor *scale;
 };
 
 #endif // STAGE_H

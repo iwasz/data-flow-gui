@@ -10,7 +10,7 @@
 #define MAIN_CONTROLLER_H_
 
 #include "primitives/Geometry.h"
-#include "view/IClutterActor.h"
+#include "view/Stage.h"
 #include <ReflectionParserAnnotation.h>
 #include <controller/AbstractController.h>
 #include <map>
@@ -53,6 +53,7 @@ public:
         void onMotion (Point p, Core::Object *o);
         void onEnter (Point p, Object *o);
         void onLeave (Point p, Object *o);
+        void onZoom (std::string const &action);
 
         void onProgramRun (bool run);
 
@@ -68,6 +69,8 @@ public:
         ClutterActorVector *getSelectedActors ();
         void setSelectedActors (ClutterActorVector *value);
 
+        Stage *getStage () const;
+        void setStage (Stage *value);
 private:
         ToolMap tools;
 
