@@ -13,6 +13,7 @@ Stage::Stage ()
 {
         clutterWidget = gtk_clutter_embed_new ();
         self = gtk_clutter_embed_get_stage (GTK_CLUTTER_EMBED (clutterWidget));
+//        gtk_clutter_embed_set_use_layout_size (GTK_CLUTTER_EMBED (clutterWidget), TRUE);
         gtk_widget_set_can_focus (clutterWidget, TRUE);
         gtk_widget_set_focus_on_click (clutterWidget, TRUE);
         setCppImplementation ();

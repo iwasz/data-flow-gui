@@ -226,14 +226,36 @@ void iw_circle_set_fill (IwCircle *self, gboolean b)
         clutter_content_invalidate (self->priv->canvas);
 }
 
+/*****************************************************************************/
+
 gboolean iw_circle_is_fill (IwCircle *self)
 {
         g_return_val_if_fail (IW_IS_CIRCLE (self), FALSE);
         return self->priv->fill;
 }
 
+/*****************************************************************************/
+
 static void iw_circle_allocate (ClutterActor *actor, const ClutterActorBox *box, ClutterAllocationFlags flags)
 {
+        float ax, ay;
+        clutter_actor_get_position (actor, &ax, &ay);
+
+        float tx, ty;
+        clutter_actor_get_transformed_position (actor, &tx, &ty);
+
+        ClutterVertex in, out = { 0, 0 };
+        in.x = ax;
+        in.y = ay;
+
+        // clutter_actor_apply_relative_transform_to_point (actor, clutter_actor_get_parent (CLUTTER_ACTOR (self)), &in, &out);
+        clutter_actor_apply_relative_transform_to_point (actor, NULL, &in, &out);
+        // clutter_actor_apply_transform_to_point (CLUTTER_ACTOR (self), &in, &out);
+
+        printf ("position : %f, %f, transformedPosition :  %f, %f, relative %f, %f, %p\n", ax, ay, tx, ty, out.x, out.y, actor);
+
+        /*---------------------------------------------------------------------------*/
+
         ClutterActorBox newBox = *box;
         float dia = fmin (clutter_actor_box_get_width (box), clutter_actor_box_get_height (box));
         newBox.x2 = newBox.x1 + dia;

@@ -257,7 +257,19 @@ void iw_circular_node_get_port_absolute_position (IwCircularNode *self, int i, f
         py += clutter_actor_get_height (port) / 2.0;
 
         float ax, ay;
-        clutter_actor_get_position (CLUTTER_ACTOR (self), &ax, &ay);
+        // clutter_actor_get_position (CLUTTER_ACTOR (self), &ax, &ay);
+        clutter_actor_get_transformed_position (CLUTTER_ACTOR (self), &ax, &ay);
+
+        //        ClutterVertex in, out = {0, 0};
+        //        in.x = ax;
+        //        in.y = ay;
+
+        //        clutter_actor_apply_relative_transform_to_point (CLUTTER_ACTOR (self), clutter_actor_get_parent (CLUTTER_ACTOR (self)), &in, &out);
+        //        // clutter_actor_apply_transform_to_point (CLUTTER_ACTOR (self), &in, &out);
+        //        printf ("%f, %f -> %f, %f\n", ax, ay, out.x, out.y);
+        //        *x = px + out.x;
+        //        *y = py + out.y;
+
         *x = px + ax;
         *y = py + ay;
 }
@@ -344,9 +356,9 @@ void iw_circular_node_set_ports_no (IwCircularNode *self, int i)
                 iw_circle_set_stroke_width (IW_CIRCLE (a), 0);
                 clutter_actor_add_child (CLUTTER_ACTOR (self->priv->mainCircle), a);
                 clutter_actor_set_reactive (a, TRUE);
-//                g_signal_connect (a, "motion-event", G_CALLBACK (portMotionEvent), NULL);
-//                g_signal_connect (a, "button-press-event", G_CALLBACK (portMotionEvent), NULL);
-//                g_signal_connect (a, "button-release-event", G_CALLBACK (portMotionEvent), NULL);
+                //                g_signal_connect (a, "motion-event", G_CALLBACK (portMotionEvent), NULL);
+                //                g_signal_connect (a, "button-press-event", G_CALLBACK (portMotionEvent), NULL);
+                //                g_signal_connect (a, "button-release-event", G_CALLBACK (portMotionEvent), NULL);
         }
 }
 

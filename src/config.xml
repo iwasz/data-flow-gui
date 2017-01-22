@@ -57,7 +57,7 @@
   </CircularNode>
 
   <LineConnector scope="prototype" id="lineConnector" parent="@stage" strokeColor="#d1d1d1ff"
-        fontColor="#8d8d8dff" visible="false" strokeWidth="5" text="0" textEditable="true" >
+        fontColor="#8d8d8dff" visible="false" strokeWidth="5" text="0" textEditable="true" selectable="false">
     <Arc scope="prototype" set-as="arc"/>
   </LineConnector>
 
