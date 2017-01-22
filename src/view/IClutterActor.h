@@ -9,14 +9,14 @@
 #ifndef CLUTTER_ICONTAINER_H
 #define CLUTTER_ICONTAINER_H
 
-#include <core/Object.h>
+#include "primitives/Color.h"
+#include "primitives/Geometry.h"
 #include <ReflectionParserAnnotation.h>
 #include <clutter-gtk/clutter-gtk.h>
+#include <core/Object.h>
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
-#include "primitives/Geometry.h"
-#include "primitives/Color.h"
 
 struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
         virtual ~IClutterActor () {}
@@ -54,6 +54,6 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
         virtual Box getBoundingBox () const = 0;
 };
 
-typedef std::vector <std::shared_ptr <IClutterActor>> ClutterActorVector;
+typedef __tiliae_reflect__ std::vector<IClutterActor *> ClutterActorVector;
 
 #endif // ICONTAINER_H

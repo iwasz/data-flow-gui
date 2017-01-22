@@ -19,8 +19,10 @@
     <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false"/>
   </ShapeDrawStrategy>
 
+  <!-- std::vector of selected actors -->
+  <ClutterActorVector id="selectedActors" />
   <Rectangle id="rectangularSelector" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="10" visible="false" selectable="false"/>
-  <RectangularSelectorStrategy id="selectionDashedRect" rectangularSelector="@rectangularSelector">
+  <RectangularSelectorStrategy id="selectionDashedRect" rectangularSelector="@rectangularSelector" selectedActors="@selectedActors">
     <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="5" visible="false"/>
   </RectangularSelectorStrategy>
 
@@ -54,7 +56,8 @@
     <Console scope="prototype" set-as="node"/>
   </CircularNode>
 
-  <LineConnector scope="prototype" id="lineConnector" parent="@stage" strokeColor="#d1d1d1ff" fontColor="#8d8d8dff" visible="false" strokeWidth="5" text="0" textEditable="true">
+  <LineConnector scope="prototype" id="lineConnector" parent="@stage" strokeColor="#d1d1d1ff"
+        fontColor="#8d8d8dff" visible="false" strokeWidth="5" text="0" textEditable="true" >
     <Arc scope="prototype" set-as="arc"/>
   </LineConnector>
 
@@ -86,6 +89,7 @@
       </Tool>
     </ToolMap>
     <ref set-as="rectangularSelector" bean="rectangularSelector"/>
+    <ref set-as="selectedActors" bean="selectedActors"/>
   </MainController>
 
   <Stage id="stage" fillColor="#ecececff"/>

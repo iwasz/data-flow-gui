@@ -10,7 +10,21 @@
 
 /*****************************************************************************/
 
-void AbstractActor::setParent (IClutterActor *parent) { clutter_actor_add_child (parent->getActor (), self); }
+void AbstractActor::setParent (IClutterActor *parent)
+{
+
+        ClutterActor *oldParent;
+        if ((oldParent = clutter_actor_get_parent (self)) != nullptr) {
+                g_object_ref (self);
+                clutter_actor_remove_child (oldParent, self);
+        }
+
+        clutter_actor_add_child (parent->getActor (), self);
+
+        if (oldParent) {
+                g_object_unref (self);
+        }
+}
 
 /*****************************************************************************/
 

@@ -70,8 +70,8 @@ struct MainController::Impl {
                 IFactoryStrategy *currentFactoryStrategy = nullptr;
         } vars;
 
-        // Maybe other name and element type?
-        ClutterActorVector actors;
+        ClutterActorVector *selectedActors = nullptr;
+
 };
 
 /*****************************************************************************/
@@ -161,7 +161,6 @@ void MainController::Impl::configureMachine ()
 
                         if (a) {
                                 a->setVisible (true);
-                                actors.push_back (std::shared_ptr <IClutterActor> (a));
                         }
 
                         return true;
@@ -308,6 +307,14 @@ Rectangle *MainController::getRectangularSelector () const { return impl->rectan
 /*****************************************************************************/
 
 void MainController::setRectangularSelector (Rectangle *value) { impl->rectangularSelector = value; }
+
+/*****************************************************************************/
+
+ClutterActorVector *MainController::getSelectedActors () { return impl->selectedActors; }
+
+/*****************************************************************************/
+
+void MainController::setSelectedActors (ClutterActorVector *value) { impl->selectedActors = value; }
 
 /****************************************************************************/
 /* State machine low lewel deps.                                            */

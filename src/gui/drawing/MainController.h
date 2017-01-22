@@ -10,6 +10,7 @@
 #define MAIN_CONTROLLER_H_
 
 #include "primitives/Geometry.h"
+#include "view/IClutterActor.h"
 #include <ReflectionParserAnnotation.h>
 #include <controller/AbstractController.h>
 #include <map>
@@ -63,6 +64,9 @@ public:
 
         Rectangle *getRectangularSelector () const;
         void setRectangularSelector (Rectangle *value);
+
+        ClutterActorVector *getSelectedActors ();
+        void setSelectedActors (ClutterActorVector *value);
 
 private:
         ToolMap tools;
