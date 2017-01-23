@@ -21,7 +21,7 @@ public:
         virtual ~RectangularSelectorStrategy () {}
         virtual void onObjectCreated (IClutterActor *a);
 
-        void onButtonPress (Point p, Core::Object *o);
+        void onButtonPress (Event const &e);
 
         Rectangle *getRectangularSelector () const { return rectangularSelector; }
         void setRectangularSelector (Rectangle *value) { rectangularSelector = value; }

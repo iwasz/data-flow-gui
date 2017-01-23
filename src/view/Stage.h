@@ -14,8 +14,7 @@
 #include <clutter-gtk/clutter-gtk.h>
 #include <string>
 
-#define SCALE_SURFACE_WIDTH 10000
-#define SCALE_SURFACE_HEIGHT 10000
+class ScaleLayer;
 
 class __tiliae_reflect__ Stage : public AbstractActor {
 public:
@@ -24,18 +23,17 @@ public:
 
         GtkWidget *getClutterWidget () { return clutterWidget; }
         void setParent (IClutterActor *parent) { throw Core::Exception ("Not implemented"); }
-        virtual ClutterActor *getActor () { return scale; }
 
         virtual Color getFillColor () const;
         virtual void setFillColor (const Color &value);
+//        virtual bool isContainter () const { return true; }
 
-        void zoomIn ();
-        void zoomOut ();
-        void zoom (double f);
+        ScaleLayer *getScaleLayer () const { return scaleLayer; }
+        void setScaleLayer (ScaleLayer *value);
 
 private:
         GtkWidget *clutterWidget;
-        ClutterActor *scale;
+        ScaleLayer *scaleLayer;
 };
 
 #endif // STAGE_H

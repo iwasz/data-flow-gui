@@ -8,25 +8,25 @@
 
 #include "DashedLineStrategy.h"
 
-void DashedLineStrategy::onButtonPress (Point p, Object *o)
+void DashedLineStrategy::onButtonPress (const Event &e)
 {
-        startPoint = p;
+        startPoint = e.positionParentCoords;
         endPoint = Point ();
-        line->setPointA (startPoint);
-        line->setPointB (startPoint);
+        line->setPointA (e.positionStageCoords);
+        line->setPointB (e.positionStageCoords);
         line->setVisible (true);
 }
 
 /*****************************************************************************/
 
-void DashedLineStrategy::onMotion (Point p, Object *o) { line->setPointB (p); }
+void DashedLineStrategy::onMotion (const Event &e) { line->setPointB (e.positionStageCoords); }
 
 /*****************************************************************************/
 
-bool DashedLineStrategy::onButtonRelease (Point p, Object *o)
+bool DashedLineStrategy::onButtonRelease (const Event &e)
 {
         line->setVisible (false);
-        endPoint = p;
+        endPoint = e.positionParentCoords;
         return startPoint.x != endPoint.x || startPoint.y != endPoint.y;
 }
 

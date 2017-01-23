@@ -252,7 +252,8 @@ static void iw_circle_allocate (ClutterActor *actor, const ClutterActorBox *box,
         clutter_actor_apply_relative_transform_to_point (actor, NULL, &in, &out);
         // clutter_actor_apply_transform_to_point (CLUTTER_ACTOR (self), &in, &out);
 
-        printf ("position : %f, %f, transformedPosition :  %f, %f, relative %f, %f, %p\n", ax, ay, tx, ty, out.x, out.y, actor);
+        // TODO!!!! to się wywołuje dla każdego koła na scenie (nawet tych, których nie ruszam).
+        // printf ("position : %f, %f, transformedPosition :  %f, %f, relative %f, %f, %p\n", ax, ay, tx, ty, out.x, out.y, actor);
 
         /*---------------------------------------------------------------------------*/
 

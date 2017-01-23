@@ -63,10 +63,10 @@ void RectangularSelectorStrategy::onObjectCreated (IClutterActor *a)
 
 /*****************************************************************************/
 
-void RectangularSelectorStrategy::onButtonPress (Point p, Core::Object *o)
+void RectangularSelectorStrategy::onButtonPress (const Event &e)
 {
         unselectAll ();
-        ShapeDrawStrategy::onButtonPress (p, o);
+        ShapeDrawStrategy::onButtonPress (e);
 }
 
 /*****************************************************************************/

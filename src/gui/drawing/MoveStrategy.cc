@@ -6,20 +6,21 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "view/IClutterActor.h"
-#include "view/Stage.h"
 #include "MoveStrategy.h"
+#include "view/IClutterActor.h"
+#include "view/ScaleLayer.h"
+#include "view/Stage.h"
 
 /*****************************************************************************/
 
-void MoveStrategy::onEnter (Point p, Core::Object *o)
+void MoveStrategy::onEnter (Event const &e)
 {
         IClutterActor *act;
-        if (!(act = dynamic_cast<IClutterActor *> (o))) {
+        if (!(act = dynamic_cast<IClutterActor *> (e.object))) {
                 return;
         }
 
-        if (dynamic_cast<Stage *> (act)) {
+        if (dynamic_cast<ScaleLayer *> (act) || dynamic_cast<Stage *> (act)) {
                 return;
         }
 
@@ -30,7 +31,7 @@ void MoveStrategy::onEnter (Point p, Core::Object *o)
 
 /*****************************************************************************/
 
-void MoveStrategy::onLeave (Point p, Core::Object *o)
+void MoveStrategy::onLeave (const Event &e)
 {
         if (movingActor) {
                 clutter_actor_remove_action (movingActor, dragAction);

@@ -11,13 +11,13 @@
 #include <core/variant/Cast.h>
 #include <iostream>
 
-Core::Variant ContainerFactoryStrategy::run () { return container->getBean (beanName); }
+Core::Variant ContainerFactoryStrategy::run (Event const &e) { return container->getBean (beanName); }
 
 /*****************************************************************************/
 
-Core::Variant NodeContainerFactoryStrategy::run ()
+Core::Variant NodeContainerFactoryStrategy::run (Event const &e)
 {
-        Core::Variant v = ContainerFactoryStrategy::run ();
+        Core::Variant v = ContainerFactoryStrategy::run (e);
 
         if (!occast<INodeView *> (v)) {
                 throw Core::Exception ("NodeContainerFactoryStrategy::run can't cast to INodeView *.");

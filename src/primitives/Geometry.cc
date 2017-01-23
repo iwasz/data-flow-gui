@@ -11,6 +11,15 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/tokenizer.hpp>
 #include <core/Exception.h>
+#include <ostream>
+
+/*****************************************************************************/
+
+std::ostream &operator<< (std::ostream &o, Point const &p)
+{
+        o << "[" << p.x << ", " << p.y << "]";
+        return o;
+}
 
 /*****************************************************************************/
 

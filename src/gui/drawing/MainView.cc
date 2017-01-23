@@ -8,6 +8,8 @@
 
 #include "MainView.h"
 #include "MainController.h"
+#include "view/IClutterActor.h"
+#include "view/ScaleLayer.h"
 #include "view/abstractActor.h"
 #include "view/clutter/iw_circle.h"
 #include "view/clutter/iw_circular_node.h"
@@ -118,16 +120,14 @@ void MainView::loadUi (GtkForms::App *app)
 
 /*****************************************************************************/
 
-typedef std::pair<Point, Core::Object *> EventData;
-
-EventData processEvent (ClutterStage *stage, ClutterEvent *event)
+void processEvent (ClutterStage *stage, ClutterEvent *ev, Event *event)
 {
         gfloat x = 0;
         gfloat y = 0;
-        clutter_event_get_coords (event, &x, &y);
+        clutter_event_get_coords (ev, &x, &y);
 
-        //        ClutterActor *actor = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
-        ClutterActor *actor = clutter_event_get_source (event);
+        // ClutterActor *actor = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
+        ClutterActor *actor = clutter_event_get_source (ev);
         Core::Object *cActor = nullptr;
 
         do {
@@ -139,7 +139,48 @@ EventData processEvent (ClutterStage *stage, ClutterEvent *event)
 
         } while ((actor = clutter_actor_get_parent (actor)) != CLUTTER_ACTOR (stage));
 
-        return EventData (Point (x, y), cActor);
+        event->positionStageCoords = Point (x, y);
+        event->object = cActor;
+
+        /*---------------------------------------------------------------------------*/
+
+        Core::Object *obj = nullptr;
+        IClutterActor *firstContainer = nullptr;
+        actor = clutter_event_get_source (ev);
+
+        do {
+                obj = static_cast<Core::Object *> (g_object_get_data (G_OBJECT (actor), CPP_IMPLEMENTATION_KEY));
+
+                if (!obj) {
+                        continue;
+                }
+
+                firstContainer = dynamic_cast<IClutterActor *> (obj);
+
+                if (firstContainer && firstContainer->isContainter ()) {
+                        break;
+                }
+
+        } while ((actor = clutter_actor_get_parent (actor)) != nullptr && actor != CLUTTER_ACTOR (stage));
+
+        if (firstContainer) {
+                ClutterActor *firstContainerActor = firstContainer->getActor ();
+                clutter_actor_transform_stage_point (firstContainerActor, event->positionStageCoords.x, event->positionStageCoords.y,
+                                                     &event->positionParentCoords.x, &event->positionParentCoords.y);
+        }
+        else {
+                event->positionParentCoords = event->positionStageCoords;
+        }
+
+        // std::cerr << event.positionScaleCoords << std::endl;
+
+        //        ClutterVertex in, out = { 0, 0 };
+        //        in.x = event.positionStageCoords.x;
+        //        in.y = event.positionStageCoords.y;
+
+        // clutter_actor_apply_relative_transform_to_point (actor, clutter_actor_get_parent (CLUTTER_ACTOR (self)), &in, &out);
+        //        clutter_actor_apply_relative_transform_to_point (actor, NULL, &in, &out);
+        //        // clutter_actor_apply_transform_to_point (CLUTTER_ACTOR (self), &in, &out);
 }
 
 /*****************************************************************************/
@@ -147,11 +188,9 @@ EventData processEvent (ClutterStage *stage, ClutterEvent *event)
 void on_stage_button_press (ClutterStage *stage, ClutterEvent *ev, gpointer data)
 {
         MainController *mc = static_cast<MainController *> (data);
-        EventData t = processEvent (stage, ev);
 
         static Event event;
-        event.p = t.first;
-        event.object = t.second;
+        processEvent (stage, ev, &event);
         event.button = clutter_event_get_button (ev);
 
         if (event.button == 2) {
@@ -167,11 +206,9 @@ void on_stage_button_press (ClutterStage *stage, ClutterEvent *ev, gpointer data
 void on_stage_button_release (ClutterStage *stage, ClutterEvent *ev, gpointer data)
 {
         MainController *mc = static_cast<MainController *> (data);
-        EventData t = processEvent (stage, ev);
 
         static Event event;
-        event.p = t.first;
-        event.object = t.second;
+        processEvent (stage, ev, &event);
         event.button = clutter_event_get_button (ev);
 
         if (event.button == 2) {
@@ -187,11 +224,9 @@ void on_stage_button_release (ClutterStage *stage, ClutterEvent *ev, gpointer da
 void on_stage_motion (ClutterStage *stage, ClutterEvent *ev, gpointer data)
 {
         MainController *mc = static_cast<MainController *> (data);
-        EventData t = processEvent (stage, ev);
 
         static Event event;
-        event.p = t.first;
-        event.object = t.second;
+        processEvent (stage, ev, &event);
 
         if (clutter_event_get_state (ev) & CLUTTER_BUTTON1_MASK) {
                 event.button = 1;
@@ -211,13 +246,11 @@ void on_stage_motion (ClutterStage *stage, ClutterEvent *ev, gpointer data)
 void on_stage_enter (ClutterStage *stage, ClutterEvent *ev, gpointer data)
 {
         MainController *mc = static_cast<MainController *> (data);
-        EventData t = processEvent (stage, ev);
+        static Event event;
+        processEvent (stage, ev, &event);
 
-        if (clutter_event_get_source (ev) != CLUTTER_ACTOR (stage)) {
-                static Event event;
-                event.p = t.first;
-                event.object = t.second;
-                event.button = clutter_event_get_button (ev);
+        ClutterActor *actor = clutter_event_get_source (ev);
+        if (actor != CLUTTER_ACTOR (stage) && actor != mc->getStage ()->getScaleLayer ()->getActor ()) {
                 mc->pushMessage ("stage.enter", &event);
         }
 }
@@ -227,9 +260,11 @@ void on_stage_enter (ClutterStage *stage, ClutterEvent *ev, gpointer data)
 void on_stage_leave (ClutterStage *stage, ClutterEvent *ev, gpointer data)
 {
         MainController *mc = static_cast<MainController *> (data);
-        EventData t = processEvent (stage, ev);
+        static Event event;
+        processEvent (stage, ev, &event);
 
-        if (clutter_event_get_source (ev) != CLUTTER_ACTOR (stage)) {
+        ClutterActor *actor = clutter_event_get_source (ev);
+        if (actor != CLUTTER_ACTOR (stage) && actor != mc->getStage ()->getScaleLayer ()->getActor ()) {
 #if 0
                 gfloat x = 0;
                 gfloat y = 0;
@@ -238,10 +273,6 @@ void on_stage_leave (ClutterStage *stage, ClutterEvent *ev, gpointer data)
                 std::cerr << "leave : Core::Obj " << typeid (*t.second).name () << ", pointer_at " << actor << ", source " << clutter_event_get_source (event)
                           << std::endl;
 #endif
-                static Event event;
-                event.p = t.first;
-                event.object = t.second;
-                event.button = clutter_event_get_button (ev);
                 mc->pushMessage ("stage.leave", &event);
         }
 }
@@ -253,14 +284,19 @@ gboolean on_stage_scroll (ClutterActor *actor, ClutterEvent *event, gpointer use
         ClutterScrollDirection direction;
         direction = clutter_event_get_scroll_direction (event);
         Stage *stage = static_cast<Stage *> (userData);
+        ScaleLayer *scale = stage->getScaleLayer ();
+
+        if (!scale) {
+                return CLUTTER_EVENT_PROPAGATE;
+        }
 
         switch (direction) {
         case CLUTTER_SCROLL_UP:
-                stage->zoomIn ();
+                scale->zoomIn ();
                 break;
 
         case CLUTTER_SCROLL_DOWN:
-                stage->zoomOut ();
+                scale->zoomOut ();
                 break;
 
         case CLUTTER_SCROLL_SMOOTH: {
@@ -268,10 +304,10 @@ gboolean on_stage_scroll (ClutterActor *actor, ClutterEvent *event, gpointer use
                 clutter_event_get_scroll_delta (event, &dx, &dy);
 
                 if (dy > 0) {
-                        stage->zoomOut ();
+                        scale->zoomOut ();
                 }
                 else if (dy < 0) {
-                        stage->zoomIn ();
+                        scale->zoomIn ();
                 }
         } break;
 

@@ -9,6 +9,7 @@
 #ifndef MAIN_CONTROLLER_H_
 #define MAIN_CONTROLLER_H_
 
+#include "Event.h"
 #include "primitives/Geometry.h"
 #include "view/Stage.h"
 #include <ReflectionParserAnnotation.h>
@@ -32,18 +33,6 @@ struct __tiliae_reflect__ Tool {
 };
 
 typedef __tiliae_reflect__ std::map<std::string, Tool> ToolMap;
-
-
-/**
- * Additional arguments for state machine. Pointer to this struct is passed
- * whenever I need some additional data in the state machine actions.
- */
-struct Event {
-        std::string tool;
-        Point p;
-        Core::Object *object = nullptr;
-        int button = -1;
-};
 
 /**
  * Controller for drawing new objects like nodes, arcs and the like.
@@ -79,6 +68,7 @@ public:
 
         Stage *getStage () const;
         void setStage (Stage *value);
+
 private:
         ToolMap tools;
 

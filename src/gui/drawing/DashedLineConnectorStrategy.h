@@ -18,9 +18,10 @@
 class __tiliae_reflect__ DashedLineConnectorStrategy : public IDrawStrategy {
 public:
         virtual ~DashedLineConnectorStrategy () {}
-        virtual void onButtonPress (Point p, Core::Object *o);
-        virtual void onMotion (Point p, Core::Object *o);
-        virtual bool onButtonRelease (Point p, Core::Object *o);
+
+        virtual void onButtonPress (Event const &e);
+        virtual void onMotion (Event const &e);
+        virtual bool onButtonRelease (Event const &e);
         virtual void onObjectCreated (IClutterActor *a);
 
         Line *getLine () const { return line; }

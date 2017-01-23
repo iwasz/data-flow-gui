@@ -16,9 +16,10 @@
 class __tiliae_reflect__ ShapeDrawStrategy : public IDrawStrategy {
 public:
         virtual ~ShapeDrawStrategy () {}
-        virtual void onButtonPress (Point p, Core::Object *o);
-        virtual void onMotion (Point p, Core::Object *o);
-        virtual bool onButtonRelease (Point p, Core::Object *o);
+
+        virtual void onButtonPress (Event const &e);
+        virtual void onMotion (Event const &e);
+        virtual bool onButtonRelease (Event const &e);
         virtual void onObjectCreated (IClutterActor *a);
 
         AbstractActor *getActor () const { return actor; }
@@ -28,10 +29,11 @@ public:
         void setMinSize (const Dimension &value) { minSize = value; }
 
 protected:
-        AbstractActor *actor = nullptr;
+        AbstractActor *actor = nullptr; // Actor must be on stage, not on scale.
         Point startPoint;
         Point endPoint;
         Dimension minSize;
+        Point startPointActor; // In stage coords.
 };
 
 #endif // DASHEDCIRCLESTRATEGY_H

@@ -11,30 +11,30 @@
 #include <core/Core.h>
 #include <view/INodeView.h>
 
-void DashedLineConnectorStrategy::onButtonPress (Point p, Object *o)
+void DashedLineConnectorStrategy::onButtonPress (Event const &e)
 {
-        startPoint = p;
+        startPoint = e.positionParentCoords;
         endPoint = Point ();
 
-        startObject = o;
+        startObject = e.object;
         endObject = nullptr;
 
-        line->setPointA (startPoint);
-        line->setPointB (startPoint);
+        line->setPointA (e.positionStageCoords);
+        line->setPointB (e.positionStageCoords);
         line->setVisible (true);
 }
 
 /*****************************************************************************/
 
-void DashedLineConnectorStrategy::onMotion (Point p, Object *o) { line->setPointB (p); }
+void DashedLineConnectorStrategy::onMotion (const Event &e) { line->setPointB (e.positionStageCoords); }
 
 /*****************************************************************************/
 
-bool DashedLineConnectorStrategy::onButtonRelease (Point p, Object *o)
+bool DashedLineConnectorStrategy::onButtonRelease (const Event &e)
 {
         line->setVisible (false);
-        endPoint = p;
-        endObject = o;
+        endPoint = e.positionParentCoords;
+        endObject = e.object;
         return startPoint.x != endPoint.x || startPoint.y != endPoint.y;
 }
 

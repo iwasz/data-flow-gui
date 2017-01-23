@@ -48,6 +48,7 @@ public:
         virtual void setFillColor (const Color &value) { throw Core::Exception ("Not implemented"); }
 
         virtual Box getBoundingBox () const;
+        virtual bool isContainter () const { return false; }
 
         /// Stores this into self as g_object value.
         virtual void setCppImplementation ();

@@ -9,18 +9,20 @@
 #ifndef IDRAWSTRATEGY_H
 #define IDRAWSTRATEGY_H
 
+#include "Event.h"
+#include "view/IClutterActor.h"
 #include <ReflectionParserAnnotation.h>
 #include <core/Object.h>
-#include "view/IClutterActor.h"
 
 struct __tiliae_reflect__ IDrawStrategy : public Core::Object {
         virtual ~IDrawStrategy () {}
+
         /// When mouse mutton is pressed for the first time after the tool was selected.
-        virtual void onButtonPress (Point p, Core::Object *o) = 0;
+        virtual void onButtonPress (Event const &e) = 0;
         /// Mouse motion while button still pressed.
-        virtual void onMotion (Point p, Core::Object *o) = 0;
+        virtual void onMotion (Event const &e) = 0;
         /// Button released. Returns if creating an object with such dimensions makes even sense.
-        virtual bool onButtonRelease (Point p, Core::Object *o) = 0;
+        virtual bool onButtonRelease (Event const &e) = 0;
         /**
          * This get called after all 3 above, and after a factory kicked in, and created an *a.
          * It's purpose is to set *a it's final shape.

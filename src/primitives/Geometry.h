@@ -20,6 +20,8 @@ struct Point {
         float y;
 };
 
+extern std::ostream &operator<< (std::ostream &o, Point const &p);
+
 struct __tiliae_reflect__ Dimension {
         Dimension () : width (0), height (0) {}
         Dimension (float w, float h) : width (w), height (h) {}

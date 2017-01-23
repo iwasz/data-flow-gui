@@ -11,6 +11,7 @@
 #include "IFactoryStrategy.h"
 #include "MoveStrategy.h"
 #include "view/Rectangle.h"
+#include "view/ScaleLayer.h"
 #include "view/Stage.h"
 #include <App.h>
 #include <Logging.h>
@@ -100,11 +101,10 @@ void MainController::Impl::configureMachine ()
                 ->transition (MOVE)->when (eq ("stage.enter"))
                 ->transition (STAGE_MOVE)->when (eq ("stage.press.scroll"))
                 ->transition (DRAW)->when (eq ("stage.press"))->then ([this] (const char *, void *arg) {
-                        Event *args = static_cast <Event *> (arg);
                         vars.currentTool = "select";
                         vars.currentDrawStrategy = (*tools)[vars.currentTool].drawStrategy;
                         vars.currentFactoryStrategy = (*tools)[vars.currentTool].factoryStrategy;
-                        vars.currentDrawStrategy->onButtonPress (args->p, args->object);
+                        vars.currentDrawStrategy->onButtonPress (*static_cast <Event *> (arg));
                         return true;
                 });
 
@@ -127,8 +127,7 @@ void MainController::Impl::configureMachine ()
                 ->transition (TOOL_SELECTED)->when (eq ("selected.tool"))
                 ->transition (IDLE)->when (eq ("selected.select"))
                 ->transition (DRAW)->when (eq ("stage.press"))->then ([this] (const char *, void *arg) {
-                        Event *args = static_cast <Event *> (arg);
-                        vars.currentDrawStrategy->onButtonPress (args->p, args->object);
+                        vars.currentDrawStrategy->onButtonPress (*static_cast <Event *> (arg));
                         return true;
                 });
 
@@ -136,20 +135,19 @@ void MainController::Impl::configureMachine ()
 
         machine.state (DRAW)
                 ->transition (DRAW)->when (eq ("stage.motion"))->then ([this] (const char *, void *arg) {
-                        Event *args = static_cast <Event *> (arg);
-                        vars.currentDrawStrategy->onMotion (args->p, args->object);
+                        vars.currentDrawStrategy->onMotion (*static_cast <Event *> (arg));
                         return true;
                 })
                 ->transition (IDLE)->when (eq ("stage.release"))->then ([this] (const char *, void *arg) {
                         Event *args = static_cast <Event *> (arg);
 
-                        if (!vars.currentDrawStrategy->onButtonRelease (args->p, args->object)) {
+                        if (!vars.currentDrawStrategy->onButtonRelease (*args)) {
                                 return true;
                         }
 
                         IClutterActor *a = nullptr;
                         if (vars.currentFactoryStrategy) {
-                                Core::Variant v = vars.currentFactoryStrategy->run ();
+                                Core::Variant v = vars.currentFactoryStrategy->run (*args);
                                 a = ocast <IClutterActor *> (v);
                         }
 
@@ -166,13 +164,11 @@ void MainController::Impl::configureMachine ()
 
         machine.state (MOVE)
                 ->entry ([this] (const char *, void *arg) {
-                        Event *args = static_cast <Event *> (arg);
-                        moveStrategy.onEnter (args->p, args->object);
+                        moveStrategy.onEnter (*static_cast <Event *> (arg));
                         return true;
                 })
                 ->transition (IDLE)->when (eq ("stage.leave"))->then ([this] (const char *, void *arg) {
-                        Event *args = static_cast <Event *> (arg);
-                        moveStrategy.onLeave (args->p, args->object);
+                        moveStrategy.onLeave (*static_cast <Event *> (arg));
                         return true;
                 });
 
@@ -181,18 +177,18 @@ void MainController::Impl::configureMachine ()
         machine.state (STAGE_MOVE)
                 ->entry ([this] (const char *, void *arg) {
                         Event *event = static_cast <Event *> (arg);
-                        vars.last = event->p;
+                        vars.last = event->positionStageCoords;
                         return true;
                 })
                 ->transition (STAGE_MOVE)->when (eq ("stage.motion"))->then ([this] (const char *, void *arg) {
                         Event *event = static_cast <Event *> (arg);
 
                         Point n;
-                        n.x = event->p.x - vars.last.x;
-                        n.y = event->p.y - vars.last.y;
-                        clutter_actor_move_by (stage->getActor (), n.x, n.y);
+                        n.x = event->positionStageCoords.x - vars.last.x;
+                        n.y = event->positionStageCoords.y - vars.last.y;
+                        clutter_actor_move_by (stage->getScaleLayer ()->getActor (), n.x, n.y);
 
-                        vars.last = event->p;
+                        vars.last = event->positionStageCoords;
                         return true;
                 })
                 ->transition (IDLE)->when (eq ("stage.release.scroll"));
@@ -269,13 +265,13 @@ void MainController::onNewNodeToolClicked (std::string const &name)
 void MainController::onZoom (std::string const &action)
 {
         if (action == "in") {
-                impl->stage->zoomIn ();
+                impl->stage->getScaleLayer ()->zoomIn ();
         }
         else if (action == "out") {
-                impl->stage->zoomOut ();
+                impl->stage->getScaleLayer ()->zoomOut ();
         }
         else if (action == "1") {
-                impl->stage->zoom (1.0);
+                impl->stage->getScaleLayer ()->zoom (1.0);
         }
 }
 
@@ -327,8 +323,11 @@ uint32_t getCurrentMs ()
 
 /*****************************************************************************/
 
+#if 0
 void transitionPrint (uint8_t name) { BOOST_LOG (lg) << "State changed to [" << (int)name << "]"; }
-// void transitionPrint (uint8_t) {}
+#else
+void transitionPrint (uint8_t) {}
+#endif
 
 /*****************************************************************************/
 

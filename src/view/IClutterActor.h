@@ -51,6 +51,8 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
         virtual Color getFillColor () const = 0;
         virtual void setFillColor (const Color &value) = 0;
 
+        virtual bool isContainter () const = 0;
+
         virtual Box getBoundingBox () const = 0;
 };
 

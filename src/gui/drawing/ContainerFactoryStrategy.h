@@ -20,7 +20,7 @@
 class __tiliae_reflect__ ContainerFactoryStrategy : public IFactoryStrategy {
 public:
         virtual ~ContainerFactoryStrategy () {}
-        virtual Core::Variant run () __tiliae_no_reflect__;
+        virtual Core::Variant run (Event const &e) __tiliae_no_reflect__;
 
         std::string const &getBeanName () const { return beanName; }
         void setBeanName (const std::string &value) { beanName = value; }
@@ -41,7 +41,7 @@ private:
 class __tiliae_reflect__ NodeContainerFactoryStrategy : public ContainerFactoryStrategy {
 public:
         virtual ~NodeContainerFactoryStrategy () {}
-        virtual Core::Variant run () __tiliae_no_reflect__;
+        virtual Core::Variant run (const Event &e) __tiliae_no_reflect__;
 
         flow::Program *getProgram () const { return program; }
         void setProgram (flow::Program *value) { program = value; }

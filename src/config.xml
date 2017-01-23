@@ -34,29 +34,29 @@
     <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="3"/>
   </DashedLineConnectorStrategy>
 
-  <Circle scope="prototype" id="circle" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>
-  <Rectangle scope="prototype" id="rect" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>
-  <Line scope="prototype" id="line" parent="@stage" strokeColor="#0096c6c9" visible="false" strokeWidth="1"/>
+  <Circle scope="prototype" id="circle" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>
+  <Rectangle scope="prototype" id="rect" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>
+  <Line scope="prototype" id="line" parent="@scale" strokeColor="#0096c6c9" visible="false" strokeWidth="1"/>
 
-  <CircularNode scope="prototype" id="addNode" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
+  <CircularNode scope="prototype" id="addNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
     <InputPort scope="prototype" add-to="ports" angle="2.6415" color="#d1d1d1ff" size="20"/>
     <InputPort scope="prototype" add-to="ports" angle="3.6415" color="#d1d1d1ff" size="20"/>
     <OutputPort scope="prototype" add-to="ports" angle="6.283" color="#8d8d8dff" size="20"/>
     <Add scope="prototype" set-as="node"/>
   </CircularNode>
 
-  <CircularNode scope="prototype" id="copyNode" parent="@stage" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
+  <CircularNode scope="prototype" id="copyNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
     <InputPort scope="prototype" add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20"/>
     <OutputPort scope="prototype" add-to="ports" angle="6.283" color="#8d8d8dff" size="20"/>
     <Copy scope="prototype" set-as="node"/>
   </CircularNode>
 
-  <CircularNode scope="prototype" id="consoleNode" parent="@stage" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">
+  <CircularNode scope="prototype" id="consoleNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">
     <InputPort scope="prototype" add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20"/>
     <Console scope="prototype" set-as="node"/>
   </CircularNode>
 
-  <LineConnector scope="prototype" id="lineConnector" parent="@stage" strokeColor="#d1d1d1ff"
+  <LineConnector scope="prototype" id="lineConnector" parent="@scale" strokeColor="#d1d1d1ff"
         fontColor="#8d8d8dff" visible="false" strokeWidth="5" text="0" textEditable="true" selectable="false">
     <Arc scope="prototype" set-as="arc"/>
   </LineConnector>
@@ -93,7 +93,9 @@
     <ref set-as="stage" bean="stage"/>
   </MainController>
 
-  <Stage id="stage" fillColor="#ecececff"/>
+  <!-- Setting parent to stage would cause cyclic reference. Stage will set parent in C++ -->
+  <ScaleLayer id="scale" />
+  <Stage id="stage" fillColor="#ecececff" scaleLayer="@scale"/>
 
   <MainView id="mainView" file="ui/main-palette.ui" stage="@stage" loadWholeFile="true"/>
 </beans>

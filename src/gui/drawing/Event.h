@@ -5,17 +5,24 @@
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
-#ifndef IFACTORYSTRATEGY_H
-#define IFACTORYSTRATEGY_H
 
-#include "Event.h"
-#include <ReflectionParserAnnotation.h>
+#ifndef DATA_FLOW_DRAWING_EVENT_H
+#define DATA_FLOW_DRAWING_EVENT_H
+
 #include <core/Object.h>
-#include <core/variant/Variant.h>
+#include <primitives/Geometry.h>
+#include <string>
 
-struct __tiliae_reflect__ IFactoryStrategy : public Core::Object {
-        virtual ~IFactoryStrategy () {}
-        virtual Core::Variant run (Event const &e) __tiliae_no_reflect__ = 0;
+/**
+ * Additional arguments for state machine. Pointer to this struct is passed
+ * whenever I need some additional data in the state machine actions.
+ */
+struct Event {
+        std::string tool;
+        Point positionStageCoords;
+        Point positionParentCoords;
+        Core::Object *object = nullptr;
+        int button = -1;
 };
 
-#endif // IFACTORYSTRATEGY_H
+#endif // EVENT_H

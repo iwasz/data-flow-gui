@@ -8,26 +8,27 @@
 
 #include "ShapeDrawStrategy.h"
 
-void ShapeDrawStrategy::onButtonPress (Point p, Core::Object *o)
+void ShapeDrawStrategy::onButtonPress (const Event &e)
 {
-        startPoint = p;
+        startPoint = e.positionParentCoords;
         endPoint = Point ();
 
-        actor->setPosition (p);
+        startPointActor = e.positionStageCoords;
+        actor->setPosition (startPointActor);
         actor->setSize (Dimension ());
         actor->setVisible (true);
 }
 
 /*****************************************************************************/
 
-void ShapeDrawStrategy::onMotion (Point p, Core::Object *o) { actor->setSize (p - startPoint); }
+void ShapeDrawStrategy::onMotion (const Event &e) { actor->setSize (e.positionStageCoords - startPointActor); }
 
 /*****************************************************************************/
 
-bool ShapeDrawStrategy::onButtonRelease (Point p, Object *o)
+bool ShapeDrawStrategy::onButtonRelease (const Event &e)
 {
         actor->setVisible (false);
-        endPoint = p;
+        endPoint = e.positionParentCoords;
         return (startPoint.x != endPoint.x && startPoint.y != endPoint.y) || (minSize.height && minSize.width);
 }
 
