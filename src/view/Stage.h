@@ -14,9 +14,11 @@
 #include <clutter-gtk/clutter-gtk.h>
 #include <string>
 
+#define SCALE_SURFACE_WIDTH 10000
+#define SCALE_SURFACE_HEIGHT 10000
+
 class __tiliae_reflect__ Stage : public AbstractActor {
 public:
-
         Stage ();
         virtual ~Stage () {}
 
@@ -32,7 +34,6 @@ public:
         void zoom (double f);
 
 private:
-
         GtkWidget *clutterWidget;
         ClutterActor *scale;
 };

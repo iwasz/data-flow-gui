@@ -19,12 +19,13 @@
 
 /*****************************************************************************/
 
-static void on_stage_button_press (ClutterStage *stage, ClutterEvent *event, gpointer data);
-static void on_stage_button_release (ClutterStage *stage, ClutterEvent *event, gpointer data);
-static void on_stage_motion (ClutterStage *stage, ClutterEvent *event, gpointer data);
-static void on_stage_enter (ClutterStage *stage, ClutterEvent *event, gpointer data);
-static void on_stage_leave (ClutterStage *stage, ClutterEvent *event, gpointer data);
-static gboolean button_callback_clutter (GtkWidget *widget, GdkEvent *event, gpointer callback_data);
+void on_stage_button_press (ClutterStage *stage, ClutterEvent *event, gpointer data);
+void on_stage_button_release (ClutterStage *stage, ClutterEvent *event, gpointer data);
+void on_stage_motion (ClutterStage *stage, ClutterEvent *event, gpointer data);
+void on_stage_enter (ClutterStage *stage, ClutterEvent *event, gpointer data);
+void on_stage_leave (ClutterStage *stage, ClutterEvent *event, gpointer data);
+gboolean on_stage_scroll (ClutterActor *actor, ClutterEvent *event, gpointer userData);
+gboolean button_callback_clutter (GtkWidget *widget, GdkEvent *event, gpointer callback_data);
 
 /*****************************************************************************/
 
@@ -54,6 +55,7 @@ void MainView::loadUi (GtkForms::App *app)
         g_signal_connect (stage->getActor (), "motion-event", G_CALLBACK (on_stage_motion), mc);
         g_signal_connect (stage->getActor (), "enter-event", G_CALLBACK (on_stage_enter), mc);
         g_signal_connect (stage->getActor (), "leave-event", G_CALLBACK (on_stage_leave), mc);
+        g_signal_connect (stage->getActor (), "scroll-event", G_CALLBACK (on_stage_scroll), stage);
         g_signal_connect (stage->getClutterWidget (), "button_press_event", G_CALLBACK (button_callback_clutter), nullptr);
 
         /*---------------------------------------------------------------------------*/
@@ -142,67 +144,92 @@ EventData processEvent (ClutterStage *stage, ClutterEvent *event)
 
 /*****************************************************************************/
 
-void on_stage_button_press (ClutterStage *stage, ClutterEvent *event, gpointer data)
+void on_stage_button_press (ClutterStage *stage, ClutterEvent *ev, gpointer data)
 {
         MainController *mc = static_cast<MainController *> (data);
-        EventData t = processEvent (stage, event);
-#if 0
-        gfloat x = 0;
-        gfloat y = 0;
-        clutter_event_get_coords (event, &x, &y);
-        ClutterActor *actor = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
-        std::cerr << "press : Core::Obj " << typeid (*t.second).name () << ", pointer_at " << actor << ", source " << clutter_event_get_source (event)
-                  << std::endl;
-#endif
-        mc->onButtonPress (t.first, t.second);
-}
+        EventData t = processEvent (stage, ev);
 
-/*****************************************************************************/
+        static Event event;
+        event.p = t.first;
+        event.object = t.second;
+        event.button = clutter_event_get_button (ev);
 
-void on_stage_button_release (ClutterStage *stage, ClutterEvent *event, gpointer data)
-{
-        MainController *mc = static_cast<MainController *> (data);
-        EventData t = processEvent (stage, event);
-        mc->onButtonRelease (t.first, t.second);
-}
-
-/*****************************************************************************/
-
-void on_stage_motion (ClutterStage *stage, ClutterEvent *event, gpointer data)
-{
-        MainController *mc = static_cast<MainController *> (data);
-        EventData t = processEvent (stage, event);
-        mc->onMotion (t.first, t.second);
-}
-
-/*****************************************************************************/
-
-void on_stage_enter (ClutterStage *stage, ClutterEvent *event, gpointer data)
-{
-        MainController *mc = static_cast<MainController *> (data);
-        EventData t = processEvent (stage, event);
-
-        if (clutter_event_get_source (event) != CLUTTER_ACTOR (stage)) {
-#if 0
-                gfloat x = 0;
-                gfloat y = 0;
-                clutter_event_get_coords (event, &x, &y);
-                ClutterActor *actor = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
-                std::cerr << "enter : Core::Obj " << typeid (*t.second).name () << ", pointer_at " << actor << ", source " << clutter_event_get_source (event)
-                          << std::endl;
-#endif
-                mc->onEnter (t.first, t.second);
+        if (event.button == 2) {
+                mc->pushMessage ("stage.press.scroll", &event);
+        }
+        else {
+                mc->pushMessage ("stage.press", &event);
         }
 }
 
 /*****************************************************************************/
 
-void on_stage_leave (ClutterStage *stage, ClutterEvent *event, gpointer data)
+void on_stage_button_release (ClutterStage *stage, ClutterEvent *ev, gpointer data)
 {
         MainController *mc = static_cast<MainController *> (data);
-        EventData t = processEvent (stage, event);
+        EventData t = processEvent (stage, ev);
 
-        if (clutter_event_get_source (event) != CLUTTER_ACTOR (stage)) {
+        static Event event;
+        event.p = t.first;
+        event.object = t.second;
+        event.button = clutter_event_get_button (ev);
+
+        if (event.button == 2) {
+                mc->pushMessage ("stage.release.scroll", &event);
+        }
+        else {
+                mc->pushMessage ("stage.release", &event);
+        }
+}
+
+/*****************************************************************************/
+
+void on_stage_motion (ClutterStage *stage, ClutterEvent *ev, gpointer data)
+{
+        MainController *mc = static_cast<MainController *> (data);
+        EventData t = processEvent (stage, ev);
+
+        static Event event;
+        event.p = t.first;
+        event.object = t.second;
+
+        if (clutter_event_get_state (ev) & CLUTTER_BUTTON1_MASK) {
+                event.button = 1;
+        }
+        else if (clutter_event_get_state (ev) & CLUTTER_BUTTON2_MASK) {
+                event.button = 2;
+        }
+        else if (clutter_event_get_state (ev) & CLUTTER_BUTTON3_MASK) {
+                event.button = 3;
+        }
+
+        mc->pushMessage ("stage.motion", &event);
+}
+
+/*****************************************************************************/
+
+void on_stage_enter (ClutterStage *stage, ClutterEvent *ev, gpointer data)
+{
+        MainController *mc = static_cast<MainController *> (data);
+        EventData t = processEvent (stage, ev);
+
+        if (clutter_event_get_source (ev) != CLUTTER_ACTOR (stage)) {
+                static Event event;
+                event.p = t.first;
+                event.object = t.second;
+                event.button = clutter_event_get_button (ev);
+                mc->pushMessage ("stage.enter", &event);
+        }
+}
+
+/*****************************************************************************/
+
+void on_stage_leave (ClutterStage *stage, ClutterEvent *ev, gpointer data)
+{
+        MainController *mc = static_cast<MainController *> (data);
+        EventData t = processEvent (stage, ev);
+
+        if (clutter_event_get_source (ev) != CLUTTER_ACTOR (stage)) {
 #if 0
                 gfloat x = 0;
                 gfloat y = 0;
@@ -211,13 +238,53 @@ void on_stage_leave (ClutterStage *stage, ClutterEvent *event, gpointer data)
                 std::cerr << "leave : Core::Obj " << typeid (*t.second).name () << ", pointer_at " << actor << ", source " << clutter_event_get_source (event)
                           << std::endl;
 #endif
-                mc->onLeave (t.first, t.second);
+                static Event event;
+                event.p = t.first;
+                event.object = t.second;
+                event.button = clutter_event_get_button (ev);
+                mc->pushMessage ("stage.leave", &event);
         }
 }
 
 /*****************************************************************************/
 
-static gboolean button_callback_clutter (GtkWidget *widget, GdkEvent *event, gpointer callback_data)
+gboolean on_stage_scroll (ClutterActor *actor, ClutterEvent *event, gpointer userData)
+{
+        ClutterScrollDirection direction;
+        direction = clutter_event_get_scroll_direction (event);
+        Stage *stage = static_cast<Stage *> (userData);
+
+        switch (direction) {
+        case CLUTTER_SCROLL_UP:
+                stage->zoomIn ();
+                break;
+
+        case CLUTTER_SCROLL_DOWN:
+                stage->zoomOut ();
+                break;
+
+        case CLUTTER_SCROLL_SMOOTH: {
+                double dx, dy;
+                clutter_event_get_scroll_delta (event, &dx, &dy);
+
+                if (dy > 0) {
+                        stage->zoomOut ();
+                }
+                else if (dy < 0) {
+                        stage->zoomIn ();
+                }
+        } break;
+
+        default:
+                break;
+        }
+
+        return CLUTTER_EVENT_STOP;
+}
+
+/*****************************************************************************/
+
+gboolean button_callback_clutter (GtkWidget *widget, GdkEvent *event, gpointer callback_data)
 {
         gtk_widget_grab_focus (widget);
         gboolean handled = FALSE;

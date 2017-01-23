@@ -33,6 +33,18 @@ struct __tiliae_reflect__ Tool {
 
 typedef __tiliae_reflect__ std::map<std::string, Tool> ToolMap;
 
+
+/**
+ * Additional arguments for state machine. Pointer to this struct is passed
+ * whenever I need some additional data in the state machine actions.
+ */
+struct Event {
+        std::string tool;
+        Point p;
+        Core::Object *object = nullptr;
+        int button = -1;
+};
+
 /**
  * Controller for drawing new objects like nodes, arcs and the like.
  */
@@ -48,14 +60,10 @@ public:
         virtual void onStop ();
 
         void onNewNodeToolClicked (std::string const &name);
-        void onButtonPress (Point p, Core::Object *o);
-        void onButtonRelease (Point p, Core::Object *o);
-        void onMotion (Point p, Core::Object *o);
-        void onEnter (Point p, Object *o);
-        void onLeave (Point p, Object *o);
         void onZoom (std::string const &action);
 
         void onProgramRun (bool run);
+        void pushMessage (std::string const &msg, Event *event);
 
         ToolMap const &getTools () const { return tools; }
         void setTools (const ToolMap &value) { tools = value; }

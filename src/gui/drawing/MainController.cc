@@ -26,6 +26,7 @@ enum MachineStates {
         TOOL_SELECTED, /// Toolbox clicked, tool picked.
         DRAW,          /// Creating a new object by drawing something
         MOVE,          /// Moving an object around.
+        STAGE_MOVE     /// Moving the viewport.
 };
 
 /*****************************************************************************/
@@ -46,16 +47,7 @@ struct MainController::Impl {
         bool runProgram = false;
         Rectangle *rectangularSelector = nullptr;
         Stage *stage = nullptr;
-
-        /*
-         * Additional arguments for state machine. Pointer to this struct is passed
-         * whenever I need some additional data in the state machine actions.
-         */
-        struct Arguments {
-                std::string tool;
-                Point p;
-                Core::Object *object;
-        } arguments;
+        Event event; // Tempporary for some handlers.
 
         /// Additional state. Used directly in the drawing events (onMove, onRelease).
         struct {
@@ -69,10 +61,12 @@ struct MainController::Impl {
                 IDrawStrategy *currentDrawStrategy = nullptr;
                 /// This strategy creates the object we are drawing.
                 IFactoryStrategy *currentFactoryStrategy = nullptr;
+
+                // TODO remove encapsulate.
+                Point last;
         } vars;
 
         ClutterActorVector *selectedActors = nullptr;
-
 };
 
 /*****************************************************************************/
@@ -104,8 +98,9 @@ void MainController::Impl::configureMachine ()
                 })
                 ->transition (TOOL_SELECTED)->when (eq ("selected.tool"))
                 ->transition (MOVE)->when (eq ("stage.enter"))
+                ->transition (STAGE_MOVE)->when (eq ("stage.press.scroll"))
                 ->transition (DRAW)->when (eq ("stage.press"))->then ([this] (const char *, void *arg) {
-                        Arguments *args = static_cast <Arguments *> (arg);
+                        Event *args = static_cast <Event *> (arg);
                         vars.currentTool = "select";
                         vars.currentDrawStrategy = (*tools)[vars.currentTool].drawStrategy;
                         vars.currentFactoryStrategy = (*tools)[vars.currentTool].factoryStrategy;
@@ -118,7 +113,7 @@ void MainController::Impl::configureMachine ()
 
         machine.state (TOOL_SELECTED)
                 ->entry ([this] (const char *, void *arg) {
-                        Arguments *args = static_cast <Arguments *> (arg);
+                        Event *args = static_cast <Event *> (arg);
                         vars.currentTool = args->tool;
 
                         if (tools->find (vars.currentTool) == tools->end ()) {
@@ -132,7 +127,7 @@ void MainController::Impl::configureMachine ()
                 ->transition (TOOL_SELECTED)->when (eq ("selected.tool"))
                 ->transition (IDLE)->when (eq ("selected.select"))
                 ->transition (DRAW)->when (eq ("stage.press"))->then ([this] (const char *, void *arg) {
-                        Arguments *args = static_cast <Arguments *> (arg);
+                        Event *args = static_cast <Event *> (arg);
                         vars.currentDrawStrategy->onButtonPress (args->p, args->object);
                         return true;
                 });
@@ -141,12 +136,12 @@ void MainController::Impl::configureMachine ()
 
         machine.state (DRAW)
                 ->transition (DRAW)->when (eq ("stage.motion"))->then ([this] (const char *, void *arg) {
-                        Arguments *args = static_cast <Arguments *> (arg);
+                        Event *args = static_cast <Event *> (arg);
                         vars.currentDrawStrategy->onMotion (args->p, args->object);
                         return true;
                 })
                 ->transition (IDLE)->when (eq ("stage.release"))->then ([this] (const char *, void *arg) {
-                        Arguments *args = static_cast <Arguments *> (arg);
+                        Event *args = static_cast <Event *> (arg);
 
                         if (!vars.currentDrawStrategy->onButtonRelease (args->p, args->object)) {
                                 return true;
@@ -171,15 +166,36 @@ void MainController::Impl::configureMachine ()
 
         machine.state (MOVE)
                 ->entry ([this] (const char *, void *arg) {
-                        Arguments *args = static_cast <Arguments *> (arg);
+                        Event *args = static_cast <Event *> (arg);
                         moveStrategy.onEnter (args->p, args->object);
                         return true;
                 })
                 ->transition (IDLE)->when (eq ("stage.leave"))->then ([this] (const char *, void *arg) {
-                        Arguments *args = static_cast <Arguments *> (arg);
+                        Event *args = static_cast <Event *> (arg);
                         moveStrategy.onLeave (args->p, args->object);
                         return true;
                 });
+
+        /*---------------------------------------------------------------------------*/
+
+        machine.state (STAGE_MOVE)
+                ->entry ([this] (const char *, void *arg) {
+                        Event *event = static_cast <Event *> (arg);
+                        vars.last = event->p;
+                        return true;
+                })
+                ->transition (STAGE_MOVE)->when (eq ("stage.motion"))->then ([this] (const char *, void *arg) {
+                        Event *event = static_cast <Event *> (arg);
+
+                        Point n;
+                        n.x = event->p.x - vars.last.x;
+                        n.y = event->p.y - vars.last.y;
+                        clutter_actor_move_by (stage->getActor (), n.x, n.y);
+
+                        vars.last = event->p;
+                        return true;
+                })
+                ->transition (IDLE)->when (eq ("stage.release.scroll"));
 
         /* clang-format on */
 }
@@ -230,63 +246,22 @@ void MainController::onIdle ()
 }
 
 /****************************************************************************/
+
+void MainController::pushMessage (std::string const &msg, Event *event) { impl->pushMessage (msg, event); }
+
+/****************************************************************************/
 /* Drawing events                                                           */
 /****************************************************************************/
 
 void MainController::onNewNodeToolClicked (std::string const &name)
 {
         if (name == "select") {
-                impl->pushMessage ("selected.select", &impl->arguments);
+                impl->pushMessage ("selected.select", &impl->event);
         }
         else {
-                impl->arguments.tool = name;
-                impl->pushMessage ("selected.tool", &impl->arguments);
+                impl->event.tool = name;
+                impl->pushMessage ("selected.tool", &impl->event);
         }
-}
-
-/*****************************************************************************/
-
-void MainController::onButtonPress (Point p, Object *o)
-{
-        impl->arguments.p = p;
-        impl->arguments.object = o;
-        impl->pushMessage ("stage.press", &impl->arguments);
-}
-
-/*****************************************************************************/
-
-void MainController::onButtonRelease (Point p, Object *o)
-{
-        impl->arguments.p = p;
-        impl->arguments.object = o;
-        impl->pushMessage ("stage.release", &impl->arguments);
-}
-
-/*****************************************************************************/
-
-void MainController::onMotion (Point p, Object *o)
-{
-        impl->arguments.p = p;
-        impl->arguments.object = o;
-        impl->pushMessage ("stage.motion", &impl->arguments);
-}
-
-/*****************************************************************************/
-
-void MainController::onEnter (Point p, Object *o)
-{
-        impl->arguments.p = p;
-        impl->arguments.object = o;
-        impl->pushMessage ("stage.enter", &impl->arguments);
-}
-
-/*****************************************************************************/
-
-void MainController::onLeave (Point p, Object *o)
-{
-        impl->arguments.p = p;
-        impl->arguments.object = o;
-        impl->pushMessage ("stage.leave", &impl->arguments);
 }
 
 /*****************************************************************************/
@@ -352,8 +327,8 @@ uint32_t getCurrentMs ()
 
 /*****************************************************************************/
 
-// void transitionPrint (uint8_t name) { BOOST_LOG (lg) << "State changed to [" << (int)name << "]"; }
-void transitionPrint (uint8_t) {}
+void transitionPrint (uint8_t name) { BOOST_LOG (lg) << "State changed to [" << (int)name << "]"; }
+// void transitionPrint (uint8_t) {}
 
 /*****************************************************************************/
 
