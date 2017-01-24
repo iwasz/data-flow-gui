@@ -10,28 +10,28 @@
   <!-- +===================================================+ -->
 
   <ShapeDrawStrategy id="dashedCircle">
-    <Circle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false"/>
+    <Circle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" reactive="false"/>
   </ShapeDrawStrategy>
 
   <dashedCircle id="dashedCircleMinSize" minSize="100, 100"/>
 
   <ShapeDrawStrategy id="dashedRect">
-    <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false"/>
+    <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" reactive="false"/>
   </ShapeDrawStrategy>
 
   <!-- std::vector of selected actors -->
   <ClutterActorVector id="selectedActors" />
   <Rectangle id="rectangularSelector" parent="@scale" fill="false" strokeColor="#d1d1d1ff" strokeDash="10" visible="false" selectable="false"/>
   <RectangularSelectorStrategy id="selectionDashedRect" rectangularSelector="@rectangularSelector" selectedActors="@selectedActors" scaleLayer="@scale">
-    <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="5" visible="false"/>
+    <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="5" visible="false" reactive="false"/>
   </RectangularSelectorStrategy>
 
   <DashedLineStrategy id="dashedLine">
-    <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="3"/>
+    <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="3" reactive="false"/>
   </DashedLineStrategy>
 
   <DashedLineConnectorStrategy id="dashedLineConnector">
-    <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="3"/>
+    <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="3" reactive="false"/>
   </DashedLineConnectorStrategy>
 
   <Circle scope="prototype" id="circle" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>

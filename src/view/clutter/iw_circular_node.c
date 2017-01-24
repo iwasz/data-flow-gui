@@ -257,8 +257,8 @@ void iw_circular_node_get_port_absolute_position (IwCircularNode *self, int i, f
         py += clutter_actor_get_height (port) / 2.0;
 
         float ax, ay;
-        // clutter_actor_get_position (CLUTTER_ACTOR (self), &ax, &ay);
-        clutter_actor_get_transformed_position (CLUTTER_ACTOR (self), &ax, &ay);
+        clutter_actor_get_position (CLUTTER_ACTOR (self), &ax, &ay);
+        // clutter_actor_get_transformed_position (CLUTTER_ACTOR (self), &ax, &ay);
 
         //        ClutterVertex in, out = {0, 0};
         //        in.x = ax;

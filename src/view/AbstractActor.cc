@@ -83,10 +83,17 @@ Box AbstractActor::getBoundingBox () const
         //        }
         //        return Box (Point (actorBox.x1, actorBox.y1), Point (actorBox.x2, actorBox.y2));
 
-
         // Assuming, that IClutterActors won't be scalled or rotated.
         float x, y, w, h;
         clutter_actor_get_position (self, &x, &y);
         clutter_actor_get_size (self, &w, &h);
         return Box (Point (x, y), Dimension (w, h));
 }
+
+/*****************************************************************************/
+
+bool AbstractActor::isReactive () const { return clutter_actor_get_reactive (self); }
+
+/*****************************************************************************/
+
+void AbstractActor::setReactive (bool value) { clutter_actor_set_reactive (self, value); }

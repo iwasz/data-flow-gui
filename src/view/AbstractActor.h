@@ -26,6 +26,9 @@ public:
         virtual bool isSelectable () const { return selectable; }
         virtual void setSelectable (bool value) { selectable = value; }
 
+        virtual bool isReactive () const;
+        virtual void setReactive (bool value);
+
         virtual void setPosition (Point const &p);
         virtual Point getPosition () const;
 

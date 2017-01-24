@@ -30,6 +30,9 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
         virtual bool isSelectable () const = 0;
         virtual void setSelectable (bool value) = 0;
 
+        virtual bool isReactive () const = 0;
+        virtual void setReactive (bool value) = 0;
+
         virtual void setPosition (Point const &p) = 0;
         virtual Point getPosition () const = 0;
 
