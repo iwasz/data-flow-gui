@@ -111,10 +111,9 @@ Point AbstractActor::convertToScaleLayer (Point const &p) const
         in.x = p.x;
         in.y = p.y;
         clutter_actor_apply_relative_transform_to_point (CLUTTER_ACTOR (self), ScaleLayer::singleton ()->getActor (), &in, &out);
-        // clutter_actor_apply_transform_to_point (CLUTTER_ACTOR (self), &in, &out);
-        // printf ("%f, %f -> %f, %f\n", ax, ay, out.x, out.y);
-        Point b;
-        b.x = out.x;
-        b.y = out.y;
+        Point b, pos = getPosition ();
+        b.x = out.x - pos.x;
+        b.y = out.y - pos.y;
+
         return b;
 }

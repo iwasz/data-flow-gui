@@ -73,12 +73,16 @@ static void iw_circular_node_finalize (GObject *gobject)
 static void iw_circular_node_allocate (ClutterActor *actor, const ClutterActorBox *box, ClutterAllocationFlags flags)
 {
         IwCircularNodePrivate *priv = IW_CIRCULAR_NODE (actor)->priv;
-        ClutterActorBox childBox = {
-                0,
-        };
 
         /* set the allocation for the whole button */
-        CLUTTER_ACTOR_CLASS (iw_circular_node_parent_class)->allocate (actor, box, flags);
+        //  CLUTTER_ACTOR_CLASS (iw_circular_node_parent_class)->allocate (actor, box, flags);
+
+        ClutterActorBox newBox = *box;
+        float dia = fmin (clutter_actor_box_get_width (box), clutter_actor_box_get_height (box));
+        newBox.x2 = newBox.x1 + dia;
+        newBox.y2 = newBox.y1 + dia;
+        ClutterAllocationFlags newFlags = flags | CLUTTER_DELEGATE_LAYOUT;
+        clutter_actor_set_allocation (actor, &newBox, newFlags);
 
         /* make the child (the ClutterBox) fill the parent;
          * note that this allocation box is relative to the
@@ -88,13 +92,14 @@ static void iw_circular_node_allocate (ClutterActor *actor, const ClutterActorBo
          * top-left corner (0,0) to its bottom-right corner
          * (width,height)
          */
+        ClutterActorBox childBox;
         childBox.x1 = 0.0;
         childBox.y1 = 0.0;
         childBox.x2 = clutter_actor_box_get_width (box);
         childBox.y2 = clutter_actor_box_get_height (box);
 
         clutter_actor_allocate (priv->mainCircle, &childBox, flags);
-        circularNodeOnAllocate (priv->userData, box->x1, box->y1, box->x2, box->y2);
+        circularNodeOnAllocate (priv->userData, newBox.x1, newBox.y1, newBox.x2, newBox.y2);
 }
 
 /*****************************************************************************/
@@ -258,17 +263,6 @@ void iw_circular_node_get_port_position (IwCircularNode *self, int i, float *x, 
 
         float ax, ay;
         clutter_actor_get_position (CLUTTER_ACTOR (self), &ax, &ay);
-        // clutter_actor_get_transformed_position (CLUTTER_ACTOR (self), &ax, &ay);
-
-        //        ClutterVertex in, out = {0, 0};
-        //        in.x = ax;
-        //        in.y = ay;
-
-        //        clutter_actor_apply_relative_transform_to_point (CLUTTER_ACTOR (self), clutter_actor_get_parent (CLUTTER_ACTOR (self)), &in, &out);
-        //        // clutter_actor_apply_transform_to_point (CLUTTER_ACTOR (self), &in, &out);
-        //        printf ("%f, %f -> %f, %f\n", ax, ay, out.x, out.y);
-        //        *x = px + out.x;
-        //        *y = py + out.y;
 
         *x = px + ax;
         *y = py + ay;

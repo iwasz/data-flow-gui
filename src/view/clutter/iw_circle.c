@@ -238,6 +238,7 @@ gboolean iw_circle_is_fill (IwCircle *self)
 
 static void iw_circle_allocate (ClutterActor *actor, const ClutterActorBox *box, ClutterAllocationFlags flags)
 {
+#if 0
         float ax, ay;
         clutter_actor_get_position (actor, &ax, &ay);
 
@@ -254,7 +255,7 @@ static void iw_circle_allocate (ClutterActor *actor, const ClutterActorBox *box,
 
         // TODO!!!! to się wywołuje dla każdego koła na scenie (nawet tych, których nie ruszam).
         // printf ("position : %f, %f, transformedPosition :  %f, %f, relative %f, %f, %p\n", ax, ay, tx, ty, out.x, out.y, actor);
-
+#endif
         /*---------------------------------------------------------------------------*/
 
         ClutterActorBox newBox = *box;
