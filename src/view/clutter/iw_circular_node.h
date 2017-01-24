@@ -99,7 +99,7 @@ void iw_circular_node_set_ports_no (IwCircularNode *self, int i);
 void iw_circular_node_set_port_user_data (IwCircularNode *self, int i, void *p);
 void *iw_circular_node_get_port_user_data (IwCircularNode *self, int i);
 
-void iw_circular_node_get_port_absolute_position (IwCircularNode *self, int i, float *x, float *y);
+void iw_circular_node_get_port_position (IwCircularNode *self, int i, float *x, float *y);
 
 void iw_circular_node_set_user_data (IwCircularNode *self, void *p);
 void *iw_circular_node_get_user_data (IwCircularNode *self);

@@ -11,7 +11,9 @@
 
 #include "AbstractActor.h"
 #include "AbstractNodeView.h"
+#include "primitives/Geometry.h"
 #include <vector>
+
 /**
  * This is only a view.
  */
@@ -39,6 +41,8 @@ public:
         /*---------------------------------------------------------------------------*/
 
         virtual void onAllocate (Box const &b);
+        virtual Point getPortPosition (int i) const;
+
 };
 
 #endif // CIRCULARNODE_H

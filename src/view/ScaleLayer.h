@@ -22,12 +22,18 @@ public:
         ScaleLayer ();
         virtual ~ScaleLayer () {}
 
+        /// Warning, warning! It returns somethig only after container created the instance.
+        static ScaleLayer *singleton () { return instance; }
+
         virtual bool isContainter () const { return true; }
         virtual bool isSelectable () const { return false; }
         void zoomIn ();
         void zoomOut ();
         void zoom (double f);
 
+private:
+        friend class Stage;
+        static ScaleLayer *instance;
 };
 
 #endif // SCALELAYER_H

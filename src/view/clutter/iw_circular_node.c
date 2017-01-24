@@ -246,7 +246,7 @@ static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocat
 
 /*****************************************************************************/
 
-void iw_circular_node_get_port_absolute_position (IwCircularNode *self, int i, float *x, float *y)
+void iw_circular_node_get_port_position (IwCircularNode *self, int i, float *x, float *y)
 {
         g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
         float px, py;

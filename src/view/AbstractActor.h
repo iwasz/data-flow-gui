@@ -53,6 +53,9 @@ public:
         virtual Box getBoundingBox () const;
         virtual bool isContainter () const { return false; }
 
+        /// For converting coordinates to common space. Works after container has done its job.
+        virtual Point convertToScaleLayer (Point const &p) const;
+
         /// Stores this into self as g_object value.
         virtual void setCppImplementation ();
 

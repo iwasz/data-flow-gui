@@ -29,7 +29,7 @@ public:
         virtual bool isSelectable () const { return false; }
 
         ScaleLayer *getScaleLayer () const { return scaleLayer; }
-        void setScaleLayer (ScaleLayer *value);
+        void setScaleLayer (ScaleLayer *layer);
 
 private:
         GtkWidget *clutterWidget;

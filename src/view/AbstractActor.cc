@@ -7,6 +7,7 @@
  ****************************************************************************/
 
 #include "AbstractActor.h"
+#include "ScaleLayer.h"
 
 /*****************************************************************************/
 
@@ -97,3 +98,23 @@ bool AbstractActor::isReactive () const { return clutter_actor_get_reactive (sel
 /*****************************************************************************/
 
 void AbstractActor::setReactive (bool value) { clutter_actor_set_reactive (self, value); }
+
+/*****************************************************************************/
+
+Point AbstractActor::convertToScaleLayer (Point const &p) const
+{
+        if (clutter_actor_get_parent (self) == ScaleLayer::singleton ()->getActor ()) {
+                return p;
+        }
+
+        ClutterVertex in, out = { 0, 0 };
+        in.x = p.x;
+        in.y = p.y;
+        clutter_actor_apply_relative_transform_to_point (CLUTTER_ACTOR (self), ScaleLayer::singleton ()->getActor (), &in, &out);
+        // clutter_actor_apply_transform_to_point (CLUTTER_ACTOR (self), &in, &out);
+        // printf ("%f, %f -> %f, %f\n", ax, ay, out.x, out.y);
+        Point b;
+        b.x = out.x;
+        b.y = out.y;
+        return b;
+}

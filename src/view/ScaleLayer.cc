@@ -8,6 +8,10 @@
 
 #include "ScaleLayer.h"
 
+ScaleLayer *ScaleLayer::instance;
+
+/*****************************************************************************/
+
 ScaleLayer::ScaleLayer ()
 {
         self = clutter_actor_new ();

@@ -6,7 +6,7 @@
   </Config>
 
   <!-- +===================================================+ -->
-  <!-- | Kontrolery i widoki                               | -->
+  <!-- | Controllrers and views                            | -->
   <!-- +===================================================+ -->
 
   <ShapeDrawStrategy id="dashedCircle">

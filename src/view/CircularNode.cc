@@ -13,18 +13,13 @@
 
 class CircularNodeAnchorPositionProvider : public IAnchorPositionProvider {
 public:
-        CircularNodeAnchorPositionProvider (int i, IwCircularNode *self) : i (i), self (self) {}
+        CircularNodeAnchorPositionProvider (int i, CircularNode *n) : i (i), node (n) {}
         virtual ~CircularNodeAnchorPositionProvider () {}
-        virtual Point getPosition () const
-        {
-                float px, py;
-                iw_circular_node_get_port_absolute_position (self, i, &px, &py);
-                return Point (px, py);
-        }
+        virtual Point getPosition () const { return node->convertToScaleLayer (node->getPortPosition (i)); }
 
 private:
         int i;
-        IwCircularNode *self;
+        CircularNode *node;
 };
 
 /*****************************************************************************/
@@ -50,7 +45,7 @@ void CircularNode::init ()
                 ClutterColor c = p->color.toClutterColor ();
                 iw_circular_node_set_port_color (IW_CIRCULAR_NODE (self), portNumber, &c);
                 iw_circular_node_set_port_user_data (IW_CIRCULAR_NODE (self), portNumber, p.get ());
-                p->anchor.setApProvider (std::make_shared<CircularNodeAnchorPositionProvider> (portNumber, IW_CIRCULAR_NODE (self)));
+                p->anchor.setApProvider (std::make_shared<CircularNodeAnchorPositionProvider> (portNumber, this));
                 ++portNumber;
         }
 
@@ -107,14 +102,20 @@ void CircularNode::setFillColor (const Color &value)
 
 /*****************************************************************************/
 
+Point CircularNode::getPortPosition (int i) const
+{
+        Point p;
+        iw_circular_node_get_port_position (IW_CIRCULAR_NODE (self), i, &p.x, &p.y);
+        return p;
+}
+
+/*****************************************************************************/
+
 void CircularNode::onAllocate (Box const &)
 {
         int i = 0;
         for (std::shared_ptr<Port> p : getPorts ()) {
-                float px = 0;
-                float py = 0;
-                iw_circular_node_get_port_absolute_position (IW_CIRCULAR_NODE (self), i, &px, &py);
-                p->anchor.notifyMoveAnchor (Point (px, py));
+                p->anchor.notifyMoveAnchor (convertToScaleLayer (getPortPosition (i)));
                 ++i;
         }
 }

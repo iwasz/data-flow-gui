@@ -68,8 +68,9 @@ void on_stage_resize (ClutterActor *actor, ClutterActorBox *box, ClutterAllocati
 
 /*****************************************************************************/
 
-void Stage::setScaleLayer (ScaleLayer *value)
+void Stage::setScaleLayer (ScaleLayer *layer)
 {
-        scaleLayer = value;
-        value->setParent (this);
+        scaleLayer = layer;
+        layer->setParent (this);
+        layer->instance = layer; // trick
 }
