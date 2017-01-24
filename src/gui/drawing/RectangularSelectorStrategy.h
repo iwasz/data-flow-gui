@@ -12,6 +12,7 @@
 #include "ShapeDrawStrategy.h"
 
 class Rectangle;
+class ScaleLayer;
 
 /**
  * Responsible for drawing the selection rectangle, and managing sleected objects.
@@ -31,9 +32,14 @@ public:
 
         void unselectAll ();
 
+        ScaleLayer *getScaleLayer () const { return scaleLayer; }
+        void setScaleLayer (ScaleLayer *value) { scaleLayer = value; }
+
 private:
         Rectangle *rectangularSelector = nullptr;
         ClutterActorVector *selectedActors = nullptr;
+        ScaleLayer *scaleLayer = nullptr;
+
 };
 
 #endif // RECTANGULARSELECTORSTRATEGY_H

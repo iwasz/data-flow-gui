@@ -21,8 +21,8 @@
 
   <!-- std::vector of selected actors -->
   <ClutterActorVector id="selectedActors" />
-  <Rectangle id="rectangularSelector" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="10" visible="false" selectable="false"/>
-  <RectangularSelectorStrategy id="selectionDashedRect" rectangularSelector="@rectangularSelector" selectedActors="@selectedActors">
+  <Rectangle id="rectangularSelector" parent="@scale" fill="false" strokeColor="#d1d1d1ff" strokeDash="10" visible="false" selectable="false"/>
+  <RectangularSelectorStrategy id="selectionDashedRect" rectangularSelector="@rectangularSelector" selectedActors="@selectedActors" scaleLayer="@scale">
     <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="5" visible="false"/>
   </RectangularSelectorStrategy>
 

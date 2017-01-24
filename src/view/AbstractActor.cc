@@ -77,10 +77,16 @@ void AbstractActor::setCppImplementation () { g_object_set_data (G_OBJECT (self)
 Box AbstractActor::getBoundingBox () const
 {
 
-        ClutterActorBox actorBox;
-        if (!clutter_actor_get_paint_box (self, &actorBox)) {
-                throw Core::Exception ("AbstractActor::getBoundingBox : !clutter_actor_get_paint_box");
-        }
+        //        ClutterActorBox actorBox;
+        //        if (!clutter_actor_get_paint_box (self, &actorBox)) {
+        //                throw Core::Exception ("AbstractActor::getBoundingBox : !clutter_actor_get_paint_box");
+        //        }
+        //        return Box (Point (actorBox.x1, actorBox.y1), Point (actorBox.x2, actorBox.y2));
 
-        return Box (Point (actorBox.x1, actorBox.y1), Point (actorBox.x2, actorBox.y2));
+
+        // Assuming, that IClutterActors won't be scalled or rotated.
+        float x, y, w, h;
+        clutter_actor_get_position (self, &x, &y);
+        clutter_actor_get_size (self, &w, &h);
+        return Box (Point (x, y), Dimension (w, h));
 }

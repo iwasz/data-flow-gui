@@ -26,7 +26,7 @@ public:
 
         virtual Color getFillColor () const;
         virtual void setFillColor (const Color &value);
-//        virtual bool isContainter () const { return true; }
+        virtual bool isSelectable () const { return false; }
 
         ScaleLayer *getScaleLayer () const { return scaleLayer; }
         void setScaleLayer (ScaleLayer *value);

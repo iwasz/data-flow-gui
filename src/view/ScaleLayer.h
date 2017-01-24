@@ -23,6 +23,7 @@ public:
         virtual ~ScaleLayer () {}
 
         virtual bool isContainter () const { return true; }
+        virtual bool isSelectable () const { return false; }
         void zoomIn ();
         void zoomOut ();
         void zoom (double f);

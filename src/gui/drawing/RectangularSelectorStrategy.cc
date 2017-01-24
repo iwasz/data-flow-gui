@@ -8,6 +8,7 @@
 
 #include "RectangularSelectorStrategy.h"
 #include "view/Rectangle.h"
+#include "view/ScaleLayer.h"
 #include <clutter/clutter.h>
 #include <iostream>
 
@@ -18,10 +19,9 @@ void RectangularSelectorStrategy::onObjectCreated (IClutterActor *a)
         Box selectionBox = Box (startPoint, endPoint - startPoint);
         Box minimalSelectionBox;
 
-        // This can be stage, but can be some other container actor (in the future?)
-        ClutterActor *stage = clutter_actor_get_parent (rectangularSelector->getActor ());
+        ClutterActor *root = scaleLayer->getActor ();
 
-        for (ClutterActor *child = clutter_actor_get_first_child (stage); child != NULL; child = clutter_actor_get_next_sibling (child)) {
+        for (ClutterActor *child = clutter_actor_get_first_child (root); child != NULL; child = clutter_actor_get_next_sibling (child)) {
 
                 IClutterActor *actor = static_cast<IClutterActor *> (g_object_get_data (G_OBJECT (child), CPP_IMPLEMENTATION_KEY));
 
