@@ -15,7 +15,7 @@
 
 class __tiliae_reflect__ AbstractActor : public IClutterActor {
 public:
-        virtual ~AbstractActor () {}
+        virtual ~AbstractActor ();
 
         virtual void setParent (IClutterActor *parent);
         virtual ClutterActor *getActor () { return self; }

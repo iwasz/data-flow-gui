@@ -9,6 +9,7 @@
 #include "MainController.h"
 #include "IDrawStrategy.h"
 #include "IFactoryStrategy.h"
+#include "ISelectorStrategy.h"
 #include "MoveStrategy.h"
 #include "view/Rectangle.h"
 #include "view/ScaleLayer.h"
@@ -49,25 +50,21 @@ struct MainController::Impl {
         Rectangle *rectangularSelector = nullptr;
         Stage *stage = nullptr;
         Event event; // Tempporary for some handlers.
+        ClutterActorVector *selectedActors = nullptr;
 
         /// Additional state. Used directly in the drawing events (onMove, onRelease).
         struct {
                 /// Name of curently selected tool (arc, node etc).
                 std::string currentTool;
-                /// Coordinates of first point of current "gesture".
-                //                Point startPoint;
-                /// Object (already on stage, usually an actor) we clicked when started drawing our new object.
-                //                Core::Object *startObject;
                 /// Draw strategy draws shapes just prior to actual object creation.
                 IDrawStrategy *currentDrawStrategy = nullptr;
                 /// This strategy creates the object we are drawing.
                 IFactoryStrategy *currentFactoryStrategy = nullptr;
+                ISelectorStrategy *currentSelectorStrategy = nullptr;
 
                 // TODO remove encapsulate.
                 Point last;
         } vars;
-
-        ClutterActorVector *selectedActors = nullptr;
 };
 
 /*****************************************************************************/
@@ -100,10 +97,23 @@ void MainController::Impl::configureMachine ()
                 ->transition (TOOL_SELECTED)->when (eq ("selected.tool"))
                 ->transition (MOVE)->when (eq ("stage.enter"))
                 ->transition (STAGE_MOVE)->when (eq ("stage.press.scroll"))
+                ->transition (IDLE)->when (eq ("stage.delete"))->then ([this] (const char *, void *arg) {
+                        if (selectedActors->empty ()) {
+                                return true;
+                        }
+
+                        for (IClutterActor *actor : *selectedActors) {
+                                delete actor;
+                        }
+                        selectedActors->clear ();
+                        vars.currentSelectorStrategy->unselectAll();
+                        return true;
+                })
                 ->transition (DRAW)->when (eq ("stage.press"))->then ([this] (const char *, void *arg) {
                         vars.currentTool = "select";
                         vars.currentDrawStrategy = (*tools)[vars.currentTool].drawStrategy;
                         vars.currentFactoryStrategy = (*tools)[vars.currentTool].factoryStrategy;
+                        vars.currentSelectorStrategy = (*tools)[vars.currentTool].selectorStrategy;
                         vars.currentDrawStrategy->onButtonPress (*static_cast <Event *> (arg));
                         return true;
                 });

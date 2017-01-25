@@ -65,7 +65,7 @@
 
   <MainController id="mainController" loopDelayMs="5" program="@program">
     <ToolMap set-as="tools">
-      <Tool set-as="select" drawStrategy="@selectionDashedRect"/>
+      <Tool set-as="select" drawStrategy="@selectionDashedRect" selectorStrategy="@selectionDashedRect"/>
       <Tool set-as="addNode" drawStrategy="@dashedCircleMinSize">
         <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="addNode" container="@#container" program="@program"/>
       </Tool>

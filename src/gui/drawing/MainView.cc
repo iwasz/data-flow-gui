@@ -28,6 +28,7 @@ void on_stage_enter (ClutterStage *stage, ClutterEvent *event, gpointer data);
 void on_stage_leave (ClutterStage *stage, ClutterEvent *event, gpointer data);
 gboolean on_stage_scroll (ClutterActor *actor, ClutterEvent *event, gpointer userData);
 gboolean button_callback_clutter (GtkWidget *widget, GdkEvent *event, gpointer callback_data);
+gboolean on_stage_key_press (ClutterActor *actor, ClutterEvent *event, gpointer user_data);
 
 /*****************************************************************************/
 
@@ -58,6 +59,7 @@ void MainView::loadUi (GtkForms::App *app)
         g_signal_connect (stage->getActor (), "enter-event", G_CALLBACK (on_stage_enter), mc);
         g_signal_connect (stage->getActor (), "leave-event", G_CALLBACK (on_stage_leave), mc);
         g_signal_connect (stage->getActor (), "scroll-event", G_CALLBACK (on_stage_scroll), stage);
+        g_signal_connect (stage->getActor (), "key-press-event", G_CALLBACK (on_stage_key_press), mc);
         g_signal_connect (stage->getClutterWidget (), "button_press_event", G_CALLBACK (button_callback_clutter), nullptr);
 
         /*---------------------------------------------------------------------------*/
@@ -320,6 +322,28 @@ gboolean on_stage_scroll (ClutterActor *actor, ClutterEvent *ev, gpointer userDa
         }
 
         return CLUTTER_EVENT_STOP;
+}
+
+/*****************************************************************************/
+
+gboolean on_stage_key_press (ClutterActor *actor, ClutterEvent *ev, gpointer data)
+{
+        MainController *mc = static_cast<MainController *> (data);
+        static Event event;
+        event.key = clutter_event_get_key_symbol (ev);
+        event.state = clutter_event_get_state (ev);
+        event.shiftPressed = (event.state & CLUTTER_SHIFT_MASK ? TRUE : FALSE);
+        event.ctrlPressed = (event.state & CLUTTER_CONTROL_MASK ? TRUE : FALSE);
+
+        if (event.key == CLUTTER_KEY_Delete) {
+                mc->pushMessage ("stage.delete", &event);
+        }
+        else {
+                mc->pushMessage ("stage.leave", &event);
+        }
+
+        /* The event was not handled, and the emission should continue */
+        return CLUTTER_EVENT_PROPAGATE;
 }
 
 /*****************************************************************************/

@@ -9,6 +9,7 @@
 #ifndef DATA_FLOW_DRAWING_EVENT_H
 #define DATA_FLOW_DRAWING_EVENT_H
 
+#include <clutter/clutter.h>
 #include <core/Object.h>
 #include <primitives/Geometry.h>
 #include <string>
@@ -23,6 +24,10 @@ struct Event {
         Point positionParentCoords;
         Core::Object *object = nullptr;
         int button = -1;
+        unsigned int key = 0;
+        ClutterModifierType state;
+        bool shiftPressed = false;
+        bool ctrlPressed = false;
 };
 
 #endif // EVENT_H

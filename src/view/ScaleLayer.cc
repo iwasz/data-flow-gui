@@ -20,7 +20,7 @@ ScaleLayer::ScaleLayer ()
         clutter_actor_set_reactive (self, true);
         clutter_actor_set_size (self, SCALE_SURFACE_SIZE, SCALE_SURFACE_SIZE);
 
-#if 1
+#if 0
         static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
         clutter_actor_set_background_color (self, &c);
 #endif
@@ -78,7 +78,7 @@ void ScaleLayer::zoomOut (const Point &center)
                 clutter_actor_set_pivot_point (self, 0.5, 0.5);
         }
         else {
-                std::cerr << center << ", " << center.x / SCALE_SURFACE_SIZE << ", " << center.y / SCALE_SURFACE_SIZE << std::endl;
+//                std::cerr << center << ", " << center.x / SCALE_SURFACE_SIZE << ", " << center.y / SCALE_SURFACE_SIZE << std::endl;
                 clutter_actor_set_pivot_point (self, double(center.x) / SCALE_SURFACE_SIZE, double(center.y) / SCALE_SURFACE_SIZE);
         }
 

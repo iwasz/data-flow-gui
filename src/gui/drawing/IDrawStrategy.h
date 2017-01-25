@@ -14,7 +14,7 @@
 #include <ReflectionParserAnnotation.h>
 #include <core/Object.h>
 
-struct __tiliae_reflect__ IDrawStrategy : public Core::Object {
+struct __tiliae_reflect__ IDrawStrategy : public virtual Core::Object {
         virtual ~IDrawStrategy () {}
 
         /// When mouse mutton is pressed for the first time after the tool was selected.

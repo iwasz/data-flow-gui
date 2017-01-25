@@ -10,6 +10,7 @@
 #define MAIN_CONTROLLER_H_
 
 #include "Event.h"
+#include "ISelectorStrategy.h"
 #include "primitives/Geometry.h"
 #include "view/Stage.h"
 #include <ReflectionParserAnnotation.h>
@@ -28,8 +29,9 @@ class Program;
  * Represents one tool that can be picked from left side toolbar.
  */
 struct __tiliae_reflect__ Tool {
-        IDrawStrategy *drawStrategy;
-        IFactoryStrategy *factoryStrategy;
+        IDrawStrategy *drawStrategy = nullptr;
+        IFactoryStrategy *factoryStrategy = nullptr;
+        ISelectorStrategy *selectorStrategy = nullptr;
 };
 
 typedef __tiliae_reflect__ std::map<std::string, Tool> ToolMap;

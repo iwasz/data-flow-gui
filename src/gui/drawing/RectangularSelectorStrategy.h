@@ -9,6 +9,7 @@
 #ifndef RECTANGULARSELECTORSTRATEGY_H
 #define RECTANGULARSELECTORSTRATEGY_H
 
+#include "ISelectorStrategy.h"
 #include "ShapeDrawStrategy.h"
 
 class Rectangle;
@@ -17,7 +18,7 @@ class ScaleLayer;
 /**
  * Responsible for drawing the selection rectangle, and managing sleected objects.
  */
-class __tiliae_reflect__ RectangularSelectorStrategy : public ShapeDrawStrategy {
+class __tiliae_reflect__ RectangularSelectorStrategy : public ShapeDrawStrategy, public ISelectorStrategy {
 public:
         virtual ~RectangularSelectorStrategy () {}
         virtual void onObjectCreated (IClutterActor *a);
@@ -39,7 +40,6 @@ private:
         Rectangle *rectangularSelector = nullptr;
         ClutterActorVector *selectedActors = nullptr;
         ScaleLayer *scaleLayer = nullptr;
-
 };
 
 #endif // RECTANGULARSELECTORSTRATEGY_H

@@ -11,6 +11,19 @@
 
 /*****************************************************************************/
 
+AbstractActor::~AbstractActor ()
+{
+        ClutterActor *oldParent;
+        if ((oldParent = clutter_actor_get_parent (self)) != nullptr) {
+                clutter_actor_remove_child (oldParent, self);
+        }
+        else {
+                g_critical ("AbstractActor::~AbstractActor : clutter_actor_get_parent (self) == nullptr");
+        }
+}
+
+/*****************************************************************************/
+
 void AbstractActor::setParent (IClutterActor *parent)
 {
 
