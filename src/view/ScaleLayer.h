@@ -26,8 +26,8 @@ public:
 
         virtual bool isContainter () const { return true; }
         virtual bool isSelectable () const { return false; }
-        void zoomIn ();
-        void zoomOut ();
+        void zoomIn (Point const &center = Point ());
+        void zoomOut (Point const &center = Point ());
         void zoom (double f);
         void pan (Point const &n);
 

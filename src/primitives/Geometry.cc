@@ -39,6 +39,7 @@ Dimension::Dimension (std::string const &s)
 /*****************************************************************************/
 
 Dimension operator- (Point const &a, Point const &b) { return Dimension (a.x - b.x, a.y - b.y); }
+bool operator== (Point const &a, Point const &b) { return a.x == b.x && a.y == b.y; }
 
 /*****************************************************************************/
 

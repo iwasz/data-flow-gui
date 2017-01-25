@@ -279,10 +279,10 @@ void on_stage_leave (ClutterStage *stage, ClutterEvent *ev, gpointer data)
 
 /*****************************************************************************/
 
-gboolean on_stage_scroll (ClutterActor *actor, ClutterEvent *event, gpointer userData)
+gboolean on_stage_scroll (ClutterActor *actor, ClutterEvent *ev, gpointer userData)
 {
         ClutterScrollDirection direction;
-        direction = clutter_event_get_scroll_direction (event);
+        direction = clutter_event_get_scroll_direction (ev);
         Stage *stage = static_cast<Stage *> (userData);
         ScaleLayer *scale = stage->getScaleLayer ();
 
@@ -290,24 +290,28 @@ gboolean on_stage_scroll (ClutterActor *actor, ClutterEvent *event, gpointer use
                 return CLUTTER_EVENT_PROPAGATE;
         }
 
+        gfloat x = 0, y = 0, x1, y1;
+        clutter_event_get_coords (ev, &x, &y);
+        clutter_actor_transform_stage_point (scale->getActor (), x, y, &x1, &y1);
+
         switch (direction) {
         case CLUTTER_SCROLL_UP:
-                scale->zoomIn ();
+                scale->zoomIn (Point (x1, y1));
                 break;
 
         case CLUTTER_SCROLL_DOWN:
-                scale->zoomOut ();
+                scale->zoomOut (Point (x1, y1));
                 break;
 
         case CLUTTER_SCROLL_SMOOTH: {
                 double dx, dy;
-                clutter_event_get_scroll_delta (event, &dx, &dy);
+                clutter_event_get_scroll_delta (ev, &dx, &dy);
 
                 if (dy > 0) {
-                        scale->zoomOut ();
+                        scale->zoomOut (Point (x1, y1));
                 }
                 else if (dy < 0) {
-                        scale->zoomIn ();
+                        scale->zoomIn (Point (x1, y1));
                 }
         } break;
 

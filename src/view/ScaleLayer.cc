@@ -25,48 +25,66 @@ ScaleLayer::ScaleLayer ()
         clutter_actor_set_background_color (self, &c);
 #endif
 
-        clutter_actor_set_pivot_point (self, 0.5, 0.5);
-
         setCppImplementation ();
 }
 
 /*****************************************************************************/
 
-void ScaleLayer::zoomIn ()
+void ScaleLayer::zoomIn (const Point &center)
 {
         double x, y;
         clutter_actor_get_scale (self, &x, &y);
+
+        if (x >= 1) {
+                return;
+        }
+
         double newScale = x * 1.1;
 
-        if (newScale > 1) {
-                newScale = 1;
-        }
+        //        if (center == Point ()) {
+        //                clutter_actor_set_pivot_point (self, 0.5, 0.5);
+        //        }
+        //        else {
+        //                float x = int(center.x * 100 / SCALE_SURFACE_SIZE + 0.5) / 100.0;
+        //                float y = int(center.y * 100 / SCALE_SURFACE_SIZE + 0.5) / 100.0;
+        //                std::cerr << center << ", " << center.x / SCALE_SURFACE_SIZE << ", " << center.y / SCALE_SURFACE_SIZE << ", " << Point (x, y) <<
+        //                std::endl;
+        //                // clutter_actor_set_pivot_point (self, double(center.x) / SCALE_SURFACE_SIZE, double(center.y) / SCALE_SURFACE_SIZE);
+        //                clutter_actor_set_pivot_point (self, x, y);
+        //        }
 
         clutter_actor_set_scale (self, newScale, newScale);
 }
 
 /*****************************************************************************/
 
-void ScaleLayer::zoomOut ()
+void ScaleLayer::zoomOut (const Point &center)
 {
         ClutterActor *stage = clutter_actor_get_parent (self);
-        float w, h, w1, h1, x1, y1;
-        clutter_actor_get_size (stage, &w, &h);
-        clutter_actor_get_transformed_size (self, &w1, &h1);
-        clutter_actor_get_transformed_position (self, &x1, &y1);
+        float stageW, stageH;
+        clutter_actor_get_size (stage, &stageW, &stageH);
 
-        float dim = std::max (w, h);
+        float dim = std::max (stageW, stageH);
         double minScale = dim / SCALE_SURFACE_SIZE + 0.05;
 
         double x, y;
         clutter_actor_get_scale (self, &x, &y);
-        std::cerr << w << ", " << h << ", " << w1 << ", " << h1 << ", " << x1 << ", " << y1 << ", " << minScale << ", " << x << std::endl;
 
         if (x <= minScale) {
                 return;
         }
 
+        if (center == Point ()) {
+                clutter_actor_set_pivot_point (self, 0.5, 0.5);
+        }
+        else {
+                std::cerr << center << ", " << center.x / SCALE_SURFACE_SIZE << ", " << center.y / SCALE_SURFACE_SIZE << std::endl;
+                clutter_actor_set_pivot_point (self, double(center.x) / SCALE_SURFACE_SIZE, double(center.y) / SCALE_SURFACE_SIZE);
+        }
+
         clutter_actor_set_scale (self, x / 1.1, x / 1.1);
+
+        pan (Point ());
 }
 
 /*****************************************************************************/
@@ -78,28 +96,28 @@ void ScaleLayer::zoom (double f) { clutter_actor_set_scale (self, f, f); }
 void ScaleLayer::pan (Point const &n)
 {
 
+        float stageW, stageH, scaleW, scaleH, scaleX, scaleY;
         ClutterActor *stage = clutter_actor_get_parent (self);
-        float w, h, w1, h1, x1, y1;
-        clutter_actor_get_size (stage, &w, &h);
-        clutter_actor_get_transformed_size (self, &w1, &h1);
-        clutter_actor_get_transformed_position (self, &x1, &y1);
+        clutter_actor_get_size (stage, &stageW, &stageH);
+        clutter_actor_get_transformed_size (self, &scaleW, &scaleH);
+        clutter_actor_get_transformed_position (self, &scaleX, &scaleY);
 
         Point m = n;
 
-        if (x1 + m.x > 0) {
-                m.x = -x1;
+        if (scaleX + m.x > 0) {
+                m.x = -scaleX;
         }
 
-        if (x1 + m.x < -(w1 - w)) {
-                m.x = -(w1 - w) - x1;
+        if (scaleX + m.x < -(scaleW - stageW)) {
+                m.x = -(scaleW - stageW) - scaleX;
         }
 
-        if (y1 + m.y > 0) {
-                m.y = -y1;
+        if (scaleY + m.y > 0) {
+                m.y = -scaleY;
         }
 
-        if (y1 + m.y < -(h1 - h)) {
-                m.y = -(h1 - h) - y1;
+        if (scaleY + m.y < -(scaleH - stageH)) {
+                m.y = -(scaleH - stageH) - scaleY;
         }
 
         clutter_actor_move_by (self, m.x, m.y);

@@ -34,6 +34,7 @@ struct __tiliae_reflect__ Dimension {
 };
 
 extern Dimension operator- (Point const &a, Point const &b);
+extern bool operator== (Point const &a, Point const &b);
 
 struct Box {
         Box () {}
