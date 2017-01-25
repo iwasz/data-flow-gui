@@ -20,7 +20,7 @@ public:
 
         virtual void onConnectAnchor (Point const &p, Side s) { onMoveAnchor (p, s); }
         virtual void onMoveAnchor (Point const &p, Side s);
-        virtual void onDisconnectAnchor (Point const &p, Side s) { onMoveAnchor (p, s); }
+        virtual void onDisconnectAnchor (/*Side s*/) { delete this; }
         virtual void onTextChanged (std::string const &text);
 };
 

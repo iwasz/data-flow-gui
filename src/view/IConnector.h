@@ -24,14 +24,13 @@ struct __tiliae_reflect__ IConnector {
         virtual ~IConnector () {}
 
         virtual void connect (Anchor *a, Side s) = 0;
-
-        virtual void disconnect (Side s) = 0;
+        virtual void disconnect (/*Side s*/) = 0;
 
         // Event handlers
 
         virtual void onConnectAnchor (Point const &p, Side s) = 0;
         virtual void onMoveAnchor (Point const &p, Side s) = 0;
-        virtual void onDisconnectAnchor (Point const &p, Side s) = 0;
+        virtual void onDisconnectAnchor (/*Side s*/) = 0;
 };
 
 #endif // ICONNECTOR_H

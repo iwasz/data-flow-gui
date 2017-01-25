@@ -20,7 +20,7 @@ public:
         virtual ~AbstractConnector () {}
 
         virtual void connect (Anchor *an, Side s);
-        virtual void disconnect (Side s);
+        virtual void disconnect (/*Side s*/);
 
 private:
 

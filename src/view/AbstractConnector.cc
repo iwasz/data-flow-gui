@@ -25,15 +25,22 @@ void AbstractConnector::connect (Anchor *an, Side s)
 
 /*****************************************************************************/
 
-void AbstractConnector::disconnect (Side s)
+void AbstractConnector::disconnect (/*Side s*/)
 {
-        a->disconnect (this, A);
-        if (s == A) {
-                a = nullptr;
-                onDisconnectAnchor (a->getPosition (), s);
-        }
-        else {
-                b = nullptr;
-                onDisconnectAnchor (b->getPosition (), s);
-        }
+//        a->disconnect (this, A);
+//        if (s == A) {
+//                a = nullptr;
+//        }
+//                onDisconnectAnchor (a->getPosition (), s);
+//        else {
+//                b = nullptr;
+//                onDisconnectAnchor (b->getPosition (), s);
+//        }
+
+        a->disconnect (this);
+        b->disconnect (this);
+        a = nullptr;
+        b = nullptr;
+        onDisconnectAnchor (/*a->getPosition (), s*/);
+
 }

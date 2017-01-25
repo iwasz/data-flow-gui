@@ -24,6 +24,8 @@ struct IAnchorPositionProvider {
  */
 class Anchor {
 public:
+        ~Anchor ();
+
         struct Connection {
                 IConnector::Side side;
                 IConnector *connector;
@@ -38,9 +40,14 @@ public:
 
         void setApProvider (std::shared_ptr<IAnchorPositionProvider> value) { apProvider = value; }
 
+
 private:
+
         void connect (IConnector *c, IConnector::Side s);
-        void disconnect (IConnector *c, IConnector::Side s);
+//        void disconnect (IConnector *c, IConnector::Side s);
+        void disconnect (IConnector *c);
+//        void disconnect ();
+
 
         ConnectionVector connections;
         std::shared_ptr<IAnchorPositionProvider> apProvider;
