@@ -14,8 +14,7 @@
 #include <clutter-gtk/clutter-gtk.h>
 #include <string>
 
-#define SCALE_SURFACE_WIDTH 10000
-#define SCALE_SURFACE_HEIGHT 10000
+#define SCALE_SURFACE_SIZE 10000
 
 class __tiliae_reflect__ ScaleLayer : public AbstractActor {
 public:
@@ -30,6 +29,7 @@ public:
         void zoomIn ();
         void zoomOut ();
         void zoom (double f);
+        void pan (Point const &n);
 
 private:
         friend class Stage;

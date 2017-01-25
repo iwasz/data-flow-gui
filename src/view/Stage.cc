@@ -63,7 +63,7 @@ void on_stage_resize (ClutterActor *actor, ClutterActorBox *box, ClutterAllocati
         Box bb (Point (box->x1, box->y1), Point (box->x2, box->y2));
         Dimension dim = bb.getDimension ();
         // clutter_actor_set_size (scale, dim.width, dim.height);
-        clutter_actor_set_position (scale, -(SCALE_SURFACE_WIDTH - dim.width) / 2.0, -(SCALE_SURFACE_HEIGHT - dim.height) / 2.0);
+        clutter_actor_set_position (scale, -(SCALE_SURFACE_SIZE - dim.width) / 2.0, -(SCALE_SURFACE_SIZE - dim.height) / 2.0);
 }
 
 /*****************************************************************************/

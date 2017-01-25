@@ -186,7 +186,7 @@ void MainController::Impl::configureMachine ()
                         Point n;
                         n.x = event->positionStageCoords.x - vars.last.x;
                         n.y = event->positionStageCoords.y - vars.last.y;
-                        clutter_actor_move_by (stage->getScaleLayer ()->getActor (), n.x, n.y);
+                        stage->getScaleLayer ()->pan (n);
 
                         vars.last = event->positionStageCoords;
                         return true;
