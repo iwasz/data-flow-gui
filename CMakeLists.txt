@@ -117,6 +117,8 @@ LIST (APPEND SOURCES
         "src/gui/drawing/IFactoryStrategy.h"
         "src/gui/drawing/MoveStrategy.cc"
         "src/gui/drawing/MoveStrategy.h"
+        "src/view/clutter/iw_button.c"
+        "src/view/clutter/iw_button.h"
         "src/view/clutter/iw_circle.c"
         "src/view/clutter/iw_circle.h"
         "src/view/clutter/iw_rectangle.c"
