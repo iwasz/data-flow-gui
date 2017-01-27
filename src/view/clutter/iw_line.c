@@ -9,67 +9,18 @@
 #include "iw_line.h"
 #include <math.h>
 
-/**
- * SECTION:cb-button
- * @short_description: Button widget
- *
- * A button widget with support for a text label and background color.
- */
-
-/* convenience macro for GType implementations; see:
- * http://library.gnome.org/devel/gobject/2.27/gobject-Type-Information.html#G-DEFINE-TYPE:CAPS
- */
-G_DEFINE_TYPE (IwLine, iw_line, CLUTTER_TYPE_ACTOR);
-
-/* macro for accessing the object's private structure */
+G_DEFINE_TYPE (IwLine, iw_line, IW_TYPE_ACTOR);
 #define IW_LINE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IW_TYPE_LINE, IwLinePrivate))
 
-/* private structure - should only be accessed through the public API;
- * this is used to store member variables whose properties
- * need to be accessible from the implementation; for example, if we
- * intend to create wrapper functions which modify properties on the
- * actors composing an object, we should keep a reference to the actors
- * here
- *
- * this is also the place where other state variables go:
- * for example, you might record the current state of the button
- * (toggled on or off) or a background image
- */
 struct _IwLinePrivate {
-        ClutterColor strokeColor;
-        gfloat strokeWidth;
-        gfloat strokeDash;
         gfloat ax, ay;
         gfloat bx, by;
-        ClutterContent *canvas;
         ClutterActor *label;
-        void *userData;
 };
 
 static gboolean draw_line (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data);
-static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocation, ClutterAllocationFlags flags, gpointer user_data);
-static gboolean idle_resize (gpointer data);
 static void iw_line_resize_accordingly (IwLine *self);
 void onTextChanged (void *lineConnector, const char *text);
-
-/* from http://mail.gnome.org/archives/gtk-devel-list/2004-July/msg00158.html:
- *
- * "The finalize method finishes releasing the remaining
- * resources just before the object itself will be freed from memory, and
- * therefore it will only be called once. The two step process helps break
- * cyclic references. Both dispose and finalize must chain up to their
- * parent objects by calling their parent's respective methods *after* they
- * have disposed or finalized their own members."
- */
-static void iw_line_finalize (GObject *gobject)
-{
-        //        IwLinePrivate *priv = IW_LINE (gobject)->priv;
-
-        //        clutter_color_free (priv->color);
-
-        /* call the parent class' finalize() method */
-        G_OBJECT_CLASS (iw_line_parent_class)->finalize (gobject);
-}
 
 /*****************************************************************************/
 
@@ -92,7 +43,7 @@ static void iw_line_pick (ClutterActor *actor, const ClutterColor *pick_color)
 
         cogl_set_source_color4ub (pick_color->red, pick_color->green, pick_color->blue, pick_color->alpha);
 
-        float m = IW_LINE (actor)->priv->strokeWidth / 2.0 + 0.5;
+        float m = iw_actor_get_stroke_width (IW_ACTOR (actor)) / 2.0 + 0.5;
         cogl_path_move_to (0 + m, 0 - m);
         cogl_path_line_to (width + m, height - m);
         cogl_path_line_to (width - m, height + m);
@@ -105,30 +56,12 @@ static void iw_line_pick (ClutterActor *actor, const ClutterColor *pick_color)
         }
 }
 
-/* GObject class and instance initialization functions; note that
- * these have been placed after the Clutter implementation, as
- * they refer to the static function implementations above
- */
+/*****************************************************************************/
 
-/* class init: attach functions to superclasses, define properties
- * and signals
- */
 static void iw_line_class_init (IwLineClass *klass)
 {
         ClutterActorClass *actor_class = CLUTTER_ACTOR_CLASS (klass);
-        GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-        GParamSpec *pspec;
-
-        gobject_class->finalize = iw_line_finalize;
-        //        gobject_class->set_property = iw_line_set_property;
-        //        gobject_class->get_property = iw_line_get_property;
-
-        // It still got destroyed even when I do not override the destroy method (like virtual function in C++).
-        //        actor_class->allocate = iw_line_allocate;
-        //        actor_class->paint = cb_button_paint;
-        //        actor_class->paint_node = iw_line_paint_node;
         actor_class->pick = iw_line_pick;
-
         g_type_class_add_private (klass, sizeof (IwLinePrivate));
 }
 
@@ -139,34 +72,20 @@ void on_text_changed (ClutterText *self, gpointer user_data)
         /*printf ("%s\n", clutter_text_get_text (self));*/
         IwLine *line = (IwLine *)user_data;
         iw_line_resize_accordingly (line);
-
-        onTextChanged (line->priv->userData, clutter_text_get_text (self));
+        onTextChanged (iw_actor_get_user_data (IW_ACTOR (line)), clutter_text_get_text (self));
 }
 
 /*****************************************************************************/
 
 static void iw_line_init (IwLine *self)
 {
-        IwLinePrivate *priv;
-        ClutterLayoutManager *layout;
-
-        priv = self->priv = IW_LINE_GET_PRIVATE (self);
-        priv->strokeColor = *clutter_color_get_static (CLUTTER_COLOR_BLACK);
-        priv->strokeDash = 0;
-        priv->strokeWidth = 1;
+        IwLinePrivate *priv = self->priv = IW_LINE_GET_PRIVATE (self);
         priv->ax = 0;
         priv->ay = 0;
         priv->bx = 0;
         priv->by = 0;
 
-        priv->canvas = clutter_canvas_new ();
-        clutter_actor_set_content (CLUTTER_ACTOR (self), priv->canvas);
-        clutter_actor_set_content_scaling_filters (CLUTTER_ACTOR (self), CLUTTER_SCALING_FILTER_TRILINEAR, CLUTTER_SCALING_FILTER_LINEAR);
-        g_object_unref (priv->canvas);
-
-        // priv->text = "Hello world!"; /* NULL */
         priv->label = clutter_text_new ();
-        // clutter_text_set_text (CLUTTER_TEXT (priv->label), "Hello, World!");
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->label);
         clutter_text_set_font_name (CLUTTER_TEXT (priv->label), "18px");
         clutter_text_set_editable (CLUTTER_TEXT (priv->label), FALSE);
@@ -181,68 +100,17 @@ static void iw_line_init (IwLine *self)
         clutter_actor_set_background_color (CLUTTER_ACTOR (self->priv->label), &c);
 #endif
 
-        g_signal_connect (priv->canvas, "draw", G_CALLBACK (draw_line), priv);
-        clutter_content_invalidate (priv->canvas);
-
-        g_signal_connect (CLUTTER_ACTOR (self), "allocation-changed", G_CALLBACK (on_actor_resize), NULL);
-}
-
-/*****************************************************************************/
-
-void iw_line_set_stroke_color (IwLine *self, const ClutterColor *color)
-{
-        g_return_if_fail (IW_IS_LINE (self));
-        self->priv->strokeColor = *color;
-        clutter_content_invalidate (self->priv->canvas);
-}
-
-/*****************************************************************************/
-
-ClutterColor *iw_line_get_stroke_color (IwLine *self)
-{
-        g_return_val_if_fail (IW_IS_LINE (self), NULL);
-        return &self->priv->strokeColor;
-}
-
-/*****************************************************************************/
-
-void iw_line_set_stroke_width (IwLine *self, gfloat w)
-{
-        g_return_if_fail (IW_IS_LINE (self));
-        self->priv->strokeWidth = w;
-        clutter_content_invalidate (self->priv->canvas);
-}
-
-/*****************************************************************************/
-
-gfloat iw_line_get_stroke_width (IwLine *self)
-{
-        g_return_val_if_fail (IW_IS_LINE (self), -1);
-        return self->priv->strokeWidth;
-}
-
-/*****************************************************************************/
-
-void iw_line_set_stroke_dash (IwLine *self, gfloat w)
-{
-        g_return_if_fail (IW_IS_LINE (self));
-        self->priv->strokeDash = w;
-        clutter_content_invalidate (self->priv->canvas);
-}
-
-/*****************************************************************************/
-
-gfloat iw_line_get_stroke_dash (IwLine *self)
-{
-        g_return_val_if_fail (IW_IS_LINE (self), -1);
-        return self->priv->strokeDash;
+        ClutterContent *canvas = iw_actor_get_canvas (IW_ACTOR (self));
+        g_signal_connect (canvas, "draw", G_CALLBACK (draw_line), self);
+        clutter_content_invalidate (canvas);
 }
 
 /*****************************************************************************/
 
 static void iw_line_resize_accordingly (IwLine *self)
 {
-        float lw = self->priv->strokeWidth;
+        gfloat strokeWidth = iw_actor_get_stroke_width (IW_ACTOR (self));
+        float lw = strokeWidth;
         float ax = self->priv->ax;
         float ay = self->priv->ay;
         float bx = self->priv->bx;
@@ -267,7 +135,7 @@ static void iw_line_resize_accordingly (IwLine *self)
                 float px = c * tw;
                 float py = s * tw;
 
-                float lh = self->priv->strokeWidth;
+                float lh = strokeWidth;
                 px += s * lh;
                 py -= c * lh;
 
@@ -277,7 +145,7 @@ static void iw_line_resize_accordingly (IwLine *self)
         }
         else {
                 float tw = clutter_actor_get_width (CLUTTER_ACTOR (self->priv->label));
-                clutter_actor_set_position (CLUTTER_ACTOR (self->priv->label), -tw / 2.0, self->priv->strokeWidth);
+                clutter_actor_set_position (CLUTTER_ACTOR (self->priv->label), -tw / 2.0, strokeWidth);
         }
 
         clutter_text_set_editable (CLUTTER_TEXT (self->priv->label), TRUE);
@@ -329,7 +197,8 @@ ClutterActor *iw_line_new (void) { return g_object_new (IW_TYPE_LINE, NULL); }
 
 static gboolean draw_line (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data)
 {
-        IwLinePrivate *priv = (IwLinePrivate *)data;
+        IwLine *self = (IwLine *)data;
+        IwLinePrivate *priv = self->priv;
 
         cairo_save (cr);
 
@@ -343,21 +212,22 @@ static gboolean draw_line (ClutterCanvas *canvas, cairo_t *cr, int width, int he
 
         cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
 
-        /* scale the modelview to the size of the surface */
-        //        cairo_scale (cr, width, height);
+        gfloat strokeWidth = iw_actor_get_stroke_width (IW_ACTOR (self));
+        gfloat strokeDash = iw_actor_get_stroke_dash (IW_ACTOR (self));
+        ClutterColor *strokeColor = iw_actor_get_stroke_color (IW_ACTOR (self));
 
         cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
-        cairo_set_line_width (cr, priv->strokeWidth);
+        cairo_set_line_width (cr, strokeWidth);
 
-        if (priv->strokeDash > 0) {
-                double dashed1 = priv->strokeDash;
+        if (strokeDash > 0) {
+                double dashed1 = strokeDash;
                 cairo_set_dash (cr, &dashed1, 1, 0);
         }
 
-        clutter_cairo_set_source_color (cr, &priv->strokeColor);
+        clutter_cairo_set_source_color (cr, strokeColor);
 
         // Prevent clipping.
-        float margin = priv->strokeWidth /*/ 2.0 + 0.5*/;
+        float margin = strokeWidth /*/ 2.0 + 0.5*/;
 
         float ax = priv->ax;
         float ay = priv->ay;
@@ -384,14 +254,6 @@ static gboolean draw_line (ClutterCanvas *canvas, cairo_t *cr, int width, int he
 
         cairo_stroke (cr);
         return TRUE;
-}
-
-/*****************************************************************************/
-
-static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocation, ClutterAllocationFlags flags, gpointer user_data)
-{
-        clutter_canvas_set_size (CLUTTER_CANVAS (clutter_actor_get_content (actor)), ceilf (clutter_actor_box_get_width (allocation)),
-                                 ceilf (clutter_actor_box_get_height (allocation)));
 }
 
 /*****************************************************************************/
@@ -456,20 +318,4 @@ void iw_line_set_editable (IwLine *self, gboolean b)
 {
         g_return_if_fail (IW_IS_LINE (self));
         clutter_text_set_editable (CLUTTER_TEXT (self->priv->label), b);
-}
-
-/*****************************************************************************/
-
-void iw_line_set_user_data (IwLine *self, void *p)
-{
-        g_return_if_fail (IW_IS_LINE (self));
-        self->priv->userData = p;
-}
-
-/*****************************************************************************/
-
-void *iw_line_get_user_data (IwLine *self)
-{
-        g_return_val_if_fail (IW_IS_LINE (self), NULL);
-        return self->priv->userData;
 }

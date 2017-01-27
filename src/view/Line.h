@@ -26,17 +26,6 @@ public:
         void setPointB (Point const &p);
         Point getPointB () const;
 
-        float getStrokeWidth () const;
-        void setStrokeWidth (float value);
-
-        float getStrokeDash () const;
-        void setStrokeDash (float value);
-
-        Color getStrokeColor () const;
-        void setStrokeColor (const Color &value);
-
-        /*---------------------------------------------------------------------------*/
-
         std::string getText () const;
         void setText (std::string const t);
 

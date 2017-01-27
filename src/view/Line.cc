@@ -14,7 +14,7 @@ Line::Line ()
 {
         self = iw_line_new ();
         clutter_actor_set_reactive (self, TRUE);
-        iw_line_set_user_data (IW_LINE (self), this);
+        iw_actor_set_user_data (IW_ACTOR (self), this);
         setCppImplementation ();
 }
 
@@ -42,34 +42,6 @@ Point Line::getPointB () const
         Point p;
         iw_line_get_point_a (IW_LINE (self), &p.x, &p.y);
         return p;
-}
-
-/*****************************************************************************/
-
-float Line::getStrokeWidth () const { return iw_line_get_stroke_width (IW_LINE (self)); }
-
-/*****************************************************************************/
-
-void Line::setStrokeWidth (float value) { iw_line_set_stroke_width (IW_LINE (self), value); }
-
-/*****************************************************************************/
-
-float Line::getStrokeDash () const { return iw_line_get_stroke_dash (IW_LINE (self)); }
-
-/*****************************************************************************/
-
-void Line::setStrokeDash (float value) { iw_line_set_stroke_dash (IW_LINE (self), value); }
-
-/*****************************************************************************/
-
-Color Line::getStrokeColor () const { return Color (iw_line_get_stroke_color (IW_LINE (self))); }
-
-/*****************************************************************************/
-
-void Line::setStrokeColor (const Color &value)
-{
-        ClutterColor color = Color::toClutterColor (value);
-        iw_line_set_stroke_color (IW_LINE (self), &color);
 }
 
 /*****************************************************************************/
