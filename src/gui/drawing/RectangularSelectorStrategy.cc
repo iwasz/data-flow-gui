@@ -7,6 +7,7 @@
  ****************************************************************************/
 
 #include "RectangularSelectorStrategy.h"
+#include "view/clutter/iw_actor.h"
 #include "view/Rectangle.h"
 #include "view/ScaleLayer.h"
 #include <clutter/clutter.h>

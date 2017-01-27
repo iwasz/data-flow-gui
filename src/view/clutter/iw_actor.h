@@ -15,6 +15,8 @@
 extern "C" {
 #endif
 
+#define CPP_IMPLEMENTATION_KEY "cppImplKey"
+
 /* GObject implementation */
 
 /* declare this function signature to remove compilation errors with -Wall;
@@ -88,6 +90,8 @@ gboolean iw_actor_is_fill (IwActor *self);
 
 void iw_actor_set_user_data (IwActor *self, void *p);
 void *iw_actor_get_user_data (IwActor *self);
+
+ClutterContent *iw_actor_get_canvas (IwActor *self);
 
 #ifdef __cplusplus
 }

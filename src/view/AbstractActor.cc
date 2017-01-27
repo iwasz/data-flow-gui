@@ -8,6 +8,7 @@
 
 #include "AbstractActor.h"
 #include "ScaleLayer.h"
+#include "clutter/iw_actor.h"
 
 /*****************************************************************************/
 
@@ -131,6 +132,54 @@ Point AbstractActor::convertToScaleLayer (Point const &p) const
         b.y = out.y - pos.y;
 
         return b;
+}
+
+/*****************************************************************************/
+
+bool AbstractActor::isFill () const { return iw_actor_is_fill (IW_ACTOR (self)); }
+
+/*****************************************************************************/
+
+void AbstractActor::setFill (bool value) { iw_actor_set_fill (IW_ACTOR (self), value); }
+
+/*****************************************************************************/
+
+float AbstractActor::getStrokeWidth () const { return iw_actor_get_stroke_width (IW_ACTOR (self)); }
+
+/*****************************************************************************/
+
+void AbstractActor::setStrokeWidth (float value) { iw_actor_set_stroke_width (IW_ACTOR (self), value); }
+
+/*****************************************************************************/
+
+float AbstractActor::getStrokeDash () const { return iw_actor_get_stroke_dash (IW_ACTOR (self)); }
+
+/*****************************************************************************/
+
+void AbstractActor::setStrokeDash (float value) { iw_actor_set_stroke_dash (IW_ACTOR (self), value); }
+
+/*****************************************************************************/
+
+Color AbstractActor::getStrokeColor () const { return Color (iw_actor_get_stroke_color (IW_ACTOR (self))); }
+
+/*****************************************************************************/
+
+Color AbstractActor::getFillColor () const { return Color (iw_actor_get_fill_color (IW_ACTOR (self))); }
+
+/*****************************************************************************/
+
+void AbstractActor::setStrokeColor (const Color &value)
+{
+        ClutterColor color = Color::toClutterColor (value);
+        iw_actor_set_stroke_color (IW_ACTOR (self), &color);
+}
+
+/*****************************************************************************/
+
+void AbstractActor::setFillColor (const Color &value)
+{
+        ClutterColor color = Color::toClutterColor (value);
+        iw_actor_set_fill_color (IW_ACTOR (self), &color);
 }
 
 /*****************************************************************************/

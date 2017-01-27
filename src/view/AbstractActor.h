@@ -10,7 +10,6 @@
 #define ABSTRACTACTOR_H
 
 #include "IClutterActor.h"
-#include "abstractActor.h"
 #include <core/Exception.h>
 
 extern "C" void abstractActorOnFinalize (void *ptr);
@@ -37,20 +36,20 @@ public:
         virtual void setSize (Dimension const &d);
         virtual Dimension getDimension () const;
 
-        virtual bool isFill () const { throw Core::Exception ("Not implemented"); }
-        virtual void setFill (bool value) { throw Core::Exception ("Not implemented"); }
+        virtual bool isFill () const;
+        virtual void setFill (bool value);
 
-        virtual float getStrokeWidth () const { throw Core::Exception ("Not implemented"); }
-        virtual void setStrokeWidth (float value) { throw Core::Exception ("Not implemented"); }
+        virtual float getStrokeWidth () const;
+        virtual void setStrokeWidth (float value);
 
-        virtual float getStrokeDash () const { throw Core::Exception ("Not implemented"); }
-        virtual void setStrokeDash (float value) { throw Core::Exception ("Not implemented"); }
+        virtual float getStrokeDash () const;
+        virtual void setStrokeDash (float value);
 
-        virtual Color getStrokeColor () const { throw Core::Exception ("Not implemented"); }
-        virtual void setStrokeColor (const Color &value) { throw Core::Exception ("Not implemented"); }
+        virtual Color getStrokeColor () const;
+        virtual void setStrokeColor (const Color &value);
 
-        virtual Color getFillColor () const { throw Core::Exception ("Not implemented"); }
-        virtual void setFillColor (const Color &value) { throw Core::Exception ("Not implemented"); }
+        virtual Color getFillColor () const;
+        virtual void setFillColor (const Color &value);
 
         virtual Box getBoundingBox () const;
         virtual bool isContainter () const { return false; }

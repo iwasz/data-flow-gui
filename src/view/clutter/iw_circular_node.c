@@ -8,7 +8,7 @@
 
 #include "iw_circular_node.h"
 #include "iw_circle.h"
-#include "view/abstractActor.h"
+#include "view/clutter/iw_actor.h"
 #include <math.h>
 
 /* convenience macro for GType implementations; see:
@@ -268,12 +268,11 @@ void iw_circular_node_get_port_position (IwCircularNode *self, int i, float *x, 
 }
 
 /*****************************************************************************/
-// public API
 
 void iw_circular_node_set_fill_color (IwCircularNode *self, const ClutterColor *color)
 {
         g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        iw_circle_set_fill_color (IW_CIRCLE (self->priv->mainCircle), color);
+//        iw_circle_set_fill_color (IW_CIRCLE (self->priv->mainCircle), color);
 }
 
 /*****************************************************************************/
@@ -281,7 +280,7 @@ void iw_circular_node_set_fill_color (IwCircularNode *self, const ClutterColor *
 ClutterColor *iw_circular_node_get_fill_color (IwCircularNode *self)
 {
         g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), NULL);
-        return iw_circle_get_fill_color (IW_CIRCLE (self->priv->mainCircle));
+//        return iw_circle_get_fill_color (IW_CIRCLE (self->priv->mainCircle));
 }
 
 /*****************************************************************************/
@@ -289,49 +288,49 @@ ClutterColor *iw_circular_node_get_fill_color (IwCircularNode *self)
 void iw_circular_node_set_stroke_color (IwCircularNode *self, const ClutterColor *color)
 {
         g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        iw_circle_set_stroke_color (IW_CIRCLE (self->priv->mainCircle), color);
+//        iw_circle_set_stroke_color (IW_CIRCLE (self->priv->mainCircle), color);
 }
 
 ClutterColor *iw_circular_node_get_stroke_color (IwCircularNode *self)
 {
         g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), NULL);
-        return iw_circle_get_stroke_color (IW_CIRCLE (self->priv->mainCircle));
+//        return iw_circle_get_stroke_color (IW_CIRCLE (self->priv->mainCircle));
 }
 
 void iw_circular_node_set_stroke_width (IwCircularNode *self, gfloat w)
 {
         g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        iw_circle_set_stroke_width (IW_CIRCLE (self->priv->mainCircle), w);
+//        iw_circle_set_stroke_width (IW_CIRCLE (self->priv->mainCircle), w);
 }
 
 gfloat iw_circular_node_get_stroke_width (IwCircularNode *self)
 {
         g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), -1);
-        return iw_circle_get_stroke_width (IW_CIRCLE (self->priv->mainCircle));
+//        return iw_circle_get_stroke_width (IW_CIRCLE (self->priv->mainCircle));
 }
 
 void iw_circular_node_set_stroke_dash (IwCircularNode *self, gfloat w)
 {
         g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        iw_circle_set_stroke_dash (IW_CIRCLE (self->priv->mainCircle), w);
+//        iw_circle_set_stroke_dash (IW_CIRCLE (self->priv->mainCircle), w);
 }
 
 gfloat iw_circular_node_get_stroke_dash (IwCircularNode *self)
 {
         g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), -1);
-        return iw_circle_get_stroke_dash (IW_CIRCLE (self->priv->mainCircle));
+//        return iw_circle_get_stroke_dash (IW_CIRCLE (self->priv->mainCircle));
 }
 
 void iw_circular_node_set_fill (IwCircularNode *self, gboolean b)
 {
         g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        iw_circle_set_fill (IW_CIRCLE (self->priv->mainCircle), b);
+//        iw_circle_set_fill (IW_CIRCLE (self->priv->mainCircle), b);
 }
 
 gboolean iw_circular_node_is_fill (IwCircularNode *self)
 {
         g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), FALSE);
-        return iw_circle_is_fill (IW_CIRCLE (self->priv->mainCircle));
+//        return iw_circle_is_fill (IW_CIRCLE (self->priv->mainCircle));
 }
 
 /*****************************************************************************/
@@ -345,13 +344,10 @@ void iw_circular_node_set_ports_no (IwCircularNode *self, int i)
 
         for (int i = 0; i < self->priv->portsNo; ++i) {
                 ClutterActor *a = self->priv->ports[i].actor = iw_circle_new ();
-                iw_circle_set_fill (IW_CIRCLE (a), TRUE);
-                iw_circle_set_stroke_width (IW_CIRCLE (a), 0);
+//                iw_circle_set_fill (IW_CIRCLE (a), TRUE);
+//                iw_circle_set_stroke_width (IW_CIRCLE (a), 0);
                 clutter_actor_add_child (CLUTTER_ACTOR (self->priv->mainCircle), a);
                 clutter_actor_set_reactive (a, TRUE);
-                //                g_signal_connect (a, "motion-event", G_CALLBACK (portMotionEvent), NULL);
-                //                g_signal_connect (a, "button-press-event", G_CALLBACK (portMotionEvent), NULL);
-                //                g_signal_connect (a, "button-release-event", G_CALLBACK (portMotionEvent), NULL);
         }
 }
 
@@ -360,7 +356,7 @@ void iw_circular_node_set_ports_no (IwCircularNode *self, int i)
 void iw_circular_node_set_port_color (IwCircularNode *self, int i, const ClutterColor *color)
 {
         g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        iw_circle_set_fill_color (IW_CIRCLE (self->priv->ports[i].actor), color);
+//        iw_circle_set_fill_color (IW_CIRCLE (self->priv->ports[i].actor), color);
 }
 
 /*****************************************************************************/

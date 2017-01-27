@@ -114,18 +114,12 @@ static void iw_actor_init (IwActor *self)
         g_signal_connect (CLUTTER_ACTOR (self), "allocation-changed", G_CALLBACK (on_actor_resize), NULL);
 }
 
-/* public API */
-/* examples of public API functions which wrap functions
- * on internal actors
- */
+ClutterContent *iw_actor_get_canvas (IwActor *self)
+{
+        g_return_val_if_fail (IW_IS_ACTOR (self), NULL);
+        return self->priv->canvas;
+}
 
-/**
- * iw_actor_set_background_color:
- * @self: a #IwActor
- * @color: the #ClutterColor to use for the button's background
- *
- * Set the color of the button's background
- */
 void iw_actor_set_fill_color (IwActor *self, const ClutterColor *color)
 {
         g_return_if_fail (IW_IS_ACTOR (self));

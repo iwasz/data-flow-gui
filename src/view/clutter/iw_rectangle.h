@@ -9,7 +9,7 @@
 #ifndef __IW_RECTANGLE_H__
 #define __IW_RECTANGLE_H__
 
-#include <clutter/clutter.h>
+#include "iw_actor.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -27,41 +27,16 @@ typedef struct _IwRectanglePrivate IwRectanglePrivate;
 typedef struct _IwRectangle IwRectangle;
 typedef struct _IwRectangleClass IwRectangleClass;
 
-// Object structure
 struct _IwRectangle {
-        /*<private>*/
-        ClutterActor parent_instance;
-
-        /* structure containing private members */
-        /*<private>*/
+        IwActor parent_instance;
         IwRectanglePrivate *priv;
 };
 
-/* class structure */
 struct _IwRectangleClass {
-        /*<private>*/
-        ClutterActorClass parent_class;
+        IwActorClass parent_class;
 };
 
-/* public API */
-
-/* constructor - note this returns a ClutterActor instance */
 ClutterActor *iw_rectangle_new (void);
-
-void iw_rectangle_set_fill_color (IwRectangle *self, const ClutterColor *color);
-ClutterColor *iw_rectangle_get_fill_color (IwRectangle *self);
-
-void iw_rectangle_set_stroke_color (IwRectangle *self, const ClutterColor *color);
-ClutterColor *iw_rectangle_get_stroke_color (IwRectangle *self);
-
-void iw_rectangle_set_stroke_width (IwRectangle *self, gfloat w);
-gfloat iw_rectangle_get_stroke_width (IwRectangle *self);
-
-void iw_rectangle_set_stroke_dash (IwRectangle *self, gfloat w);
-gfloat iw_rectangle_get_stroke_dash (IwRectangle *self);
-
-void iw_rectangle_set_fill (IwRectangle *self, gboolean b);
-gboolean iw_rectangle_is_fill (IwRectangle *self);
 
 #ifdef __cplusplus
 }

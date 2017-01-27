@@ -10,7 +10,7 @@
 #include "MainController.h"
 #include "view/IClutterActor.h"
 #include "view/ScaleLayer.h"
-#include "view/abstractActor.h"
+#include "view/clutter/iw_actor.h"
 #include "view/clutter/iw_button.h"
 #include "view/clutter/iw_circle.h"
 #include "view/clutter/iw_circular_node.h"
