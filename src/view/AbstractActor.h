@@ -9,9 +9,11 @@
 #ifndef ABSTRACTACTOR_H
 #define ABSTRACTACTOR_H
 
-#include <core/Exception.h>
 #include "IClutterActor.h"
 #include "abstractActor.h"
+#include <core/Exception.h>
+
+extern "C" void abstractActorOnFinalize (void *ptr);
 
 class __tiliae_reflect__ AbstractActor : public IClutterActor {
 public:
@@ -60,9 +62,12 @@ public:
         virtual void setCppImplementation ();
 
 protected:
+        friend void abstractActorOnFinalize (void *ptr);
+        void onFinalize () { clutterDestroyed = true; }
 
         ClutterActor *self = 0;
         bool selectable = true;
+        bool clutterDestroyed = false;
 };
 
 #endif // ABSTRACTACTOR_H

@@ -6,22 +6,22 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef CIRCULARNODE_H
-#define CIRCULARNODE_H
+#ifndef DATAFLOW_GUI_STUFF_BUTTON_H
+#define DATAFLOW_GUI_STUFF_BUTTON_H
 
 #include "AbstractActor.h"
 #include "AbstractNodeView.h"
 #include "primitives/Geometry.h"
 
-/**
- * This is only a view.
- */
-class __tiliae_reflect__ CircularNode : public AbstractActor, public AbstractNodeView {
+class __tiliae_reflect__ Button : public AbstractActor, public AbstractNodeView {
 public:
-        CircularNode ();
-        virtual ~CircularNode () {}
+        Button ();
+        virtual ~Button () {}
         void init ();
 
+        /*---------------------------------------------------------------------------*/
+
+        // TODO all these methods to AbstractActor.
         bool isFill () const;
         void setFill (bool value);
 
@@ -40,8 +40,8 @@ public:
         /*---------------------------------------------------------------------------*/
 
         virtual void onAllocate (Box const &b);
+        virtual void onClick ();
         virtual Point getPortPosition (int i) const;
-
 };
 
-#endif // CIRCULARNODE_H
+#endif // BUTTON_H

@@ -25,6 +25,7 @@ public:
         virtual Anchor const *getAnchor (size_t i) const __tiliae_no_reflect__;
 
         PortVector &getPorts () { return ports; }
+        virtual Point getPortPosition (int i) const = 0;
 
 private:
         std::shared_ptr<flow::INode> node;

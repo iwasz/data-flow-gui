@@ -12,6 +12,10 @@
 /* include any dependencies */
 #include <clutter/clutter.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* GObject implementation */
 
 /* declare this function signature to remove compilation errors with -Wall;
@@ -82,5 +86,14 @@ void cb_button_set_text (CbButton *self, const gchar *text);
 void cb_button_set_background_color (CbButton *self, const ClutterColor *color);
 
 void cb_button_set_text_color (CbButton *self, const ClutterColor *color);
+
+// TODO move to base class
+void cb_button_set_user_data (CbButton *self, void *p);
+// TODO move to base class
+void *cb_button_get_user_data (CbButton *self);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // IW_BUTTON_H

@@ -27,6 +27,11 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">ic_insert_comment_black_24dp.png</property>
   </object>
+  <object class="GtkImage" id="consoleIcon1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">ic_insert_comment_black_24dp.png</property>
+  </object>
   <object class="GtkImage" id="copyIcon">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -319,6 +324,20 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkToolButton" id="addButton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Sum</property>
+                        <property name="label" translatable="yes">Sum</property>
+                        <property name="use_underline">True</property>
+                        <property name="icon_widget">addIcon</property>
+                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('addNode')" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkToolButton" id="copyButton">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -345,17 +364,16 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkToolButton" id="addButton">
+                      <object class="GtkToolButton" id="buttonButton">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Sum</property>
-                        <property name="label" translatable="yes">Sum</property>
-                        <property name="use_underline">True</property>
-                        <property name="icon_widget">addIcon</property>
-                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('addNode')" swapped="no"/>
+                        <property name="tooltip_text" translatable="yes">Console</property>
+                        <property name="label" translatable="yes">Button</property>
+                        <property name="icon_widget">consoleIcon1</property>
+                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('buttonNode')" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="position">1</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                   </object>

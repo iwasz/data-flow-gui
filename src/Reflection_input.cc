@@ -10,6 +10,8 @@
 #include "view/Line.h"
 #include "view/LineConnector.h"
 #include "view/Stage.h"
+#include "view/Button.h"
 #include "view/CircularNode.h"
 #include "primitives/Geometry.h"
 #include "view/ScaleLayer.h"
+

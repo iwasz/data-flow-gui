@@ -8,6 +8,9 @@
 
 #include "iw_button.h"
 
+void buttonOnAllocate (void *ptr, float x1, float y1, float x2, float y2);
+void buttonOnClick (void *ptr);
+
 /**
  * SECTION:cb-button
  * @short_description: Button widget
@@ -39,6 +42,7 @@ struct _CbButtonPrivate {
         ClutterActor *label;
         ClutterAction *click_action;
         gchar *text;
+        void *userData;
 };
 
 /* enumerates property identifiers for this class;
@@ -46,17 +50,6 @@ struct _CbButtonPrivate {
  * so we add an unused PROP_0 to occupy the 0 position in the enum
  */
 enum { PROP_0, PROP_TEXT };
-
-/* enumerates signal identifiers for this class;
- * LAST_SIGNAL is not used as a signal identifier, but is instead
- * used to delineate the size of the cache array for signals (see below)
- */
-enum { CLICKED, LAST_SIGNAL };
-
-/* cache array for signals */
-static guint cb_button_signals[LAST_SIGNAL] = {
-        0,
-};
 
 /* from http://mail.gnome.org/archives/gtk-devel-list/2004-July/msg00158.html:
  *
@@ -197,6 +190,7 @@ static void cb_button_allocate (ClutterActor *actor, const ClutterActorBox *box,
         child_box.y2 = clutter_actor_box_get_height (box);
 
         clutter_actor_allocate (priv->child, &child_box, flags);
+        buttonOnAllocate (priv->userData, child_box.x1, child_box.y1, child_box.x2, child_box.y2);
 }
 
 /* paint function implementation: just calls paint() on the ClutterBox */
@@ -210,8 +204,8 @@ static void cb_button_paint (ClutterActor *actor)
 /* proxy ClickAction signals so they become signals from the actor */
 static void cb_button_clicked (ClutterClickAction *action, ClutterActor *actor, gpointer user_data)
 {
-        /* emit signal via the cache array */
-        g_signal_emit (actor, cb_button_signals[CLICKED], 0);
+        CbButtonPrivate *priv = CB_BUTTON (actor)->priv;
+        buttonOnClick (priv->userData);
 }
 
 /* GObject class and instance initialization functions; note that
@@ -247,16 +241,6 @@ static void cb_button_class_init (CbButtonClass *klass)
          */
         pspec = g_param_spec_string ("text", "Text", "Text of the button", NULL, G_PARAM_READWRITE);
         g_object_class_install_property (gobject_class, PROP_TEXT, pspec);
-
-        /**
-         * CbButton::clicked:
-         * @button: the #CbButton that emitted the signal
-         *
-         * The ::clicked signal is emitted when the internal #ClutterClickAction
-         * associated with a #CbButton emits its own ::clicked signal
-         */
-        cb_button_signals[CLICKED] = g_signal_new ("clicked", G_TYPE_FROM_CLASS (klass), G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (CbButtonClass, clicked), NULL,
-                                                   NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }
 
 /* object init: create a private structure and pack
@@ -295,8 +279,9 @@ static void cb_button_init (CbButton *self)
          */
         priv->click_action = clutter_click_action_new ();
         clutter_actor_add_action (CLUTTER_ACTOR (self), priv->click_action);
-
         g_signal_connect (priv->click_action, "clicked", G_CALLBACK (cb_button_clicked), NULL);
+
+        priv->userData = NULL;
 }
 
 /* public API */
@@ -385,3 +370,19 @@ const gchar *cb_button_get_text (CbButton *self)
  * Returns: a new #CbButton
  */
 ClutterActor *cb_button_new (void) { return g_object_new (CB_TYPE_BUTTON, NULL); }
+
+/*****************************************************************************/
+
+void cb_button_set_user_data (CbButton *self, void *p)
+{
+        g_return_if_fail (CB_IS_BUTTON (self));
+        self->priv->userData = p;
+}
+
+/*****************************************************************************/
+
+void *cb_button_get_user_data (CbButton *self)
+{
+        g_return_val_if_fail (CB_IS_BUTTON (self), NULL);
+        return self->priv->userData;
+}

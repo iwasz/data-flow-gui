@@ -37,7 +37,6 @@ typedef struct _IwCircularNodePort IwCircularNodePort;
  */
 struct _IwCircularNodePrivate {
         ClutterLayoutManager *layout;
-        //        ClutterActor *box;
         ClutterActor *mainCircle;
         void *userData;
 
@@ -390,11 +389,19 @@ ClutterActor *iw_circular_node_new (void) { return g_object_new (IW_TYPE_CIRCULA
 
 /*****************************************************************************/
 
-void iw_circular_node_set_user_data (IwCircularNode *self, void *p) { self->priv->userData = p; }
+void iw_circular_node_set_user_data (IwCircularNode *self, void *p)
+{
+        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
+        self->priv->userData = p;
+}
 
 /*****************************************************************************/
 
-void *iw_circular_node_get_user_data (IwCircularNode *self) { return self->priv->userData; }
+void *iw_circular_node_get_user_data (IwCircularNode *self)
+{
+        g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), NULL);
+        return self->priv->userData;
+}
 
 /*****************************************************************************/
 

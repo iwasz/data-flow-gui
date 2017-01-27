@@ -7,6 +7,7 @@
  ****************************************************************************/
 
 #include "MoveStrategy.h"
+#include "view/Button.h"
 #include "view/IClutterActor.h"
 #include "view/ScaleLayer.h"
 #include "view/Stage.h"
@@ -20,7 +21,8 @@ void MoveStrategy::onEnter (Event const &e)
                 return;
         }
 
-        if (dynamic_cast<ScaleLayer *> (act) || dynamic_cast<Stage *> (act)) {
+        // TODO remove Button from the list of casts
+        if (dynamic_cast<ScaleLayer *> (act) || dynamic_cast<Stage *> (act) || dynamic_cast<Button *> (act)) {
                 return;
         }
 

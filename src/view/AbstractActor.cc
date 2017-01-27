@@ -13,12 +13,14 @@
 
 AbstractActor::~AbstractActor ()
 {
-        ClutterActor *oldParent;
-        if ((oldParent = clutter_actor_get_parent (self)) != nullptr) {
-                clutter_actor_remove_child (oldParent, self);
-        }
-        else {
-                g_critical ("AbstractActor::~AbstractActor : clutter_actor_get_parent (self) == nullptr");
+        if (!clutterDestroyed) {
+                ClutterActor *oldParent;
+                if ((oldParent = clutter_actor_get_parent (self)) != nullptr) {
+                        clutter_actor_remove_child (oldParent, self);
+                }
+                else {
+                        g_critical ("AbstractActor::~AbstractActor : clutter_actor_get_parent (self) == nullptr");
+                }
         }
 }
 
@@ -129,4 +131,12 @@ Point AbstractActor::convertToScaleLayer (Point const &p) const
         b.y = out.y - pos.y;
 
         return b;
+}
+
+/*****************************************************************************/
+
+extern "C" void abstractActorOnFinalize (void *ptr)
+{
+        AbstractActor *cn = static_cast<AbstractActor *> (ptr);
+        cn->onFinalize ();
 }

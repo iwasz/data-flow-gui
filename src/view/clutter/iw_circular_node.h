@@ -76,19 +76,29 @@ struct _IwCircularNodeClass {
 /* constructor - note this returns a ClutterActor instance */
 ClutterActor *iw_circular_node_new (void);
 
+// TODO move to base class
 void iw_circular_node_set_fill_color (IwCircularNode *self, const ClutterColor *color);
+// TODO move to base class
 ClutterColor *iw_circular_node_get_fill_color (IwCircularNode *self);
 
+// TODO move to base class
 void iw_circular_node_set_stroke_color (IwCircularNode *self, const ClutterColor *color);
+// TODO move to base class
 ClutterColor *iw_circular_node_get_stroke_color (IwCircularNode *self);
 
+// TODO move to base class
 void iw_circular_node_set_stroke_width (IwCircularNode *self, gfloat w);
+// TODO move to base class
 gfloat iw_circular_node_get_stroke_width (IwCircularNode *self);
 
+// TODO move to base class
 void iw_circular_node_set_stroke_dash (IwCircularNode *self, gfloat w);
+// TODO move to base class
 gfloat iw_circular_node_get_stroke_dash (IwCircularNode *self);
 
+// TODO move to base class
 void iw_circular_node_set_fill (IwCircularNode *self, gboolean b);
+// TODO move to base class
 gboolean iw_circular_node_is_fill (IwCircularNode *self);
 
 void iw_circular_node_set_port_color (IwCircularNode *self, int i, const ClutterColor *color);
@@ -101,7 +111,9 @@ void *iw_circular_node_get_port_user_data (IwCircularNode *self, int i);
 
 void iw_circular_node_get_port_position (IwCircularNode *self, int i, float *x, float *y);
 
+// TODO move to base class
 void iw_circular_node_set_user_data (IwCircularNode *self, void *p);
+// TODO move to base class
 void *iw_circular_node_get_user_data (IwCircularNode *self);
 
 #ifdef __cplusplus

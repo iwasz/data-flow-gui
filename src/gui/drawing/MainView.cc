@@ -11,6 +11,7 @@
 #include "view/IClutterActor.h"
 #include "view/ScaleLayer.h"
 #include "view/abstractActor.h"
+#include "view/clutter/iw_button.h"
 #include "view/clutter/iw_circle.h"
 #include "view/clutter/iw_circular_node.h"
 #include "view/clutter/iw_line.h"
@@ -61,63 +62,6 @@ void MainView::loadUi (GtkForms::App *app)
         g_signal_connect (stage->getActor (), "scroll-event", G_CALLBACK (on_stage_scroll), stage);
         g_signal_connect (stage->getActor (), "key-press-event", G_CALLBACK (on_stage_key_press), mc);
         g_signal_connect (stage->getClutterWidget (), "button_press_event", G_CALLBACK (button_callback_clutter), nullptr);
-
-        /*---------------------------------------------------------------------------*/
-
-        //        {
-        //                ClutterActor *circularNode = iw_circular_node_new ();
-        //                clutter_actor_set_position (circularNode, 100, 300);
-        //                iw_circular_node_set_radius (IW_CIRCULAR_NODE (circularNode), 75);
-        //                ClutterColor actor_color = { 0, 150, 198, 201 };
-        //                iw_circular_node_set_color (IW_CIRCULAR_NODE (circularNode), &actor_color);
-        //                clutter_actor_set_reactive (circularNode, TRUE);
-
-        //                iw_circular_node_set_ports_no (IW_CIRCULAR_NODE (circularNode), 3);
-        //                iw_circular_node_set_port_angle (IW_CIRCULAR_NODE (circularNode), 0, G_PI - 0.5);
-        //                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (circularNode), 0, 20);
-        //                ClutterColor port_color = { 141, 141, 141, 255 };
-        //                iw_circular_node_set_port_color (IW_CIRCULAR_NODE (circularNode), 0, &port_color);
-
-        //                iw_circular_node_set_port_angle (IW_CIRCULAR_NODE (circularNode), 1, G_PI + 0.5);
-        //                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (circularNode), 1, 20);
-        //                iw_circular_node_set_port_color (IW_CIRCULAR_NODE (circularNode), 1, &port_color);
-
-        //                iw_circular_node_set_port_angle (IW_CIRCULAR_NODE (circularNode), 2, 2 * G_PI);
-        //                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (circularNode), 2, 20);
-        //                ClutterColor port_color2 = { 209, 209, 209, 255 };
-        //                iw_circular_node_set_port_color (IW_CIRCULAR_NODE (circularNode), 2, &port_color2);
-
-        //                clutter_actor_add_child (stage->getActor (), circularNode);
-
-        //                ClutterAction *dragAction = clutter_drag_action_new ();
-        //                clutter_actor_add_action (circularNode, dragAction);
-        //        }
-
-        //        {
-        //                ClutterActor *label = clutter_text_new ();
-        //                clutter_actor_add_child (stage->getActor (), label);
-        //                clutter_actor_set_position (label, 100, 300);
-        //                clutter_text_set_text (CLUTTER_TEXT (label), "Hello, World!");
-        //                clutter_text_set_font_name (CLUTTER_TEXT (label), "18px");
-        //                clutter_text_set_editable (CLUTTER_TEXT (label), TRUE);
-        //                clutter_text_set_selectable (CLUTTER_TEXT (label), TRUE);
-        //                clutter_actor_set_reactive (label, TRUE);
-        //        }
-
-        //        {
-        //                ClutterActor *rect = iw_rectangle_new ();
-        //                clutter_actor_add_child (stage->getActor (), rect);
-        //                clutter_actor_set_position (rect, 100, 300);
-        //                clutter_actor_set_size (rect, 600, 600);
-        //                clutter_actor_set_reactive (rect, TRUE);
-        //                ClutterAction *dragAction = clutter_drag_action_new ();
-        //                clutter_actor_add_action (rect, dragAction);
-
-        //                ClutterActor *circle = iw_circle_new ();
-        //                clutter_actor_add_child (rect, circle);
-        //                clutter_actor_set_position (circle, 100, 100);
-        //                clutter_actor_set_size (circle, 400, 400);
-        //        }
 }
 
 /*****************************************************************************/
