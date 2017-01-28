@@ -60,7 +60,9 @@ struct _IwActorPrivate {
 static void iw_actor_finalize (GObject *gobject)
 {
         IwActorPrivate *priv = IW_ACTOR (gobject)->priv;
-        abstractActorOnFinalize (priv->userData);
+        if (priv->userData) {
+                abstractActorOnFinalize (priv->userData);
+        }
         /* call the parent class' finalize() method */
         G_OBJECT_CLASS (iw_actor_parent_class)->finalize (gobject);
 }
@@ -95,7 +97,7 @@ static void iw_actor_init (IwActor *self)
         priv->fill = FALSE;
         priv->strokeDash = 0;
         priv->strokeWidth = 3;
-
+        priv->userData = NULL;
 #if 0
         static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
         clutter_actor_set_background_color (CLUTTER_ACTOR (self), &c);

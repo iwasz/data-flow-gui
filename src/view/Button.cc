@@ -14,13 +14,9 @@ Button::Button ()
 {
         self = cb_button_new ();
         clutter_actor_set_reactive (self, TRUE);
-        // iw_circular_node_set_user_data (IW_CIRCULAR_NODE (self), this);
-        cb_button_set_text (CB_BUTTON (self), "Hello world");
         clutter_actor_set_position (self, 100, 300);
-        static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
-        clutter_actor_set_background_color (self, &c);
 
-        cb_button_set_user_data (CB_BUTTON (self), this);
+        iw_actor_set_user_data (IW_ACTOR (self), this);
         setCppImplementation ();
 }
 
@@ -42,54 +38,6 @@ void Button::init ()
         //        }
 
         //        glueInit ();
-}
-
-/*****************************************************************************/
-
-bool Button::isFill () const { /*return iw_circular_node_is_fill (IW_CIRCULAR_NODE (self));*/}
-
-/*****************************************************************************/
-
-void Button::setFill (bool value) { /*iw_circular_node_set_fill (IW_CIRCULAR_NODE (self), value);*/}
-
-/*****************************************************************************/
-
-float Button::getStrokeWidth () const { /*return iw_circular_node_get_stroke_width (IW_CIRCULAR_NODE (self));*/}
-
-/*****************************************************************************/
-
-void Button::setStrokeWidth (float value) { /*iw_circular_node_set_stroke_width (IW_CIRCULAR_NODE (self), value);*/}
-
-/*****************************************************************************/
-
-float Button::getStrokeDash () const { /*return iw_circular_node_get_stroke_dash (IW_CIRCULAR_NODE (self));*/}
-
-/*****************************************************************************/
-
-void Button::setStrokeDash (float value) { /*iw_circular_node_set_stroke_dash (IW_CIRCULAR_NODE (self), value);*/}
-
-/*****************************************************************************/
-
-Color Button::getStrokeColor () const { /*return Color (iw_circular_node_get_stroke_color (IW_CIRCULAR_NODE (self)));*/}
-
-/*****************************************************************************/
-
-void Button::setStrokeColor (const Color &value)
-{
-        //        ClutterColor color = Color::toClutterColor (value);
-        //        iw_circular_node_set_stroke_color (IW_CIRCULAR_NODE (self), &color);
-}
-
-/*****************************************************************************/
-
-Color Button::getFillColor () const { /*return Color (iw_circular_node_get_fill_color (IW_CIRCULAR_NODE (self)));*/}
-
-/*****************************************************************************/
-
-void Button::setFillColor (const Color &value)
-{
-        //        ClutterColor color = Color::toClutterColor (value);
-        //        iw_circular_node_set_fill_color (IW_CIRCULAR_NODE (self), &color);
 }
 
 /*****************************************************************************/

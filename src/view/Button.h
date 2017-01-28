@@ -21,24 +21,6 @@ public:
 
         /*---------------------------------------------------------------------------*/
 
-        // TODO all these methods to AbstractActor.
-        bool isFill () const;
-        void setFill (bool value);
-
-        float getStrokeWidth () const;
-        void setStrokeWidth (float value);
-
-        float getStrokeDash () const;
-        void setStrokeDash (float value);
-
-        Color getStrokeColor () const;
-        void setStrokeColor (const Color &value);
-
-        Color getFillColor () const;
-        void setFillColor (const Color &value);
-
-        /*---------------------------------------------------------------------------*/
-
         virtual void onAllocate (Box const &b);
         virtual void onClick ();
         virtual Point getPortPosition (int i) const;
