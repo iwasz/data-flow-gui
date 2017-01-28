@@ -7,6 +7,8 @@
  ****************************************************************************/
 
 #include "Anchor.h"
+#include "IClutterActor.h"
+#include "INodeView.h"
 #include <algorithm>
 
 Anchor::~Anchor ()
@@ -23,20 +25,6 @@ void Anchor::connect (IConnector *c, IConnector::Side s) { connections.push_back
 
 /*****************************************************************************/
 
-// void Anchor::disconnect (IConnector *c, IConnector::Side s)
-//{
-//        ConnectionVector::iterator i
-//                = std::remove_if (connections.begin (), connections.end (), [c, s](Connection const &con) { return con.connector == c && con.side == s; });
-
-//        for (ConnectionVector::iterator j = i; j < connections.end (); ++j) {
-//                j->connector->onDisconnectAnchor (Point (), j->side);
-//        }
-
-//        connections.erase (i, connections.end ());
-//}
-
-/*****************************************************************************/
-
 void Anchor::disconnect (IConnector *c)
 {
         ConnectionVector::iterator i = std::remove_if (connections.begin (), connections.end (), [c](Connection const &con) { return con.connector == c; });
@@ -50,21 +38,13 @@ void Anchor::disconnect (IConnector *c)
 
 /*****************************************************************************/
 
-// void Anchor::disconnect ()
-//{
-
-//        for (Connection const &con : connections) {
-//                con.connector->onDisconnectAnchor (Point (), con.side);
-//        }
-
-//        connections.clear ();
-//}
-
-/*****************************************************************************/
-
 void Anchor::notifyMoveAnchor (const Point &p)
 {
         for (Connection &c : connections) {
                 c.connector->onMoveAnchor (p, c.side);
         }
 }
+
+/*****************************************************************************/
+
+Point NodeAnchorPositionProvider::getPosition () const { return dynamic_cast<IClutterActor *> (node)->convertToScaleLayer (node->getPortPosition (i)); }

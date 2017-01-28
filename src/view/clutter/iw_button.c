@@ -7,24 +7,16 @@
  ****************************************************************************/
 
 #include "iw_button.h"
+#include "iw_circle.h"
+#include <math.h>
 
 void buttonOnAllocate (void *ptr, float x1, float y1, float x2, float y2);
-void buttonOnClick (void *ptr);
+void buttonOnPress (void *ptr);
+void buttonOnRelease (void *ptr);
 static gboolean draw_rectangle (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data);
+static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocation, ClutterAllocationFlags flags, gpointer user_data);
 
-/**
- * SECTION:cb-button
- * @short_description: Button widget
- *
- * A button widget with support for a text label and background color.
- */
-
-/* convenience macro for GType implementations; see:
- * http://library.gnome.org/devel/gobject/2.27/gobject-Type-Information.html#G-DEFINE-TYPE:CAPS
- */
 G_DEFINE_TYPE (CbButton, cb_button, IW_TYPE_ACTOR);
-
-/* macro for accessing the object's private structure */
 #define CB_BUTTON_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), CB_TYPE_BUTTON, CbButtonPrivate))
 
 /* private structure - should only be accessed through the public API;
@@ -39,134 +31,13 @@ G_DEFINE_TYPE (CbButton, cb_button, IW_TYPE_ACTOR);
  * (toggled on or off) or a background image
  */
 struct _CbButtonPrivate {
-        //        ClutterActor *child;
         ClutterActor *label;
-        ClutterAction *click_action;
-        //        gchar *text;
-        //        void *userData;
+        ClutterActor *port;
+        gboolean mouseOver;
 };
 
-/* enumerates property identifiers for this class;
- * note that property identifiers should be non-zero integers,
- * so we add an unused PROP_0 to occupy the 0 position in the enum
- */
-// enum { PROP_0, PROP_TEXT };
+/*****************************************************************************/
 
-/* from http://mail.gnome.org/archives/gtk-devel-list/2004-July/msg00158.html:
- *
- * "The finalize method finishes releasing the remaining
- * resources just before the object itself will be freed from memory, and
- * therefore it will only be called once. The two step process helps break
- * cyclic references. Both dispose and finalize must chain up to their
- * parent objects by calling their parent's respective methods *after* they
- * have disposed or finalized their own members."
- */
-// static void cb_button_finalize (GObject *gobject)
-//{
-//        CbButtonPrivate *priv = CB_BUTTON (gobject)->priv;
-
-//        g_free (priv->text);
-
-//        /* call the parent class' finalize() method */
-//        G_OBJECT_CLASS (cb_button_parent_class)->finalize (gobject);
-//}
-
-/* enables objects to be uniformly treated as GObjects;
- * also exposes properties so they become scriptable, e.g.
- * through ClutterScript
- */
-// static void cb_button_set_property (GObject *gobject, guint prop_id, const GValue *value, GParamSpec *pspec)
-//{
-//        CbButton *button = CB_BUTTON (gobject);
-
-//        switch (prop_id) {
-//        case PROP_TEXT:
-//                cb_button_set_text (button, g_value_get_string (value));
-//                break;
-
-//        default:
-//                G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
-//                break;
-//        }
-//}
-
-/* enables objects to be uniformly treated as GObjects */
-// static void cb_button_get_property (GObject *gobject, guint prop_id, GValue *value, GParamSpec *pspec)
-//{
-//        CbButtonPrivate *priv = CB_BUTTON (gobject)->priv;
-
-//        switch (prop_id) {
-//        case PROP_TEXT:
-//                g_value_set_string (value, priv->text);
-//                break;
-
-//        default:
-//                G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
-//                break;
-//        }
-//}
-
-/* ClutterActor implementation
- *
- * we only implement destroy(), get_preferred_height(), get_preferred_width(),
- * allocate(), and paint(), as this is the minimum we can get away with
- */
-
-/* composite actors should implement destroy(), and inside their
- * implementation destroy any actors they are composed from;
- * in this case, we just destroy the child ClutterBox
- */
-// static void cb_button_destroy (ClutterActor *self)
-//{
-//        CbButtonPrivate *priv = CB_BUTTON (self)->priv;
-
-//        /* we just destroy the child, and let the child
-//         * deal with destroying _its_ children; note that we have a guard
-//         * here in case the child has already been destroyed
-//         */
-//        if (priv->child) {
-//                clutter_actor_destroy (priv->child);
-//                priv->child = NULL;
-//        }
-
-//        /* chain up to destroy() on the parent ClutterActorClass;
-//         * note that we check the parent class has a destroy() implementation
-//         * before calling it
-//         */
-//        if (CLUTTER_ACTOR_CLASS (cb_button_parent_class)->destroy) CLUTTER_ACTOR_CLASS (cb_button_parent_class)->destroy (self);
-//}
-
-/* get_preferred_height and get_preferred_width defer to the
- * internal ClutterBox, adding 20px padding on each axis;
- * min_*_p is the minimum height or width the actor should occupy
- * to be useful; natural_*_p is the height or width the actor
- * would occupy if not constrained
- *
- * note that if we required explicit sizing for CbButtons
- * (i.e. a developer must set their height and width),
- * we wouldn't need to implement these functions
- */
-static void cb_button_get_preferred_height (ClutterActor *self, gfloat for_width, gfloat *min_height_p, gfloat *natural_height_p)
-{
-        CbButtonPrivate *priv = CB_BUTTON (self)->priv;
-
-        clutter_actor_get_preferred_height (self, for_width, min_height_p, natural_height_p);
-
-        *min_height_p += 20.0;
-        *natural_height_p += 20.0;
-}
-
-static void cb_button_get_preferred_width (ClutterActor *self, gfloat for_height, gfloat *min_width_p, gfloat *natural_width_p)
-{
-        CbButtonPrivate *priv = CB_BUTTON (self)->priv;
-
-        clutter_actor_get_preferred_width (self, for_height, min_width_p, natural_width_p);
-
-        *min_width_p += 20.0;
-        *natural_width_p += 20.0;
-}
-
-/* use the actor's allocation for the ClutterBox */
 static void cb_button_allocate (ClutterActor *actor, const ClutterActorBox *box, ClutterAllocationFlags flags)
 {
         CbButtonPrivate *priv = CB_BUTTON (actor)->priv;
@@ -175,76 +46,76 @@ static void cb_button_allocate (ClutterActor *actor, const ClutterActorBox *box,
         };
 
         /* set the allocation for the whole button */
-        CLUTTER_ACTOR_CLASS (cb_button_parent_class)->allocate (actor, box, flags);
+        //        CLUTTER_ACTOR_CLASS (cb_button_parent_class)->allocate (actor, box, flags);
+        clutter_actor_set_allocation (actor, box, flags);
 
-        /* make the child (the ClutterBox) fill the parent;
-         * note that this allocation box is relative to the
-         * coordinates of the whole button actor, so we can't just
-         * use the box passed into this function; instead, it
-         * is adjusted to span the whole of the actor, from its
-         * top-left corner (0,0) to its bottom-right corner
-         * (width,height)
-         */
-        //        child_box.x1 = 0.0;
-        //        child_box.y1 = 0.0;
-        //        child_box.x2 = clutter_actor_box_get_width (box);
-        //        child_box.y2 = clutter_actor_box_get_height (box);
+        float w = clutter_actor_box_get_width (box);
+        float h = clutter_actor_box_get_height (box);
+        float tw = clutter_actor_get_width (priv->label);
+        float th = clutter_actor_get_height (priv->label);
+        float portR = clutter_actor_get_width (priv->port);
 
-        //        clutter_actor_set_allocation (actor, &child_box, flags);
+        child_box.x1 = (w - tw) / 2;
+        child_box.y1 = (h - th) / 2;
+        child_box.x2 = child_box.x1 + tw;
+        child_box.y2 = child_box.y1 + th;
+        clutter_actor_allocate (priv->label, &child_box, flags);
+
+        child_box.x1 = w - portR / 2;
+        child_box.y1 = (h - portR) / 2;
+        child_box.x2 = child_box.x1 + portR;
+        child_box.y2 = child_box.y1 + portR;
+        clutter_actor_allocate (priv->port, &child_box, flags);
+
         buttonOnAllocate (iw_actor_get_user_data (IW_ACTOR (actor)), child_box.x1, child_box.y1, child_box.x2, child_box.y2);
 }
 
-/* paint function implementation: just calls paint() on the ClutterBox */
-// static void cb_button_paint (ClutterActor *actor)
-//{
-//        CbButtonPrivate *priv = CB_BUTTON (actor)->priv;
-//        clutter_actor_paint (priv->child);
-//}
+/*****************************************************************************/
 
-/* proxy ClickAction signals so they become signals from the actor */
-static void cb_button_clicked (ClutterClickAction *action, ClutterActor *actor, gpointer user_data)
+gboolean on_button_button_press (ClutterActor *actor, ClutterEvent *ev, gpointer data)
 {
-        buttonOnClick (iw_actor_get_user_data (IW_ACTOR (actor)));
+        buttonOnPress (iw_actor_get_user_data (IW_ACTOR (actor)));
+        return FALSE;
 }
 
-/* GObject class and instance initialization functions; note that
- * these have been placed after the Clutter implementation, as
- * they refer to the static function implementations above
- */
+/*****************************************************************************/
 
-/* class init: attach functions to superclasses, define properties
- * and signals
- */
+gboolean on_button_button_release (ClutterActor *actor, ClutterEvent *ev, gpointer data)
+{
+        buttonOnRelease (iw_actor_get_user_data (IW_ACTOR (actor)));
+        return FALSE;
+}
+
+/*****************************************************************************/
+
+void on_button_enter (ClutterActor *actor, ClutterEvent *ev, gpointer data)
+{
+        CbButtonPrivate *priv = CB_BUTTON (actor)->priv;
+        priv->mouseOver = TRUE;
+        clutter_content_invalidate (iw_actor_get_canvas (IW_ACTOR (actor)));
+}
+
+/*****************************************************************************/
+
+void on_button_leave (ClutterActor *actor, ClutterEvent *ev, gpointer data)
+{
+        CbButtonPrivate *priv = CB_BUTTON (actor)->priv;
+        priv->mouseOver = FALSE;
+        clutter_content_invalidate (iw_actor_get_canvas (IW_ACTOR (actor)));
+}
+
+/*****************************************************************************/
+
 static void cb_button_class_init (CbButtonClass *klass)
 {
         ClutterActorClass *actor_class = CLUTTER_ACTOR_CLASS (klass);
-        GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-        //        GParamSpec *pspec;
-
-        //        gobject_class->finalize = cb_button_finalize;
-        //        gobject_class->set_property = cb_button_set_property;
-        //        gobject_class->get_property = cb_button_get_property;
-
-        //        actor_class->destroy = cb_button_destroy;
-        actor_class->get_preferred_height = cb_button_get_preferred_height;
-        actor_class->get_preferred_width = cb_button_get_preferred_width;
         actor_class->allocate = cb_button_allocate;
-        //        actor_class->paint = cb_button_paint;
 
         g_type_class_add_private (klass, sizeof (CbButtonPrivate));
-
-        /**
-         * CbButton:text:
-         *
-         * The text shown on the #CbButton
-         */
-        //        pspec = g_param_spec_string ("text", "Text", "Text of the button", NULL, G_PARAM_READWRITE);
-        //        g_object_class_install_property (gobject_class, PROP_TEXT, pspec);
 }
 
-/* object init: create a private structure and pack
- * composed ClutterActors into it
- */
+/*****************************************************************************/
+
 static void cb_button_init (CbButton *self)
 {
         CbButtonPrivate *priv;
@@ -253,80 +124,33 @@ static void cb_button_init (CbButton *self)
         priv = self->priv = CB_BUTTON_GET_PRIVATE (self);
         clutter_actor_set_reactive (CLUTTER_ACTOR (self), TRUE);
 
-        //        layout = clutter_bin_layout_new (CLUTTER_BIN_ALIGNMENT_CENTER, CLUTTER_BIN_ALIGNMENT_CENTER);
-        //        clutter_actor_set_layout_manager (CLUTTER_ACTOR (self), layout);
-
         priv->label = clutter_text_new ();
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->label);
-        clutter_text_set_font_name (CLUTTER_TEXT (priv->label), "180px");
+        clutter_text_set_font_name (CLUTTER_TEXT (priv->label), "18px");
         clutter_text_set_text (CLUTTER_TEXT (priv->label), "Hello world");
         clutter_text_set_editable (CLUTTER_TEXT (priv->label), FALSE);
         clutter_text_set_selectable (CLUTTER_TEXT (priv->label), TRUE);
         clutter_text_set_single_line_mode (CLUTTER_TEXT (priv->label), TRUE);
-        static ClutterColor c = { 0xff, 0x00, 0x00, 0xff };
-        clutter_text_set_color (CLUTTER_TEXT (priv->label), &c);
-        clutter_actor_set_reactive (priv->label, TRUE);
 
-        /* add a ClutterClickAction on this actor, so we can proxy its
-         * "clicked" signal into a signal from this actor
-         */
-        priv->click_action = clutter_click_action_new ();
-        clutter_actor_add_action (CLUTTER_ACTOR (self), priv->click_action);
-        g_signal_connect (priv->click_action, "clicked", G_CALLBACK (cb_button_clicked), NULL);
+//        static ClutterColor c = { 0x00, 0xff, 0x00, 0x88 };
+//        clutter_actor_set_background_color (priv->label, &c);
+
+        self->priv->port = iw_circle_new ();
+        iw_actor_set_fill (IW_ACTOR (self->priv->port), TRUE);
+        iw_actor_set_stroke_width (IW_ACTOR (self->priv->port), 0);
+        clutter_actor_add_child (CLUTTER_ACTOR (self), self->priv->port);
+        clutter_actor_set_reactive (self->priv->port, TRUE);
+        clutter_actor_set_size (self->priv->port, 20, 20);
+
+        g_signal_connect (CLUTTER_ACTOR (self), "button-press-event", G_CALLBACK (on_button_button_press), NULL);
+        g_signal_connect (CLUTTER_ACTOR (self), "button-release-event", G_CALLBACK (on_button_button_release), NULL);
+        g_signal_connect (CLUTTER_ACTOR (self), "enter-event", G_CALLBACK (on_button_enter), NULL);
+        g_signal_connect (CLUTTER_ACTOR (self), "leave-event", G_CALLBACK (on_button_leave), NULL);
 
         ClutterContent *canvas = iw_actor_get_canvas (IW_ACTOR (self));
         g_signal_connect (canvas, "draw", G_CALLBACK (draw_rectangle), self);
         clutter_content_invalidate (canvas);
 }
-
-/**
- * cb_button_set_text_color:
- * @self: a #CbButton
- * @color: the #ClutterColor to use as the color for the button text
- *
- * Set the color of the text on the button
- */
-void cb_button_set_text_color (CbButton *self, const ClutterColor *color)
-{
-        g_return_if_fail (CB_IS_BUTTON (self));
-        clutter_text_set_color (CLUTTER_TEXT (self->priv->label), color);
-}
-
-/**
- * cb_button_set_text:
- * @self: a #CbButton
- * @text: the text to display on the button
- *
- * Set the text on the button
- */
-void cb_button_set_text (CbButton *self, const gchar *text)
-{
-        g_return_if_fail (CB_IS_BUTTON (self));
-        clutter_text_set_text (CLUTTER_TEXT (self->priv->label), text);
-}
-
-/**
- * cb_button_get_text:
- * @self: a #CbButton
- *
- * Get the text displayed on the button
- *
- * Returns: the button's text. This must not be freed by the application.
- */
-const gchar *cb_button_get_text (CbButton *self)
-{
-        g_return_val_if_fail (CB_IS_BUTTON (self), NULL);
-        return clutter_text_get_text (CLUTTER_TEXT (self->priv->label));
-}
-
-/**
- * cb_button_new:
- *
- * Creates a new #CbButton instance
- *
- * Returns: a new #CbButton
- */
-ClutterActor *cb_button_new (void) { return g_object_new (CB_TYPE_BUTTON, NULL); }
 
 /*****************************************************************************/
 
@@ -360,11 +184,20 @@ static gboolean draw_rectangle (ClutterCanvas *canvas, cairo_t *cr, int width, i
         }
 
         float mr = strokeWidth / 2.0 + 1;
-        cairo_move_to (cr, mr, mr);
-        cairo_line_to (cr, width - mr, mr);
-        cairo_line_to (cr, width - mr, height - mr);
-        cairo_line_to (cr, mr, height - mr);
-        cairo_line_to (cr, mr, mr);
+
+        width -= mr;
+        height -= mr + 1;
+
+        double x = mr, y = mr, aspect = 1.0, corner_radius = 10.0;
+        double radius = corner_radius / aspect;
+        double degrees = M_PI / 180.0;
+
+        cairo_new_sub_path (cr);
+        cairo_arc (cr, x + width - radius, y + radius, radius, -90 * degrees, 0 * degrees);
+        cairo_arc (cr, x + width - radius, y + height - radius, radius, 0 * degrees, 90 * degrees);
+        cairo_arc (cr, x + radius, y + height - radius, radius, 90 * degrees, 180 * degrees);
+        cairo_arc (cr, x + radius, y + radius, radius, 180 * degrees, 270 * degrees);
+        cairo_close_path (cr);
 
         if (strokeWidth > 0) {
                 clutter_cairo_set_source_color (cr, strokeColor);
@@ -372,9 +205,120 @@ static gboolean draw_rectangle (ClutterCanvas *canvas, cairo_t *cr, int width, i
         }
 
         if (isFill) {
-                clutter_cairo_set_source_color (cr, fillColor);
+                if (self->priv->mouseOver) {
+                        ClutterColor newColor;
+                        clutter_color_lighten (fillColor, &newColor);
+                        clutter_cairo_set_source_color (cr, &newColor);
+                }
+                else {
+                        clutter_cairo_set_source_color (cr, fillColor);
+                }
+
                 cairo_fill (cr);
         }
 
         return TRUE;
+}
+
+/*****************************************************************************/
+
+const gchar *cb_buton_get_font (CbButton *self)
+{
+        g_return_val_if_fail (CB_IS_BUTTON (self), NULL);
+        return clutter_text_get_font_name (CLUTTER_TEXT (self->priv->label));
+}
+
+/*****************************************************************************/
+
+void cb_buton_set_font (CbButton *self, const gchar *s)
+{
+        g_return_if_fail (CB_IS_BUTTON (self));
+        clutter_text_set_font_name (CLUTTER_TEXT (self->priv->label), s);
+}
+
+/*****************************************************************************/
+
+void cb_button_set_font_color (CbButton *self, const ClutterColor *color)
+{
+        g_return_if_fail (CB_IS_BUTTON (self));
+        clutter_text_set_color (CLUTTER_TEXT (self->priv->label), color);
+}
+
+/*****************************************************************************/
+
+void cb_button_get_font_color (CbButton *self, ClutterColor *color)
+{
+        g_return_if_fail (CB_IS_BUTTON (self));
+        return clutter_text_get_color (CLUTTER_TEXT (self->priv->label), color);
+}
+
+/*****************************************************************************/
+
+void cb_button_set_text (CbButton *self, const gchar *text)
+{
+        g_return_if_fail (CB_IS_BUTTON (self));
+        clutter_text_set_text (CLUTTER_TEXT (self->priv->label), text);
+}
+
+/*****************************************************************************/
+
+const gchar *cb_button_get_text (CbButton *self)
+{
+        g_return_val_if_fail (CB_IS_BUTTON (self), NULL);
+        return clutter_text_get_text (CLUTTER_TEXT (self->priv->label));
+}
+
+/*****************************************************************************/
+
+ClutterActor *cb_button_new (void) { return g_object_new (CB_TYPE_BUTTON, NULL); }
+
+/*****************************************************************************/
+
+void cb_button_set_port_color (CbButton *self, const ClutterColor *color)
+{
+        g_return_if_fail (CB_IS_BUTTON (self));
+        iw_actor_set_fill_color (IW_ACTOR (self->priv->port), color);
+}
+
+/*****************************************************************************/
+
+void cb_button_set_port_size (CbButton *self, float s)
+{
+        g_return_if_fail (CB_IS_BUTTON (self));
+        clutter_actor_set_size (CLUTTER_ACTOR (self->priv->port), s, s);
+}
+
+/*****************************************************************************/
+
+void cb_button_set_port_user_data (CbButton *self, void *p)
+{
+        g_return_if_fail (CB_IS_BUTTON (self));
+        g_object_set_data (G_OBJECT (self->priv->port), CPP_IMPLEMENTATION_KEY, p);
+}
+
+/*****************************************************************************/
+
+void *cb_button_node_get_port_user_data (CbButton *self)
+{
+        g_return_val_if_fail (CB_IS_BUTTON (self), NULL);
+        return g_object_get_data (G_OBJECT (self->priv->port), CPP_IMPLEMENTATION_KEY);
+}
+
+/*****************************************************************************/
+
+void cb_button_get_port_position (CbButton *self, float *x, float *y)
+{
+        g_return_if_fail (CB_IS_BUTTON (self));
+        float px, py;
+        ClutterActor *port = self->priv->port;
+        clutter_actor_get_position (port, &px, &py);
+
+        px += clutter_actor_get_width (port) / 2.0;
+        py += clutter_actor_get_height (port) / 2.0;
+
+        float ax, ay;
+        clutter_actor_get_position (CLUTTER_ACTOR (self), &ax, &ay);
+
+        *x = px + ax;
+        *y = py + ay;
 }

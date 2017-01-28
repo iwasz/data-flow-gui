@@ -11,19 +11,6 @@
 
 /*****************************************************************************/
 
-class CircularNodeAnchorPositionProvider : public IAnchorPositionProvider {
-public:
-        CircularNodeAnchorPositionProvider (int i, CircularNode *n) : i (i), node (n) {}
-        virtual ~CircularNodeAnchorPositionProvider () {}
-        virtual Point getPosition () const { return node->convertToScaleLayer (node->getPortPosition (i)); }
-
-private:
-        int i;
-        CircularNode *node;
-};
-
-/*****************************************************************************/
-
 CircularNode::CircularNode ()
 {
         self = iw_circular_node_new ();
@@ -45,7 +32,7 @@ void CircularNode::init ()
                 ClutterColor c = p->color.toClutterColor ();
                 iw_circular_node_set_port_color (IW_CIRCULAR_NODE (self), portNumber, &c);
                 iw_circular_node_set_port_user_data (IW_CIRCULAR_NODE (self), portNumber, p.get ());
-                p->anchor.setApProvider (std::make_shared<CircularNodeAnchorPositionProvider> (portNumber, this));
+                p->anchor.setApProvider (std::make_shared<NodeAnchorPositionProvider> (portNumber, this));
                 ++portNumber;
         }
 

@@ -12,11 +12,11 @@
 
 Anchor *AbstractNodeView::getAnchor (size_t i)
 {
-        if (i >= ports.size ()) {
+        if (i >= getPorts ().size ()) {
                 throw Core::Exception ("AbstractNodeView::getAnchor no sucho node");
         }
 
-        return &ports[i]->anchor;
+        return &getPorts ()[i]->anchor;
 }
 
 /*****************************************************************************/

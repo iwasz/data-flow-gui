@@ -57,6 +57,8 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
         virtual bool isContainter () const = 0;
 
         virtual Box getBoundingBox () const = 0;
+        virtual Point convertToScaleLayer (Point const &p) const = 0;
+
 };
 
 typedef __tiliae_reflect__ std::vector<IClutterActor *> ClutterActorVector;

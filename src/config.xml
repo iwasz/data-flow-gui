@@ -56,9 +56,9 @@
     <Console scope="prototype" set-as="node"/>
   </CircularNode>
 
-  <Button scope="prototype" id="buttonNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D5007488" visible="false">
-<!--    <OutputPort scope="prototype" add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20"/>-->
-    <Console scope="prototype" set-as="node"/>
+  <Button scope="prototype" id="buttonNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">
+    <OutputPort scope="prototype" add-to="ports" color="#8d8d8dff" size="20"/>
+    <Copy scope="prototype" set-as="node"/>
   </Button>
 
   <LineConnector scope="prototype" id="lineConnector" parent="@scale" strokeColor="#d1d1d1ff"

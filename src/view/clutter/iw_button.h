@@ -43,7 +43,20 @@ ClutterActor *cb_button_new (void);
 const gchar *cb_button_get_text (CbButton *self);
 void cb_button_set_text (CbButton *self, const gchar *text);
 
-void cb_button_set_text_color (CbButton *self, const ClutterColor *color);
+const gchar *cb_buton_get_font (CbButton *self);
+void cb_buton_set_font (CbButton *self, const gchar *s);
+
+void cb_button_get_font_color (CbButton *self, ClutterColor *color);
+void cb_button_set_font_color (CbButton *self, const ClutterColor *c);
+
+void cb_button_set_port_color (CbButton *self, const ClutterColor *color);
+void cb_button_set_port_size (CbButton *self, float s);
+void cb_button_set_ports_no (CbButton *self);
+
+void cb_button_set_port_user_data (CbButton *self, void *p);
+void *cb_button_node_get_port_user_data (CbButton *self);
+
+void cb_button_get_port_position (CbButton *self, float *x, float *y);
 
 #ifdef __cplusplus
 }

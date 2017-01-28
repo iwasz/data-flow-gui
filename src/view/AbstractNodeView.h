@@ -10,7 +10,6 @@
 #define ABSTRACTNODEVIEW_H
 
 #include "INodeView.h"
-#include "Port.h"
 
 class __tiliae_reflect__ AbstractNodeView : public INodeView {
 public:
@@ -18,14 +17,13 @@ public:
 
         void glueInit ();
 
-        std::shared_ptr<flow::INode> getNode () { return node; }
-        void setNode (std::shared_ptr<flow::INode> n) { node = n; }
+        virtual std::shared_ptr<flow::INode> getNode () { return node; }
+        virtual void setNode (std::shared_ptr<flow::INode> n) { node = n; }
 
         virtual Anchor *getAnchor (size_t i) __tiliae_no_reflect__;
         virtual Anchor const *getAnchor (size_t i) const __tiliae_no_reflect__;
 
-        PortVector &getPorts () { return ports; }
-        virtual Point getPortPosition (int i) const = 0;
+        virtual PortVector &getPorts () { return ports; }
 
 private:
         std::shared_ptr<flow::INode> node;
