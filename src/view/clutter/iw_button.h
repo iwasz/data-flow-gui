@@ -15,48 +15,48 @@
 extern "C" {
 #endif
 
-GType cb_button_get_type (void);
+GType iw_button_get_type (void);
 
-#define CB_TYPE_BUTTON (cb_button_get_type ())
-#define CB_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), CB_TYPE_BUTTON, CbButton))
-#define CB_IS_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CB_TYPE_BUTTON))
-#define CB_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), CB_TYPE_BUTTON, CbButtonClass))
-#define CB_IS_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), CB_TYPE_BUTTON))
-#define CB_BUTTON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), CB_TYPE_BUTTON, CbButtonClass))
+#define IW_TYPE_BUTTON (iw_button_get_type ())
+#define IW_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), IW_TYPE_BUTTON, IwButton))
+#define IW_IS_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IW_TYPE_BUTTON))
+#define IW_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), IW_TYPE_BUTTON, IwButtonClass))
+#define IW_IS_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), IW_TYPE_BUTTON))
+#define IW_BUTTON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), IW_TYPE_BUTTON, IwButtonClass))
 
-typedef struct _CbButtonPrivate CbButtonPrivate;
-typedef struct _CbButton CbButton;
-typedef struct _CbButtonClass CbButtonClass;
+typedef struct _IwButtonPrivate IwButtonPrivate;
+typedef struct _IwButton IwButton;
+typedef struct _IwButtonClass IwButtonClass;
 
-struct _CbButton {
+struct _IwButton {
         IwActor parent_instance;
-        CbButtonPrivate *priv;
+        IwButtonPrivate *priv;
 };
 
-struct _CbButtonClass {
-        void (*clicked) (CbButton *button);
+struct _IwButtonClass {
+        void (*clicked) (IwButton *button);
         IwActorClass parent_class;
 };
 
-ClutterActor *cb_button_new (void);
+ClutterActor *iw_button_new (void);
 
-const gchar *cb_button_get_text (CbButton *self);
-void cb_button_set_text (CbButton *self, const gchar *text);
+const gchar *iw_button_get_text (IwButton *self);
+void iw_button_set_text (IwButton *self, const gchar *text);
 
-const gchar *cb_buton_get_font (CbButton *self);
-void cb_buton_set_font (CbButton *self, const gchar *s);
+const gchar *iw_button_get_font (IwButton *self);
+void iw_button_set_font (IwButton *self, const gchar *s);
 
-void cb_button_get_font_color (CbButton *self, ClutterColor *color);
-void cb_button_set_font_color (CbButton *self, const ClutterColor *c);
+void iw_button_get_font_color (IwButton *self, ClutterColor *color);
+void iw_button_set_font_color (IwButton *self, const ClutterColor *c);
 
-void cb_button_set_port_color (CbButton *self, const ClutterColor *color);
-void cb_button_set_port_size (CbButton *self, float s);
-void cb_button_set_ports_no (CbButton *self);
+void iw_button_set_port_color (IwButton *self, const ClutterColor *color);
+void iw_button_set_port_size (IwButton *self, float s);
+void iw_button_set_ports_no (IwButton *self);
 
-void cb_button_set_port_user_data (CbButton *self, void *p);
-void *cb_button_node_get_port_user_data (CbButton *self);
+void iw_button_set_port_user_data (IwButton *self, void *p);
+void *iw_button_node_get_port_user_data (IwButton *self);
 
-void cb_button_get_port_position (CbButton *self, float *x, float *y);
+void iw_button_get_port_position (IwButton *self, float *x, float *y);
 
 #ifdef __cplusplus
 }

@@ -12,23 +12,34 @@
 #include "AbstractActor.h"
 #include "AbstractNodeView.h"
 #include "primitives/Geometry.h"
+#include <string>
 
 class __tiliae_reflect__ Button : public AbstractActor, public AbstractNodeView {
 public:
         Button ();
         virtual ~Button ();
         void init ();
-        virtual void setNode (std::shared_ptr<flow::INode> n);
 
         /*---------------------------------------------------------------------------*/
 
+        std::string getText () const;
+        void setText (std::string const t);
+
+        std::string getFont () const;
+        void setFont (std::string const t);
+
+        Color getFontColor () const;
+        void setFontColor (const Color &value);
+
+        /*---------------------------------------------------------------------------*/
+
+        virtual void setNode (std::shared_ptr<flow::INode> n);
         virtual void onAllocate (Box const &b);
         virtual void onPress ();
         virtual void onRelease ();
         virtual Point getPortPosition (int i) const;
 
 private:
-
         struct Impl;
         Impl *impl;
 };

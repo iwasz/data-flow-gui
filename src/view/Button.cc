@@ -21,7 +21,7 @@ struct Button::Impl {
 Button::Button ()
 {
         impl = new Impl;
-        self = cb_button_new ();
+        self = iw_button_new ();
         clutter_actor_set_reactive (self, TRUE);
         iw_actor_set_user_data (IW_ACTOR (self), this);
         setCppImplementation ();
@@ -51,10 +51,10 @@ void Button::init ()
 {
         if (!getPorts ().empty ()) {
                 Port *p = getPorts ()[0].get ();
-                cb_button_set_port_size (CB_BUTTON (self), p->size);
+                iw_button_set_port_size (IW_BUTTON (self), p->size);
                 ClutterColor c = p->color.toClutterColor ();
-                cb_button_set_port_color (CB_BUTTON (self), &c);
-                cb_button_set_port_user_data (CB_BUTTON (self), p);
+                iw_button_set_port_color (IW_BUTTON (self), &c);
+                iw_button_set_port_user_data (IW_BUTTON (self), p);
                 p->anchor.setApProvider (std::make_shared<NodeAnchorPositionProvider> (0, this));
         }
 
@@ -66,7 +66,7 @@ void Button::init ()
 Point Button::getPortPosition (int i) const
 {
         Point p;
-        cb_button_get_port_position (CB_BUTTON (self), &p.x, &p.y);
+        iw_button_get_port_position (IW_BUTTON (self), &p.x, &p.y);
         return p;
 }
 
@@ -79,6 +79,43 @@ void Button::onAllocate (Box const &)
         }
 }
 
+/*****************************************************************************/
+// Getters/setters
+/*****************************************************************************/
+
+std::string Button::getText () const { return iw_button_get_text (IW_BUTTON (self)); }
+
+/*****************************************************************************/
+
+void Button::setText (std::string const t) { iw_button_set_text (IW_BUTTON (self), t.c_str ()); }
+
+/*****************************************************************************/
+
+std::string Button::getFont () const { return iw_button_get_font (IW_BUTTON (self)); }
+
+/*****************************************************************************/
+
+void Button::setFont (std::string const t) { iw_button_set_font (IW_BUTTON (self), t.c_str ()); }
+
+/*****************************************************************************/
+
+Color Button::getFontColor () const
+{
+        ClutterColor c;
+        iw_button_get_font_color (IW_BUTTON (self), &c);
+        return Color (&c);
+}
+
+/*****************************************************************************/
+
+void Button::setFontColor (const Color &value)
+{
+        ClutterColor color = Color::toClutterColor (value);
+        iw_button_set_font_color (IW_BUTTON (self), &color);
+}
+
+/*****************************************************************************/
+// C interconnection
 /*****************************************************************************/
 
 void Button::onPress () { impl->arc.put (1); }

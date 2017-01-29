@@ -56,9 +56,10 @@
     <Console scope="prototype" set-as="node"/>
   </CircularNode>
 
-  <Button scope="prototype" id="buttonNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">
+  <Button scope="prototype" id="buttonNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" fontColor="#ecececff" visible="false">
     <OutputPort scope="prototype" add-to="ports" color="#8d8d8dff" size="20"/>
     <Copy scope="prototype" set-as="node"/>
+    <value set-as="text">Button</value>
   </Button>
 
   <LineConnector scope="prototype" id="lineConnector" parent="@scale" strokeColor="#d1d1d1ff"

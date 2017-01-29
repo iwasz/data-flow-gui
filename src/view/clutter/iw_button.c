@@ -16,8 +16,8 @@ void buttonOnRelease (void *ptr);
 static gboolean draw_rectangle (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data);
 static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocation, ClutterAllocationFlags flags, gpointer user_data);
 
-G_DEFINE_TYPE (CbButton, cb_button, IW_TYPE_ACTOR);
-#define CB_BUTTON_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), CB_TYPE_BUTTON, CbButtonPrivate))
+G_DEFINE_TYPE (IwButton, iw_button, IW_TYPE_ACTOR);
+#define IW_BUTTON_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IW_TYPE_BUTTON, IwButtonPrivate))
 
 /* private structure - should only be accessed through the public API;
  * this is used to store member variables whose properties
@@ -30,7 +30,7 @@ G_DEFINE_TYPE (CbButton, cb_button, IW_TYPE_ACTOR);
  * for example, you might record the current state of the button
  * (toggled on or off) or a background image
  */
-struct _CbButtonPrivate {
+struct _IwButtonPrivate {
         ClutterActor *label;
         ClutterActor *port;
         gboolean mouseOver;
@@ -38,15 +38,15 @@ struct _CbButtonPrivate {
 
 /*****************************************************************************/
 
-static void cb_button_allocate (ClutterActor *actor, const ClutterActorBox *box, ClutterAllocationFlags flags)
+static void iw_button_allocate (ClutterActor *actor, const ClutterActorBox *box, ClutterAllocationFlags flags)
 {
-        CbButtonPrivate *priv = CB_BUTTON (actor)->priv;
+        IwButtonPrivate *priv = IW_BUTTON (actor)->priv;
         ClutterActorBox child_box = {
                 0,
         };
 
         /* set the allocation for the whole button */
-        //        CLUTTER_ACTOR_CLASS (cb_button_parent_class)->allocate (actor, box, flags);
+        //        CLUTTER_ACTOR_CLASS (iw_button_parent_class)->allocate (actor, box, flags);
         clutter_actor_set_allocation (actor, box, flags);
 
         float w = clutter_actor_box_get_width (box);
@@ -90,7 +90,7 @@ gboolean on_button_button_release (ClutterActor *actor, ClutterEvent *ev, gpoint
 
 void on_button_enter (ClutterActor *actor, ClutterEvent *ev, gpointer data)
 {
-        CbButtonPrivate *priv = CB_BUTTON (actor)->priv;
+        IwButtonPrivate *priv = IW_BUTTON (actor)->priv;
         priv->mouseOver = TRUE;
         clutter_content_invalidate (iw_actor_get_canvas (IW_ACTOR (actor)));
 }
@@ -99,41 +99,37 @@ void on_button_enter (ClutterActor *actor, ClutterEvent *ev, gpointer data)
 
 void on_button_leave (ClutterActor *actor, ClutterEvent *ev, gpointer data)
 {
-        CbButtonPrivate *priv = CB_BUTTON (actor)->priv;
+        IwButtonPrivate *priv = IW_BUTTON (actor)->priv;
         priv->mouseOver = FALSE;
         clutter_content_invalidate (iw_actor_get_canvas (IW_ACTOR (actor)));
 }
 
 /*****************************************************************************/
 
-static void cb_button_class_init (CbButtonClass *klass)
+static void iw_button_class_init (IwButtonClass *klass)
 {
         ClutterActorClass *actor_class = CLUTTER_ACTOR_CLASS (klass);
-        actor_class->allocate = cb_button_allocate;
+        actor_class->allocate = iw_button_allocate;
 
-        g_type_class_add_private (klass, sizeof (CbButtonPrivate));
+        g_type_class_add_private (klass, sizeof (IwButtonPrivate));
 }
 
 /*****************************************************************************/
 
-static void cb_button_init (CbButton *self)
+static void iw_button_init (IwButton *self)
 {
-        CbButtonPrivate *priv;
+        IwButtonPrivate *priv;
         ClutterLayoutManager *layout;
 
-        priv = self->priv = CB_BUTTON_GET_PRIVATE (self);
+        priv = self->priv = IW_BUTTON_GET_PRIVATE (self);
         clutter_actor_set_reactive (CLUTTER_ACTOR (self), TRUE);
 
         priv->label = clutter_text_new ();
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->label);
         clutter_text_set_font_name (CLUTTER_TEXT (priv->label), "18px");
-        clutter_text_set_text (CLUTTER_TEXT (priv->label), "Hello world");
         clutter_text_set_editable (CLUTTER_TEXT (priv->label), FALSE);
         clutter_text_set_selectable (CLUTTER_TEXT (priv->label), TRUE);
         clutter_text_set_single_line_mode (CLUTTER_TEXT (priv->label), TRUE);
-
-//        static ClutterColor c = { 0x00, 0xff, 0x00, 0x88 };
-//        clutter_actor_set_background_color (priv->label, &c);
 
         self->priv->port = iw_circle_new ();
         iw_actor_set_fill (IW_ACTOR (self->priv->port), TRUE);
@@ -156,7 +152,7 @@ static void cb_button_init (CbButton *self)
 
 static gboolean draw_rectangle (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data)
 {
-        CbButton *self = (CbButton *)data;
+        IwButton *self = (IwButton *)data;
 
         cairo_save (cr);
 
@@ -222,93 +218,93 @@ static gboolean draw_rectangle (ClutterCanvas *canvas, cairo_t *cr, int width, i
 
 /*****************************************************************************/
 
-const gchar *cb_buton_get_font (CbButton *self)
+const gchar *iw_button_get_font (IwButton *self)
 {
-        g_return_val_if_fail (CB_IS_BUTTON (self), NULL);
+        g_return_val_if_fail (IW_IS_BUTTON (self), NULL);
         return clutter_text_get_font_name (CLUTTER_TEXT (self->priv->label));
 }
 
 /*****************************************************************************/
 
-void cb_buton_set_font (CbButton *self, const gchar *s)
+void iw_button_set_font (IwButton *self, const gchar *s)
 {
-        g_return_if_fail (CB_IS_BUTTON (self));
+        g_return_if_fail (IW_IS_BUTTON (self));
         clutter_text_set_font_name (CLUTTER_TEXT (self->priv->label), s);
 }
 
 /*****************************************************************************/
 
-void cb_button_set_font_color (CbButton *self, const ClutterColor *color)
+void iw_button_set_font_color (IwButton *self, const ClutterColor *color)
 {
-        g_return_if_fail (CB_IS_BUTTON (self));
+        g_return_if_fail (IW_IS_BUTTON (self));
         clutter_text_set_color (CLUTTER_TEXT (self->priv->label), color);
 }
 
 /*****************************************************************************/
 
-void cb_button_get_font_color (CbButton *self, ClutterColor *color)
+void iw_button_get_font_color (IwButton *self, ClutterColor *color)
 {
-        g_return_if_fail (CB_IS_BUTTON (self));
+        g_return_if_fail (IW_IS_BUTTON (self));
         return clutter_text_get_color (CLUTTER_TEXT (self->priv->label), color);
 }
 
 /*****************************************************************************/
 
-void cb_button_set_text (CbButton *self, const gchar *text)
+void iw_button_set_text (IwButton *self, const gchar *text)
 {
-        g_return_if_fail (CB_IS_BUTTON (self));
+        g_return_if_fail (IW_IS_BUTTON (self));
         clutter_text_set_text (CLUTTER_TEXT (self->priv->label), text);
 }
 
 /*****************************************************************************/
 
-const gchar *cb_button_get_text (CbButton *self)
+const gchar *iw_button_get_text (IwButton *self)
 {
-        g_return_val_if_fail (CB_IS_BUTTON (self), NULL);
+        g_return_val_if_fail (IW_IS_BUTTON (self), NULL);
         return clutter_text_get_text (CLUTTER_TEXT (self->priv->label));
 }
 
 /*****************************************************************************/
 
-ClutterActor *cb_button_new (void) { return g_object_new (CB_TYPE_BUTTON, NULL); }
+ClutterActor *iw_button_new (void) { return g_object_new (IW_TYPE_BUTTON, NULL); }
 
 /*****************************************************************************/
 
-void cb_button_set_port_color (CbButton *self, const ClutterColor *color)
+void iw_button_set_port_color (IwButton *self, const ClutterColor *color)
 {
-        g_return_if_fail (CB_IS_BUTTON (self));
+        g_return_if_fail (IW_IS_BUTTON (self));
         iw_actor_set_fill_color (IW_ACTOR (self->priv->port), color);
 }
 
 /*****************************************************************************/
 
-void cb_button_set_port_size (CbButton *self, float s)
+void iw_button_set_port_size (IwButton *self, float s)
 {
-        g_return_if_fail (CB_IS_BUTTON (self));
+        g_return_if_fail (IW_IS_BUTTON (self));
         clutter_actor_set_size (CLUTTER_ACTOR (self->priv->port), s, s);
 }
 
 /*****************************************************************************/
 
-void cb_button_set_port_user_data (CbButton *self, void *p)
+void iw_button_set_port_user_data (IwButton *self, void *p)
 {
-        g_return_if_fail (CB_IS_BUTTON (self));
+        g_return_if_fail (IW_IS_BUTTON (self));
         g_object_set_data (G_OBJECT (self->priv->port), CPP_IMPLEMENTATION_KEY, p);
 }
 
 /*****************************************************************************/
 
-void *cb_button_node_get_port_user_data (CbButton *self)
+void *iw_button_node_get_port_user_data (IwButton *self)
 {
-        g_return_val_if_fail (CB_IS_BUTTON (self), NULL);
+        g_return_val_if_fail (IW_IS_BUTTON (self), NULL);
         return g_object_get_data (G_OBJECT (self->priv->port), CPP_IMPLEMENTATION_KEY);
 }
 
 /*****************************************************************************/
 
-void cb_button_get_port_position (CbButton *self, float *x, float *y)
+void iw_button_get_port_position (IwButton *self, float *x, float *y)
 {
-        g_return_if_fail (CB_IS_BUTTON (self));
+        g_return_if_fail (IW_IS_BUTTON (self));
         float px, py;
         ClutterActor *port = self->priv->port;
         clutter_actor_get_position (port, &px, &py);
