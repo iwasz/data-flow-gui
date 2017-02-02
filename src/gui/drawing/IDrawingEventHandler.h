@@ -6,16 +6,16 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "Rectangle.h"
-#include "clutter/iw_rectangle.h"
-#include <core/Exception.h>
+#ifndef IDRAWINGEVENTHANDLER_H
+#define IDRAWINGEVENTHANDLER_H
 
-/*****************************************************************************/
+#include "Event.h"
+#include <ReflectionParserAnnotation.h>
+#include <string>
 
-Rectangle::Rectangle ()
-{
-        self = iw_rectangle_new ();
-        clutter_actor_set_reactive (self, TRUE);
-        iw_actor_set_user_data (IW_ACTOR (self), this);
-        setCppImplementation ();
-}
+struct __tiliae_reflect__ IDrawingEventHandler {
+        virtual ~IDrawingEventHandler () {}
+        virtual void pushMessage (std::string const &msg, Event const *event) = 0;
+};
+
+#endif // IDRAWINGEVENTHANDLER_H

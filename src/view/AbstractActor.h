@@ -10,12 +10,17 @@
 #define ABSTRACTACTOR_H
 
 #include "IClutterActor.h"
+#include "gui/drawing/IDrawingEventHandler.h"
 #include <core/Exception.h>
 
 extern "C" void abstractActorOnFinalize (void *ptr);
 
+/**
+ * @brief The AbstractActor class
+ */
 class __tiliae_reflect__ AbstractActor : public IClutterActor {
 public:
+        void init ();
         virtual ~AbstractActor ();
 
         virtual void setParent (IClutterActor *parent);
@@ -60,11 +65,27 @@ public:
         /// Stores this into self as g_object value.
         virtual void setCppImplementation ();
 
+        IDrawingEventHandler *getEventHandler () const { return eventHandler; }
+        void setEventHandler (IDrawingEventHandler *value) { eventHandler = value; }
+
+        /*---------------------------------------------------------------------------*/
+
+        virtual bool onButtonPress (Event const &e) { return false; }
+        virtual bool onButtonRelease (Event const &e) { return false; }
+        virtual bool onMotion (Event const &e) { return false; }
+        virtual bool onEnter (Event const &e) { return false; }
+        virtual bool onLeave (Event const &e) { return false; }
+        virtual bool onScroll (Event const &e) { return false; }
+        virtual bool onKeyPress (Event const &e) { return false; }
+
 protected:
         friend void abstractActorOnFinalize (void *ptr);
         void onFinalize () { clutterDestroyed = true; }
 
         ClutterActor *self = 0;
+
+private:
+        IDrawingEventHandler *eventHandler = nullptr;
         bool selectable = true;
         bool clutterDestroyed = false;
 };

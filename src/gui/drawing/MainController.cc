@@ -12,6 +12,7 @@
 #include "ISelectorStrategy.h"
 #include "MoveStrategy.h"
 #include "view/Rectangle.h"
+#include "view/RectangularSelector.h"
 #include "view/ScaleLayer.h"
 #include "view/Stage.h"
 #include <App.h>
@@ -47,7 +48,7 @@ struct MainController::Impl {
         MoveStrategy moveStrategy;
         flow::Program *program = nullptr;
         bool runProgram = false;
-        Rectangle *rectangularSelector = nullptr;
+        RectangularSelector *rectangularSelector = nullptr;
         Stage *stage = nullptr;
         Event event; // Tempporary for some handlers.
         ClutterActorVector *selectedActors = nullptr;
@@ -253,7 +254,7 @@ void MainController::onIdle ()
 
 /****************************************************************************/
 
-void MainController::pushMessage (std::string const &msg, Event *event) { impl->pushMessage (msg, event); }
+void MainController::pushMessage (std::string const &msg, Event const *event) { impl->pushMessage (msg, const_cast<Event *> (event)); }
 
 /****************************************************************************/
 /* Drawing events                                                           */
@@ -299,11 +300,15 @@ void MainController::onProgramRun (bool run) { impl->runProgram = run; }
 
 /*****************************************************************************/
 
-Rectangle *MainController::getRectangularSelector () const { return impl->rectangularSelector; }
+RectangularSelector *MainController::getRectangularSelector () const { return impl->rectangularSelector; }
 
 /*****************************************************************************/
 
-void MainController::setRectangularSelector (Rectangle *value) { impl->rectangularSelector = value; }
+void MainController::setRectangularSelector (RectangularSelector *value)
+{
+        impl->rectangularSelector = value;
+        value->setEventHandler (this);
+}
 
 /*****************************************************************************/
 
@@ -319,7 +324,11 @@ Stage *MainController::getStage () const { return impl->stage; }
 
 /*****************************************************************************/
 
-void MainController::setStage (Stage *value) { impl->stage = value; }
+void MainController::setStage (Stage *value)
+{
+        impl->stage = value;
+        value->setEventHandler (this);
+}
 
 /****************************************************************************/
 /* State machine low lewel deps.                                            */

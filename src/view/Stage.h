@@ -44,6 +44,16 @@ public:
         ScaleLayer *getScaleLayer () const { return scaleLayer; }
         void setScaleLayer (ScaleLayer *layer);
 
+        /*---------------------------------------------------------------------------*/
+
+        virtual bool onButtonPress (Event const &e);
+        virtual bool onButtonRelease (Event const &e);
+        virtual bool onMotion (Event const &e);
+//        virtual bool onEnter (Event const &e);
+//        virtual bool onLeave (Event const &e);
+        virtual bool onScroll (Event const &e);
+        virtual bool onKeyPress (Event const &e);
+
 private:
         GtkWidget *clutterWidget;
         ScaleLayer *scaleLayer;

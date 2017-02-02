@@ -23,6 +23,7 @@ CircularNode::CircularNode ()
 
 void CircularNode::init ()
 {
+        AbstractActor::init ();
         iw_circular_node_set_ports_no (IW_CIRCULAR_NODE (self), getPorts ().size ());
 
         int portNumber = 0;

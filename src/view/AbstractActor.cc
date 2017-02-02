@@ -12,6 +12,16 @@
 
 /*****************************************************************************/
 
+gboolean on_actor_button_press (ClutterActor *stage, ClutterEvent *event, gpointer data);
+gboolean on_actor_button_release (ClutterActor *stage, ClutterEvent *event, gpointer data);
+gboolean on_actor_motion (ClutterActor *stage, ClutterEvent *event, gpointer data);
+gboolean on_actor_enter (ClutterActor *stage, ClutterEvent *event, gpointer data);
+gboolean on_actor_leave (ClutterActor *stage, ClutterEvent *event, gpointer data);
+gboolean on_actor_scroll (ClutterActor *actor, ClutterEvent *event, gpointer userData);
+gboolean on_actor_key_press (ClutterActor *actor, ClutterEvent *event, gpointer user_data);
+
+/*****************************************************************************/
+
 AbstractActor::~AbstractActor ()
 {
         if (!clutterDestroyed) {
@@ -23,6 +33,19 @@ AbstractActor::~AbstractActor ()
                         g_critical ("AbstractActor::~AbstractActor : clutter_actor_get_parent (self) == nullptr");
                 }
         }
+}
+
+/*****************************************************************************/
+
+void AbstractActor::init ()
+{
+        g_signal_connect (self, "button-press-event", G_CALLBACK (on_actor_button_press), this);
+        g_signal_connect (self, "button-release-event", G_CALLBACK (on_actor_button_release), this);
+        g_signal_connect (self, "motion-event", G_CALLBACK (on_actor_motion), this);
+        g_signal_connect (self, "enter-event", G_CALLBACK (on_actor_enter), this);
+        g_signal_connect (self, "leave-event", G_CALLBACK (on_actor_leave), this);
+        g_signal_connect (self, "scroll-event", G_CALLBACK (on_actor_scroll), this);
+        g_signal_connect (self, "key-press-event", G_CALLBACK (on_actor_key_press), this);
 }
 
 /*****************************************************************************/
@@ -188,4 +211,150 @@ extern "C" void abstractActorOnFinalize (void *ptr)
 {
         AbstractActor *cn = static_cast<AbstractActor *> (ptr);
         cn->onFinalize ();
+}
+
+/*****************************************************************************/
+
+void processEvent (ClutterActor *stage, ClutterEvent *ev, Event *event)
+{
+        gfloat x = 0;
+        gfloat y = 0;
+        clutter_event_get_coords (ev, &x, &y);
+
+        // Find cpp implementation of an actor under cursor.
+
+        // ClutterActor *actor = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
+        ClutterActor *actor = clutter_event_get_source (ev);
+        Core::Object *cActor = nullptr;
+
+        do {
+                cActor = static_cast<Core::Object *> (g_object_get_data (G_OBJECT (actor), CPP_IMPLEMENTATION_KEY));
+
+                if (cActor) {
+                        break;
+                }
+
+        } while ((actor = clutter_actor_get_parent (actor)) != CLUTTER_ACTOR (stage));
+
+        event->positionStageCoords = Point (x, y);
+        event->object = cActor;
+
+        /*---------------------------------------------------------------------------*/
+        // Find container which the actor is on.
+
+        Core::Object *obj = nullptr;
+        IClutterActor *firstContainer = nullptr;
+        actor = clutter_event_get_source (ev);
+
+        do {
+                obj = static_cast<Core::Object *> (g_object_get_data (G_OBJECT (actor), CPP_IMPLEMENTATION_KEY));
+
+                if (!obj) {
+                        continue;
+                }
+
+                firstContainer = dynamic_cast<IClutterActor *> (obj);
+
+                if (firstContainer && firstContainer->isContainter ()) {
+                        break;
+                }
+
+        } while ((actor = clutter_actor_get_parent (actor)) != nullptr && actor != CLUTTER_ACTOR (stage));
+
+        if (firstContainer) {
+                ClutterActor *firstContainerActor = firstContainer->getActor ();
+                clutter_actor_transform_stage_point (firstContainerActor, event->positionStageCoords.x, event->positionStageCoords.y,
+                                                     &event->positionParentCoords.x, &event->positionParentCoords.y);
+        }
+        else {
+                event->positionParentCoords = event->positionStageCoords;
+        }
+}
+
+/*****************************************************************************/
+
+gboolean on_actor_button_press (ClutterActor *actor, ClutterEvent *ev, gpointer data)
+{
+        static Event event;
+        processEvent (actor, ev, &event);
+        event.button = clutter_event_get_button (ev);
+        AbstractActor *that = static_cast<AbstractActor *> (data);
+        return that->onButtonPress (event);
+}
+
+/*****************************************************************************/
+
+gboolean on_actor_button_release (ClutterActor *stage, ClutterEvent *ev, gpointer data)
+{
+        static Event event;
+        processEvent (stage, ev, &event);
+        event.button = clutter_event_get_button (ev);
+        AbstractActor *that = static_cast<AbstractActor *> (data);
+        return that->onButtonRelease (event);
+}
+
+/*****************************************************************************/
+
+gboolean on_actor_motion (ClutterActor *stage, ClutterEvent *ev, gpointer data)
+{
+        static Event event;
+        processEvent (stage, ev, &event);
+        AbstractActor *that = static_cast<AbstractActor *> (data);
+
+        if (clutter_event_get_state (ev) & CLUTTER_BUTTON1_MASK) {
+                event.button = 1;
+        }
+        else if (clutter_event_get_state (ev) & CLUTTER_BUTTON2_MASK) {
+                event.button = 2;
+        }
+        else if (clutter_event_get_state (ev) & CLUTTER_BUTTON3_MASK) {
+                event.button = 3;
+        }
+
+        return that->onMotion (event);
+}
+
+/*****************************************************************************/
+
+gboolean on_actor_enter (ClutterActor *stage, ClutterEvent *ev, gpointer data)
+{
+        static Event event;
+        processEvent (stage, ev, &event);
+        AbstractActor *that = static_cast<AbstractActor *> (data);
+        return that->onEnter (event);
+}
+
+/*****************************************************************************/
+
+gboolean on_actor_leave (ClutterActor *stage, ClutterEvent *ev, gpointer data)
+{
+        static Event event;
+        processEvent (stage, ev, &event);
+        AbstractActor *that = static_cast<AbstractActor *> (data);
+        return that->onLeave (event);
+}
+
+/*****************************************************************************/
+
+gboolean on_actor_scroll (ClutterActor *actor, ClutterEvent *ev, gpointer data)
+{
+        static Event event;
+        processEvent (actor, ev, &event);
+        AbstractActor *that = static_cast<AbstractActor *> (data);
+        event.scrollDirection = clutter_event_get_scroll_direction (ev);
+        clutter_event_get_scroll_delta (ev, &event.scrollX, &event.scrollY);
+        return that->onScroll (event);
+}
+
+/*****************************************************************************/
+
+gboolean on_actor_key_press (ClutterActor *actor, ClutterEvent *ev, gpointer data)
+{
+        static Event event;
+        event.key = clutter_event_get_key_symbol (ev);
+        event.state = clutter_event_get_state (ev);
+        event.shiftPressed = (event.state & CLUTTER_SHIFT_MASK ? TRUE : FALSE);
+        event.ctrlPressed = (event.state & CLUTTER_CONTROL_MASK ? TRUE : FALSE);
+        AbstractActor *that = static_cast<AbstractActor *> (data);
+        return that->onKeyPress (event);
 }

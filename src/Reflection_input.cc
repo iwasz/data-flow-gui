@@ -7,6 +7,7 @@
 #include "gui/drawing/RectangularSelectorStrategy.h"
 #include "view/Circle.h"
 #include "view/Rectangle.h"
+#include "view/RectangularSelector.h"
 #include "view/Line.h"
 #include "view/LineConnector.h"
 #include "view/Stage.h"

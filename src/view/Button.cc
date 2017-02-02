@@ -49,6 +49,8 @@ void Button::setNode (std::shared_ptr<flow::INode> n)
 
 void Button::init ()
 {
+        AbstractActor::init ();
+
         if (!getPorts ().empty ()) {
                 Port *p = getPorts ()[0].get ();
                 iw_button_set_port_size (IW_BUTTON (self), p->size);

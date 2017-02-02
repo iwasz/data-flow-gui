@@ -6,16 +6,22 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#ifndef DATA_FLOW_RECTANGULAR_SELECTOR_H
+#define DATA_FLOW_RECTANGULAR_SELECTOR_H
+
 #include "Rectangle.h"
-#include "clutter/iw_rectangle.h"
-#include <core/Exception.h>
+#include <ReflectionParserAnnotation.h>
+#include <clutter/clutter.h>
+#include <string>
 
-/*****************************************************************************/
+class __tiliae_reflect__ RectangularSelector : public Rectangle {
+public:
+        RectangularSelector ();
+        virtual ~RectangularSelector () {}
 
-Rectangle::Rectangle ()
-{
-        self = iw_rectangle_new ();
-        clutter_actor_set_reactive (self, TRUE);
-        iw_actor_set_user_data (IW_ACTOR (self), this);
-        setCppImplementation ();
-}
+        virtual bool onButtonPress (Event const &e);
+        virtual bool onButtonRelease (Event const &e);
+        virtual bool onMotion (Event const &e);
+};
+
+#endif // RECTANGLE_H

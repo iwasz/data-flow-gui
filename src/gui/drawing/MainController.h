@@ -9,7 +9,7 @@
 #ifndef MAIN_CONTROLLER_H_
 #define MAIN_CONTROLLER_H_
 
-#include "Event.h"
+#include "IDrawingEventHandler.h"
 #include "ISelectorStrategy.h"
 #include "primitives/Geometry.h"
 #include "view/Stage.h"
@@ -18,7 +18,7 @@
 #include <map>
 #include <string>
 
-class Rectangle;
+class RectangularSelector;
 struct IDrawStrategy;
 struct IFactoryStrategy;
 namespace flow {
@@ -39,7 +39,7 @@ typedef __tiliae_reflect__ std::map<std::string, Tool> ToolMap;
 /**
  * Controller for drawing new objects like nodes, arcs and the like.
  */
-class __tiliae_reflect__ MainController : public GtkForms::AbstractController {
+class __tiliae_reflect__ MainController : public GtkForms::AbstractController, public IDrawingEventHandler {
 public:
         MainController ();
         virtual ~MainController ();
@@ -54,7 +54,7 @@ public:
         void onZoom (std::string const &action);
 
         void onProgramRun (bool run);
-        void pushMessage (std::string const &msg, Event *event);
+        void pushMessage (std::string const &msg, Event const *event);
 
         ToolMap const &getTools () const { return tools; }
         void setTools (const ToolMap &value) { tools = value; }
@@ -62,8 +62,8 @@ public:
         flow::Program *getProgram () const;
         void setProgram (flow::Program *value);
 
-        Rectangle *getRectangularSelector () const;
-        void setRectangularSelector (Rectangle *value);
+        RectangularSelector *getRectangularSelector () const;
+        void setRectangularSelector (RectangularSelector *value);
 
         ClutterActorVector *getSelectedActors ();
         void setSelectedActors (ClutterActorVector *value);
