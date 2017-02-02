@@ -24,6 +24,7 @@ public:
         virtual void onObjectCreated (IClutterActor *a);
 
         void onButtonPress (Event const &e);
+//        bool onButtonRelease (const Event &e);
 
         Rectangle *getRectangularSelector () const { return rectangularSelector; }
         void setRectangularSelector (Rectangle *value) { rectangularSelector = value; }

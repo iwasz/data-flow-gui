@@ -96,7 +96,6 @@ void MainController::Impl::configureMachine ()
                         return true;
                 })
                 ->transition (TOOL_SELECTED)->when (eq ("selected.tool"))
-//                ->transition (MOVE)->when (eq ("stage.enter"))
                 ->transition (STAGE_MOVE)->when (eq ("stage.press.scroll"))
                 ->transition (IDLE)->when (eq ("stage.delete"))->then ([this] (const char *, void *arg) {
                         if (selectedActors->empty ()) {
@@ -117,8 +116,17 @@ void MainController::Impl::configureMachine ()
                         vars.currentSelectorStrategy = (*tools)[vars.currentTool].selectorStrategy;
                         vars.currentDrawStrategy->onButtonPress (*static_cast <Event *> (arg));
                         return true;
+                })
+                ->transition (IDLE)->when (eq ("object.press"))->then ([this] (const char *, void *arg) {
+                        vars.currentTool = "select";
+                        vars.currentDrawStrategy = (*tools)[vars.currentTool].drawStrategy;
+                        vars.currentSelectorStrategy = (*tools)[vars.currentTool].selectorStrategy;
+                        Event *args = static_cast <Event *> (arg);
+                        vars.currentDrawStrategy->onButtonPress (*args);
+                        vars.currentDrawStrategy->onButtonRelease (*args);
+                        vars.currentDrawStrategy->onObjectCreated (nullptr);
+                        return true;
                 });
-
 
         /*---------------------------------------------------------------------------*/
 
@@ -168,18 +176,6 @@ void MainController::Impl::configureMachine ()
                                 a->setVisible (true);
                         }
 
-                        return true;
-                });
-
-        /*---------------------------------------------------------------------------*/
-
-        machine.state (MOVE)
-                ->entry ([this] (const char *, void *arg) {
-                        moveStrategy.onEnter (*static_cast <Event *> (arg));
-                        return true;
-                })
-                ->transition (IDLE)->when (eq ("stage.leave"))->then ([this] (const char *, void *arg) {
-                        moveStrategy.onLeave (*static_cast <Event *> (arg));
                         return true;
                 });
 

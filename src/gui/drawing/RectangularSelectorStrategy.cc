@@ -7,15 +7,15 @@
  ****************************************************************************/
 
 #include "RectangularSelectorStrategy.h"
-#include "view/clutter/iw_actor.h"
 #include "view/Rectangle.h"
 #include "view/ScaleLayer.h"
+#include "view/clutter/iw_actor.h"
 #include <clutter/clutter.h>
 #include <iostream>
 
 /*****************************************************************************/
 
-void RectangularSelectorStrategy::onObjectCreated (IClutterActor *a)
+void RectangularSelectorStrategy::onObjectCreated (IClutterActor *)
 {
         Box selectionBox = Box (startPoint, endPoint - startPoint);
         Box minimalSelectionBox;
@@ -36,7 +36,7 @@ void RectangularSelectorStrategy::onObjectCreated (IClutterActor *a)
 
                 Box boundingBox = actor->getBoundingBox ();
 
-                if (!boundingBox.isInside (selectionBox)) {
+                if (!boundingBox.isIntersects (selectionBox)) {
                         continue;
                 }
 
@@ -69,6 +69,14 @@ void RectangularSelectorStrategy::onButtonPress (const Event &e)
         unselectAll ();
         ShapeDrawStrategy::onButtonPress (e);
 }
+
+/*****************************************************************************/
+
+//bool RectangularSelectorStrategy::onButtonRelease (const Event &e)
+//{
+//        ShapeDrawStrategy::onButtonRelease (e);
+//        return true;
+//}
 
 /*****************************************************************************/
 

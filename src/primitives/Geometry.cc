@@ -65,7 +65,24 @@ bool Box::isInside (Box const &box) const
 
 /*****************************************************************************/
 
-bool Box::isIntersects (const Box &box) const { throw Core::Exception ("Not implemented"); }
+bool Box::isIntersects (const Box &box) const
+{
+
+        if (b.x < box.a.x) {
+                return false;
+        }
+        if (a.x > box.b.x) {
+                return false;
+        }
+        if (b.y < box.a.y) {
+                return false;
+        }
+        if (a.y > box.b.y) {
+                return false;
+        }
+
+        return true;
+}
 
 /*****************************************************************************/
 

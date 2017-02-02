@@ -98,7 +98,12 @@ bool Stage::onButtonPress (Event const &event)
                 getEventHandler ()->pushMessage ("stage.press.scroll", &event);
         }
         else {
-                getEventHandler ()->pushMessage ("stage.press", &event);
+                if (event.object == this || event.object == getScaleLayer ()) {
+                        getEventHandler ()->pushMessage ("stage.press", &event);
+                }
+                else {
+                        getEventHandler ()->pushMessage ("object.press", &event);
+                }
         }
 
         return true;
