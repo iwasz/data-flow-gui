@@ -16,6 +16,9 @@ Rectangle::Rectangle ()
 {
         self = iw_rectangle_new ();
         clutter_actor_set_reactive (self, TRUE);
+
+        clutter_actor_add_action (self, clutter_drag_action_new ());
+
         iw_actor_set_user_data (IW_ACTOR (self), this);
         setCppImplementation ();
 }

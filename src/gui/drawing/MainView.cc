@@ -72,6 +72,8 @@ void processEvent (ClutterStage *stage, ClutterEvent *ev, Event *event)
         gfloat y = 0;
         clutter_event_get_coords (ev, &x, &y);
 
+        // Find cpp implementation of an actor under cursor.
+
         // ClutterActor *actor = clutter_stage_get_actor_at_pos (CLUTTER_STAGE (stage), CLUTTER_PICK_ALL, x, y);
         ClutterActor *actor = clutter_event_get_source (ev);
         Core::Object *cActor = nullptr;
@@ -89,6 +91,7 @@ void processEvent (ClutterStage *stage, ClutterEvent *ev, Event *event)
         event->object = cActor;
 
         /*---------------------------------------------------------------------------*/
+        // Find container which the actor is on.
 
         Core::Object *obj = nullptr;
         IClutterActor *firstContainer = nullptr;

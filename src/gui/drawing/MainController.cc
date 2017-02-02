@@ -95,7 +95,7 @@ void MainController::Impl::configureMachine ()
                         return true;
                 })
                 ->transition (TOOL_SELECTED)->when (eq ("selected.tool"))
-                ->transition (MOVE)->when (eq ("stage.enter"))
+//                ->transition (MOVE)->when (eq ("stage.enter"))
                 ->transition (STAGE_MOVE)->when (eq ("stage.press.scroll"))
                 ->transition (IDLE)->when (eq ("stage.delete"))->then ([this] (const char *, void *arg) {
                         if (selectedActors->empty ()) {

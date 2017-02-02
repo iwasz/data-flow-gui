@@ -126,7 +126,7 @@ static void iw_button_init (IwButton *self)
 
         priv->label = clutter_text_new ();
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->label);
-        clutter_text_set_font_name (CLUTTER_TEXT (priv->label), "18px");
+        clutter_text_set_font_name (CLUTTER_TEXT (priv->label), "20px");
         clutter_text_set_editable (CLUTTER_TEXT (priv->label), FALSE);
         clutter_text_set_selectable (CLUTTER_TEXT (priv->label), TRUE);
         clutter_text_set_single_line_mode (CLUTTER_TEXT (priv->label), TRUE);
