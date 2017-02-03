@@ -122,9 +122,13 @@ void MainController::Impl::configureMachine ()
                         vars.currentDrawStrategy = (*tools)[vars.currentTool].drawStrategy;
                         vars.currentSelectorStrategy = (*tools)[vars.currentTool].selectorStrategy;
                         Event *args = static_cast <Event *> (arg);
-                        vars.currentDrawStrategy->onButtonPress (*args);
-                        vars.currentDrawStrategy->onButtonRelease (*args);
-                        vars.currentDrawStrategy->onObjectCreated (nullptr);
+
+                        if (std::find (selectedActors->cbegin (), selectedActors->cend (), args->object) == selectedActors->cend ()) {
+                                vars.currentDrawStrategy->onButtonPress (*args);
+                                vars.currentDrawStrategy->onButtonRelease (*args);
+                                vars.currentDrawStrategy->onObjectCreated (nullptr);
+                        }
+
                         return true;
                 });
 
