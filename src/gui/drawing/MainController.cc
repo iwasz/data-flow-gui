@@ -117,7 +117,7 @@ void MainController::Impl::configureMachine ()
                         vars.currentDrawStrategy->onButtonPress (*static_cast <Event *> (arg));
                         return true;
                 })
-                ->transition (IDLE)->when (eq ("object.press"))->then ([this] (const char *, void *arg) {
+                ->transition (MOVE)->when (eq ("object.press"))->then ([this] (const char *, void *arg) {
                         vars.currentTool = "select";
                         vars.currentDrawStrategy = (*tools)[vars.currentTool].drawStrategy;
                         vars.currentSelectorStrategy = (*tools)[vars.currentTool].selectorStrategy;
@@ -178,6 +178,28 @@ void MainController::Impl::configureMachine ()
 
                         return true;
                 });
+
+        /*---------------------------------------------------------------------------*/
+
+        machine.state (MOVE)
+//                ->entry ([this] (const char *, void *arg) {
+//                        Event *event = static_cast <Event *> (arg);
+//                        vars.last = event->positionStageCoords;
+//                        return true;
+//                })
+                ->transition (MOVE)->when (eq ("stage.motion"))->then ([this] (const char *, void *arg) {
+                        Event *event = static_cast <Event *> (arg);
+
+                        Point p2;
+                        clutter_actor_get_position (rectangularSelector->getActor(), &p2.x, &p2.y);
+                        p2.x += event->stageDelta.x;
+                        p2.y += event->stageDelta.y;
+                        //std::cerr << "++ " << event.stageDelta << std::endl;
+                        clutter_actor_set_position (rectangularSelector->getActor (), p2.x, p2.y);
+
+                        return true;
+                })
+                ->transition (IDLE)->when (eq ("stage.release"));
 
         /*---------------------------------------------------------------------------*/
 

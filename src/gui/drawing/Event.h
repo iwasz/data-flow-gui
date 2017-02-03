@@ -31,6 +31,8 @@ struct Event {
         ClutterScrollDirection scrollDirection;
         double scrollX = 0;
         double scrollY = 0;
+        Point stageDelta;
+        Point parentDelta;
 };
 
 #endif // EVENT_H

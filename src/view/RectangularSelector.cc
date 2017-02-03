@@ -9,10 +9,11 @@
 #include "RectangularSelector.h"
 #include "clutter/iw_rectangle.h"
 #include <core/Exception.h>
+#include <iostream>
 
 /*****************************************************************************/
 
-RectangularSelector::RectangularSelector () { clutter_actor_add_action (self, clutter_drag_action_new ()); }
+RectangularSelector::RectangularSelector () { clutter_actor_add_action (self, clutter_drag_action_new ());}
 
 /*****************************************************************************/
 
@@ -67,6 +68,12 @@ bool RectangularSelector::onMotion (Event const &event)
         }
 
         if (event.object != this) {
+//                Point p2;
+//                clutter_actor_get_position (getActor(), &p2.x, &p2.y);
+//                p2.x += event.stageDelta.x;
+//                p2.y += event.stageDelta.y;
+//                std::cerr << "++ " << event.stageDelta << std::endl;
+//                clutter_actor_set_position (getActor (), p2.x, p2.y);
                 return true;
         }
 

@@ -9,6 +9,7 @@
 #include "AbstractActor.h"
 #include "ScaleLayer.h"
 #include "clutter/iw_actor.h"
+#include <iostream>
 
 /*****************************************************************************/
 
@@ -39,13 +40,15 @@ AbstractActor::~AbstractActor ()
 
 void AbstractActor::init ()
 {
-        g_signal_connect (self, "button-press-event", G_CALLBACK (on_actor_button_press), this);
-        g_signal_connect (self, "button-release-event", G_CALLBACK (on_actor_button_release), this);
-        g_signal_connect (self, "motion-event", G_CALLBACK (on_actor_motion), this);
-        g_signal_connect (self, "enter-event", G_CALLBACK (on_actor_enter), this);
-        g_signal_connect (self, "leave-event", G_CALLBACK (on_actor_leave), this);
-        g_signal_connect (self, "scroll-event", G_CALLBACK (on_actor_scroll), this);
-        g_signal_connect (self, "key-press-event", G_CALLBACK (on_actor_key_press), this);
+        if (isConnectSignals ()) {
+                g_signal_connect (self, "button-press-event", G_CALLBACK (on_actor_button_press), this);
+                g_signal_connect (self, "button-release-event", G_CALLBACK (on_actor_button_release), this);
+                g_signal_connect (self, "motion-event", G_CALLBACK (on_actor_motion), this);
+                g_signal_connect (self, "enter-event", G_CALLBACK (on_actor_enter), this);
+                g_signal_connect (self, "leave-event", G_CALLBACK (on_actor_leave), this);
+                g_signal_connect (self, "scroll-event", G_CALLBACK (on_actor_scroll), this);
+                g_signal_connect (self, "key-press-event", G_CALLBACK (on_actor_key_press), this);
+        }
 }
 
 /*****************************************************************************/
@@ -279,6 +282,8 @@ gboolean on_actor_button_press (ClutterActor *actor, ClutterEvent *ev, gpointer 
         processEvent (actor, ev, &event);
         event.button = clutter_event_get_button (ev);
         AbstractActor *that = static_cast<AbstractActor *> (data);
+        that->stagePrev = event.positionStageCoords;
+        that->parentPrev = event.positionParentCoords;
         return that->onButtonPress (event);
 }
 
@@ -300,6 +305,21 @@ gboolean on_actor_motion (ClutterActor *stage, ClutterEvent *ev, gpointer data)
         static Event event;
         processEvent (stage, ev, &event);
         AbstractActor *that = static_cast<AbstractActor *> (data);
+
+        if (clutter_event_get_state (ev) & CLUTTER_BUTTON1_MASK) {
+                event.stageDelta.x = event.positionStageCoords.x - that->stagePrev.x;
+                event.stageDelta.y = event.positionStageCoords.y - that->stagePrev.y;
+                event.parentDelta.x = event.positionParentCoords.x - that->parentPrev.x;
+                event.parentDelta.y = event.positionParentCoords.y - that->parentPrev.y;
+                that->stagePrev = event.positionStageCoords;
+                that->parentPrev = event.positionParentCoords;
+        }
+        else {
+                event.stageDelta = Point ();
+                event.parentDelta = Point ();
+        }
+
+        std::cerr << event.stageDelta << ", " << event.parentDelta << std::endl;
 
         if (clutter_event_get_state (ev) & CLUTTER_BUTTON1_MASK) {
                 event.button = 1;

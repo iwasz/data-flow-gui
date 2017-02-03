@@ -70,6 +70,7 @@ public:
 
         /*---------------------------------------------------------------------------*/
 
+        virtual bool isConnectSignals () { return false; }
         virtual bool onButtonPress (Event const &e) { return false; }
         virtual bool onButtonRelease (Event const &e) { return false; }
         virtual bool onMotion (Event const &e) { return false; }
@@ -77,6 +78,10 @@ public:
         virtual bool onLeave (Event const &e) { return false; }
         virtual bool onScroll (Event const &e) { return false; }
         virtual bool onKeyPress (Event const &e) { return false; }
+
+        // TODO private
+        Point stagePrev;
+        Point parentPrev;
 
 protected:
         friend void abstractActorOnFinalize (void *ptr);

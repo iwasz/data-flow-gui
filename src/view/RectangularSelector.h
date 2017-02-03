@@ -19,6 +19,7 @@ public:
         RectangularSelector ();
         virtual ~RectangularSelector () {}
 
+//        virtual bool isConnectSignals () { return true; }
         virtual bool onButtonPress (Event const &e);
         virtual bool onButtonRelease (Event const &e);
         virtual bool onMotion (Event const &e);

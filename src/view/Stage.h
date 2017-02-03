@@ -46,11 +46,10 @@ public:
 
         /*---------------------------------------------------------------------------*/
 
+        virtual bool isConnectSignals () { return true; }
         virtual bool onButtonPress (Event const &e);
         virtual bool onButtonRelease (Event const &e);
         virtual bool onMotion (Event const &e);
-//        virtual bool onEnter (Event const &e);
-//        virtual bool onLeave (Event const &e);
         virtual bool onScroll (Event const &e);
         virtual bool onKeyPress (Event const &e);
 
