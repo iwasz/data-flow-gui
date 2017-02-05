@@ -34,6 +34,7 @@ static void iw_rectangle_init (IwRectangle *self)
         clutter_actor_set_background_color (CLUTTER_ACTOR (self), &c);
 #endif
 
+        iw_actor_create_canvas (IW_ACTOR (self));
         ClutterContent *canvas = iw_actor_get_canvas (IW_ACTOR (self));
         g_signal_connect (canvas, "draw", G_CALLBACK (draw_rectangle), self);
         clutter_content_invalidate (canvas);

@@ -24,12 +24,39 @@ void onTextChanged (void *lineConnector, const char *text);
 
 /*****************************************************************************/
 
-static void iw_line_pick (ClutterActor *actor, const ClutterColor *pick_color)
+void cogl_line (gfloat x1, gfloat y1, gfloat x2, gfloat y2, gboolean fill, float angle, float lw)
 {
-        if (!clutter_actor_should_pick_paint (actor)) {
+        if (lw <= 1) {
+                cogl_path_move_to (x1, y1);
+                cogl_path_line_to (x2, y2);
+                cogl_path_stroke ();
                 return;
         }
 
+        double c = cos (angle);
+        double s = sin (angle);
+
+        float px = s * lw / 2.0;
+        float py = c * lw / 2.0;
+
+        cogl_path_move_to (x1 - px, y1 + py);
+        cogl_path_line_to (x2 - px, y2 + py);
+        cogl_path_line_to (x2 + px, y2 - py);
+        cogl_path_line_to (x1 + px, y1 - py);
+        cogl_path_line_to (x1 - px, y1 + py);
+
+        if (fill) {
+                cogl_path_fill ();
+        }
+        else {
+                cogl_path_stroke ();
+        }
+}
+
+/*****************************************************************************/
+
+static void iw_line_paint_priv (ClutterActor *actor, const ClutterColor *color, gboolean fill)
+{
         ClutterActorBox allocation = {
                 0,
         };
@@ -40,16 +67,29 @@ static void iw_line_pick (ClutterActor *actor, const ClutterColor *pick_color)
         clutter_actor_box_get_size (&allocation, &width, &height);
 
         cogl_path_new ();
+        cogl_set_source_color4ub (color->red, color->green, color->blue, color->alpha);
 
-        cogl_set_source_color4ub (pick_color->red, pick_color->green, pick_color->blue, pick_color->alpha);
+        float lw = iw_actor_get_stroke_width (IW_ACTOR (actor));
 
-        float m = iw_actor_get_stroke_width (IW_ACTOR (actor)) / 2.0 + 0.5;
-        cogl_path_move_to (0 + m, 0 - m);
-        cogl_path_line_to (width + m, height - m);
-        cogl_path_line_to (width - m, height + m);
-        cogl_path_line_to (0 - m, 0 + m);
-        cogl_path_line_to (0 + m, 0 - m);
-        cogl_path_fill ();
+        float ax = IW_LINE (actor)->priv->ax;
+        float ay = IW_LINE (actor)->priv->ay;
+        float bx = IW_LINE (actor)->priv->bx;
+        float by = IW_LINE (actor)->priv->by;
+
+        float angle = atan ((ay - by) / (ax - bx));
+
+        if (ax < bx && ay < by) {
+                cogl_line (0, 0, width, height, fill, angle, lw);
+        }
+        else if (ax > bx && ay > by) {
+                cogl_line (width, height, 0, 0, fill, angle, lw);
+        }
+        else if (ax > bx && ay < by) {
+                cogl_line (width, 0, 0, height, fill, angle, lw);
+        }
+        else if (ax < bx && ay > by) {
+                cogl_line (0, height, width, 0, fill, angle, lw);
+        }
 
         for (ClutterActor *iter = clutter_actor_get_first_child (actor); iter != NULL; iter = clutter_actor_get_next_sibling (iter)) {
                 clutter_actor_paint (iter);
@@ -58,10 +98,30 @@ static void iw_line_pick (ClutterActor *actor, const ClutterColor *pick_color)
 
 /*****************************************************************************/
 
+static void iw_line_pick (ClutterActor *actor, const ClutterColor *pick_color)
+{
+        if (!clutter_actor_should_pick_paint (actor)) {
+                return;
+        }
+
+        iw_line_paint_priv (actor, pick_color, TRUE);
+}
+
+/*****************************************************************************/
+
+static void iw_line_paint (ClutterActor *actor)
+{
+        ClutterColor *strokeColor = iw_actor_get_stroke_color (IW_ACTOR (actor));
+        iw_line_paint_priv (actor, strokeColor, TRUE);
+}
+
+/*****************************************************************************/
+
 static void iw_line_class_init (IwLineClass *klass)
 {
         ClutterActorClass *actor_class = CLUTTER_ACTOR_CLASS (klass);
         actor_class->pick = iw_line_pick;
+        actor_class->paint = iw_line_paint;
         g_type_class_add_private (klass, sizeof (IwLinePrivate));
 }
 
@@ -100,9 +160,9 @@ static void iw_line_init (IwLine *self)
         clutter_actor_set_background_color (CLUTTER_ACTOR (self->priv->label), &c);
 #endif
 
-        ClutterContent *canvas = iw_actor_get_canvas (IW_ACTOR (self));
-        g_signal_connect (canvas, "draw", G_CALLBACK (draw_line), self);
-        clutter_content_invalidate (canvas);
+        //        ClutterContent *canvas = iw_actor_get_canvas (IW_ACTOR (self));
+        //        g_signal_connect (canvas, "draw", G_CALLBACK (draw_line), self);
+        //        clutter_content_invalidate (canvas);
 }
 
 /*****************************************************************************/
@@ -110,7 +170,7 @@ static void iw_line_init (IwLine *self)
 static void iw_line_resize_accordingly (IwLine *self)
 {
         gfloat strokeWidth = iw_actor_get_stroke_width (IW_ACTOR (self));
-        float lw = strokeWidth;
+        float lw = 0; // strokeWidth;
         float ax = self->priv->ax;
         float ay = self->priv->ay;
         float bx = self->priv->bx;

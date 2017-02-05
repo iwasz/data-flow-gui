@@ -69,6 +69,7 @@ static void iw_circle_init (IwCircle *self)
         clutter_actor_set_background_color (CLUTTER_ACTOR (self), &c);
 #endif
 
+        iw_actor_create_canvas (IW_ACTOR (self));
         ClutterContent *canvas = iw_actor_get_canvas (IW_ACTOR (self));
         g_signal_connect (canvas, "draw", G_CALLBACK (draw_circle), self);
         clutter_content_invalidate (canvas);

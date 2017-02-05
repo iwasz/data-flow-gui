@@ -29,11 +29,11 @@
   </RectangularSelectorStrategy>
 
   <DashedLineStrategy id="dashedLine">
-    <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="3" reactive="false"/>
+    <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="5" reactive="false"/>
   </DashedLineStrategy>
 
   <DashedLineConnectorStrategy id="dashedLineConnector">
-    <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="3" reactive="false"/>
+    <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="5" reactive="false"/>
   </DashedLineConnectorStrategy>
 
   <Circle scope="prototype" id="circle" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>

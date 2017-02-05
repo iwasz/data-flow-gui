@@ -9,7 +9,6 @@
 #include "AbstractActor.h"
 #include "ScaleLayer.h"
 #include "clutter/iw_actor.h"
-#include <iostream>
 
 /*****************************************************************************/
 
@@ -319,7 +318,7 @@ gboolean on_actor_motion (ClutterActor *stage, ClutterEvent *ev, gpointer data)
                 event.parentDelta = Point ();
         }
 
-        std::cerr << event.stageDelta << ", " << event.parentDelta << std::endl;
+//        std::cerr << event.stageDelta << ", " << event.parentDelta << std::endl;
 
         if (clutter_event_get_state (ev) & CLUTTER_BUTTON1_MASK) {
                 event.button = 1;

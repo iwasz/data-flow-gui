@@ -15,7 +15,11 @@
 
 /*****************************************************************************/
 
-void RectangularSelectorStrategy::onObjectCreated (IClutterActor *)
+void RectangularSelectorStrategy::onObjectCreated (IClutterActor *) { onObjectCreated (nullptr, true); }
+
+/*****************************************************************************/
+
+void RectangularSelectorStrategy::onObjectCreated (IClutterActor *, bool inside)
 {
         Box selectionBox = Box (startPoint, endPoint - startPoint);
         Box minimalSelectionBox;
@@ -36,8 +40,15 @@ void RectangularSelectorStrategy::onObjectCreated (IClutterActor *)
 
                 Box boundingBox = actor->getBoundingBox ();
 
-                if (!boundingBox.isIntersects (selectionBox)) {
-                        continue;
+                if (inside) {
+                        if (!boundingBox.isInside (selectionBox)) {
+                                continue;
+                        }
+                }
+                else {
+                        if (!boundingBox.isIntersects (selectionBox)) {
+                                continue;
+                        }
                 }
 
                 minimalSelectionBox.resizeContain (boundingBox);
@@ -69,14 +80,6 @@ void RectangularSelectorStrategy::onButtonPress (const Event &e)
         unselectAll ();
         ShapeDrawStrategy::onButtonPress (e);
 }
-
-/*****************************************************************************/
-
-//bool RectangularSelectorStrategy::onButtonRelease (const Event &e)
-//{
-//        ShapeDrawStrategy::onButtonRelease (e);
-//        return true;
-//}
 
 /*****************************************************************************/
 

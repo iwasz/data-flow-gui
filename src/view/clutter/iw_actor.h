@@ -70,8 +70,7 @@ struct _IwActorClass {
 
 /* public API */
 
-/* constructor - note this returns a ClutterActor instance */
-//ClutterActor *iw_actor_new (void);
+void iw_actor_create_canvas (IwActor *self);
 
 void iw_actor_set_fill_color (IwActor *self, const ClutterColor *color);
 ClutterColor *iw_actor_get_fill_color (IwActor *self);

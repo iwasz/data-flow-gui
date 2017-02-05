@@ -21,7 +21,8 @@ class ScaleLayer;
 class __tiliae_reflect__ RectangularSelectorStrategy : public ShapeDrawStrategy, public ISelectorStrategy {
 public:
         virtual ~RectangularSelectorStrategy () {}
-        virtual void onObjectCreated (IClutterActor *a);
+        virtual void onObjectCreated (IClutterActor *a) __tiliae_no_reflect__;
+        virtual void onObjectCreated (IClutterActor *a, bool inside) __tiliae_no_reflect__;
 
         void onButtonPress (Event const &e);
 

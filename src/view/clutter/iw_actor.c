@@ -103,16 +103,15 @@ static void iw_actor_init (IwActor *self)
         clutter_actor_set_background_color (CLUTTER_ACTOR (self), &c);
 #endif
 
-        priv->canvas = clutter_canvas_new ();
-        clutter_actor_set_content (CLUTTER_ACTOR (self), priv->canvas);
+        priv->canvas = NULL;
+}
+
+void iw_actor_create_canvas (IwActor *self)
+{
+        self->priv->canvas = clutter_canvas_new ();
+        clutter_actor_set_content (CLUTTER_ACTOR (self), self->priv->canvas);
         clutter_actor_set_content_scaling_filters (CLUTTER_ACTOR (self), CLUTTER_SCALING_FILTER_TRILINEAR, CLUTTER_SCALING_FILTER_LINEAR);
-        g_object_unref (priv->canvas);
-
-        //        /* connect our drawing code */
-        //        g_signal_connect (priv->canvas, "draw", G_CALLBACK (draw_actor), priv);
-        //        /* invalidate the canvas, so that we can draw before the main loop starts */
-        //        clutter_content_invalidate (priv->canvas);
-
+        g_object_unref (self->priv->canvas);
         g_signal_connect (CLUTTER_ACTOR (self), "allocation-changed", G_CALLBACK (on_actor_resize), NULL);
 }
 
@@ -126,7 +125,10 @@ void iw_actor_set_fill_color (IwActor *self, const ClutterColor *color)
 {
         g_return_if_fail (IW_IS_ACTOR (self));
         self->priv->fillColor = *color;
-        clutter_content_invalidate (self->priv->canvas);
+
+        if (self->priv->canvas) {
+                clutter_content_invalidate (self->priv->canvas);
+        }
 }
 
 ClutterColor *iw_actor_get_fill_color (IwActor *self)
@@ -139,7 +141,10 @@ void iw_actor_set_stroke_color (IwActor *self, const ClutterColor *color)
 {
         g_return_if_fail (IW_IS_ACTOR (self));
         self->priv->strokeColor = *color;
-        clutter_content_invalidate (self->priv->canvas);
+
+        if (self->priv->canvas) {
+                clutter_content_invalidate (self->priv->canvas);
+        }
 }
 
 ClutterColor *iw_actor_get_stroke_color (IwActor *self)
@@ -152,7 +157,10 @@ void iw_actor_set_stroke_width (IwActor *self, gfloat w)
 {
         g_return_if_fail (IW_IS_ACTOR (self));
         self->priv->strokeWidth = w;
-        clutter_content_invalidate (self->priv->canvas);
+
+        if (self->priv->canvas) {
+                clutter_content_invalidate (self->priv->canvas);
+        }
 }
 
 gfloat iw_actor_get_stroke_width (IwActor *self)
@@ -165,7 +173,10 @@ void iw_actor_set_stroke_dash (IwActor *self, gfloat w)
 {
         g_return_if_fail (IW_IS_ACTOR (self));
         self->priv->strokeDash = w;
-        clutter_content_invalidate (self->priv->canvas);
+
+        if (self->priv->canvas) {
+                clutter_content_invalidate (self->priv->canvas);
+        }
 }
 
 gfloat iw_actor_get_stroke_dash (IwActor *self)
@@ -178,7 +189,10 @@ void iw_actor_set_fill (IwActor *self, gboolean b)
 {
         g_return_if_fail (IW_IS_ACTOR (self));
         self->priv->fill = b;
-        clutter_content_invalidate (self->priv->canvas);
+
+        if (self->priv->canvas) {
+                clutter_content_invalidate (self->priv->canvas);
+        }
 }
 
 /*****************************************************************************/

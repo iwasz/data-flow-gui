@@ -10,7 +10,7 @@
 #include "IDrawStrategy.h"
 #include "IFactoryStrategy.h"
 #include "ISelectorStrategy.h"
-#include "MoveStrategy.h"
+#include "gui/drawing/RectangularSelectorStrategy.h"
 #include "view/Rectangle.h"
 #include "view/RectangularSelector.h"
 #include "view/ScaleLayer.h"
@@ -45,7 +45,6 @@ struct MainController::Impl {
         StringQueue inputQueue;
         StateMachine machine;
         ToolMap *tools;
-        MoveStrategy moveStrategy;
         flow::Program *program = nullptr;
         bool runProgram = false;
         RectangularSelector *rectangularSelector = nullptr;
@@ -126,7 +125,8 @@ void MainController::Impl::configureMachine ()
                         if (std::find (selectedActors->cbegin (), selectedActors->cend (), args->object) == selectedActors->cend ()) {
                                 vars.currentDrawStrategy->onButtonPress (*args);
                                 vars.currentDrawStrategy->onButtonRelease (*args);
-                                vars.currentDrawStrategy->onObjectCreated (nullptr);
+                                // TODO this cant be like that!
+                                dynamic_cast <RectangularSelectorStrategy *> (vars.currentDrawStrategy)->onObjectCreated (nullptr, false);
                         }
 
                         return true;

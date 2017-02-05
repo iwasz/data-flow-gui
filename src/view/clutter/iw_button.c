@@ -143,6 +143,7 @@ static void iw_button_init (IwButton *self)
         g_signal_connect (CLUTTER_ACTOR (self), "enter-event", G_CALLBACK (on_button_enter), NULL);
         g_signal_connect (CLUTTER_ACTOR (self), "leave-event", G_CALLBACK (on_button_leave), NULL);
 
+        iw_actor_create_canvas (IW_ACTOR (self));
         ClutterContent *canvas = iw_actor_get_canvas (IW_ACTOR (self));
         g_signal_connect (canvas, "draw", G_CALLBACK (draw_rectangle), self);
         clutter_content_invalidate (canvas);
