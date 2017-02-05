@@ -97,42 +97,4 @@ void DashedLineConnectorStrategy::onObjectCreated (IClutterActor *a)
         else {
                 endNode->addOutput (pb->number, arc);
         }
-
-#if 0
-        flow::Program program;
-
-        flow::Copy c2;
-        flow::Copy c1;
-        flow::Add a;
-        flow::Console l;
-
-        program.addNode (&l);
-        program.addNode (&c1);
-        program.addNode (&a);
-        program.addNode (&c2);
-
-        // c2 górne
-        flow::Arc a1 (0);
-        c2.addOutput (0, &a1);
-
-        // c1 dolne
-        flow::Arc a2 (1);
-        flow::Arc a3 (1);
-        c1.addOutput (0, &a3);
-        c1.addOutput (0, &a2);
-
-        // add
-        flow::Arc a4;
-        flow::Arc a5 (1);
-        a.addOutput (0, &a4);
-        a.addOutput (0, &a5);
-
-        c1.setInput (0, &a4);
-        c2.setInput (0, &a2);
-        a.setInput (0, &a1);
-        a.setInput (1, &a3);
-        l.setInput (0, &a5);
-
-        program.run ();
-#endif
 }

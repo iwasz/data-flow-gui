@@ -23,6 +23,21 @@ std::ostream &operator<< (std::ostream &o, Point const &p)
 
 /*****************************************************************************/
 
+Point::Point (std::string const &s)
+{
+        typedef boost::tokenizer<boost::char_separator<char>> tokenizer;
+        tokenizer tok (s, boost::char_separator<char> (","));
+        tokenizer::iterator i = tok.begin ();
+
+        assertThrow (i != tok.end (), "Point::Point : problem parsing x coordinate string : [" + s + "]");
+        x = boost::lexical_cast<float> (boost::trim_copy (*i++));
+
+        assertThrow (i != tok.end (), "Point::Point : problem parsing y coordinate string : [" + s + "]");
+        y = boost::lexical_cast<float> (boost::trim_copy (*i));
+}
+
+/*****************************************************************************/
+
 Dimension::Dimension (std::string const &s)
 {
         typedef boost::tokenizer<boost::char_separator<char>> tokenizer;

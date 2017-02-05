@@ -12,6 +12,8 @@
 
 LineConnector::LineConnector () : Line (), AbstractConnector () {}
 
+/*****************************************************************************/
+
 void LineConnector::onMoveAnchor (const Point &p, Side s)
 {
         if (s == A) {

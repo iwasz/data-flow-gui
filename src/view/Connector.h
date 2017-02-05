@@ -6,25 +6,28 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef VIEW_DATA_FLOW_LINE_H
-#define VIEW_DATA_FLOW_LINE_H
+#ifndef ANGLE_CONNECTOR_H
+#define ANGLE_CONNECTOR_H
 
-#include "AbstractActor.h"
-#include "Stage.h"
-#include <ReflectionParserAnnotation.h>
-#include <clutter/clutter.h>
-#include <string>
+#include "AbstractArcView.h"
+#include "AbstractConnector.h"
+#include "LineConnector.h"
 
-class __tiliae_reflect__ Line : public AbstractActor {
+class __tiliae_reflect__ Connector : public LineConnector {
 public:
-        Line ();
-        virtual ~Line () {}
+        Connector ();
+        virtual ~Connector () {}
+
+        /*---------------------------------------------------------------------------*/
 
         virtual void setPointA (Point const &p);
         virtual Point getPointA () const;
 
         virtual void setPointB (Point const &p);
         virtual Point getPointB () const;
+
+        virtual void setPointC (Point const &p);
+        virtual Point getPointC () const;
 
         virtual std::string getText () const;
         virtual void setText (std::string const t);
@@ -39,4 +42,4 @@ public:
         virtual void setTextEditable (bool b);
 };
 
-#endif // LINE_H
+#endif // LINECONNECTOR_H

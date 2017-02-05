@@ -10,6 +10,7 @@
 #include "view/RectangularSelector.h"
 #include "view/Line.h"
 #include "view/LineConnector.h"
+#include "view/Connector.h"
 #include "view/Stage.h"
 #include "view/Button.h"
 #include "view/CircularNode.h"

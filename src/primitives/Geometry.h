@@ -12,10 +12,10 @@
 #include <ReflectionParserAnnotation.h>
 #include <string>
 
-struct Point {
+struct __tiliae_reflect__ Point {
         Point () : x (0), y (0) {}
         Point (float x, float y) : x (x), y (y) {}
-        //        Point (std::)
+        Point (std::string const &s);
         float x;
         float y;
 };

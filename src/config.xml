@@ -6,7 +6,7 @@
   </Config>
 
   <!-- +===================================================+ -->
-  <!-- | Controllrers and views                            | -->
+  <!-- | Drawing & factory strategies.                     | -->
   <!-- +===================================================+ -->
 
   <ShapeDrawStrategy id="dashedCircle" maxSize="1000, 1000">
@@ -34,6 +34,13 @@
   <DashedLineConnectorStrategy id="dashedLineConnector">
     <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="5" reactive="false"/>
   </DashedLineConnectorStrategy>
+
+  <DashedLineConnectorStrategy id="dashedAngleConnector">
+    <Connector set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="5" reactive="false"/>
+  </DashedLineConnectorStrategy>
+  <!-- +===================================================+ -->
+  <!-- | Prototypes.                                       | -->
+  <!-- +===================================================+ -->
 
   <Circle scope="prototype" id="circle" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>
   <Rectangle scope="prototype" id="rect" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>
@@ -68,6 +75,12 @@
     <Arc scope="prototype" set-as="arc"/>
   </LineConnector>
 
+  <Connector scope="prototype" id="angleConnector" parent="@scale" strokeColor="#0096c6c9" visible="false" strokeWidth="5" />
+
+  <!-- +===================================================+ -->
+  <!-- | MainController and internals.                     | -->
+  <!-- +===================================================+ -->
+
   <Program id="program"/>
 
   <MainController id="mainController" loopDelayMs="5" program="@program">
@@ -90,6 +103,9 @@
       </Tool>
       <Tool set-as="lineConnector" drawStrategy="@dashedLineConnector">
         <ContainerFactoryStrategy set-as="factoryStrategy" beanName="lineConnector" container="@#container"/>
+      </Tool>
+      <Tool set-as="angleConnector" drawStrategy="@dashedAngleConnector">
+        <ContainerFactoryStrategy set-as="factoryStrategy" beanName="angleConnector" container="@#container"/>
       </Tool>
       <Tool set-as="rect" drawStrategy="@dashedRect">
         <ContainerFactoryStrategy set-as="factoryStrategy" beanName="rect" container="@#container"/>

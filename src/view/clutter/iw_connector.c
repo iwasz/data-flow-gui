@@ -6,26 +6,27 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "iw_line.h"
+#include "iw_connector.h"
 #include "drawing_stuff.h"
 #include <math.h>
 
-G_DEFINE_TYPE (IwLine, iw_line, IW_TYPE_ACTOR);
-#define IW_LINE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IW_TYPE_LINE, IwLinePrivate))
+G_DEFINE_TYPE (IwConnector, iw_connector, IW_TYPE_ACTOR);
+#define IW_CONNECTOR_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IW_TYPE_CONNECTOR, IwConnectorPrivate))
 
-struct _IwLinePrivate {
+struct _IwConnectorPrivate {
         gfloat ax, ay;
         gfloat bx, by;
+        gfloat cx, cy;
         ClutterActor *label;
 };
 
 static gboolean draw_line (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data);
-static void iw_line_resize_accordingly (IwLine *self);
-void onTextChanged (void *lineConnector, const char *text);
+static void iw_connector_resize_accordingly (IwConnector *self);
+void onTextChangedConnector (void *lineConnector, const char *text);
 
 /*****************************************************************************/
 
-static void iw_line_paint_priv (ClutterActor *actor, const ClutterColor *color, gboolean fill)
+static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *color, gboolean fill)
 {
         ClutterActorBox allocation = {
                 0,
@@ -41,15 +42,36 @@ static void iw_line_paint_priv (ClutterActor *actor, const ClutterColor *color, 
 
         float lw = iw_actor_get_stroke_width (IW_ACTOR (actor));
 
-        float ax = IW_LINE (actor)->priv->ax;
-        float ay = IW_LINE (actor)->priv->ay;
-        float bx = IW_LINE (actor)->priv->bx;
-        float by = IW_LINE (actor)->priv->by;
+        float ax = IW_CONNECTOR (actor)->priv->ax;
+        float ay = IW_CONNECTOR (actor)->priv->ay;
+        float bx = IW_CONNECTOR (actor)->priv->bx;
+        float by = IW_CONNECTOR (actor)->priv->by;
+        float cx = IW_CONNECTOR (actor)->priv->cx;
+        float cy = IW_CONNECTOR (actor)->priv->cy;
+
+//        ClutterActor *parent = clutter_actor_get_parent (actor);
+//        clutter_actor_transform_stage_point (firstContainerActor, event->positionStageCoords.x, event->positionStageCoords.y, &event->positionParentCoords.x,
+//                                             &event->positionParentCoords.y);
 
         float angle = atan ((ay - by) / (ax - bx));
 
         if (ax < bx && ay < by) {
                 cogl_line (0, 0, width, height, fill, angle, lw);
+
+                if (width < height) {
+                        cogl_path_move_to (0, 0);
+                        cogl_path_line_to (0, height / 2);
+                        cogl_path_line_to (width, height / 2);
+                        cogl_path_line_to (width, height);
+                        cogl_path_stroke ();
+                }
+                else {
+                        cogl_path_move_to (0, 0);
+                        cogl_path_line_to (width / 2, 0);
+                        cogl_path_line_to (width / 2, height);
+                        cogl_path_line_to (width, height);
+                        cogl_path_stroke ();
+                }
         }
         else if (ax > bx && ay > by) {
                 cogl_line (width, height, 0, 0, fill, angle, lw);
@@ -68,48 +90,47 @@ static void iw_line_paint_priv (ClutterActor *actor, const ClutterColor *color, 
 
 /*****************************************************************************/
 
-static void iw_line_pick (ClutterActor *actor, const ClutterColor *pick_color)
+static void iw_connector_pick (ClutterActor *actor, const ClutterColor *pick_color)
 {
         if (!clutter_actor_should_pick_paint (actor)) {
                 return;
         }
 
-        iw_line_paint_priv (actor, pick_color, TRUE);
+        iw_connector_paint_priv (actor, pick_color, TRUE);
 }
 
 /*****************************************************************************/
 
-static void iw_line_paint (ClutterActor *actor)
+static void iw_connector_paint (ClutterActor *actor)
 {
         ClutterColor *strokeColor = iw_actor_get_stroke_color (IW_ACTOR (actor));
-        iw_line_paint_priv (actor, strokeColor, TRUE);
+        iw_connector_paint_priv (actor, strokeColor, TRUE);
 }
 
 /*****************************************************************************/
 
-static void iw_line_class_init (IwLineClass *klass)
+static void iw_connector_class_init (IwConnectorClass *klass)
 {
         ClutterActorClass *actor_class = CLUTTER_ACTOR_CLASS (klass);
-        actor_class->pick = iw_line_pick;
-        actor_class->paint = iw_line_paint;
-        g_type_class_add_private (klass, sizeof (IwLinePrivate));
+        actor_class->pick = iw_connector_pick;
+        actor_class->paint = iw_connector_paint;
+        g_type_class_add_private (klass, sizeof (IwConnectorPrivate));
 }
 
 /*****************************************************************************/
 
 static void on_text_changed (ClutterText *self, gpointer user_data)
 {
-        /*printf ("%s\n", clutter_text_get_text (self));*/
-        IwLine *line = (IwLine *)user_data;
-        iw_line_resize_accordingly (line);
-        onTextChanged (iw_actor_get_user_data (IW_ACTOR (line)), clutter_text_get_text (self));
+        IwConnector *line = (IwConnector *)user_data;
+        iw_connector_resize_accordingly (line);
+        onTextChangedConnector (iw_actor_get_user_data (IW_ACTOR (line)), clutter_text_get_text (self));
 }
 
 /*****************************************************************************/
 
-static void iw_line_init (IwLine *self)
+static void iw_connector_init (IwConnector *self)
 {
-        IwLinePrivate *priv = self->priv = IW_LINE_GET_PRIVATE (self);
+        IwConnectorPrivate *priv = self->priv = IW_CONNECTOR_GET_PRIVATE (self);
         priv->ax = 0;
         priv->ay = 0;
         priv->bx = 0;
@@ -129,15 +150,11 @@ static void iw_line_init (IwLine *self)
         clutter_actor_set_background_color (CLUTTER_ACTOR (self), &c);
         clutter_actor_set_background_color (CLUTTER_ACTOR (self->priv->label), &c);
 #endif
-
-        //        ClutterContent *canvas = iw_actor_get_canvas (IW_ACTOR (self));
-        //        g_signal_connect (canvas, "draw", G_CALLBACK (draw_line), self);
-        //        clutter_content_invalidate (canvas);
 }
 
 /*****************************************************************************/
 
-static void iw_line_resize_accordingly (IwLine *self)
+static void iw_connector_resize_accordingly (IwConnector *self)
 {
         gfloat strokeWidth = iw_actor_get_stroke_width (IW_ACTOR (self));
         float lw = 0; // strokeWidth;
@@ -183,169 +200,125 @@ static void iw_line_resize_accordingly (IwLine *self)
 
 /*****************************************************************************/
 
-void iw_line_set_point_a (IwLine *self, gfloat x, gfloat y)
+void iw_connector_set_point_a (IwConnector *self, gfloat x, gfloat y)
 {
-        g_return_if_fail (IW_IS_LINE (self));
+        g_return_if_fail (IW_IS_CONNECTOR (self));
         self->priv->ax = x;
         self->priv->ay = y;
-        iw_line_resize_accordingly (self);
+        iw_connector_resize_accordingly (self);
 }
 
 /*****************************************************************************/
 
-void iw_line_get_point_a (IwLine *self, gfloat *x, gfloat *y)
+void iw_connector_get_point_a (IwConnector *self, gfloat *x, gfloat *y)
 {
-        g_return_if_fail (IW_IS_LINE (self));
+        g_return_if_fail (IW_IS_CONNECTOR (self));
         *x = self->priv->ax;
         *y = self->priv->ay;
 }
 
 /*****************************************************************************/
 
-void iw_line_set_point_b (IwLine *self, gfloat x, gfloat y)
+void iw_connector_set_point_b (IwConnector *self, gfloat x, gfloat y)
 {
-        g_return_if_fail (IW_IS_LINE (self));
+        g_return_if_fail (IW_IS_CONNECTOR (self));
         self->priv->bx = x;
         self->priv->by = y;
-        iw_line_resize_accordingly (self);
+        iw_connector_resize_accordingly (self);
 }
 
 /*****************************************************************************/
 
-void iw_line_get_point_b (IwLine *self, gfloat *x, gfloat *y)
+void iw_connector_get_point_b (IwConnector *self, gfloat *x, gfloat *y)
 {
-        g_return_if_fail (IW_IS_LINE (self));
+        g_return_if_fail (IW_IS_CONNECTOR (self));
         *x = self->priv->bx;
         *y = self->priv->by;
 }
 
 /*****************************************************************************/
 
-ClutterActor *iw_line_new (void) { return g_object_new (IW_TYPE_LINE, NULL); }
-
-/*****************************************************************************/
-
-static gboolean draw_line (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data)
+void iw_connector_set_point_c (IwConnector *self, gfloat x, gfloat y)
 {
-        IwLine *self = (IwLine *)data;
-        IwLinePrivate *priv = self->priv;
-
-        cairo_save (cr);
-
-        /* clear the contents of the canvas, to avoid painting
-         * over the previous frame
-         */
-        cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-        cairo_paint (cr);
-
-        cairo_restore (cr);
-
-        cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-
-        gfloat strokeWidth = iw_actor_get_stroke_width (IW_ACTOR (self));
-        gfloat strokeDash = iw_actor_get_stroke_dash (IW_ACTOR (self));
-        ClutterColor *strokeColor = iw_actor_get_stroke_color (IW_ACTOR (self));
-
-        cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
-        cairo_set_line_width (cr, strokeWidth);
-
-        if (strokeDash > 0) {
-                double dashed1 = strokeDash;
-                cairo_set_dash (cr, &dashed1, 1, 0);
-        }
-
-        clutter_cairo_set_source_color (cr, strokeColor);
-
-        // Prevent clipping.
-        float margin = strokeWidth /*/ 2.0 + 0.5*/;
-
-        float ax = priv->ax;
-        float ay = priv->ay;
-        float bx = priv->bx;
-        float by = priv->by;
-
-        if (ax < bx && ay < by) {
-                cairo_move_to (cr, margin, margin);
-                cairo_line_to (cr, width - margin, height - margin);
-        }
-        else if (ax > bx && ay > by) {
-                cairo_move_to (cr, width - margin, height - margin);
-                cairo_line_to (cr, margin, margin);
-        }
-
-        else if (ax > bx && ay < by) {
-                cairo_move_to (cr, width - margin, margin);
-                cairo_line_to (cr, margin, height - margin);
-        }
-        else if (ax < bx && ay > by) {
-                cairo_move_to (cr, margin, height - margin);
-                cairo_line_to (cr, width - margin, margin);
-        }
-
-        cairo_stroke (cr);
-        return TRUE;
+        g_return_if_fail (IW_IS_CONNECTOR (self));
+        self->priv->cx = x;
+        self->priv->cy = y;
+        iw_connector_resize_accordingly (self);
 }
 
 /*****************************************************************************/
 
-const gchar *iw_line_get_text (IwLine *self)
+void iw_connector_get_point_c (IwConnector *self, gfloat *x, gfloat *y)
 {
-        g_return_val_if_fail (IW_IS_LINE (self), NULL);
+        g_return_if_fail (IW_IS_CONNECTOR (self));
+        *x = self->priv->cx;
+        *y = self->priv->cy;
+}
+
+/*****************************************************************************/
+
+ClutterActor *iw_connector_new (void) { return g_object_new (IW_TYPE_CONNECTOR, NULL); }
+
+/*****************************************************************************/
+
+const gchar *iw_connector_get_text (IwConnector *self)
+{
+        g_return_val_if_fail (IW_IS_CONNECTOR (self), NULL);
         return clutter_text_get_text (CLUTTER_TEXT (self->priv->label));
 }
 
 /*****************************************************************************/
 
-void iw_line_set_text (IwLine *self, const gchar *s)
+void iw_connector_set_text (IwConnector *self, const gchar *s)
 {
-        g_return_if_fail (IW_IS_LINE (self));
+        g_return_if_fail (IW_IS_CONNECTOR (self));
         clutter_text_set_text (CLUTTER_TEXT (self->priv->label), s);
 }
 
 /*****************************************************************************/
 
-const gchar *iw_line_get_font (IwLine *self)
+const gchar *iw_connector_get_font (IwConnector *self)
 {
-        g_return_val_if_fail (IW_IS_LINE (self), NULL);
+        g_return_val_if_fail (IW_IS_CONNECTOR (self), NULL);
         return clutter_text_get_font_name (CLUTTER_TEXT (self->priv->label));
 }
 
 /*****************************************************************************/
 
-void iw_line_set_font (IwLine *self, const gchar *s)
+void iw_connector_set_font (IwConnector *self, const gchar *s)
 {
-        g_return_if_fail (IW_IS_LINE (self));
+        g_return_if_fail (IW_IS_CONNECTOR (self));
         clutter_text_set_font_name (CLUTTER_TEXT (self->priv->label), s);
 }
 
 /*****************************************************************************/
 
-void iw_line_get_font_color (IwLine *self, ClutterColor *color)
+void iw_connector_get_font_color (IwConnector *self, ClutterColor *color)
 {
-        g_return_if_fail (IW_IS_LINE (self));
+        g_return_if_fail (IW_IS_CONNECTOR (self));
         return clutter_text_get_color (CLUTTER_TEXT (self->priv->label), color);
 }
 
 /*****************************************************************************/
 
-void iw_line_set_font_color (IwLine *self, const ClutterColor *c)
+void iw_connector_set_font_color (IwConnector *self, const ClutterColor *c)
 {
-        g_return_if_fail (IW_IS_LINE (self));
+        g_return_if_fail (IW_IS_CONNECTOR (self));
         clutter_text_set_color (CLUTTER_TEXT (self->priv->label), c);
 }
 
 /*****************************************************************************/
 
-gboolean iw_line_is_editable (IwLine *self)
+gboolean iw_connector_is_editable (IwConnector *self)
 {
-        g_return_val_if_fail (IW_IS_LINE (self), FALSE);
+        g_return_val_if_fail (IW_IS_CONNECTOR (self), FALSE);
         return clutter_text_get_editable (CLUTTER_TEXT (self->priv->label));
 }
 
 /*****************************************************************************/
 
-void iw_line_set_editable (IwLine *self, gboolean b)
+void iw_connector_set_editable (IwConnector *self, gboolean b)
 {
-        g_return_if_fail (IW_IS_LINE (self));
+        g_return_if_fail (IW_IS_CONNECTOR (self));
         clutter_text_set_editable (CLUTTER_TEXT (self->priv->label), b);
 }
