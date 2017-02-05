@@ -9,13 +9,13 @@
   <!-- | Controllrers and views                            | -->
   <!-- +===================================================+ -->
 
-  <ShapeDrawStrategy id="dashedCircle">
+  <ShapeDrawStrategy id="dashedCircle" maxSize="1000, 1000">
     <Circle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" reactive="false"/>
   </ShapeDrawStrategy>
 
   <dashedCircle id="dashedCircleMinSize" minSize="100, 100"/>
 
-  <ShapeDrawStrategy id="dashedRect">
+  <ShapeDrawStrategy id="dashedRect" maxSize="1000, 1000">
     <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" reactive="false"/>
   </ShapeDrawStrategy>
 
@@ -23,7 +23,6 @@
   <ClutterActorVector id="selectedActors" />
   <RectangularSelector id="rectangularSelector" parent="@scale" fill="false" strokeColor="#d1d1d1ff"
         strokeDash="10" visible="false" selectable="false" />
-
   <RectangularSelectorStrategy id="selectionDashedRect" rectangularSelector="@rectangularSelector" selectedActors="@selectedActors" scaleLayer="@scale">
     <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="5" visible="false" reactive="false"/>
   </RectangularSelectorStrategy>

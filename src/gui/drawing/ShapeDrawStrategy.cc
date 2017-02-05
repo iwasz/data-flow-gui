@@ -21,7 +21,21 @@ void ShapeDrawStrategy::onButtonPress (const Event &e)
 
 /*****************************************************************************/
 
-void ShapeDrawStrategy::onMotion (const Event &e) { actor->setSize (e.positionStageCoords - startPointActor); }
+void ShapeDrawStrategy::onMotion (const Event &e)
+{
+        Dimension req = e.positionStageCoords - startPointActor;
+
+        if (maxSize.height > 0 && maxSize.width > 0) {
+                if (req.height > maxSize.height) {
+                        req.height = maxSize.height;
+                }
+                if (req.width > maxSize.width) {
+                        req.width = maxSize.width;
+                }
+        }
+
+        actor->setSize (req);
+}
 
 /*****************************************************************************/
 
@@ -46,6 +60,15 @@ void ShapeDrawStrategy::onObjectCreated (IClutterActor *a)
 
                 if (size.width < minSize.width) {
                         size.width = minSize.width;
+                }
+        }
+
+        if (maxSize.height > 0 && maxSize.width > 0) {
+                if (size.height > maxSize.height) {
+                        size.height = maxSize.height;
+                }
+                if (size.width > maxSize.width) {
+                        size.width = maxSize.width;
                 }
         }
 

@@ -15,4 +15,3 @@
 #include "view/CircularNode.h"
 #include "primitives/Geometry.h"
 #include "view/ScaleLayer.h"
-

@@ -28,11 +28,15 @@ public:
         Dimension getMinSize () const { return minSize; }
         void setMinSize (const Dimension &value) { minSize = value; }
 
+        Dimension getMaxSize () const { return maxSize; }
+        void setMaxSize (const Dimension &value) { maxSize = value; }
+
 protected:
         AbstractActor *actor = nullptr; // Actor must be on stage, not on scale.
         Point startPoint;
         Point endPoint;
         Dimension minSize;
+        Dimension maxSize;
         Point startPointActor; // In stage coords.
 };
 
