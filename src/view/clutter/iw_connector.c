@@ -49,7 +49,13 @@ gfloat getX (ClutterActor *actor, int segment)
                                 return MIN_SEGMENT_LENGTH;
                         }
                 case WEST:
-                        return -MIN_SEGMENT_LENGTH;
+                        if (ax - bx > 2 * MIN_SEGMENT_LENGTH) {
+                                return (bx - ax) / 2;
+                        }
+                        else {
+                                return -MIN_SEGMENT_LENGTH;
+                        }
+
                 case NORTH:
                 case SOUTH:
                 case NONE:
@@ -76,13 +82,19 @@ gfloat getX (ClutterActor *actor, int segment)
                 }
         }
 
-
         if (segment == 2) {
                 switch (IW_CONNECTOR (actor)->priv->aFacing) {
                 case EAST:
-                case WEST:
                         if (bx - ax < 2 * MIN_SEGMENT_LENGTH) {
                                 return (bx - ax) - 2 * MIN_SEGMENT_LENGTH;
+                        }
+                        else {
+                                return 0;
+                        }
+
+                case WEST:
+                        if (ax - bx < 2 * MIN_SEGMENT_LENGTH) {
+                                return (bx - ax) + 2 * MIN_SEGMENT_LENGTH;
                         }
                         else {
                                 return 0;
@@ -95,7 +107,6 @@ gfloat getX (ClutterActor *actor, int segment)
                         return 0;
                 }
         }
-
 
         if (segment == 3) {
                 switch (IW_CONNECTOR (actor)->priv->bFacing) {
@@ -118,7 +129,12 @@ gfloat getX (ClutterActor *actor, int segment)
         if (segment == 4) {
                 switch (IW_CONNECTOR (actor)->priv->bFacing) {
                 case EAST:
-                        return MIN_SEGMENT_LENGTH;
+                        if (ax - bx > 2 * MIN_SEGMENT_LENGTH) {
+                                return -(bx - ax) / 2;
+                        }
+                        else {
+                                return MIN_SEGMENT_LENGTH;
+                        }
                 case WEST:
                         if (bx - ax > 2 * MIN_SEGMENT_LENGTH) {
                                 return -(bx - ax) / 2;
@@ -238,14 +254,10 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
         cogl_path_rel_line_to (getX (actor, 0), getY (actor, 0));
         cogl_path_rel_line_to (getX (actor, 1), getY (actor, 1));
         cogl_path_rel_line_to (getX (actor, 2), getY (actor, 2));
-
         cogl_path_move_to (bx, by);
         cogl_path_rel_line_to (getX (actor, 4), getY (actor, 4));
         cogl_path_rel_line_to (getX (actor, 3), getY (actor, 3));
         cogl_path_stroke ();
-
-        //        cogl_line (ax, ay, getX (actor, 0), getY (actor, 0), 0, 0, 1);
-        //        cogl_line (getX (actor, 4), getY (actor, 4), bx, by, 0, 0, 1);
 
         for (ClutterActor *iter = clutter_actor_get_first_child (actor); iter != NULL; iter = clutter_actor_get_next_sibling (iter)) {
                 clutter_actor_paint (iter);
@@ -365,8 +377,8 @@ static void iw_connector_init (IwConnector *self)
         priv->ay = 0;
         priv->bx = 0;
         priv->by = 0;
-        priv->aFacing = EAST;
-        priv->bFacing = WEST;
+        priv->aFacing = WEST;
+        priv->bFacing = EAST;
 
         priv->label = clutter_text_new ();
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->label);
