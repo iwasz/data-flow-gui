@@ -76,6 +76,11 @@
   </LineConnector>
 
   <Connector scope="prototype" id="angleConnector" parent="@scale" strokeColor="#0096c6c9" visible="false" strokeWidth="5" />
+<!--  <Connector id="abcd" parent="@scale" strokeColor="#0096c6c9" visible="true" strokeWidth="5">
+    <value set-as="pointA">4500, 4700</value>
+    <value set-as="point1">4500, 4700</value>
+    <value set-as="pointB">5000, 5500</value>
+  </Connector>-->
 
   <!-- +===================================================+ -->
   <!-- | MainController and internals.                     | -->

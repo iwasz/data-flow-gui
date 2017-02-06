@@ -174,6 +174,7 @@ LIST (APPEND SOURCES
         "src/primitives/Geometry.cc"
         "src/primitives/Color.h"
         "src/primitives/Color.cc"
+        "src/primitives/Direction.h"
 )
 
 # Local includes (inside project).

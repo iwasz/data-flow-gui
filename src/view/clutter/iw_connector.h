@@ -11,10 +11,13 @@
 #define __IW_CONNECTOR_H__
 
 #include "iw_actor.h"
+#include "primitives/Direction.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define MIN_SEGMENT_LENGTH 50
 
 GType iw_connector_get_type (void);
 #define IW_TYPE_CONNECTOR (iw_connector_get_type ())
@@ -45,8 +48,14 @@ void iw_connector_get_point_a (IwConnector *self, gfloat *x, gfloat *y);
 void iw_connector_set_point_b (IwConnector *self, gfloat x, gfloat y);
 void iw_connector_get_point_b (IwConnector *self, gfloat *x, gfloat *y);
 
-void iw_connector_set_point_c (IwConnector *self, gfloat x, gfloat y);
-void iw_connector_get_point_c (IwConnector *self, gfloat *x, gfloat *y);
+//void iw_connector_set_point_1 (IwConnector *self, gfloat x, gfloat y);
+//void iw_connector_get_point_1 (IwConnector *self, gfloat *x, gfloat *y);
+
+//void iw_connector_set_point_2 (IwConnector *self, gfloat x, gfloat y);
+//void iw_connector_get_point_2 (IwConnector *self, gfloat *x, gfloat *y);
+
+//void iw_connector_set_point_3 (IwConnector *self, gfloat x, gfloat y);
+//void iw_connector_get_point_3 (IwConnector *self, gfloat *x, gfloat *y);
 
 const gchar *iw_connector_get_text (IwConnector *self);
 void iw_connector_set_text (IwConnector *self, const gchar *s);

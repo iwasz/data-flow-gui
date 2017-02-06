@@ -47,16 +47,42 @@ Point Connector::getPointB () const
 
 /*****************************************************************************/
 
-void Connector::setPointC (Point const &p) { iw_connector_set_point_c (IW_CONNECTOR (self), p.x, p.y); }
+//void Connector::setPoint1 (Point const &p) { iw_connector_set_point_1 (IW_CONNECTOR (self), p.x, p.y); }
 
-/*****************************************************************************/
+///*****************************************************************************/
 
-Point Connector::getPointC () const
-{
-        Point p;
-        iw_connector_get_point_c (IW_CONNECTOR (self), &p.x, &p.y);
-        return p;
-}
+//Point Connector::getPoint1 () const
+//{
+//        Point p;
+//        iw_connector_get_point_1 (IW_CONNECTOR (self), &p.x, &p.y);
+//        return p;
+//}
+
+///*****************************************************************************/
+
+//void Connector::setPoint2 (Point const &p) { iw_connector_set_point_2 (IW_CONNECTOR (self), p.x, p.y); }
+
+///*****************************************************************************/
+
+//Point Connector::getPoint2 () const
+//{
+//        Point p;
+//        iw_connector_get_point_2 (IW_CONNECTOR (self), &p.x, &p.y);
+//        return p;
+//}
+
+///*****************************************************************************/
+
+//void Connector::setPoint3 (Point const &p) { iw_connector_set_point_3 (IW_CONNECTOR (self), p.x, p.y); }
+
+///*****************************************************************************/
+
+//Point Connector::getPoint3 () const
+//{
+//        Point p;
+//        iw_connector_get_point_3 (IW_CONNECTOR (self), &p.x, &p.y);
+//        return p;
+//}
 
 /*****************************************************************************/
 
