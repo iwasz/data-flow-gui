@@ -67,12 +67,7 @@ gfloat getX (ClutterActor *actor, int segment)
                 switch (IW_CONNECTOR (actor)->priv->aFacing) {
                 case NORTH:
                 case SOUTH:
-                        if (ay > by) {
-                                return MIN_SEGMENT_LENGTH;
-                        }
-                        else {
-                                return -MIN_SEGMENT_LENGTH;
-                        }
+                        return -(ax - bx) / 2;
 
                 case EAST:
                 case WEST:
@@ -112,12 +107,7 @@ gfloat getX (ClutterActor *actor, int segment)
                 switch (IW_CONNECTOR (actor)->priv->bFacing) {
                 case NORTH:
                 case SOUTH:
-                        if (ay > by) {
-                                return MIN_SEGMENT_LENGTH;
-                        }
-                        else {
-                                return -MIN_SEGMENT_LENGTH;
-                        }
+                        return (ax - bx) / 2;
 
                 case EAST:
                 case WEST:
@@ -167,9 +157,21 @@ gfloat getY (ClutterActor *actor, int segment)
         if (segment == 0) {
                 switch (IW_CONNECTOR (actor)->priv->aFacing) {
                 case NORTH:
-                        return -MIN_SEGMENT_LENGTH;
+                        if (ay - by > 2 * MIN_SEGMENT_LENGTH) {
+                                return (by - ay) / 2;
+                        }
+                        else {
+                                return -MIN_SEGMENT_LENGTH;
+                        }
+
                 case SOUTH:
-                        return MIN_SEGMENT_LENGTH;
+                        if (by - ay > 2 * MIN_SEGMENT_LENGTH) {
+                                return (by - ay) / 2;
+                        }
+                        else {
+                                return MIN_SEGMENT_LENGTH;
+                        }
+
                 case EAST:
                 case WEST:
                 case NONE:
@@ -193,7 +195,29 @@ gfloat getY (ClutterActor *actor, int segment)
         }
 
         if (segment == 2) {
-                return 0;
+                switch (IW_CONNECTOR (actor)->priv->aFacing) {
+                case SOUTH:
+                        if (by - ay < 2 * MIN_SEGMENT_LENGTH) {
+                                return (by - ay) - 2 * MIN_SEGMENT_LENGTH;
+                        }
+                        else {
+                                return 0;
+                        }
+
+                case NORTH:
+                        if (ay - by < 2 * MIN_SEGMENT_LENGTH) {
+                                return (by - ay) + 2 * MIN_SEGMENT_LENGTH;
+                        }
+                        else {
+                                return 0;
+                        }
+
+                case WEST:
+                case EAST:
+                case NONE:
+                default:
+                        return 0;
+                }
         }
 
         if (segment == 3) {
@@ -213,9 +237,20 @@ gfloat getY (ClutterActor *actor, int segment)
         if (segment == 4) {
                 switch (IW_CONNECTOR (actor)->priv->bFacing) {
                 case NORTH:
-                        return -MIN_SEGMENT_LENGTH;
+                        if (by - ay > 2 * MIN_SEGMENT_LENGTH) {
+                                return -(by - ay) / 2;
+                        }
+                        else {
+                                return -MIN_SEGMENT_LENGTH;
+                        }
+
                 case SOUTH:
-                        return MIN_SEGMENT_LENGTH;
+                        if (ay - by > 2 * MIN_SEGMENT_LENGTH) {
+                                return -(by - ay) / 2;
+                        }
+                        else {
+                                return MIN_SEGMENT_LENGTH;
+                        }
                 case EAST:
                 case WEST:
                 case NONE:
@@ -264,72 +299,6 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
         }
 }
 
-// static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *color, gboolean fill)
-//{
-//        ClutterActorBox allocation = {
-//                0,
-//        };
-
-//        gfloat width, height;
-
-//        clutter_actor_get_allocation_box (actor, &allocation);
-//        clutter_actor_box_get_size (&allocation, &width, &height);
-
-//        cogl_path_new ();
-//        cogl_set_source_color4ub (color->red, color->green, color->blue, color->alpha);
-
-//        float lw = iw_actor_get_stroke_width (IW_ACTOR (actor));
-
-//        float ax = IW_CONNECTOR (actor)->priv->ax - allocation.x1;
-//        float ay = IW_CONNECTOR (actor)->priv->ay - allocation.y1;
-//        float bx = IW_CONNECTOR (actor)->priv->bx - allocation.x1;
-//        float by = IW_CONNECTOR (actor)->priv->by - allocation.y1;
-
-//        float x1 = (ax + bx) / 2;
-//        float y1 = (ay + by) / 2;
-
-////        float x1 = IW_CONNECTOR (actor)->priv->x1 - allocation.x1;
-////        float y1 = IW_CONNECTOR (actor)->priv->y1 - allocation.y1;
-////        float x2 = IW_CONNECTOR (actor)->priv->x2 - allocation.x1;
-////        float y2 = IW_CONNECTOR (actor)->priv->y2 - allocation.y1;
-////        float x3 = IW_CONNECTOR (actor)->priv->x3 - allocation.x1;
-////        float y3 = IW_CONNECTOR (actor)->priv->y3 - allocation.y1;
-
-//        float angle = atan ((ay - by) / (ax - bx));
-
-//        if (ax < bx && ay < by) {
-//                cogl_line (ax, ay, bx, by, fill, angle, lw);
-
-//                if (width < height) {
-//                        cogl_path_move_to (ax, ay);
-//                        cogl_path_line_to (ax, y1);
-//                        cogl_path_line_to (bx, y1);
-//                        cogl_path_line_to (bx, by);
-//                        cogl_path_stroke ();
-//                }
-//                else {
-//                        cogl_path_move_to (ax, ay);
-//                        cogl_path_line_to (x1, ay);
-//                        cogl_path_line_to (x1, by);
-//                        cogl_path_line_to (bx, by);
-//                        cogl_path_stroke ();
-//                }
-//        }
-//        else if (ax > bx && ay > by) {
-//                cogl_line (width, height, 0, 0, fill, angle, lw);
-//        }
-//        else if (ax > bx && ay < by) {
-//                cogl_line (width, 0, 0, height, fill, angle, lw);
-//        }
-//        else if (ax < bx && ay > by) {
-//                cogl_line (0, height, width, 0, fill, angle, lw);
-//        }
-
-//        for (ClutterActor *iter = clutter_actor_get_first_child (actor); iter != NULL; iter = clutter_actor_get_next_sibling (iter)) {
-//                clutter_actor_paint (iter);
-//        }
-//}
-
 /*****************************************************************************/
 
 static void iw_connector_pick (ClutterActor *actor, const ClutterColor *pick_color)
@@ -377,8 +346,8 @@ static void iw_connector_init (IwConnector *self)
         priv->ay = 0;
         priv->bx = 0;
         priv->by = 0;
-        priv->aFacing = WEST;
-        priv->bFacing = EAST;
+        priv->aFacing = NORTH;
+        priv->bFacing = SOUTH;
 
         priv->label = clutter_text_new ();
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->label);
