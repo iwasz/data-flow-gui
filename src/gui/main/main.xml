@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+  <!-- +===================================================+ -->
+  <!-- | MainController and internals.                     | -->
+  <!-- +===================================================+ -->
+
+  <Program id="program"/>
+
+  <MainController id="mainController" loopDelayMs="5" program="@program" tools="@tools">
+    <ref set-as="rectangularSelector" bean="rectangularSelector"/>
+    <ref set-as="selectedActors" bean="selectedActors"/>
+    <ref set-as="stage" bean="stage"/>
+  </MainController>
+
+  <!-- Setting parent to stage would cause cyclic reference. Stage will set parent in C++ -->
+  <ScaleLayer id="scale" />
+  <Stage id="stage" fillColor="#ecececff" scaleLayer="@scale"/>
+
+  <MainView id="mainView" file="src/gui/main/mainView.ui" stage="@stage" loadWholeFile="true">
+    <KeyPressEventAdapter add-to="signalAdapters" />
+  </MainView>
+</beans>

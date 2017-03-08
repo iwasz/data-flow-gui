@@ -286,6 +286,9 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
         float by = IW_CONNECTOR (actor)->priv->by - allocation.y1;
 
         cogl_path_move_to (ax, ay);
+
+//        cogl_path_arc (getX (actor, 0), getY (actor, 0), 10, 10, 0, 90);
+
         cogl_path_rel_line_to (getX (actor, 0), getY (actor, 0));
         cogl_path_rel_line_to (getX (actor, 1), getY (actor, 1));
         cogl_path_rel_line_to (getX (actor, 2), getY (actor, 2));
@@ -346,8 +349,8 @@ static void iw_connector_init (IwConnector *self)
         priv->ay = 0;
         priv->bx = 0;
         priv->by = 0;
-        priv->aFacing = NORTH;
-        priv->bFacing = SOUTH;
+        priv->aFacing = EAST;
+        priv->bFacing = WEST;
 
         priv->label = clutter_text_new ();
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->label);

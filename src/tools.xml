@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+  <!-- +===================================================+ -->
+  <!-- | Drawing & factory strategies.                     | -->
+  <!-- +===================================================+ -->
+
+  <ShapeDrawStrategy id="dashedCircle" maxSize="1000, 1000">
+    <Circle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" reactive="false"/>
+  </ShapeDrawStrategy>
+
+  <dashedCircle id="dashedCircleMinSize" minSize="100, 100"/>
+
+  <ShapeDrawStrategy id="dashedRect" maxSize="1000, 1000">
+    <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" reactive="false"/>
+  </ShapeDrawStrategy>
+
+  <!-- std::vector of selected actors -->
+  <ClutterActorVector id="selectedActors" />
+  <RectangularSelector id="rectangularSelector" parent="@scale" fill="false" strokeColor="#d1d1d1ff"
+        strokeDash="10" visible="false" selectable="false" />
+  <RectangularSelectorStrategy id="selectionDashedRect" rectangularSelector="@rectangularSelector" selectedActors="@selectedActors" scaleLayer="@scale">
+    <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="5" visible="false" reactive="false"/>
+  </RectangularSelectorStrategy>
+
+  <DashedLineStrategy id="dashedLine">
+    <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="5" reactive="false"/>
+  </DashedLineStrategy>
+
+  <DashedLineConnectorStrategy id="dashedLineConnector">
+    <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="5" reactive="false"/>
+  </DashedLineConnectorStrategy>
+
+  <DashedLineConnectorStrategy id="dashedAngleConnector">
+    <Connector set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="5" reactive="false"/>
+  </DashedLineConnectorStrategy>
+
+  <!-- +===================================================+ -->
+  <!-- | Prototypes.                                       | -->
+  <!-- +===================================================+ -->
+
+  <Circle scope="prototype" id="circle" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>
+  <Rectangle scope="prototype" id="rect" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>
+  <Line scope="prototype" id="line" parent="@scale" strokeColor="#0096c6c9" visible="false" strokeWidth="1"/>
+
+  <CircularNode scope="prototype" id="addNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
+    <InputPort scope="prototype" add-to="ports" angle="2.6415" color="#d1d1d1ff" size="20"/>
+    <InputPort scope="prototype" add-to="ports" angle="3.6415" color="#d1d1d1ff" size="20"/>
+    <OutputPort scope="prototype" add-to="ports" angle="6.283" color="#8d8d8dff" size="20"/>
+    <Add scope="prototype" set-as="node"/>
+  </CircularNode>
+
+  <CircularNode scope="prototype" id="copyNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
+    <InputPort scope="prototype" add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20"/>
+    <OutputPort scope="prototype" add-to="ports" angle="6.283" color="#8d8d8dff" size="20"/>
+    <Copy scope="prototype" set-as="node"/>
+  </CircularNode>
+
+  <CircularNode scope="prototype" id="consoleNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">
+    <InputPort scope="prototype" add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20"/>
+    <Console scope="prototype" set-as="node"/>
+  </CircularNode>
+
+  <Button scope="prototype" id="buttonNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" fontColor="#ecececff" visible="false">
+    <OutputPort scope="prototype" add-to="ports" color="#8d8d8dff" size="20"/>
+    <Copy scope="prototype" set-as="node"/>
+    <value set-as="text">Button</value>
+  </Button>
+
+  <LineConnector scope="prototype" id="lineConnector" parent="@scale" strokeColor="#d1d1d1ff"
+        fontColor="#8d8d8dff" visible="false" strokeWidth="5" text="0" textEditable="true" selectable="false">
+    <Arc scope="prototype" set-as="arc"/>
+  </LineConnector>
+
+  <Connector scope="prototype" id="angleConnector" parent="@scale" strokeColor="#0096c6c9" visible="false" strokeWidth="5" />
+<!--  <Connector id="abcd" parent="@scale" strokeColor="#0096c6c9" visible="true" strokeWidth="5">
+    <value set-as="pointA">4500, 4700</value>
+    <value set-as="point1">4500, 4700</value>
+    <value set-as="pointB">5000, 5500</value>
+  </Connector>-->
+
+  <!-- +===================================================+ -->
+  <!-- | All the toola available.                          | -->
+  <!-- +===================================================+ -->
+
+  <ToolCategoryVector id="tools">
+    <ToolCategory name="Common">
+      <Tool add-to="tools" name="select" drawStrategy="@selectionDashedRect" selectorStrategy="@selectionDashedRect"/>
+    </ToolCategory>
+
+    <ToolCategory name="Math nodes" description="Adding, substracting and the like">
+      <Tool add-to="tools" name="addNode" drawStrategy="@dashedCircleMinSize">
+        <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="addNode" container="@#container" program="@program"/>
+        <value set-as="description">Returns sum of its two inputs</value>
+      </Tool>
+    </ToolCategory>
+
+    <ToolCategory name="Basic nodes" description="Assorted simple nodes">
+      <Tool add-to="tools" name="copyNode" drawStrategy="@dashedCircleMinSize">
+        <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="copyNode" container="@#container" program="@program"/>
+      </Tool>
+      <Tool add-to="tools" name="consoleNode" drawStrategy="@dashedCircleMinSize">
+        <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="consoleNode" container="@#container" program="@program"/>
+      </Tool>
+      <Tool add-to="tools" name="buttonNode" drawStrategy="@dashedRect">
+        <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="buttonNode" container="@#container" program="@program"/>
+      </Tool>
+      <Tool add-to="tools" name="lineConnector" drawStrategy="@dashedLineConnector">
+        <ContainerFactoryStrategy set-as="factoryStrategy" beanName="lineConnector" container="@#container"/>
+      </Tool>
+      <Tool add-to="tools" name="angleConnector" drawStrategy="@dashedAngleConnector">
+        <ContainerFactoryStrategy set-as="factoryStrategy" beanName="angleConnector" container="@#container"/>
+      </Tool>
+    </ToolCategory>
+
+    <ToolCategory name="Shapes" description="Geometric shapes">
+      <Tool add-to="tools" name="line" drawStrategy="@dashedLine">
+        <ContainerFactoryStrategy set-as="factoryStrategy" beanName="line" container="@#container"/>
+      </Tool>
+      <Tool add-to="tools" name="circle" drawStrategy="@dashedCircle">
+        <ContainerFactoryStrategy set-as="factoryStrategy" beanName="circle" container="@#container"/>
+      </Tool>
+      <Tool add-to="tools" name="rect" drawStrategy="@dashedRect">
+        <ContainerFactoryStrategy set-as="factoryStrategy" beanName="rect" container="@#container"/>
+      </Tool>
+    </ToolCategory>
+
+  </ToolCategoryVector>
+
+</beans>

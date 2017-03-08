@@ -11,12 +11,14 @@
 
 #include "IDrawingEventHandler.h"
 #include "ISelectorStrategy.h"
+#include "Tool.h"
 #include "primitives/Geometry.h"
 #include "view/Stage.h"
 #include <ReflectionParserAnnotation.h>
 #include <controller/AbstractController.h>
 #include <map>
 #include <string>
+#include <vector>
 
 class RectangularSelector;
 struct IDrawStrategy;
@@ -24,17 +26,6 @@ struct IFactoryStrategy;
 namespace flow {
 class Program;
 }
-
-/**
- * Represents one tool that can be picked from left side toolbar.
- */
-struct __tiliae_reflect__ Tool {
-        IDrawStrategy *drawStrategy = nullptr;
-        IFactoryStrategy *factoryStrategy = nullptr;
-        ISelectorStrategy *selectorStrategy = nullptr;
-};
-
-typedef __tiliae_reflect__ std::map<std::string, Tool> ToolMap;
 
 /**
  * Controller for drawing new objects like nodes, arcs and the like.
@@ -56,8 +47,8 @@ public:
         void onProgramRun (bool run);
         void pushMessage (std::string const &msg, Event const *event);
 
-        ToolMap const &getTools () const { return tools; }
-        void setTools (const ToolMap &value) { tools = value; }
+        ToolCategoryVector const *getTools () const;
+        void setTools (ToolCategoryVector *value);
 
         flow::Program *getProgram () const;
         void setProgram (flow::Program *value);
@@ -71,9 +62,9 @@ public:
         Stage *getStage () const;
         void setStage (Stage *value);
 
-private:
-        ToolMap tools;
+        void onKeyPress (unsigned int key);
 
+private:
         struct Impl;
         Impl *impl;
 };

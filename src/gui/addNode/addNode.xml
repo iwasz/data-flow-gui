@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+  <AddNodeController id="addNodeController" tools="@tools" mainController="@mainController" />
+
+  <BuilderView id="addNodeView" file="src/gui/addNode/addNodeView.ui" loadWholeFile="true">
+    <TableMapping add-to="mappings" widget="nodesList" model="tools">
+      <Column add-to="columns" />
+      <PixbufColumn add-to="columns" constValue="src/gui/addNode/computer.png"/>
+      <Column add-to="columns" model="name" />
+      <Column add-to="columns" model="description" />
+      <Column add-to="columns">
+        <value set-as="constValue" type="bool">true</value>
+      </Column>
+
+      <TableMapping add-to="columns" model="tools">
+        <Column add-to="columns" storeThisRow="true" />
+        <PixbufColumn add-to="columns" constValue="src/gui/addNode/disk.png"/>
+        <Column add-to="columns" model="name" />
+        <Column add-to="columns" model="description" />
+        <Column add-to="columns">
+          <value set-as="constValue" type="bool">false</value>
+        </Column>
+      </TableMapping>
+    </TableMapping>
+    <AddNodeTableFilterMapping add-to="mappings" widget="nodesList" model="searchQuery" property="filter" />
+<!--    <PixbufMapping add-to="mappings" widget="imageDesc" model="imagePath" maxWidth="200" maxHeight="200" />-->
+
+    <RowActivatedAdapter add-to="signalAdapters" columnNumber="0" />
+    <RowActivatedAdapter add-to="signalAdapters" columnNumber="0" signal="changed" gObjectName="GtkTreeSelection" />
+    <GtkTreeViewDecorator add-to="decorators" widget="&gt;nodesList" postRefreshExpandAll="true" />
+    <DimensionRestoreDecorator add-to="decorators" widget="addNodeView" key="addNode" database="@dimensionRestoreDatabase" />
+    <DimensionRestoreDecorator add-to="decorators" widget="addNodePaned" key="addNode" database="@dimensionRestoreDatabase" />
+  </BuilderView>
+</beans>

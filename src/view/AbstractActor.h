@@ -10,7 +10,7 @@
 #define ABSTRACTACTOR_H
 
 #include "IClutterActor.h"
-#include "gui/drawing/IDrawingEventHandler.h"
+#include "gui/main/IDrawingEventHandler.h"
 #include <core/Exception.h>
 
 extern "C" void abstractActorOnFinalize (void *ptr);

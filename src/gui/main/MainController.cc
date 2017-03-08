@@ -10,7 +10,7 @@
 #include "IDrawStrategy.h"
 #include "IFactoryStrategy.h"
 #include "ISelectorStrategy.h"
-#include "gui/drawing/RectangularSelectorStrategy.h"
+#include "gui/main/RectangularSelectorStrategy.h"
 #include "view/Rectangle.h"
 #include "view/RectangularSelector.h"
 #include "view/ScaleLayer.h"
@@ -36,7 +36,7 @@ enum MachineStates {
 
 struct MainController::Impl {
 
-        Impl (ToolMap *t) : inputQueue (STRING_QUEUE_SIZE), machine (&inputQueue), tools (t) {}
+        Impl () : inputQueue (STRING_QUEUE_SIZE), machine (&inputQueue) {}
         ~Impl () {}
 
         void configureMachine ();
@@ -44,13 +44,14 @@ struct MainController::Impl {
 
         StringQueue inputQueue;
         StateMachine machine;
-        ToolMap *tools;
         flow::Program *program = nullptr;
         bool runProgram = false;
         RectangularSelector *rectangularSelector = nullptr;
         Stage *stage = nullptr;
         Event event; // Tempporary for some handlers.
         ClutterActorVector *selectedActors = nullptr;
+        ToolCategoryVector *tools = nullptr;
+        ToolMap toolMap;
 
         /// Additional state. Used directly in the drawing events (onMove, onRelease).
         struct {
@@ -110,16 +111,16 @@ void MainController::Impl::configureMachine ()
                 })
                 ->transition (DRAW)->when (eq ("stage.press"))->then ([this] (const char *, void *arg) {
                         vars.currentTool = "select";
-                        vars.currentDrawStrategy = (*tools)[vars.currentTool].drawStrategy;
-                        vars.currentFactoryStrategy = (*tools)[vars.currentTool].factoryStrategy;
-                        vars.currentSelectorStrategy = (*tools)[vars.currentTool].selectorStrategy;
+                        vars.currentDrawStrategy = toolMap[vars.currentTool]->drawStrategy;
+                        vars.currentFactoryStrategy = toolMap[vars.currentTool]->factoryStrategy;
+                        vars.currentSelectorStrategy = toolMap[vars.currentTool]->selectorStrategy;
                         vars.currentDrawStrategy->onButtonPress (*static_cast <Event *> (arg));
                         return true;
                 })
                 ->transition (MOVE)->when (eq ("object.press"))->then ([this] (const char *, void *arg) {
                         vars.currentTool = "select";
-                        vars.currentDrawStrategy = (*tools)[vars.currentTool].drawStrategy;
-                        vars.currentSelectorStrategy = (*tools)[vars.currentTool].selectorStrategy;
+                        vars.currentDrawStrategy = toolMap[vars.currentTool]->drawStrategy;
+                        vars.currentSelectorStrategy = toolMap[vars.currentTool]->selectorStrategy;
                         Event *args = static_cast <Event *> (arg);
 
                         if (std::find (selectedActors->cbegin (), selectedActors->cend (), args->object) == selectedActors->cend ()) {
@@ -139,12 +140,12 @@ void MainController::Impl::configureMachine ()
                         Event *args = static_cast <Event *> (arg);
                         vars.currentTool = args->tool;
 
-                        if (tools->find (vars.currentTool) == tools->end ()) {
+                        if (toolMap.find (vars.currentTool) == toolMap.end ()) {
                                 throw Core::Exception ("No such tool : [" + vars.currentTool + "]");
                         }
 
-                        vars.currentDrawStrategy = (*tools)[vars.currentTool].drawStrategy;
-                        vars.currentFactoryStrategy = (*tools)[vars.currentTool].factoryStrategy;
+                        vars.currentDrawStrategy = toolMap[vars.currentTool]->drawStrategy;
+                        vars.currentFactoryStrategy = toolMap[vars.currentTool]->factoryStrategy;
                         return true;
                 })
                 ->transition (TOOL_SELECTED)->when (eq ("selected.tool"))
@@ -231,7 +232,7 @@ void MainController::Impl::configureMachine ()
 
 /*****************************************************************************/
 
-MainController::MainController () { impl = new Impl (&tools); }
+MainController::MainController () { impl = new Impl; }
 
 /*****************************************************************************/
 
@@ -350,6 +351,33 @@ void MainController::setStage (Stage *value)
 {
         impl->stage = value;
         value->setEventHandler (this);
+}
+
+/*****************************************************************************/
+
+ToolCategoryVector const *MainController::getTools () const { return impl->tools; }
+
+/*****************************************************************************/
+
+void MainController::setTools (ToolCategoryVector *value)
+{
+        impl->tools = value;
+
+        for (ToolCategory *category : *impl->tools) {
+                for (Tool *tool : category->tools) {
+                        impl->toolMap[tool->name] = tool;
+                }
+        }
+}
+
+/*****************************************************************************/
+
+void MainController::onKeyPress (unsigned int key)
+{
+        BOOST_LOG (lg) << "Key pressed : [" << key << "]";
+        if (key == GDK_KEY_a) {
+                open ("addNodeController");
+        }
 }
 
 /****************************************************************************/

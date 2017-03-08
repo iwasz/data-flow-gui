@@ -54,6 +54,7 @@
   </object>
   <object class="GtkWindow" id="mainView">
     <property name="can_focus">False</property>
+    <signal name="key-press-event" handler="$controller.onKeyPress(%0)" swapped="no"/>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -203,6 +204,7 @@
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="$controller.open('aboutController')" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -329,6 +331,20 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkToolButton" id="addButton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Sum</property>
+                        <property name="label" translatable="yes">Sum</property>
+                        <property name="use_underline">True</property>
+                        <property name="icon_widget">addIcon</property>
+                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('addNode')" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkToolButton" id="copyButton">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -355,20 +371,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkToolButton" id="addButton">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Sum</property>
-                        <property name="label" translatable="yes">Sum</property>
-                        <property name="use_underline">True</property>
-                        <property name="icon_widget">addIcon</property>
-                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('addNode')" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkToolButton" id="buttonButton">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -379,6 +381,20 @@
                       </object>
                       <packing>
                         <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="addNodeButton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Sum</property>
+                        <property name="label" translatable="yes">Sum</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-add</property>
+                        <signal name="clicked" handler="$controller.open('addNodeController')" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                   </object>
