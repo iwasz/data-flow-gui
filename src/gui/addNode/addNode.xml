@@ -30,5 +30,6 @@
     <GtkTreeViewDecorator add-to="decorators" widget="&gt;nodesList" postRefreshExpandAll="true" />
     <DimensionRestoreDecorator add-to="decorators" widget="addNodeView" key="addNode" database="@dimensionRestoreDatabase" />
     <DimensionRestoreDecorator add-to="decorators" widget="addNodePaned" key="addNode" database="@dimensionRestoreDatabase" />
+    <CloseOnEscapeDecorator add-to="decorators"/>
   </BuilderView>
 </beans>
