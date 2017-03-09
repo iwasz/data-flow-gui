@@ -34,6 +34,8 @@ gboolean AddNodeTableFilterMapping::gtkTreeModelFilterVisibleFunc (GtkTreeModel 
 
         std::string queryStr = vcast<std::string> (query);
         bool found = (std::string (gStr).find (queryStr) != std::string::npos);
+#if 0
         BOOST_LOG (lg) << "---- [" << query << "] =? [" << gStr << "], found = " << found;
+#endif
         return found;
 }

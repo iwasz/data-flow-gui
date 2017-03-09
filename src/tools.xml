@@ -83,46 +83,49 @@
   <!-- | All the toola available.                          | -->
   <!-- +===================================================+ -->
 
+  <!-- Tool with default image representation -->
+  <Tool id="ToolI" imagePath="src/gui/addNode/add.jpg" />
+
   <ToolCategoryVector id="tools">
     <ToolCategory name="Common">
-      <Tool add-to="tools" name="select" drawStrategy="@selectionDashedRect" selectorStrategy="@selectionDashedRect"/>
+      <ToolI add-to="tools" name="select" drawStrategy="@selectionDashedRect" selectorStrategy="@selectionDashedRect"/>
     </ToolCategory>
 
     <ToolCategory name="Math nodes" description="Adding, substracting and the like">
-      <Tool add-to="tools" name="addNode" drawStrategy="@dashedCircleMinSize">
+      <ToolI add-to="tools" name="addNode" drawStrategy="@dashedCircleMinSize">
         <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="addNode" container="@#container" program="@program"/>
         <value set-as="description">Returns sum of its two inputs</value>
-      </Tool>
+      </ToolI>
     </ToolCategory>
 
     <ToolCategory name="Basic nodes" description="Assorted simple nodes">
-      <Tool add-to="tools" name="copyNode" drawStrategy="@dashedCircleMinSize">
+      <ToolI add-to="tools" name="copyNode" drawStrategy="@dashedCircleMinSize">
         <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="copyNode" container="@#container" program="@program"/>
-      </Tool>
-      <Tool add-to="tools" name="consoleNode" drawStrategy="@dashedCircleMinSize">
+      </ToolI>
+      <ToolI add-to="tools" name="consoleNode" drawStrategy="@dashedCircleMinSize">
         <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="consoleNode" container="@#container" program="@program"/>
-      </Tool>
-      <Tool add-to="tools" name="buttonNode" drawStrategy="@dashedRect">
+      </ToolI>
+      <ToolI add-to="tools" name="buttonNode" drawStrategy="@dashedRect">
         <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="buttonNode" container="@#container" program="@program"/>
-      </Tool>
-      <Tool add-to="tools" name="lineConnector" drawStrategy="@dashedLineConnector">
+      </ToolI>
+      <ToolI add-to="tools" name="lineConnector" drawStrategy="@dashedLineConnector">
         <ContainerFactoryStrategy set-as="factoryStrategy" beanName="lineConnector" container="@#container"/>
-      </Tool>
-      <Tool add-to="tools" name="angleConnector" drawStrategy="@dashedAngleConnector">
+      </ToolI>
+      <ToolI add-to="tools" name="angleConnector" drawStrategy="@dashedAngleConnector">
         <ContainerFactoryStrategy set-as="factoryStrategy" beanName="angleConnector" container="@#container"/>
-      </Tool>
+      </ToolI>
     </ToolCategory>
 
     <ToolCategory name="Shapes" description="Geometric shapes">
-      <Tool add-to="tools" name="line" drawStrategy="@dashedLine">
+      <ToolI add-to="tools" name="line" drawStrategy="@dashedLine">
         <ContainerFactoryStrategy set-as="factoryStrategy" beanName="line" container="@#container"/>
-      </Tool>
-      <Tool add-to="tools" name="circle" drawStrategy="@dashedCircle">
+      </ToolI>
+      <ToolI add-to="tools" name="circle" drawStrategy="@dashedCircle">
         <ContainerFactoryStrategy set-as="factoryStrategy" beanName="circle" container="@#container"/>
-      </Tool>
-      <Tool add-to="tools" name="rect" drawStrategy="@dashedRect">
+      </ToolI>
+      <ToolI add-to="tools" name="rect" drawStrategy="@dashedRect">
         <ContainerFactoryStrategy set-as="factoryStrategy" beanName="rect" container="@#container"/>
-      </Tool>
+      </ToolI>
     </ToolCategory>
 
   </ToolCategoryVector>

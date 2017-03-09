@@ -49,6 +49,7 @@ void AddNodeController::onRowSelected (Core::Variant const &row)
                 refresh ("description");
                 set ("imagePath", Core::Variant ());
                 refresh ("imageDesc");
+                currentSelection = "";
                 return;
         }
 
@@ -59,8 +60,16 @@ void AddNodeController::onRowSelected (Core::Variant const &row)
         refresh ("description");
         set ("imagePath", Core::Variant (tool->imagePath));
         refresh ("imageDesc");
+
+        currentSelection = tool->name;
 }
 
 /*****************************************************************************/
 
-void AddNodeController::onOk () {}
+void AddNodeController::onOk ()
+{
+//        if (!currentSelection.empty ()) {
+//                mainController->onNewNodeToolClicked (currentSelection);
+//                closeThis ();
+//        }
+}

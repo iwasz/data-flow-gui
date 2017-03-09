@@ -23,7 +23,7 @@
       </TableMapping>
     </TableMapping>
     <AddNodeTableFilterMapping add-to="mappings" widget="nodesList" model="searchQuery" property="filter" />
-<!--    <PixbufMapping add-to="mappings" widget="imageDesc" model="imagePath" maxWidth="200" maxHeight="200" />-->
+    <PixbufMapping add-to="mappings" widget="imageDesc" model="imagePath" maxWidth="200" maxHeight="200" />
 
     <RowActivatedAdapter add-to="signalAdapters" columnNumber="0" />
     <RowActivatedAdapter add-to="signalAdapters" columnNumber="0" signal="changed" gObjectName="GtkTreeSelection" />
