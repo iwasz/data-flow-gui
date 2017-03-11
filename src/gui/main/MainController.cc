@@ -245,10 +245,7 @@ void MainController::init () { impl->configureMachine (); }
 
 /*****************************************************************************/
 
-std::string MainController::onStart ()
-{
-        return "mainView";
-}
+std::string MainController::onStart () { return "mainView"; }
 
 /*
  * Po konwersji wykonuje się metoda IController::onSubmit:
@@ -289,6 +286,8 @@ void MainController::pushMessage (std::string const &msg, Event const *event) { 
 
 void MainController::onNewNodeToolClicked (std::string const &name)
 {
+        console->append (name + "\n");
+
         if (name == "select") {
                 impl->pushMessage ("selected.select", &impl->event);
         }

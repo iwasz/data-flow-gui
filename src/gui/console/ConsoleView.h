@@ -23,6 +23,11 @@ public:
 
 public:
         ConsoleBuffer *console = nullptr;
+        bool autoScroll = true;
+
+private:
+
+        static void onInsertText (GtkTextBuffer *textBuffer, GtkTextIter *location, gchar *text, gint len, gpointer userData);
 };
 
 #endif // MAINVIEW_H
