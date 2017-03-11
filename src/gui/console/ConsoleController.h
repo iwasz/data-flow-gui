@@ -10,6 +10,7 @@
 #define CONSOLE_CONTROLLER_H_
 
 #include "ConsoleBuffer.h"
+#include "ConsoleView.h"
 #include <ReflectionParserAnnotation.h>
 #include <controller/AbstractController.h>
 
@@ -25,6 +26,7 @@ public:
 
 public:
         ConsoleBuffer *console = nullptr;
+        ConsoleView *consoleView = nullptr; // Needed in onStart as model. See comment there.
 };
 
 #endif /* MainController_H_ */

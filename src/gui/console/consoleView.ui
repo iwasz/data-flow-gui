@@ -14,11 +14,26 @@
           <object class="GtkToolButton">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="tooltip_text" translatable="yes">Run program</property>
-            <property name="label" translatable="yes">__glade_unnamed_22</property>
+            <property name="tooltip_text" translatable="yes">Clear console</property>
+            <property name="label" translatable="yes">Clear</property>
             <property name="use_underline">True</property>
             <property name="stock_id">gtk-clear</property>
             <signal name="clicked" handler="$controller.onClear()" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToggleToolButton" id="!console.autoScroll">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="tooltip_text" translatable="yes">Autoscroll</property>
+            <property name="label" translatable="yes">Autoscroll</property>
+            <property name="use_underline">True</property>
+            <property name="stock_id">gtk-sort-ascending</property>
+            <signal name="clicked" handler="$controller.submit('console.autoScroll', '')" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
