@@ -34,6 +34,8 @@
   </object>
   <object class="GtkWindow" id="mainView">
     <property name="can_focus">False</property>
+    <property name="default_width">800</property>
+    <property name="default_height">600</property>
     <signal name="key-press-event" handler="$controller.onKeyPress(%0)" swapped="no"/>
     <child>
       <object class="GtkBox">
@@ -285,140 +287,164 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="content">
+          <object class="GtkPaned">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
+            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkToolPalette" id="drawing_tool_palette">
-                <property name="width_request">171</property>
+              <object class="GtkBox" id="content">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkToolItemGroup">
+                  <object class="GtkToolPalette" id="drawing_tool_palette">
+                    <property name="width_request">171</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Nodes</property>
+                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkToolButton" id="selectButton">
+                      <object class="GtkToolItemGroup">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Sum</property>
-                        <property name="label" translatable="yes">Sum</property>
-                        <property name="use_underline">True</property>
-                        <property name="icon_widget">addIcon1</property>
-                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('select')" swapped="no"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkToolButton" id="addNodeButton">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Sum</property>
-                        <property name="label" translatable="yes">Sum</property>
-                        <property name="use_underline">True</property>
-                        <property name="stock_id">gtk-add</property>
-                        <signal name="clicked" handler="$controller.open('addNodeController')" swapped="no"/>
+                        <property name="label" translatable="yes">Nodes</property>
+                        <child>
+                          <object class="GtkToolButton" id="selectButton">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Sum</property>
+                            <property name="label" translatable="yes">Sum</property>
+                            <property name="use_underline">True</property>
+                            <property name="icon_widget">addIcon1</property>
+                            <signal name="clicked" handler="$controller.onNewNodeToolClicked ('select')" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="addNodeButton">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Sum</property>
+                            <property name="label" translatable="yes">Sum</property>
+                            <property name="use_underline">True</property>
+                            <property name="stock_id">gtk-add</property>
+                            <signal name="clicked" handler="$controller.open('addNodeController')" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="position">5</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="angleConnectorButton">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Line connector</property>
+                            <property name="label" translatable="yes">Line connector</property>
+                            <property name="use_underline">True</property>
+                            <property name="icon_widget">lineConnectorIcon1</property>
+                            <signal name="clicked" handler="$controller.onNewNodeToolClicked ('angleConnector')" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="lineConnectorButton">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Line connector</property>
+                            <property name="label" translatable="yes">Line connector</property>
+                            <property name="use_underline">True</property>
+                            <property name="icon_widget">lineConnectorIcon</property>
+                            <signal name="clicked" handler="$controller.onNewNodeToolClicked ('lineConnector')" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="position">4</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
-                        <property name="position">5</property>
+                        <property name="expand">False</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkToolButton" id="angleConnectorButton">
+                      <object class="GtkToolItemGroup">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Line connector</property>
-                        <property name="label" translatable="yes">Line connector</property>
-                        <property name="use_underline">True</property>
-                        <property name="icon_widget">lineConnectorIcon1</property>
-                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('angleConnector')" swapped="no"/>
+                        <property name="tooltip_text" translatable="yes">Primitives</property>
+                        <property name="label" translatable="yes">Primitives</property>
+                        <child>
+                          <object class="GtkToolButton" id="lineButton">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Line</property>
+                            <property name="label" translatable="yes">Line</property>
+                            <property name="use_underline">True</property>
+                            <property name="icon_widget">lineIcon</property>
+                            <signal name="clicked" handler="$controller.onNewNodeToolClicked ('line')" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="circleButton">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Circle</property>
+                            <property name="label" translatable="yes">Circle</property>
+                            <property name="use_underline">True</property>
+                            <property name="icon_widget">circleIcon</property>
+                            <signal name="clicked" handler="$controller.onNewNodeToolClicked ('circle')" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="rectButton">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Circle</property>
+                            <property name="label" translatable="yes">Circle</property>
+                            <property name="use_underline">True</property>
+                            <property name="icon_widget">circleIcon1</property>
+                            <signal name="clicked" handler="$controller.onNewNodeToolClicked ('rect')" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolButton" id="lineConnectorButton">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Line connector</property>
-                        <property name="label" translatable="yes">Line connector</property>
-                        <property name="use_underline">True</property>
-                        <property name="icon_widget">lineConnectorIcon</property>
-                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('lineConnector')" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="position">4</property>
+                        <property name="expand">True</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolItemGroup">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Primitives</property>
-                    <property name="label" translatable="yes">Primitives</property>
-                    <child>
-                      <object class="GtkToolButton" id="lineButton">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Line</property>
-                        <property name="label" translatable="yes">Line</property>
-                        <property name="use_underline">True</property>
-                        <property name="icon_widget">lineIcon</property>
-                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('line')" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolButton" id="circleButton">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Circle</property>
-                        <property name="label" translatable="yes">Circle</property>
-                        <property name="use_underline">True</property>
-                        <property name="icon_widget">circleIcon</property>
-                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('circle')" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolButton" id="rectButton">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Circle</property>
-                        <property name="label" translatable="yes">Circle</property>
-                        <property name="use_underline">True</property>
-                        <property name="icon_widget">circleIcon1</property>
-                        <signal name="clicked" handler="$controller.onNewNodeToolClicked ('rect')" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
+                <property name="resize">False</property>
+                <property name="shrink">True</property>
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkAlignment" id="^bottomSlot">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="resize">True</property>
+                <property name="shrink">True</property>
+              </packing>
             </child>
           </object>
           <packing>

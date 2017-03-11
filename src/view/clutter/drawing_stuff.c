@@ -8,6 +8,7 @@
 
 #include "drawing_stuff.h"
 #include <cogl/cogl.h>
+#include <math.h>
 
 /*****************************************************************************/
 

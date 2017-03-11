@@ -1,5 +1,8 @@
 #include "gui/addNode/AddNodeController.h"
 #include "gui/addNode/AddNodeTableFilterMapping.h"
+#include "gui/console/ConsoleController.h"
+#include "gui/console/ConsoleView.h"
+#include "gui/console/ConsoleBuffer.h"
 #include "gui/main/ContainerFactoryStrategy.h"
 #include "gui/main/DashedLineConnectorStrategy.h"
 #include "gui/main/DashedLineStrategy.h"
@@ -19,3 +22,4 @@
 #include "view/RectangularSelector.h"
 #include "view/ScaleLayer.h"
 #include "view/Stage.h"
+#include "customNode/ConsoleNode.h"

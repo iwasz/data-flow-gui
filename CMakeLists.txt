@@ -122,6 +122,12 @@ LIST (APPEND SOURCES
         "src/gui/addNode/AddNodeController.h"
         "src/gui/addNode/AddNodeTableFilterMapping.cc"
         "src/gui/addNode/AddNodeTableFilterMapping.h"
+        "src/gui/console/ConsoleController.cc"
+        "src/gui/console/ConsoleController.h"
+        "src/gui/console/ConsoleView.cc"
+        "src/gui/console/ConsoleView.h"
+        "src/gui/console/ConsoleBuffer.cc"
+        "src/gui/console/ConsoleBuffer.h"
         "src/view/clutter/drawing_stuff.c"
         "src/view/clutter/drawing_stuff.h"
         "src/view/clutter/iw_button.c"
@@ -179,6 +185,8 @@ LIST (APPEND SOURCES
         "src/primitives/Color.h"
         "src/primitives/Color.cc"
         "src/primitives/Direction.h"
+        "src/customNode/ConsoleNode.h"
+        "src/customNode/ConsoleNode.cc"
 )
 
 # Local includes (inside project).

@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+  <ConsoleBuffer id="console" />
+  <ConsoleController id="consoleController" console="@console" />
+  <ConsoleView id="consoleView" file="src/gui/console/consoleView.ui" console="@console" />
+</beans>

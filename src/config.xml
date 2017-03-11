@@ -14,4 +14,5 @@
   <!-- Add node (tool selection dialog) -->
   <import resource="src/gui/addNode/addNode.xml" />
   <import resource="src/gui/about/about.xml" />
+  <import resource="src/gui/console/console.xml" />
 </beans>

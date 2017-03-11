@@ -11,6 +11,7 @@
     <ref set-as="rectangularSelector" bean="rectangularSelector"/>
     <ref set-as="selectedActors" bean="selectedActors"/>
     <ref set-as="stage" bean="stage"/>
+    <value set-as="alsoOpen">consoleController</value>
   </MainController>
 
   <!-- Setting parent to stage would cause cyclic reference. Stage will set parent in C++ -->

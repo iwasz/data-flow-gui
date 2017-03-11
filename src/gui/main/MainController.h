@@ -23,6 +23,7 @@
 class RectangularSelector;
 struct IDrawStrategy;
 struct IFactoryStrategy;
+class ConsoleBuffer;
 namespace flow {
 class Program;
 }

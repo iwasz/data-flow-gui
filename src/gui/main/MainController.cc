@@ -10,6 +10,7 @@
 #include "IDrawStrategy.h"
 #include "IFactoryStrategy.h"
 #include "ISelectorStrategy.h"
+#include "gui/console/ConsoleBuffer.h"
 #include "gui/main/RectangularSelectorStrategy.h"
 #include "view/Rectangle.h"
 #include "view/RectangularSelector.h"
@@ -244,7 +245,10 @@ void MainController::init () { impl->configureMachine (); }
 
 /*****************************************************************************/
 
-std::string MainController::onStart () { return "mainView"; }
+std::string MainController::onStart ()
+{
+        return "mainView";
+}
 
 /*
  * Po konwersji wykonuje się metoda IController::onSubmit:
