@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+  <PropertiesController id="propertiesController" alsoOpen="abstractActorPropertiesController,buttonPropertiesController" />
+  <EmptyView id="propertiesView" />
+
+  <DummyController id="abstractActorPropertiesController" view="abstractActorPropertiesView->rightSlot1" />
+  <BuilderView id="abstractActorPropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />
+
+  <DummyController id="buttonPropertiesController" view="buttonPropertiesView->rightSlot2" />
+  <BuilderView id="buttonPropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />
+</beans>
