@@ -29,14 +29,14 @@ void MainView::loadUi (GtkForms::App *app)
         GtkWindow *mainWindow = GTK_WINDOW (getUiOrThrow ("mainView"));
         gtk_window_maximize (mainWindow);
 
-        GtkBox *cb = GTK_BOX (getUiOrThrow ("content"));
+        GtkContainer *cb = GTK_CONTAINER (getUiOrThrow ("content"));
         gtk_widget_set_focus_on_click (GTK_WIDGET (cb), TRUE);
 
         if (!stage) {
                 throw Core::Exception ("No stage. Create stage first, and assign it to the 'stage' pointer.");
         }
 
-        gtk_box_pack_start (GTK_BOX (cb), stage->getClutterWidget (), TRUE, TRUE, 0);
+        gtk_container_add (cb, stage->getClutterWidget ());
         gtk_widget_set_can_focus (stage->getClutterWidget (), TRUE);
         gtk_widget_set_can_default (stage->getClutterWidget (), TRUE);
         gtk_widget_set_focus_on_click (stage->getClutterWidget (), TRUE);
