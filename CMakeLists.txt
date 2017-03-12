@@ -128,6 +128,8 @@ LIST (APPEND SOURCES
         "src/gui/console/ConsoleView.h"
         "src/gui/console/ConsoleBuffer.cc"
         "src/gui/console/ConsoleBuffer.h"
+        "src/gui/properties/PropertiesController.cc"
+        "src/gui/properties/PropertiesController.h"
         "src/view/clutter/drawing_stuff.c"
         "src/view/clutter/drawing_stuff.h"
         "src/view/clutter/iw_button.c"

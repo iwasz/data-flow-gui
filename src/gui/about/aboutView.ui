@@ -8,7 +8,7 @@
     <property name="type_hint">dialog</property>
     <property name="program_name">DataFlowGui</property>
     <property name="version">0.1</property>
-    <property name="comments" translatable="yes">Dataflow programming environment for &lt;cool-name&gt; wireless devices.</property>
+    <property name="comments" translatable="yes">Dataflow programming environment for &lt;cool-name&gt; wireless devices. libtiliae version x.x, libgtkforms version y.y.</property>
     <property name="website">http://iwasz.pl/</property>
     <property name="authors">Łukasz Iwaszkiewicz &lt;lukasz.iwaszkiewicz@gmail.com&gt;</property>
     <property name="logo_icon_name">image-missing</property>
