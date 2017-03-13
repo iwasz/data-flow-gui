@@ -18,5 +18,6 @@ std::string PropertiesController::onStart ()
         set ("labelTest", Core::Variant ("Hello world"));
         refresh ("fillTest");
         refresh ("labelTest");
-        return "propertiesView";
+        // return "propertiesView";
+        return "abstractActorPropertiesView->rightSlot1, buttonPropertiesView->rightSlot2";
 }
