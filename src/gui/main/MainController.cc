@@ -12,6 +12,7 @@
 #include "ISelectorStrategy.h"
 #include "gui/console/ConsoleBuffer.h"
 #include "gui/main/RectangularSelectorStrategy.h"
+#include "gui/properties/PropertiesController.h"
 #include "view/Rectangle.h"
 #include "view/RectangularSelector.h"
 #include "view/ScaleLayer.h"
@@ -29,6 +30,7 @@ enum MachineStates {
         IDLE,          /// Nothing is happening
         TOOL_SELECTED, /// Toolbox clicked, tool picked.
         DRAW,          /// Creating a new object by drawing something
+        SELECT,        /// Drawing the selection box
         MOVE,          /// Moving an object around.
         STAGE_MOVE     /// Moving the viewport.
 };
@@ -37,12 +39,13 @@ enum MachineStates {
 
 struct MainController::Impl {
 
-        Impl () : inputQueue (STRING_QUEUE_SIZE), machine (&inputQueue) {}
+        Impl (MainController *t) : that (t), inputQueue (STRING_QUEUE_SIZE), machine (&inputQueue) {}
         ~Impl () {}
 
         void configureMachine ();
         void pushMessage (std::string const &msg, void *arg);
 
+        MainController *that;
         StringQueue inputQueue;
         StateMachine machine;
         flow::Program *program = nullptr;
@@ -53,6 +56,7 @@ struct MainController::Impl {
         ClutterActorVector *selectedActors = nullptr;
         ToolCategoryVector *tools = nullptr;
         ToolMap toolMap;
+        PropertiesController *propertiesController = nullptr;
 
         /// Additional state. Used directly in the drawing events (onMove, onRelease).
         struct {
@@ -110,7 +114,7 @@ void MainController::Impl::configureMachine ()
                         vars.currentSelectorStrategy->unselectAll();
                         return true;
                 })
-                ->transition (DRAW)->when (eq ("stage.press"))->then ([this] (const char *, void *arg) {
+                ->transition (SELECT)->when (eq ("stage.press"))->then ([this] (const char *, void *arg) {
                         vars.currentTool = "select";
                         vars.currentDrawStrategy = toolMap[vars.currentTool]->drawStrategy;
                         vars.currentFactoryStrategy = toolMap[vars.currentTool]->factoryStrategy;
@@ -187,6 +191,25 @@ void MainController::Impl::configureMachine ()
 
         /*---------------------------------------------------------------------------*/
 
+        machine.state (SELECT)
+                ->transition (SELECT)->when (eq ("stage.motion"))->then ([this] (const char *, void *arg) {
+                        vars.currentDrawStrategy->onMotion (*static_cast <Event *> (arg));
+                        return true;
+                })
+                ->transition (IDLE)->when (eq ("stage.release"))->then ([this] (const char *, void *arg) {
+                        Event *args = static_cast <Event *> (arg);
+
+                        if (!vars.currentDrawStrategy->onButtonRelease (*args)) {
+                                return true;
+                        }
+
+                        vars.currentDrawStrategy->onObjectCreated (nullptr);
+                        that->onSelection (selectedActors);
+                        return true;
+                });
+
+        /*---------------------------------------------------------------------------*/
+
         machine.state (MOVE)
 //                ->entry ([this] (const char *, void *arg) {
 //                        Event *event = static_cast <Event *> (arg);
@@ -233,7 +256,7 @@ void MainController::Impl::configureMachine ()
 
 /*****************************************************************************/
 
-MainController::MainController () { impl = new Impl; }
+MainController::MainController () { impl = new Impl (this); }
 
 /*****************************************************************************/
 
@@ -382,6 +405,18 @@ void MainController::onKeyPress (unsigned int key)
                 open ("addNodeController");
         }
 }
+
+/*****************************************************************************/
+
+void MainController::onSelection (ClutterActorVector *s) { impl->propertiesController->onSelection (s); }
+
+/*****************************************************************************/
+
+PropertiesController *MainController::getPropertiesController () { return impl->propertiesController; }
+
+/*****************************************************************************/
+
+void MainController::setPropertiesController (PropertiesController *p) { impl->propertiesController = p; }
 
 /****************************************************************************/
 /* State machine low lewel deps.                                            */

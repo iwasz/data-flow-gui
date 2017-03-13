@@ -24,6 +24,7 @@ class RectangularSelector;
 struct IDrawStrategy;
 struct IFactoryStrategy;
 class ConsoleBuffer;
+class PropertiesController;
 namespace flow {
 class Program;
 }
@@ -63,7 +64,11 @@ public:
         Stage *getStage () const;
         void setStage (Stage *value);
 
+        PropertiesController *getPropertiesController ();
+        void setPropertiesController (PropertiesController *p);
+
         void onKeyPress (unsigned int key);
+        void onSelection (ClutterActorVector *s);
 
 private:
         struct Impl;

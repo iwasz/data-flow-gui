@@ -21,3 +21,9 @@ std::string PropertiesController::onStart ()
         // return "propertiesView";
         return "abstractActorPropertiesView->rightSlot1, buttonPropertiesView->rightSlot2";
 }
+
+/*****************************************************************************/
+
+void PropertiesController::onSelection (ClutterActorVector *s) {
+
+}

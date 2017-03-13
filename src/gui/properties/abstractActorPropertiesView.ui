@@ -5,6 +5,8 @@
   <object class="GtkGrid" id="abstractActorPropertiesView">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="margin_left">5</property>
+    <property name="margin_right">5</property>
     <property name="column_spacing">5</property>
     <property name="row_homogeneous">True</property>
     <child>
@@ -136,6 +138,8 @@
   <object class="GtkGrid" id="buttonPropertiesView">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="margin_left">5</property>
+    <property name="margin_right">5</property>
     <property name="column_spacing">5</property>
     <property name="row_homogeneous">True</property>
     <child>
