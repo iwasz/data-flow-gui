@@ -14,7 +14,7 @@
 
 static src::logger_mt &lg = logger::get ();
 
-std::string AddNodeController::onStart ()
+GtkForms::ViewsToOpen AddNodeController::onStart()
 {
         set ("tools", Core::Variant (tools));
         refresh ("");

@@ -268,7 +268,7 @@ void MainController::init () { impl->configureMachine (); }
 
 /*****************************************************************************/
 
-std::string MainController::onStart () { return "mainView"; }
+GtkForms::ViewsToOpen MainController::onStart() { return "mainView"; }
 
 /*
  * Po konwersji wykonuje się metoda IController::onSubmit:

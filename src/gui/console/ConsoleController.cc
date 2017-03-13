@@ -12,7 +12,7 @@
 
 static src::logger_mt &lg = logger::get ();
 
-std::string ConsoleController::onStart ()
+GtkForms::ViewsToOpen ConsoleController::onStart()
 {
         // ConsoleView acts as a model here, and GtkToolToggleButton is populated with its 'autoScroll' value.
         set ("console", Core::Variant (consoleView));

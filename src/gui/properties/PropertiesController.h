@@ -19,7 +19,7 @@
 class __tiliae_reflect__ PropertiesController : public GtkForms::AbstractController {
 public:
         virtual ~PropertiesController () {}
-        virtual std::string onStart ();
+        virtual GtkForms::ViewsToOpen onStart ();
         virtual void onSelection (ClutterActorVector *s);
 };
 

@@ -38,7 +38,7 @@ public:
         virtual ~MainController ();
 
         void init ();
-        virtual std::string onStart ();
+        virtual GtkForms::ViewsToOpen onStart ();
         virtual void onSubmit ();
         virtual void onIdle ();
         virtual void onStop ();

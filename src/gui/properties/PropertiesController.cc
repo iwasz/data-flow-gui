@@ -12,7 +12,7 @@
 
 static src::logger_mt &lg = logger::get ();
 
-std::string PropertiesController::onStart ()
+GtkForms::ViewsToOpen PropertiesController::onStart()
 {
         set ("fillTest", Core::Variant (true));
         set ("labelTest", Core::Variant ("Hello world"));

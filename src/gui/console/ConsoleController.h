@@ -21,7 +21,7 @@ class __tiliae_reflect__ ConsoleController : public GtkForms::AbstractController
 public:
         virtual ~ConsoleController () {}
 
-        virtual std::string onStart ();
+        virtual GtkForms::ViewsToOpen onStart ();
         void onClear () { console->clear (); }
 
 public:
