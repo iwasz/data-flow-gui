@@ -209,6 +209,15 @@ void AbstractActor::setFillColor (const Color &value)
 
 /*****************************************************************************/
 
+Core::StringVector AbstractActor::getPropertyViews () const
+{
+        Core::StringVector ret;
+        ret.push_back ("abstractActorPropertiesView");
+        return ret;
+}
+
+/*****************************************************************************/
+
 extern "C" void abstractActorOnFinalize (void *ptr)
 {
         AbstractActor *cn = static_cast<AbstractActor *> (ptr);

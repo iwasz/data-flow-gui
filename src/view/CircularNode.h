@@ -37,11 +37,20 @@ public:
         Color getFillColor () const;
         void setFillColor (const Color &value);
 
+        virtual Core::StringVector getPropertyViews () const
+        {
+                Core::StringVector v = AbstractActor::getPropertyViews ();
+                v.push_back (propertyView);
+                return v;
+        }
+
+        // TODO move
+        std::string propertyView;
+
         /*---------------------------------------------------------------------------*/
 
         virtual void onAllocate (Box const &b);
         virtual Point getPortPosition (int i) const;
-
 };
 
 #endif // CIRCULARNODE_H

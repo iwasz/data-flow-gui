@@ -14,6 +14,7 @@
 #include <ReflectionParserAnnotation.h>
 #include <clutter-gtk/clutter-gtk.h>
 #include <core/Object.h>
+#include <core/Typedefs.h>
 #include <memory>
 #include <string>
 #include <vector>
@@ -59,6 +60,7 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
         virtual Box getBoundingBox () const = 0;
         virtual Point convertToScaleLayer (Point const &p) const = 0;
 
+        virtual Core::StringVector getPropertyViews () const = 0;
 };
 
 typedef __tiliae_reflect__ std::vector<IClutterActor *> ClutterActorVector;

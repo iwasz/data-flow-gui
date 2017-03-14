@@ -68,6 +68,9 @@ public:
         IDrawingEventHandler *getEventHandler () const { return eventHandler; }
         void setEventHandler (IDrawingEventHandler *value) { eventHandler = value; }
 
+        virtual Core::StringVector getPropertyViews () const;
+//        virtual std::string getPropertyView () const  = 0;
+
         /*---------------------------------------------------------------------------*/
 
         virtual bool isConnectSignals () { return false; }

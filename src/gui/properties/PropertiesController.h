@@ -18,9 +18,15 @@
  */
 class __tiliae_reflect__ PropertiesController : public GtkForms::AbstractController {
 public:
-        virtual ~PropertiesController () {}
+        PropertiesController ();
+        virtual ~PropertiesController ();
         virtual GtkForms::ViewsToOpen onStart ();
         virtual void onSelection (ClutterActorVector *s);
+
+private:
+
+        struct Impl;
+        Impl *impl;
 };
 
 #endif /* MainController_H_ */

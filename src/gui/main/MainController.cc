@@ -133,6 +133,7 @@ void MainController::Impl::configureMachine ()
                                 vars.currentDrawStrategy->onButtonRelease (*args);
                                 // TODO this cant be like that!
                                 dynamic_cast <RectangularSelectorStrategy *> (vars.currentDrawStrategy)->onObjectCreated (nullptr, false);
+                                that->onSelection (selectedActors);
                         }
 
                         return true;

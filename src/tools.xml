@@ -48,17 +48,20 @@
     <InputPort scope="prototype" add-to="ports" angle="3.6415" color="#d1d1d1ff" size="20"/>
     <OutputPort scope="prototype" add-to="ports" angle="6.283" color="#8d8d8dff" size="20"/>
     <Add scope="prototype" set-as="node"/>
+    <value set-as="propertyView">addNodePropertiesView</value>
   </CircularNode>
 
   <CircularNode scope="prototype" id="copyNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
     <InputPort scope="prototype" add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20"/>
     <OutputPort scope="prototype" add-to="ports" angle="6.283" color="#8d8d8dff" size="20"/>
     <Copy scope="prototype" set-as="node"/>
+    <value set-as="propertyView">copyNodePropertiesView</value>
   </CircularNode>
 
   <CircularNode scope="prototype" id="consoleNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">
     <InputPort scope="prototype" add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20"/>
     <ConsoleNode scope="prototype" set-as="node"/>
+    <value set-as="propertyView">consoleNodePropertiesView</value>
   </CircularNode>
 
   <Button scope="prototype" id="buttonNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" fontColor="#ecececff" visible="false">
