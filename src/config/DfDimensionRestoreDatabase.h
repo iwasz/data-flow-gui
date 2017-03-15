@@ -16,6 +16,11 @@ public:
         virtual ~DfDimensionRestoreDatabase () { /*DfDimensionRestoreDatabase::save ();*/ }
         virtual void load ();
         virtual void save ();
+
+protected:
+
+        virtual std::string getDirectory () const;
+        virtual std::string getPath () const;
 };
 
 #endif // DFDIMENSIONRESTOREDATABASE_H

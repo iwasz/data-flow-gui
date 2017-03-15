@@ -7,6 +7,7 @@
  ****************************************************************************/
 
 #include "DfDimensionRestoreDatabase.h"
+#include <boost/filesystem.hpp>
 #include <boost/foreach.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -18,10 +19,20 @@
 
 namespace pt = boost::property_tree;
 
+std::string DfDimensionRestoreDatabase::getDirectory () const { return std::string (getenv ("HOME")) + "/.data-flow-gui"; }
+std::string DfDimensionRestoreDatabase::getPath () const { return getDirectory () + "/dimensions.json"; }
+
+/*****************************************************************************/
+
 void DfDimensionRestoreDatabase::load ()
 {
         pt::ptree tree;
-        std::ifstream file ("data.json", std::ifstream::in);
+        std::ifstream file (getPath (), std::ifstream::in);
+
+        if (!file.is_open ()) {
+                return;
+        }
+
         pt::read_json (file, tree);
 
         for (auto &item : tree.get_child ("dimension")) {
@@ -58,6 +69,7 @@ void DfDimensionRestoreDatabase::save ()
                 tree.add_child ("dimension." + v.first, child);
         }
 
-        // Write property tree to XML file
-        pt::write_json ("data.json", tree);
+        boost::filesystem::path dir (getDirectory ());
+        boost::filesystem::create_directory (dir);
+        pt::write_json (getPath (), tree);
 }
