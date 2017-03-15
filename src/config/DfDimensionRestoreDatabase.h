@@ -13,7 +13,7 @@
 
 class __tiliae_reflect__ DfDimensionRestoreDatabase : public GtkForms::DimensionRestoreDatabase {
 public:
-        virtual ~DfDimensionRestoreDatabase () { DfDimensionRestoreDatabase::save (); }
+        virtual ~DfDimensionRestoreDatabase () { /*DfDimensionRestoreDatabase::save ();*/ }
         virtual void load ();
         virtual void save ();
 };

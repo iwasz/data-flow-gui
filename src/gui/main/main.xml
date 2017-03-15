@@ -22,5 +22,8 @@
   <MainView id="mainView" file="src/gui/main/mainView.ui" stage="@stage" loadWholeFile="true">
     <KeyPressEventAdapter add-to="signalAdapters" />
     <DimensionRestoreDecorator add-to="decorators" widget="bottomPaned" key="mainView" database="@dimensionRestoreDatabase" />
+    <DimensionRestoreDecorator add-to="decorators" widget="leftPaned" key="mainView" database="@dimensionRestoreDatabase" />
+    <DimensionRestoreDecorator add-to="decorators" widget="rightPaned" key="mainView" database="@dimensionRestoreDatabase" />
+    <DimensionRestoreDatabaseDecorator add-to="decorators" database="@dimensionRestoreDatabase" />
   </MainView>
 </beans>

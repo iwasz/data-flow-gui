@@ -26,11 +26,14 @@ void DfDimensionRestoreDatabase::load ()
 
         for (auto &item : tree.get_child ("dimension")) {
                 std::string dimensionKey = item.first;
+#if 0
                 std::cerr << dimensionKey << std::endl;
-
+#endif
                 for (auto &item2 : item.second.get_child ("")) {
                         double dimensionValue = item2.second.get_value<double> ();
+#if 0
                         std::cerr << dimensionValue << std::endl;
+#endif
                         values[dimensionKey].push_back (dimensionValue);
                 }
         }

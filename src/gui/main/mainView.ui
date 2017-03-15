@@ -291,14 +291,11 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="orientation">vertical</property>
-            <property name="position">502</property>
-            <property name="position_set">True</property>
             <child>
               <object class="GtkPaned" id="leftPaned">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="position">100</property>
-                <property name="position_set">True</property>
                 <child>
                   <object class="GtkToolPalette" id="drawing_tool_palette">
                     <property name="visible">True</property>
@@ -431,7 +428,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="position">500</property>
-                    <property name="position_set">True</property>
                     <child>
                       <object class="GtkAlignment" id="content">
                         <property name="visible">True</property>
@@ -508,7 +504,7 @@
                 </child>
               </object>
               <packing>
-                <property name="resize">False</property>
+                <property name="resize">True</property>
                 <property name="shrink">False</property>
               </packing>
             </child>
