@@ -6,16 +6,14 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef DATAFLOWAPP_H
-#define DATAFLOWAPP_H
+#include "UserConfig.h"
 
-#include <GtkForms.h>
+void UserConfig::set (const std::string &name, Core::Variant data)
+{
 
-class DataFlowApp : public GtkForms::App {
-public:
-        virtual ~DataFlowApp () {}
-        void initBeanWrapper ();
-        std::unique_ptr<Container::BeanFactoryContainer> createContainer (Ptr<Container::MetaContainer> metaContainer);
-};
+}
 
-#endif // DATAFLOWAPP_H
+Core::Variant UserConfig::get (const std::string &path)
+{
+
+}

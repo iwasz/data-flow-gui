@@ -112,6 +112,7 @@ void MainController::Impl::configureMachine ()
                         }
                         selectedActors->clear ();
                         vars.currentSelectorStrategy->unselectAll();
+                        that->onSelection (selectedActors);
                         return true;
                 })
                 ->transition (SELECT)->when (eq ("stage.press"))->then ([this] (const char *, void *arg) {
@@ -133,9 +134,9 @@ void MainController::Impl::configureMachine ()
                                 vars.currentDrawStrategy->onButtonRelease (*args);
                                 // TODO this cant be like that!
                                 dynamic_cast <RectangularSelectorStrategy *> (vars.currentDrawStrategy)->onObjectCreated (nullptr, false);
-                                that->onSelection (selectedActors);
                         }
 
+                        that->onSelection (selectedActors);
                         return true;
                 });
 
@@ -269,7 +270,7 @@ void MainController::init () { impl->configureMachine (); }
 
 /*****************************************************************************/
 
-GtkForms::ViewsToOpen MainController::onStart() { return "mainView"; }
+GtkForms::ViewsToOpen MainController::onStart () { return "mainView"; }
 
 /*
  * Po konwersji wykonuje się metoda IController::onSubmit:

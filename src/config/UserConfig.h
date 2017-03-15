@@ -6,16 +6,19 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef DATAFLOWAPP_H
-#define DATAFLOWAPP_H
+#ifndef USERCONFIG_H
+#define USERCONFIG_H
 
-#include <GtkForms.h>
+#include <ReflectionParserAnnotation.h>
+#include <core/variant/Variant.h>
+#include <string>
 
-class DataFlowApp : public GtkForms::App {
+class __tiliae_reflect__ UserConfig {
 public:
-        virtual ~DataFlowApp () {}
-        void initBeanWrapper ();
-        std::unique_ptr<Container::BeanFactoryContainer> createContainer (Ptr<Container::MetaContainer> metaContainer);
+
+        void set (const std::string &name, Core::Variant data);
+        Core::Variant get (const std::string &path);
+
 };
 
-#endif // DATAFLOWAPP_H
+#endif // USERCONFIG_H

@@ -189,6 +189,10 @@ LIST (APPEND SOURCES
         "src/primitives/Direction.h"
         "src/customNode/ConsoleNode.h"
         "src/customNode/ConsoleNode.cc"
+        "src/config/UserConfig.h"
+        "src/config/UserConfig.cc"
+        "src/config/DfDimensionRestoreDatabase.cc"
+        "src/config/DfDimensionRestoreDatabase.h"
 )
 
 # Local includes (inside project).

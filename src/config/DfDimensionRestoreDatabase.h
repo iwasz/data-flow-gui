@@ -6,16 +6,16 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef DATAFLOWAPP_H
-#define DATAFLOWAPP_H
+#ifndef DFDIMENSIONRESTOREDATABASE_H
+#define DFDIMENSIONRESTOREDATABASE_H
 
-#include <GtkForms.h>
+#include <decorator/DimensionRestoreDecorator.h>
 
-class DataFlowApp : public GtkForms::App {
+class __tiliae_reflect__ DfDimensionRestoreDatabase : public GtkForms::DimensionRestoreDatabase {
 public:
-        virtual ~DataFlowApp () {}
-        void initBeanWrapper ();
-        std::unique_ptr<Container::BeanFactoryContainer> createContainer (Ptr<Container::MetaContainer> metaContainer);
+        virtual ~DfDimensionRestoreDatabase () { DfDimensionRestoreDatabase::save (); }
+        virtual void load ();
+        virtual void save ();
 };
 
-#endif // DATAFLOWAPP_H
+#endif // DFDIMENSIONRESTOREDATABASE_H

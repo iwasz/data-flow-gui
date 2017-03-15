@@ -24,3 +24,5 @@
 #include "view/ScaleLayer.h"
 #include "view/Stage.h"
 #include "customNode/ConsoleNode.h"
+#include "config/UserConfig.h"
+#include "config/DfDimensionRestoreDatabase.h"

@@ -5,7 +5,7 @@
     <value set-as="useWidgetId">true</value>
   </Config>
 
-  <DimensionRestoreDatabase id="dimensionRestoreDatabase" />
+  <DfDimensionRestoreDatabase id="dimensionRestoreDatabase" />
 
   <!-- Tool map for MainController, and ToolList for addNode dialog. All the tools are defined here -->
   <import resource="src/tools.xml" />

@@ -23,9 +23,9 @@ void DataFlowApp::initBeanWrapper ()
 
 /*---------------------------------------------------------------------------*/
 
-Ptr<Container::BeanFactoryContainer> DataFlowApp::createContainer (Ptr<Container::MetaContainer> metaContainer)
+std::unique_ptr<Container::BeanFactoryContainer> DataFlowApp::createContainer (Ptr<Container::MetaContainer> metaContainer)
 {
-        Ptr<Container::BeanFactoryContainer> container = Container::ContainerFactory::create (metaContainer, true);
+        std::unique_ptr<Container::BeanFactoryContainer> container (Container::ContainerFactory::create (metaContainer, true));
         container->addConversion (typeid (Color), new ColorEditor); // Auto delete is on.
         return container;
 }
