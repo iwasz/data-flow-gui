@@ -62,6 +62,30 @@ ClutterColor Color::toClutterColor (Color const &c)
 
 /*****************************************************************************/
 
+Color Color::fromGdkRGBA (GdkRGBA *cc)
+{
+        Color c;
+        c.r = std::round (cc->red * 255);
+        c.g = std::round (cc->green * 255);
+        c.b = std::round (cc->blue * 255);
+        c.a = std::round (cc->alpha * 255);
+        return c;
+}
+
+/*****************************************************************************/
+
+GdkRGBA Color::toGdkRGBA (Color const &c)
+{
+        GdkRGBA cc;
+        cc.red = c.r / 255.0;
+        cc.green = c.g / 255.0;
+        cc.blue = c.b / 255.0;
+        cc.alpha = c.a / 255.0;
+        return cc;
+}
+
+/*****************************************************************************/
+
 bool ColorEditor::convert (const Core::Variant &input, Core::Variant *output, Core::DebugContext *context)
 {
         assert (output);

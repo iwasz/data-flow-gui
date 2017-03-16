@@ -194,6 +194,8 @@ LIST (APPEND SOURCES
         "src/config/UserConfig.cc"
         "src/config/DfDimensionRestoreDatabase.cc"
         "src/config/DfDimensionRestoreDatabase.h"
+        "src/mapping/ColorMapping.h"
+        "src/mapping/ColorMapping.cc"
 )
 
 # Local includes (inside project).

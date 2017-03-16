@@ -12,6 +12,7 @@
 #include <clutter-gtk/clutter-gtk.h>
 #include <cstdint>
 #include <editor/IEditor.h>
+#include <gdk/gdk.h>
 #include <string>
 
 class Color {
@@ -20,6 +21,7 @@ public:
         Color (uint8_t r, uint8_t g, uint8_t b, uint8_t a) : r (r), g (g), b (b), a (a) {}
         explicit Color (std::string const &col) { *this = fromString (col); }
         explicit Color (ClutterColor *cc) { *this = fromClutterColor (cc); }
+        explicit Color (GdkRGBA *cc) { *this = fromGdkRGBA (cc); }
 
         uint8_t getR () const { return r; }
         void setR (const uint8_t &value) { r = value; }
@@ -35,8 +37,13 @@ public:
 
         static Color fromString (std::string const &s);
         static std::string toString (Color const &c);
+
         static Color fromClutterColor (ClutterColor *cc);
         static ClutterColor toClutterColor (Color const &c);
+
+        static Color fromGdkRGBA (GdkRGBA *cc);
+        static GdkRGBA toGdkRGBA (Color const &c);
+
         std::string toString () const { return toString (*this); }
         ClutterColor toClutterColor () const { return toClutterColor (*this); }
 
@@ -62,6 +69,5 @@ public:
          */
         virtual bool convert (const Core::Variant &input, Core::Variant *output, Core::DebugContext *context = NULL);
 };
-
 
 #endif // COLOR_H

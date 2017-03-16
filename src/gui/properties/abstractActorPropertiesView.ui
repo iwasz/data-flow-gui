@@ -107,10 +107,11 @@
       </packing>
     </child>
     <child>
-      <object class="GtkColorButton">
+      <object class="GtkColorButton" id="!actor.strokeColor">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
+        <signal name="color-set" handler="$controller.submit('actor.strokeColor','')" swapped="no"/>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -144,11 +145,12 @@
       </packing>
     </child>
     <child>
-      <object class="GtkColorButton">
+      <object class="GtkColorButton" id="!actor.fillColor">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="hexpand">False</property>
+        <signal name="color-set" handler="$controller.submit('actor.fillColor','')" swapped="no"/>
       </object>
       <packing>
         <property name="left_attach">1</property>

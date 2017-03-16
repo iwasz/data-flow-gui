@@ -16,6 +16,7 @@
 #include "gui/main/Tool.h"
 #include "gui/properties/DoubleToFloatEditor.h"
 #include "gui/properties/PropertiesController.h"
+#include "mapping/ColorMapping.h"
 #include "primitives/Geometry.h"
 #include "view/Button.h"
 #include "view/Circle.h"
