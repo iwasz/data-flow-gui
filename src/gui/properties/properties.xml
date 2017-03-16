@@ -1,7 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <beans>
+  <DoubleToFloatEditor id="double2FloatEditor" set-as="v2mEditor" />
+
   <PropertiesController id="propertiesController" />
-  <BuilderView id="abstractActorPropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />
+
+  <BuilderView id="abstractActorPropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" alsoLoad="adjustment1,adjustment2">
+  <AdjustmentMapping add-to="mappings" widget="actor.strokeWidth" v2mEditor="@double2FloatEditor" />
+  <AdjustmentMapping add-to="mappings" widget="actor.strokeDash" v2mEditor="@double2FloatEditor" />
+  </BuilderView>
   <BuilderView id="buttonPropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />
   <BuilderView id="copyNodePropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />
   <BuilderView id="addNodePropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />

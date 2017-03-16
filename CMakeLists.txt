@@ -130,6 +130,7 @@ LIST (APPEND SOURCES
         "src/gui/console/ConsoleBuffer.h"
         "src/gui/properties/PropertiesController.cc"
         "src/gui/properties/PropertiesController.h"
+        "src/gui/properties/DoubleToFloatEditor.h"
         "src/view/clutter/drawing_stuff.c"
         "src/view/clutter/drawing_stuff.h"
         "src/view/clutter/iw_button.c"
