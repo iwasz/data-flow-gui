@@ -70,6 +70,12 @@
     <value set-as="text">Button</value>
   </Button>
 
+  <CircularNode scope="prototype" id="constNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">
+    <OutputPort scope="prototype" add-to="ports" angle="6.283" color="#8d8d8dff" size="20"/>
+    <Const scope="prototype" set-as="node"/>
+    <value set-as="propertyView">constPropertiesView</value>
+  </CircularNode>
+
   <LineConnector scope="prototype" id="lineConnector" parent="@scale" strokeColor="#d1d1d1ff"
         fontColor="#8d8d8dff" visible="false" strokeWidth="5" text="0" textEditable="true" selectable="false">
     <Arc scope="prototype" set-as="arc"/>
@@ -98,6 +104,10 @@
       <ToolI add-to="tools" name="addNode" drawStrategy="@dashedCircleMinSize">
         <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="addNode" container="@#container" program="@program"/>
         <value set-as="description">Returns sum of its two inputs</value>
+      </ToolI>
+      <ToolI add-to="tools" name="constNode" drawStrategy="@dashedCircleMinSize">
+        <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="constNode" container="@#container" program="@program"/>
+        <value set-as="description">Returns predefined value.</value>
       </ToolI>
     </ToolCategory>
 

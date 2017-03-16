@@ -14,4 +14,5 @@
   <BuilderView id="copyNodePropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />
   <BuilderView id="addNodePropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />
   <BuilderView id="consoleNodePropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />
+  <BuilderView id="constPropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />
 </beans>

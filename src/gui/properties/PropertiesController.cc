@@ -55,6 +55,11 @@ void PropertiesController::onSelection (ClutterActorVector *selectedActors)
 
         int cnt = 1;
         for (std::string const &n : v) {
+
+                if (n.empty()) {
+                        continue;
+                }
+
                 // TODO add all views to the same slot (gtkforms implementation necessary).
                 std::string slotName = "rightSlot" + boost::lexical_cast<std::string> (cnt);
                 impl->currentViews.add (n, slotName);
