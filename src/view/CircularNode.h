@@ -37,17 +37,17 @@ public:
         Color getFillColor () const;
         void setFillColor (const Color &value);
 
-        virtual Core::StringVector getPropertyViews () const
-        {
-                Core::StringVector v = AbstractActor::getPropertyViews ();
-                v.push_back (propertyView);
-                return v;
-        }
+        virtual std::string getText () const;
+        virtual void setText (std::string const t);
 
-        // TODO move
-        std::string propertyView;
+        virtual std::string getFont () const;
+        virtual void setFont (std::string const t);
 
-        /*---------------------------------------------------------------------------*/
+        virtual Color getFontColor () const;
+        virtual void setFontColor (const Color &value);
+
+        virtual bool isTextEditable () const;
+        virtual void setTextEditable (bool b);
 
         virtual void onAllocate (Box const &b);
         virtual Point getPortPosition (int i) const;

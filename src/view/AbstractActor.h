@@ -68,8 +68,8 @@ public:
         IDrawingEventHandler *getEventHandler () const { return eventHandler; }
         void setEventHandler (IDrawingEventHandler *value) { eventHandler = value; }
 
-        virtual Core::StringVector getPropertyViews () const;
-//        virtual std::string getPropertyView () const  = 0;
+        virtual Core::StringVector getPropertyViews () const __tiliae_no_reflect__;
+        void setPropertyView (const std::string &value) { propertyView = value; }
 
         /*---------------------------------------------------------------------------*/
 
@@ -96,6 +96,7 @@ private:
         IDrawingEventHandler *eventHandler = nullptr;
         bool selectable = true;
         bool clutterDestroyed = false;
+        std::string propertyView;
 };
 
 #endif // ABSTRACTACTOR_H

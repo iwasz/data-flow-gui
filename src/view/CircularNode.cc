@@ -99,6 +99,47 @@ Point CircularNode::getPortPosition (int i) const
 
 /*****************************************************************************/
 
+std::string CircularNode::getText () const { return iw_circular_node_get_text (IW_CIRCULAR_NODE (self)); }
+
+/*****************************************************************************/
+
+void CircularNode::setText (std::string const t) { iw_circular_node_set_text (IW_CIRCULAR_NODE (self), t.c_str ()); }
+
+/*****************************************************************************/
+
+std::string CircularNode::getFont () const { return iw_circular_node_get_font (IW_CIRCULAR_NODE (self)); }
+
+/*****************************************************************************/
+
+void CircularNode::setFont (std::string const t) { iw_circular_node_set_font (IW_CIRCULAR_NODE (self), t.c_str ()); }
+
+/*****************************************************************************/
+
+Color CircularNode::getFontColor () const
+{
+        ClutterColor c;
+        iw_circular_node_get_font_color (IW_CIRCULAR_NODE (self), &c);
+        return Color (&c);
+}
+
+/*****************************************************************************/
+
+void CircularNode::setFontColor (const Color &value)
+{
+        ClutterColor color = Color::toClutterColor (value);
+        iw_circular_node_set_font_color (IW_CIRCULAR_NODE (self), &color);
+}
+
+/*****************************************************************************/
+
+bool CircularNode::isTextEditable () const { return iw_circular_node_is_editable (IW_CIRCULAR_NODE (self)); }
+
+/*****************************************************************************/
+
+void CircularNode::setTextEditable (bool b) { iw_circular_node_set_editable (IW_CIRCULAR_NODE (self), b); }
+
+/*****************************************************************************/
+
 void CircularNode::onAllocate (Box const &)
 {
         int i = 0;

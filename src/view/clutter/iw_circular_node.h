@@ -111,6 +111,22 @@ void *iw_circular_node_get_port_user_data (IwCircularNode *self, int i);
 
 void iw_circular_node_get_port_position (IwCircularNode *self, int i, float *x, float *y);
 
+/*---------------------------------------------------------------------------*/
+
+const gchar *iw_circular_node_get_font (IwCircularNode *self);
+void iw_circular_node_set_font (IwCircularNode *self, const gchar *s);
+
+void iw_circular_node_get_font_color (IwCircularNode *self, ClutterColor *color);
+void iw_circular_node_set_font_color (IwCircularNode *self, const ClutterColor *c);
+
+const gchar *iw_circular_node_get_text (IwCircularNode *self);
+void iw_circular_node_set_text (IwCircularNode *self, const gchar *s);
+
+gboolean iw_circular_node_is_editable (IwCircularNode *self);
+void iw_circular_node_set_editable (IwCircularNode *self, gboolean b);
+
+/*---------------------------------------------------------------------------*/
+
 // TODO move to base class
 void iw_circular_node_set_user_data (IwCircularNode *self, void *p);
 // TODO move to base class

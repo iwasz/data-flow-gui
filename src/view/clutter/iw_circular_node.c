@@ -80,18 +80,21 @@ static void iw_circular_node_allocate (ClutterActor *actor, const ClutterActorBo
         /* set the allocation for the whole button */
         //  CLUTTER_ACTOR_CLASS (iw_circular_node_parent_class)->allocate (actor, box, flags);
 
-        ClutterActorBox labelBox;
-        clutter_actor_get_allocation_box (priv->label, &labelBox);
-
         float boxW = clutter_actor_box_get_width (box);
         float boxH = clutter_actor_box_get_height (box);
+
+#if 0
+        ClutterActorBox labelBox;
+        clutter_actor_get_allocation_box (priv->label, &labelBox);
         float labelW = clutter_actor_box_get_width (&labelBox);
         float labelH = clutter_actor_box_get_height (&labelBox);
         float maxW = fmax (boxW, labelW);
         float maxH = fmax (boxH, labelH);
         float dia = fmax (maxW, maxH);
-
         printf ("%f, %f, %f, %f, %f, %f, %f\n", boxW, boxH, labelW, labelH, maxW, maxH, dia);
+#else
+        float dia = fmin (boxW, boxH);
+#endif
 
         ClutterActorBox newBox = *box;
         newBox.x2 = newBox.x1 + dia;
@@ -183,12 +186,13 @@ static void iw_circular_node_init (IwCircularNode *self)
         priv = self->priv = IW_CIRCULAR_NODE_GET_PRIVATE (self);
         priv->portsNo = 0;
 
-#if 1
+#if 0
         static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
         clutter_actor_set_background_color (CLUTTER_ACTOR (self), &c);
 #endif
 
-        priv->layout = clutter_fixed_layout_new ();
+        // priv->layout = clutter_fixed_layout_new ();
+        priv->layout = clutter_bin_layout_new (CLUTTER_BIN_ALIGNMENT_CENTER, CLUTTER_BIN_ALIGNMENT_CENTER);
         clutter_actor_set_layout_manager (CLUTTER_ACTOR (self), priv->layout);
 
         priv->mainCircle = iw_circle_new ();
@@ -196,12 +200,12 @@ static void iw_circular_node_init (IwCircularNode *self)
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->mainCircle);
 
         priv->label = clutter_text_new ();
-        clutter_text_set_text (CLUTTER_TEXT (priv->label), "A simple test");
-        clutter_text_set_font_name (CLUTTER_TEXT (priv->label), "20px");
-        clutter_text_set_editable (CLUTTER_TEXT (priv->label), TRUE);
-        clutter_text_set_selectable (CLUTTER_TEXT (priv->label), TRUE);
+//        clutter_text_set_text (CLUTTER_TEXT (priv->label), "A simple test");
+//        clutter_text_set_font_name (CLUTTER_TEXT (priv->label), "22px");
+        clutter_text_set_editable (CLUTTER_TEXT (priv->label), FALSE);
+        clutter_text_set_selectable (CLUTTER_TEXT (priv->label), FALSE);
         clutter_text_set_single_line_mode (CLUTTER_TEXT (priv->label), TRUE);
-        clutter_actor_set_reactive (priv->label, TRUE);
+        clutter_actor_set_reactive (priv->label, FALSE);
         clutter_actor_set_x_expand (priv->label, TRUE);
         clutter_actor_set_x_align (priv->label, CLUTTER_ACTOR_ALIGN_CENTER);
         clutter_actor_set_y_expand (priv->label, TRUE);
@@ -429,4 +433,70 @@ void *iw_circular_node_get_port_user_data (IwCircularNode *self, int i)
 {
         g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), NULL);
         return g_object_get_data (G_OBJECT (self->priv->ports[i].actor), CPP_IMPLEMENTATION_KEY);
+}
+
+/*****************************************************************************/
+
+const gchar *iw_circular_node_get_text (IwCircularNode *self)
+{
+        g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), NULL);
+        return clutter_text_get_text (CLUTTER_TEXT (self->priv->label));
+}
+
+/*****************************************************************************/
+
+void iw_circular_node_set_text (IwCircularNode *self, const gchar *s)
+{
+        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
+        clutter_text_set_text (CLUTTER_TEXT (self->priv->label), s);
+}
+
+/*****************************************************************************/
+
+const gchar *iw_circular_node_get_font (IwCircularNode *self)
+{
+        g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), NULL);
+        return clutter_text_get_font_name (CLUTTER_TEXT (self->priv->label));
+}
+
+/*****************************************************************************/
+
+void iw_circular_node_set_font (IwCircularNode *self, const gchar *s)
+{
+        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
+        clutter_text_set_font_name (CLUTTER_TEXT (self->priv->label), s);
+}
+
+/*****************************************************************************/
+
+void iw_circular_node_get_font_color (IwCircularNode *self, ClutterColor *color)
+{
+        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
+        return clutter_text_get_color (CLUTTER_TEXT (self->priv->label), color);
+}
+
+/*****************************************************************************/
+
+void iw_circular_node_set_font_color (IwCircularNode *self, const ClutterColor *c)
+{
+        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
+        clutter_text_set_color (CLUTTER_TEXT (self->priv->label), c);
+}
+
+/*****************************************************************************/
+
+gboolean iw_circular_node_is_editable (IwCircularNode *self)
+{
+        g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), FALSE);
+        return clutter_text_get_editable (CLUTTER_TEXT (self->priv->label));
+}
+
+/*****************************************************************************/
+
+void iw_circular_node_set_editable (IwCircularNode *self, gboolean b)
+{
+        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
+        clutter_text_set_editable (CLUTTER_TEXT (self->priv->label), b);
+        clutter_text_set_selectable (CLUTTER_TEXT (self->priv->label), b);
+        clutter_actor_set_reactive (self->priv->label, b);
 }

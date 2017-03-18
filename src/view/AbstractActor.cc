@@ -9,6 +9,7 @@
 #include "AbstractActor.h"
 #include "ScaleLayer.h"
 #include "clutter/iw_actor.h"
+#include <boost/algorithm/string.hpp>
 
 /*****************************************************************************/
 
@@ -213,6 +214,16 @@ Core::StringVector AbstractActor::getPropertyViews () const
 {
         Core::StringVector ret;
         ret.push_back ("abstractActorPropertiesView");
+
+        Core::StringVector views;
+        if (!propertyView.empty ()) {
+                boost::split (views, propertyView, boost::is_any_of (", "), boost::token_compress_on);
+        }
+
+        for (std::string const &propertyView : views) {
+                ret.push_back (propertyView);
+        }
+
         return ret;
 }
 
@@ -327,7 +338,7 @@ gboolean on_actor_motion (ClutterActor *stage, ClutterEvent *ev, gpointer data)
                 event.parentDelta = Point ();
         }
 
-//        std::cerr << event.stageDelta << ", " << event.parentDelta << std::endl;
+        //        std::cerr << event.stageDelta << ", " << event.parentDelta << std::endl;
 
         if (clutter_event_get_state (ev) & CLUTTER_BUTTON1_MASK) {
                 event.button = 1;

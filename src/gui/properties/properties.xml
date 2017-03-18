@@ -15,4 +15,7 @@
   <BuilderView id="addNodePropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />
   <BuilderView id="consoleNodePropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />
   <BuilderView id="constPropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />
+  <BuilderView id="circularNodePropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui">
+    <ColorMapping add-to="mappings" widget="actor.fontColor"/>
+  </BuilderView>
 </beans>

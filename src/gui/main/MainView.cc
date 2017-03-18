@@ -36,36 +36,20 @@ void MainView::loadUi (GtkForms::App *app)
                 throw Core::Exception ("No stage. Create stage first, and assign it to the 'stage' pointer.");
         }
 
-#if 1
+#if 0
         // Sandbox, do not delete.
         {
-                ClutterActor *self = clutter_actor_new ();
-                clutter_actor_set_position (self, 500, 500);
-                clutter_actor_set_size (self, 100, 100);
-//                clutter_actor_set_x_expand (self, TRUE);
-//                clutter_actor_set_x_align (self, CLUTTER_ACTOR_ALIGN_CENTER);
-//                clutter_actor_set_y_expand (self, TRUE);
-//                clutter_actor_set_y_align (self, CLUTTER_ACTOR_ALIGN_CENTER);
+                ClutterActor *parent = clutter_actor_new ();
+                clutter_actor_set_position (parent, 500, 500);
+                // clutter_actor_set_size (parent, 100, 100);
 
-                clutter_actor_get_preferred_height(self,);
-
-                // Uwaga, bez sensu.
-                // clutter_actor_add_constraint (self, clutter_bind_constraint_new (self, CLUTTER_BIND_WIDTH, 100));
-                // clutter_actor_add_constraint (self, clutter_bind_constraint_new (self, CLUTTER_BIND_HEIGHT, 100));
-
-                clutter_actor_add_child (stage->getActor (), self);
+                clutter_actor_add_child (stage->getActor (), parent);
 
                 static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
-                clutter_actor_set_background_color (CLUTTER_ACTOR (self), &c);
+                clutter_actor_set_background_color (CLUTTER_ACTOR (parent), &c);
 
-                //                                ClutterLayoutManager *layout = clutter_fixed_layout_new ();
                 ClutterLayoutManager *layout = clutter_bin_layout_new (CLUTTER_BIN_ALIGNMENT_CENTER, CLUTTER_BIN_ALIGNMENT_CENTER);
-                clutter_actor_set_layout_manager (self, layout);
-
-                //        mainCircle = iw_circle_new ();
-                //        clutter_actor_set_layout_manager (mainCircle, layout);
-                //        clutter_actor_set_reactive (mainCircle, TRUE);
-                //        clutter_actor_add_child (CLUTTER_ACTOR (self), mainCircle);
+                clutter_actor_set_layout_manager (parent, layout);
 
                 ClutterActor *label = clutter_text_new ();
                 clutter_actor_set_name (label, "text");
@@ -79,7 +63,7 @@ void MainView::loadUi (GtkForms::App *app)
                 clutter_actor_set_x_align (label, CLUTTER_ACTOR_ALIGN_CENTER);
                 clutter_actor_set_y_expand (label, TRUE);
                 clutter_actor_set_y_align (label, CLUTTER_ACTOR_ALIGN_CENTER);
-                clutter_actor_add_child (self, label);
+                clutter_actor_add_child (parent, label);
 
                 //                GValue gVal = G_VALUE_INIT;
                 //                g_value_init (&gVal, G_TYPE_FLOAT);
