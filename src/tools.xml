@@ -43,16 +43,31 @@
   <Rectangle scope="prototype" id="rect" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>
   <Line scope="prototype" id="line" parent="@scale" strokeColor="#0096c6c9" visible="false" strokeWidth="1"/>
 
-  <CircularNode scope="prototype" id="addNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
+  <CircularNode scope="prototype" id="mathNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
     <InputPort scope="prototype" add-to="ports" angle="2.6415" color="#d1d1d1ff" size="20"/>
     <InputPort scope="prototype" add-to="ports" angle="3.6415" color="#d1d1d1ff" size="20"/>
     <OutputPort scope="prototype" add-to="ports" angle="6.283" color="#8d8d8dff" size="20"/>
-    <Add scope="prototype" set-as="node"/>
     <value set-as="propertyView">circularNodePropertiesView,addNodePropertiesView</value>
     <value set-as="font">48px</value>
     <value set-as="text">+</value>
     <value set-as="fontColor">#ffffffff</value>
   </CircularNode>
+
+  <mathNode id="addNode">
+    <Add scope="prototype" set-as="node"/>
+  </mathNode>
+
+  <mathNode id="subNode" text="-">
+    <Sub scope="prototype" set-as="node"/>
+  </mathNode>
+
+  <mathNode id="mulNode" text="*">
+    <Mul scope="prototype" set-as="node"/>
+  </mathNode>
+
+  <mathNode id="divNode" text="/">
+    <Div scope="prototype" set-as="node"/>
+  </mathNode>
 
   <CircularNode scope="prototype" id="copyNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
     <InputPort scope="prototype" add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20"/>
@@ -111,6 +126,22 @@
         <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="addNode" container="@#container" program="@program"/>
         <value set-as="description">Returns sum of its two inputs</value>
       </ToolI>
+
+      <ToolI add-to="tools" name="subNode" drawStrategy="@dashedCircleMinSize">
+        <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="subNode" container="@#container" program="@program"/>
+        <value set-as="description">Returns difference of its two inputs</value>
+      </ToolI>
+
+      <ToolI add-to="tools" name="mulNode" drawStrategy="@dashedCircleMinSize">
+        <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="mulNode" container="@#container" program="@program"/>
+        <value set-as="description">Multiplication</value>
+      </ToolI>
+
+      <ToolI add-to="tools" name="divNode" drawStrategy="@dashedCircleMinSize">
+        <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="divNode" container="@#container" program="@program"/>
+        <value set-as="description">Division</value>
+      </ToolI>
+
       <ToolI add-to="tools" name="constNode" drawStrategy="@dashedCircleMinSize">
         <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="constNode" container="@#container" program="@program"/>
         <value set-as="description">Returns predefined value.</value>
