@@ -2,6 +2,12 @@
 <!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkImage">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-missing-image</property>
+  </object>
+  <object class="GtkAccelGroup" id="accelgroup1"/>
   <object class="GtkImage" id="addIcon1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -36,7 +42,6 @@
     <property name="can_focus">False</property>
     <property name="default_width">800</property>
     <property name="default_height">600</property>
-    <signal name="key-press-event" handler="$controller.onKeyPress(%0)" swapped="no"/>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -105,6 +110,9 @@
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <property name="accel_group">accelgroup1</property>
+                        <signal name="activate" handler="$app.quit()" swapped="no"/>
+                        <accelerator key="q" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                   </object>
@@ -155,6 +163,22 @@
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem">
+                        <property name="label">Add node</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="$controller.open('addNodeController')" swapped="no"/>
+                        <accelerator key="a" signal="activate"/>
                       </object>
                     </child>
                   </object>

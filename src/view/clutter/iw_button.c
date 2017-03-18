@@ -119,7 +119,7 @@ static void iw_button_class_init (IwButtonClass *klass)
 static void iw_button_init (IwButton *self)
 {
         IwButtonPrivate *priv;
-        ClutterLayoutManager *layout;
+//        ClutterLayoutManager *layout;
 
         priv = self->priv = IW_BUTTON_GET_PRIVATE (self);
         clutter_actor_set_reactive (CLUTTER_ACTOR (self), TRUE);

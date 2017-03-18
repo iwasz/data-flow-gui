@@ -37,6 +37,7 @@ typedef struct _IwCircularNodePort IwCircularNodePort;
 struct _IwCircularNodePrivate {
         ClutterLayoutManager *layout;
         ClutterActor *mainCircle;
+        ClutterActor *label;
         void *userData;
 
         int portsNo;
@@ -70,13 +71,29 @@ static void iw_circular_node_finalize (GObject *gobject)
 
 static void iw_circular_node_allocate (ClutterActor *actor, const ClutterActorBox *box, ClutterAllocationFlags flags)
 {
+#if 0
+        printf ("%f, %f, %f, %f\n", box->x1, box->y1, box->x2, box->y2);
+#endif
+
         IwCircularNodePrivate *priv = IW_CIRCULAR_NODE (actor)->priv;
 
         /* set the allocation for the whole button */
         //  CLUTTER_ACTOR_CLASS (iw_circular_node_parent_class)->allocate (actor, box, flags);
 
+        ClutterActorBox labelBox;
+        clutter_actor_get_allocation_box (priv->label, &labelBox);
+
+        float boxW = clutter_actor_box_get_width (box);
+        float boxH = clutter_actor_box_get_height (box);
+        float labelW = clutter_actor_box_get_width (&labelBox);
+        float labelH = clutter_actor_box_get_height (&labelBox);
+        float maxW = fmax (boxW, labelW);
+        float maxH = fmax (boxH, labelH);
+        float dia = fmax (maxW, maxH);
+
+        printf ("%f, %f, %f, %f, %f, %f, %f\n", boxW, boxH, labelW, labelH, maxW, maxH, dia);
+
         ClutterActorBox newBox = *box;
-        float dia = fmin (clutter_actor_box_get_width (box), clutter_actor_box_get_height (box));
         newBox.x2 = newBox.x1 + dia;
         newBox.y2 = newBox.y1 + dia;
         ClutterAllocationFlags newFlags = flags | CLUTTER_DELEGATE_LAYOUT;
@@ -93,8 +110,8 @@ static void iw_circular_node_allocate (ClutterActor *actor, const ClutterActorBo
         ClutterActorBox childBox;
         childBox.x1 = 0.0;
         childBox.y1 = 0.0;
-        childBox.x2 = clutter_actor_box_get_width (box);
-        childBox.y2 = clutter_actor_box_get_height (box);
+        childBox.x2 = clutter_actor_box_get_width (&newBox);
+        childBox.y2 = clutter_actor_box_get_height (&newBox);
 
         clutter_actor_allocate (priv->mainCircle, &childBox, flags);
         circularNodeOnAllocate (priv->userData, newBox.x1, newBox.y1, newBox.x2, newBox.y2);
@@ -166,30 +183,30 @@ static void iw_circular_node_init (IwCircularNode *self)
         priv = self->priv = IW_CIRCULAR_NODE_GET_PRIVATE (self);
         priv->portsNo = 0;
 
-#if 0
+#if 1
         static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
-        clutter_actor_set_background_color(self, &c);
+        clutter_actor_set_background_color (CLUTTER_ACTOR (self), &c);
 #endif
 
         priv->layout = clutter_fixed_layout_new ();
-
-/* the main container; this actor will use the BinLayout to lay
- * out its children; we use the anchor point to keep it centered
- * on the same position even when we change its size
- */
-//        priv->box = clutter_actor_new ();
-#if 0
-        clutter_actor_set_background_color(priv->box, &c);
-#endif
-
-        //        clutter_actor_set_layout_manager (priv->box, priv->layout);
-        //        clutter_actor_set_reactive (priv->box, TRUE);
-        //        clutter_actor_add_child (CLUTTER_ACTOR (self), priv->box);
+        clutter_actor_set_layout_manager (CLUTTER_ACTOR (self), priv->layout);
 
         priv->mainCircle = iw_circle_new ();
-        clutter_actor_set_layout_manager (priv->mainCircle, priv->layout);
         clutter_actor_set_reactive (priv->mainCircle, TRUE);
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->mainCircle);
+
+        priv->label = clutter_text_new ();
+        clutter_text_set_text (CLUTTER_TEXT (priv->label), "A simple test");
+        clutter_text_set_font_name (CLUTTER_TEXT (priv->label), "20px");
+        clutter_text_set_editable (CLUTTER_TEXT (priv->label), TRUE);
+        clutter_text_set_selectable (CLUTTER_TEXT (priv->label), TRUE);
+        clutter_text_set_single_line_mode (CLUTTER_TEXT (priv->label), TRUE);
+        clutter_actor_set_reactive (priv->label, TRUE);
+        clutter_actor_set_x_expand (priv->label, TRUE);
+        clutter_actor_set_x_align (priv->label, CLUTTER_ACTOR_ALIGN_CENTER);
+        clutter_actor_set_y_expand (priv->label, TRUE);
+        clutter_actor_set_y_align (priv->label, CLUTTER_ACTOR_ALIGN_CENTER);
+        clutter_actor_add_child (CLUTTER_ACTOR (self), priv->label);
 
         g_signal_connect (CLUTTER_ACTOR (self), "allocation-changed", G_CALLBACK (on_actor_resize), NULL);
 
@@ -200,7 +217,7 @@ static void iw_circular_node_init (IwCircularNode *self)
 
 /*****************************************************************************/
 
-//void on_dimension_changed (GObject *gobject, GParamSpec *pspec, gpointer user_data)
+// void on_dimension_changed (GObject *gobject, GParamSpec *pspec, gpointer user_data)
 //{
 //        //        gint x_value = 0;
 
