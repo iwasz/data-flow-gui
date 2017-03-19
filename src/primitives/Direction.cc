@@ -6,18 +6,27 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef DATAFLOW_DIRECTION_H
-#define DATAFLOW_DIRECTION_H
+#include "Direction.h"
 
-enum _Direction { NONE, EAST, SOUTH, WEST, NORTH };
-typedef enum _Direction Direction;
+Core::Variant directionFromString (std::string const &s)
+{
+        Direction d;
 
-#ifdef __cplusplus
-#include <core/Exception.h>
-#include <core/variant/Variant.h>
-#include <string>
+        if (s == "E") {
+                d = EAST;
+        }
+        else if (s == "W") {
+                d = WEST;
+        }
+        else if (s == "S") {
+                d = SOUTH;
+        }
+        else if (s == "N") {
+                d = NORTH;
+        }
+        else {
+                throw Core::Exception (std::string ("directionFromString : unknown direction [") + s + "]!");
+        }
 
-extern Core::Variant directionFromString (std::string const &s);
-#endif
-
-#endif // DIRECTION_H
+        return Core::Variant (d);
+}

@@ -188,6 +188,7 @@ LIST (APPEND SOURCES
         "src/primitives/Color.h"
         "src/primitives/Color.cc"
         "src/primitives/Direction.h"
+        "src/primitives/Direction.cc"
         "src/customNode/ConsoleNode.h"
         "src/customNode/ConsoleNode.cc"
         "src/config/UserConfig.h"

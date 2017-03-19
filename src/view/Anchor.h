@@ -50,7 +50,7 @@ private:
         std::shared_ptr<IAnchorPositionProvider> apProvider;
 
         /// Tells which side a connector conected to this anchor should face (N,S,W,E)
-        Direction facing = EAST;
+        Direction facing = NONE;
 };
 
 typedef std::vector<std::unique_ptr<Anchor>> AnchorVector;

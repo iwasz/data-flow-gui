@@ -8,6 +8,7 @@
 
 #include "DataFlowApp.h"
 #include "primitives/Color.h"
+#include "primitives/Direction.h"
 
 /*---------------------------------------------------------------------------*/
 
@@ -27,5 +28,6 @@ std::unique_ptr<Container::BeanFactoryContainer> DataFlowApp::createContainer (P
 {
         std::unique_ptr<Container::BeanFactoryContainer> container (Container::ContainerFactory::create (metaContainer, true));
         container->addConversion (typeid (Color), new ColorEditor); // Auto delete is on.
+        container->addConversion (typeid (Direction), directionFromString);
         return container;
 }

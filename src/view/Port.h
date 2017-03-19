@@ -11,6 +11,7 @@
 
 #include "Anchor.h"
 #include "primitives/Color.h"
+#include "primitives/Direction.h"
 #include <ReflectionParserAnnotation.h>
 #include <vector>
 
@@ -24,6 +25,9 @@ class __tiliae_reflect__ Port : public Core::Object {
 public:
         virtual ~Port () {}
         virtual bool isInput () const = 0;
+
+        Direction getFacing () const { return anchor.getFacing (); }
+        void setFacing (Direction value) { anchor.setFacing (value); }
 
         float angle = 0.0;
         float size = 0.0;
