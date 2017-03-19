@@ -17,6 +17,7 @@
 
   <!-- std::vector of selected actors -->
   <ClutterActorVector id="selectedActors" />
+
   <RectangularSelector id="rectangularSelector" parent="@scale" fill="false" strokeColor="#d1d1d1ff"
         strokeDash="10" visible="false" selectable="false" />
   <RectangularSelectorStrategy id="selectionDashedRect" rectangularSelector="@rectangularSelector" selectedActors="@selectedActors" scaleLayer="@scale">
@@ -43,10 +44,13 @@
   <Rectangle scope="prototype" id="rect" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>
   <Line scope="prototype" id="line" parent="@scale" strokeColor="#0096c6c9" visible="false" strokeWidth="1"/>
 
+  <InputPort id="inputPort" scope="prototype" angle="2.6415" color="#d1d1d1ff" size="20" facing="W" />
+  <OutputPort id="outputPort" scope="prototype" angle="6.283" color="#8d8d8dff" size="20" facing="E" />
+
   <CircularNode scope="prototype" id="mathNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
-    <InputPort scope="prototype" add-to="ports" angle="2.6415" color="#d1d1d1ff" size="20" facing="W" />
-    <InputPort scope="prototype" add-to="ports" angle="3.6415" color="#d1d1d1ff" size="20" facing="W" />
-    <OutputPort scope="prototype" add-to="ports" angle="6.283" color="#8d8d8dff" size="20" facing="E" />
+    <inputPort add-to="ports" angle="2.6415" />
+    <inputPort add-to="ports" angle="3.6415" />
+    <outputPort add-to="ports" />
     <value set-as="propertyView">circularNodePropertiesView,addNodePropertiesView</value>
     <value set-as="font">48px</value>
     <value set-as="text">+</value>
@@ -70,26 +74,39 @@
   </mathNode>
 
   <CircularNode scope="prototype" id="copyNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
-    <InputPort scope="prototype" add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20" facing="W" />
-    <OutputPort scope="prototype" add-to="ports" angle="6.283" color="#8d8d8dff" size="20"  facing="E"/>
+    <inputPort add-to="ports" angle="3.1415" />
+    <outputPort add-to="ports" />
     <Copy scope="prototype" set-as="node"/>
     <value set-as="propertyView">copyNodePropertiesView</value>
+    <value set-as="font">22px</value>
+    <value set-as="text">copy</value>
+    <value set-as="fontColor">#ffffffff</value>
+  </CircularNode>
+
+  <CircularNode scope="prototype" id="testNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
+    <inputPort add-to="ports" angle="3.1415" />
+    <inputPort add-to="ports" angle="4.7124" facing="N" />
+    <outputPort add-to="ports" />
+    <outputPort add-to="ports" angle="7.85398" facing="S" />
+    <value set-as="font">22px</value>
+    <value set-as="text">test</value>
+    <value set-as="fontColor">#ff0000ff</value>
   </CircularNode>
 
   <CircularNode scope="prototype" id="consoleNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">
-    <InputPort scope="prototype" add-to="ports" angle="3.1415" color="#d1d1d1ff" size="20" facing="W"/>
+    <inputPort add-to="ports" angle="3.1415" />
     <ConsoleNode scope="prototype" set-as="node"/>
     <value set-as="propertyView">consoleNodePropertiesView</value>
   </CircularNode>
 
   <Button scope="prototype" id="buttonNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" fontColor="#ecececff" visible="false">
-    <OutputPort scope="prototype" add-to="ports" color="#8d8d8dff" size="20"  facing="E"/>
+    <outputPort add-to="ports" />
     <Copy scope="prototype" set-as="node"/>
     <value set-as="text">Button</value>
   </Button>
 
   <CircularNode scope="prototype" id="constNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">
-    <OutputPort scope="prototype" add-to="ports" angle="6.283" color="#8d8d8dff" size="20" facing="E"/>
+    <outputPort add-to="ports" />
     <Const scope="prototype" set-as="node"/>
     <value set-as="propertyView">constPropertiesView</value>
   </CircularNode>
@@ -99,15 +116,9 @@
     <Arc scope="prototype" set-as="arc"/>
   </LineConnector>
 
-  <Connector scope="prototype" id="angleConnector" parent="@scale" strokeColor="#0096c6c9" visible="false" strokeWidth="5">
+  <Connector scope="prototype" id="angleConnector" parent="@scale" strokeColor="#0096c6c9" visible="false" strokeWidth="5" selectable="false">
     <Arc scope="prototype" set-as="arc"/>
   </Connector>
-
-<!--  <Connector id="abcd" parent="@scale" strokeColor="#0096c6c9" visible="true" strokeWidth="5">
-    <value set-as="pointA">4500, 4700</value>
-    <value set-as="point1">4500, 4700</value>
-    <value set-as="pointB">5000, 5500</value>
-  </Connector>-->
 
   <!-- +===================================================+ -->
   <!-- | All the toola available.                          | -->
@@ -175,6 +186,9 @@
       </ToolI>
       <ToolI add-to="tools" name="rect" drawStrategy="@dashedRect">
         <ContainerFactoryStrategy set-as="factoryStrategy" beanName="rect" container="@#container"/>
+      </ToolI>
+      <ToolI add-to="tools" name="test" drawStrategy="@dashedRect">
+        <ContainerFactoryStrategy set-as="factoryStrategy" beanName="testNode" container="@#container"/>
       </ToolI>
     </ToolCategory>
 

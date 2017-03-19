@@ -87,25 +87,31 @@ void DashedLineConnectorStrategy::onObjectCreated (IClutterActor *a)
         assert (lc->getArc ());
         flow::Arc *arc = lc->getArc ().get ();
 
-        assert (pa->nodeView);
-        assert (pa->nodeView->getNode ());
-        flow::INode *startNode = pa->nodeView->getNode ().get ();
+        //        assert (pa->nodeView);
+        //        assert (pa->nodeView->getNode ());
 
-        assert (pb->nodeView);
-        assert (pb->nodeView->getNode ());
-        flow::INode *endNode = pb->nodeView->getNode ().get ();
+        if (pa->nodeView && pa->nodeView->getNode ()) {
+                flow::INode *startNode = pa->nodeView->getNode ().get ();
 
-        if (pa->isInput ()) {
-                startNode->setInput (pa->number, arc);
-        }
-        else {
-                startNode->addOutput (pa->number, arc);
+                if (pa->isInput ()) {
+                        startNode->setInput (pa->number, arc);
+                }
+                else {
+                        startNode->addOutput (pa->number, arc);
+                }
         }
 
-        if (pb->isInput ()) {
-                endNode->setInput (pb->number, arc);
-        }
-        else {
-                endNode->addOutput (pb->number, arc);
+        //        assert (pb->nodeView);
+        //        assert (pb->nodeView->getNode ());
+
+        if (pb->nodeView && pb->nodeView->getNode ()) {
+                flow::INode *endNode = pb->nodeView->getNode ().get ();
+
+                if (pb->isInput ()) {
+                        endNode->setInput (pb->number, arc);
+                }
+                else {
+                        endNode->addOutput (pb->number, arc);
+                }
         }
 }
