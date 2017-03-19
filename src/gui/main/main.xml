@@ -20,6 +20,8 @@
   <Stage id="stage" fillColor="#ecececff" scaleLayer="@scale"/>
 
   <MainView id="mainView" file="src/gui/main/mainView.ui" stage="@stage" loadWholeFile="true">
+    <Mapping add-to="mappings" widget="buttonStep" property="sensitive"/>
+    <Mapping add-to="mappings" widget="buttonRun" property="stock-id"/>
     <KeyPressEventAdapter add-to="signalAdapters" />
     <DimensionRestoreDecorator add-to="decorators" widget="bottomPaned" key="mainView" database="@dimensionRestoreDatabase" />
     <DimensionRestoreDecorator add-to="decorators" widget="leftPaned" key="mainView" database="@dimensionRestoreDatabase" />

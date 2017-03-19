@@ -347,7 +347,39 @@ void MainController::setProgram (flow::Program *value) { impl->program = value; 
 
 /*****************************************************************************/
 
-void MainController::onProgramRun (bool run) { impl->runProgram = run; }
+void MainController::onProgramStop ()
+{
+        impl->runProgram = false;
+        impl->program->reset ();
+        updateButtons ();
+}
+
+/*****************************************************************************/
+
+void MainController::updateButtons ()
+{
+        set ("buttonStep", Core::Variant (!impl->runProgram));
+        refresh ("buttonStep");
+
+        if (impl->runProgram) {
+                set ("buttonRun", Core::Variant ("gtk-media-pause"));
+        }
+        else {
+                set ("buttonRun", Core::Variant ("gtk-media-play"));
+        }
+
+        refresh ("buttonRun");
+}
+
+/*****************************************************************************/
+
+void MainController::onProgramRun ()
+{
+        impl->runProgram = !impl->runProgram;
+        updateButtons ();
+}
+
+void MainController::onProgramStep () { impl->program->step (); }
 
 /*****************************************************************************/
 

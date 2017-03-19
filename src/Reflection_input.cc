@@ -28,4 +28,3 @@
 #include "view/RectangularSelector.h"
 #include "view/ScaleLayer.h"
 #include "view/Stage.h"
-

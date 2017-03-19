@@ -229,14 +229,29 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkToolButton">
+              <object class="GtkToolButton" id="&gt;buttonRun">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Run program</property>
+                <property name="tooltip_text" translatable="yes">Run/pause program</property>
                 <property name="label" translatable="yes">__glade_unnamed_22</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-play</property>
-                <signal name="clicked" handler="$controller.onProgramRun (true)" swapped="no"/>
+                <signal name="clicked" handler="$controller.onProgramRun ()" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="&gt;buttonStep">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Step</property>
+                <property name="label" translatable="yes">__glade_unnamed_22</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-go-forward</property>
+                <signal name="clicked" handler="$controller.onProgramStep ()" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -247,11 +262,11 @@
               <object class="GtkToolButton">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Stop program</property>
+                <property name="tooltip_text" translatable="yes">Stop program and reset internal state of all teh nodes</property>
                 <property name="label" translatable="yes">__glade_unnamed_23</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-stop</property>
-                <signal name="clicked" handler="$controller.onProgramRun (false)" swapped="no"/>
+                <signal name="clicked" handler="$controller.onProgramStop ()" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -262,7 +277,7 @@
               <object class="GtkToolButton">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Stop program</property>
+                <property name="tooltip_text" translatable="yes">Zoom in</property>
                 <property name="label" translatable="yes">__glade_unnamed_23</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-zoom-in</property>
@@ -277,7 +292,7 @@
               <object class="GtkToolButton">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Stop program</property>
+                <property name="tooltip_text" translatable="yes">Zoom out</property>
                 <property name="label" translatable="yes">__glade_unnamed_23</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-zoom-out</property>
@@ -292,7 +307,7 @@
               <object class="GtkToolButton">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Stop program</property>
+                <property name="tooltip_text" translatable="yes">1:1 Zoom</property>
                 <property name="label" translatable="yes">__glade_unnamed_23</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-zoom-100</property>

@@ -46,7 +46,9 @@ public:
         void onNewNodeToolClicked (std::string const &name);
         void onZoom (std::string const &action);
 
-        void onProgramRun (bool run);
+        void onProgramRun ();
+        void onProgramStep ();
+        void onProgramStop ();
         void pushMessage (std::string const &msg, Event const *event);
 
         ToolCategoryVector const *getTools () const;
@@ -71,6 +73,8 @@ public:
         void onSelection (ClutterActorVector *s);
 
 private:
+        void updateButtons();
+
         struct Impl;
         Impl *impl;
 };
