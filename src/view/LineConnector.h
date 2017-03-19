@@ -26,7 +26,6 @@ public:
         virtual Direction getAFacing () const { return NONE; }
         virtual Direction getBFacing () const { return NONE; }
 
-protected:
         virtual void setAFacing (Direction value) {}
         virtual void setBFacing (Direction value) {}
 };

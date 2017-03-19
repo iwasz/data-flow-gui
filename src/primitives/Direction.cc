@@ -30,3 +30,26 @@ Core::Variant directionFromString (std::string const &s)
 
         return Core::Variant (d);
 }
+
+/*****************************************************************************/
+
+Direction getOppositeDirection (Direction d)
+{
+        switch (d) {
+        case NORTH:
+                return SOUTH;
+
+        case SOUTH:
+                return NORTH;
+
+        case WEST:
+                return EAST;
+
+        case EAST:
+                return WEST;
+
+        case NONE:
+        default:
+                return NONE;
+        }
+}

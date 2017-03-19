@@ -21,6 +21,17 @@ void DashedLineConnectorStrategy::onButtonPress (Event const &e)
 
         line->setPointA (e.positionStageCoords);
         line->setPointB (e.positionStageCoords);
+
+        AbstractConnector *lc;
+        if ((lc = dynamic_cast<AbstractConnector *> (line))) {
+                Port *pa = dynamic_cast<Port *> (startObject);
+
+                if (pa) {
+                        lc->setAFacing (pa->getFacing ());
+                        lc->setBFacing (getOppositeDirection (pa->getFacing ()));
+                }
+        }
+
         line->setVisible (true);
 }
 
