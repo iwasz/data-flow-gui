@@ -18,9 +18,6 @@ struct _IwConnectorPrivate {
         Direction aFacing;
         gfloat bx, by; // End
         Direction bFacing;
-        //        gfloat x1, y1;
-        //        gfloat x2, y2;
-        //        gfloat x3, y3;
         ClutterActor *label;
 };
 
@@ -287,7 +284,7 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
 
         cogl_path_move_to (ax, ay);
 
-//        cogl_path_arc (getX (actor, 0), getY (actor, 0), 10, 10, 0, 90);
+        //        cogl_path_arc (getX (actor, 0), getY (actor, 0), 10, 10, 0, 90);
 
         cogl_path_rel_line_to (getX (actor, 0), getY (actor, 0));
         cogl_path_rel_line_to (getX (actor, 1), getY (actor, 1));
@@ -349,8 +346,8 @@ static void iw_connector_init (IwConnector *self)
         priv->ay = 0;
         priv->bx = 0;
         priv->by = 0;
-        priv->aFacing = EAST;
-        priv->bFacing = WEST;
+        priv->aFacing = NONE;
+        priv->bFacing = NONE;
 
         priv->label = clutter_text_new ();
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->label);
@@ -454,60 +451,35 @@ void iw_connector_get_point_b (IwConnector *self, gfloat *x, gfloat *y)
 
 /*****************************************************************************/
 
-// void iw_connector_set_point_1 (IwConnector *self, gfloat x, gfloat y)
-//{
-//        g_return_if_fail (IW_IS_CONNECTOR (self));
-//        self->priv->x1 = x;
-//        self->priv->y1 = y;
-//        iw_connector_resize_accordingly (self);
-//}
+void iw_connector_set_a_facing (IwConnector *self, Direction d)
+{
+        g_return_if_fail (IW_IS_CONNECTOR (self));
+        self->priv->aFacing = d;
+}
 
-///*****************************************************************************/
+/*****************************************************************************/
 
-// void iw_connector_get_point_1 (IwConnector *self, gfloat *x, gfloat *y)
-//{
-//        g_return_if_fail (IW_IS_CONNECTOR (self));
-//        *x = self->priv->x1;
-//        *y = self->priv->y1;
-//}
+Direction iw_connector_get_a_facing (IwConnector *self)
+{
+        g_return_val_if_fail (IW_IS_CONNECTOR (self), NONE);
+        return self->priv->aFacing;
+}
 
-///*****************************************************************************/
+/*****************************************************************************/
 
-// void iw_connector_set_point_2 (IwConnector *self, gfloat x, gfloat y)
-//{
-//        g_return_if_fail (IW_IS_CONNECTOR (self));
-//        self->priv->x2 = x;
-//        self->priv->y2 = y;
-//        iw_connector_resize_accordingly (self);
-//}
+void iw_connector_set_b_facing (IwConnector *self, Direction d)
+{
+        g_return_if_fail (IW_IS_CONNECTOR (self));
+        self->priv->bFacing = d;
+}
 
-///*****************************************************************************/
+/*****************************************************************************/
 
-// void iw_connector_get_point_2 (IwConnector *self, gfloat *x, gfloat *y)
-//{
-//        g_return_if_fail (IW_IS_CONNECTOR (self));
-//        *x = self->priv->x2;
-//        *y = self->priv->y2;
-//}
-
-///*****************************************************************************/
-
-// void iw_connector_set_point_3 (IwConnector *self, gfloat x, gfloat y)
-//{
-//        g_return_if_fail (IW_IS_CONNECTOR (self));
-//        self->priv->x2 = x;
-//        self->priv->y2 = y;
-//        iw_connector_resize_accordingly (self);
-//}
-
-///*****************************************************************************/
-
-// void iw_connector_get_point_3 (IwConnector *self, gfloat *x, gfloat *y)
-//{
-//        g_return_if_fail (IW_IS_CONNECTOR (self));
-//        *x = self->priv->x2;
-//        *y = self->priv->y2;
-//}
+Direction iw_connector_get_b_facing (IwConnector *self)
+{
+        g_return_val_if_fail (IW_IS_CONNECTOR (self), NONE);
+        return self->priv->bFacing;
+}
 
 /*****************************************************************************/
 

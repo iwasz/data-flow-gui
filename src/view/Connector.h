@@ -26,15 +26,6 @@ public:
         virtual void setPointB (Point const &p);
         virtual Point getPointB () const;
 
-//        virtual void setPoint1 (Point const &p);
-//        virtual Point getPoint1 () const;
-
-//        virtual void setPoint2 (Point const &p);
-//        virtual Point getPoint2 () const;
-
-//        virtual void setPoint3 (Point const &p);
-//        virtual Point getPoint3 () const;
-
         virtual std::string getText () const;
         virtual void setText (std::string const t);
 
@@ -46,6 +37,13 @@ public:
 
         virtual bool isTextEditable () const;
         virtual void setTextEditable (bool b);
+
+        virtual Direction getAFacing () const;
+        virtual Direction getBFacing () const;
+
+protected:
+        virtual void setAFacing (Direction value);
+        virtual void setBFacing (Direction value);
 };
 
 #endif // LINECONNECTOR_H

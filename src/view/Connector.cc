@@ -47,42 +47,13 @@ Point Connector::getPointB () const
 
 /*****************************************************************************/
 
-//void Connector::setPoint1 (Point const &p) { iw_connector_set_point_1 (IW_CONNECTOR (self), p.x, p.y); }
+Direction Connector::getAFacing () const { return iw_connector_get_a_facing (IW_CONNECTOR (self)); }
+Direction Connector::getBFacing () const { return iw_connector_get_b_facing (IW_CONNECTOR (self)); }
 
-///*****************************************************************************/
+/*****************************************************************************/
 
-//Point Connector::getPoint1 () const
-//{
-//        Point p;
-//        iw_connector_get_point_1 (IW_CONNECTOR (self), &p.x, &p.y);
-//        return p;
-//}
-
-///*****************************************************************************/
-
-//void Connector::setPoint2 (Point const &p) { iw_connector_set_point_2 (IW_CONNECTOR (self), p.x, p.y); }
-
-///*****************************************************************************/
-
-//Point Connector::getPoint2 () const
-//{
-//        Point p;
-//        iw_connector_get_point_2 (IW_CONNECTOR (self), &p.x, &p.y);
-//        return p;
-//}
-
-///*****************************************************************************/
-
-//void Connector::setPoint3 (Point const &p) { iw_connector_set_point_3 (IW_CONNECTOR (self), p.x, p.y); }
-
-///*****************************************************************************/
-
-//Point Connector::getPoint3 () const
-//{
-//        Point p;
-//        iw_connector_get_point_3 (IW_CONNECTOR (self), &p.x, &p.y);
-//        return p;
-//}
+void Connector::setAFacing (Direction value) { iw_connector_set_a_facing (IW_CONNECTOR (self), value); }
+void Connector::setBFacing (Direction value) { iw_connector_set_b_facing (IW_CONNECTOR (self), value); }
 
 /*****************************************************************************/
 

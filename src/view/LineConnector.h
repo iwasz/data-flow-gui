@@ -22,6 +22,13 @@ public:
         virtual void onMoveAnchor (Point const &p, Side s);
         virtual void onDisconnectAnchor (/*Side s*/) { delete this; }
         virtual void onTextChanged (std::string const &text);
+
+        virtual Direction getAFacing () const { return NONE; }
+        virtual Direction getBFacing () const { return NONE; }
+
+protected:
+        virtual void setAFacing (Direction value) {}
+        virtual void setBFacing (Direction value) {}
 };
 
 #endif // LINECONNECTOR_H

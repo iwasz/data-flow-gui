@@ -10,6 +10,7 @@
 #define DATA_FLOW_ANCHOR_H
 
 #include "IConnector.h"
+#include "primitives/Direction.h"
 #include "primitives/Geometry.h"
 #include <memory>
 #include <vector>
@@ -38,12 +39,18 @@ public:
         Point getPosition () const { return apProvider->getPosition (); }
         void setApProvider (std::shared_ptr<IAnchorPositionProvider> value) { apProvider = value; }
 
+        Direction getFacing () const { return facing; }
+        void setFacing (Direction value) { facing = value; }
+
 private:
         void connect (IConnector *c, IConnector::Side s);
         void disconnect (IConnector *c);
 
         ConnectionVector connections;
         std::shared_ptr<IAnchorPositionProvider> apProvider;
+
+        /// Tells which side a connector conected to this anchor should face (N,S,W,E)
+        Direction facing = EAST;
 };
 
 typedef std::vector<std::unique_ptr<Anchor>> AnchorVector;

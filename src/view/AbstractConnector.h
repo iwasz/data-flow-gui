@@ -9,22 +9,32 @@
 #ifndef ABSTRACTCONNECTOR_H
 #define ABSTRACTCONNECTOR_H
 
-#include "IConnector.h"
 #include "Anchor.h"
+#include "IConnector.h"
+#include "primitives/Direction.h"
 
 /**
  * @brief The AbstractConnector class
  */
-class __tiliae_reflect__  AbstractConnector : public IConnector {
+class __tiliae_reflect__ AbstractConnector : public IConnector {
 public:
         virtual ~AbstractConnector () {}
 
         virtual void connect (Anchor *an, Side s);
         virtual void disconnect (/*Side s*/);
 
-private:
+        virtual Direction getAFacing () const = 0;
+        virtual Direction getBFacing () const = 0;
 
+protected:
+
+        virtual void setAFacing (Direction value) = 0;
+        virtual void setBFacing (Direction value) = 0;
+
+private:
+        /// Anchor at the start of the connector
         Anchor *a = nullptr;
+        /// Anchor at the start of the connector
         Anchor *b = nullptr;
 };
 
