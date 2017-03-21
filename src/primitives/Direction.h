@@ -12,6 +12,15 @@
 enum _Direction { NONE, EAST, SOUTH, WEST, NORTH };
 typedef enum _Direction Direction;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+Direction getOppositeDirection (Direction d);
+
+#ifdef __cplusplus
+}
+#endif
 
 #ifdef __cplusplus
 #include <core/Exception.h>
@@ -19,7 +28,6 @@ typedef enum _Direction Direction;
 #include <string>
 
 extern Core::Variant directionFromString (std::string const &s);
-extern Direction getOppositeDirection (Direction d);
 #endif
 
 #endif // DIRECTION_H

@@ -9,6 +9,214 @@
 #include "iw_connector.h"
 #include "drawing_stuff.h"
 #include <math.h>
+#include <memory.h>
+#include <stdbool.h>
+
+/// Ray or line segment (not a line).
+struct _Line {
+        float ax, ay, bx, by;
+        Direction direction;
+};
+
+typedef struct _Line Line;
+
+struct _Point {
+        float x, y;
+};
+
+typedef struct _Point Point;
+
+Line lineNew (float ax, float ay, float bx, float by)
+{
+        Line l;
+        l.ax = ax;
+        l.ay = ay;
+        l.bx = bx;
+        l.by = by;
+        l.direction = NONE;
+        return l;
+}
+
+Line rayNew (float ax, float ay, Direction dir)
+{
+        Line l;
+        l.ax = ax;
+        l.ay = ay;
+
+        switch (dir) {
+        case NORTH:
+                l.bx = ax;
+                l.by = -INFINITY;
+                break;
+
+        case SOUTH:
+                l.bx = ax;
+                l.by = INFINITY;
+                break;
+
+        case EAST:
+                l.bx = INFINITY;
+                l.by = ay;
+                break;
+
+        case WEST:
+                l.bx = -INFINITY;
+                l.by = ay;
+                break;
+
+        case NONE:
+        default:
+                break;
+        }
+
+        l.direction = dir;
+        return l;
+}
+
+float lineGetAx (Line const *l) { return l->ax; }
+float lineGetAy (Line const *l) { return l->ay; }
+
+float lineGetBx (Line const *l)
+{
+        return l->bx;
+
+        //        if (l->direction == NONE) {
+        //                return l->bx;
+        //        }
+
+        //        switch (l->direction) {
+        //        case NORTH:
+        //        case SOUTH:
+        //                return l->ax;
+
+        //        case EAST:
+        //                return INFINITY;
+
+        //        case WEST:
+        //                return -INFINITY;
+
+        //        case NONE:
+        //        default:
+        //                return NAN;
+        //        }
+}
+
+float lineGetBy (Line const *l)
+{
+        return l->by;
+
+        //        if (l->direction == NONE) {
+        //                return l->by;
+        //        }
+
+        //        switch (l->direction) {
+        //        case NORTH:
+        //                return INFINITY;
+
+        //        case SOUTH:
+        //                return -INFINITY;
+
+        //        case EAST:
+        //        case WEST:
+        //                return l->ay;
+
+        //        case NONE:
+        //        default:
+        //                return NAN;
+        //        }
+}
+
+/// Tells if Line is a ray.
+bool isRay (Line const *l) { return l->direction != NONE; }
+
+/// Returns if two rays facing one another overlays.
+bool raysConnect (Line const *a, Line const *b, Point *pointOfConnection)
+{
+        // Consider only rays
+        if (!isRay (a) || !isRay (b)) {
+                return false;
+        }
+
+        // Only rays facing eachother will be taken into account.
+        if (a->direction != getOppositeDirection (b->direction)) {
+                return false;
+        }
+
+        printf ("%f, %f, %f, %f\n", a->ax, b->ax, a->ax, b->ax);
+
+        // Only facing each other
+        if ((a->direction == NORTH && a->ay < b->ay) || (a->direction == SOUTH && a->ay > b->ay) || (a->direction == EAST && a->ax > b->ax)
+            || (a->direction == WEST && a->ax < b->ax)) {
+                return false;
+        }
+
+        printf ("!");
+
+        // If vertical
+        if (a->direction == NORTH || a->direction == SOUTH) {
+                pointOfConnection->x = a->ax;
+                pointOfConnection->y = fabs (a->ay - b->ay) / 2.0;
+                return (a->ax == b->ax);
+        }
+        else if (a->direction == WEST || a->direction == EAST) {
+                pointOfConnection->x = fabs (a->ax - b->ax) / 2.0;
+                pointOfConnection->y = a->ay;
+                return (a->ay == b->ay);
+        }
+
+        return false;
+}
+
+/// Returns if two perpendicullar rays cross (at right angle).
+bool raysCross (Line const *a, Line const *b, Point *pointOfCrossing)
+{
+        // Consider only rays
+        if (!isRay (a) || !isRay (b)) {
+                return false;
+        }
+
+        float aax = lineGetAx (a);
+        float aay = lineGetAy (a);
+        float abx = lineGetBx (a);
+        float aby = lineGetBy (a);
+        float bax = lineGetAx (b);
+        float bay = lineGetAy (b);
+        float bbx = lineGetBx (b);
+        float bby = lineGetBy (b);
+
+        // Normalised coordinates of horizontal ray. Point A is on the left, point B is on the right.
+        float hax, hay, hbx, hby;
+        // Normalised coordinates of vertical ray. Point A is on the top, point B is on the bottom.
+        float vax, vay, vbx, vby;
+
+        if (a->direction == NORTH || a->direction == SOUTH) {
+                vax = aax;
+                vay = fmin (aay, aby);
+                vbx = aax;
+                vby = fmax (aay, aby);
+        }
+        else {
+                hax = fmin (aax, abx);
+                hay = aay;
+                hbx = fmax (aax, abx);
+                hby = aay;
+        }
+
+        if (b->direction == NORTH || b->direction == SOUTH) {
+                vax = bax;
+                vay = fmin (bay, bby);
+                vbx = bax;
+                vby = fmax (bay, bby);
+        }
+        else {
+                hax = fmin (bax, bbx);
+                hay = bay;
+                hbx = fmax (bax, bbx);
+                hby = bay;
+        }
+
+        return (hay >= vay && hay <= vby) && (vax >= hax && vax <= hbx);
+}
 
 G_DEFINE_TYPE (IwConnector, iw_connector, IW_TYPE_ACTOR);
 #define IW_CONNECTOR_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IW_TYPE_CONNECTOR, IwConnectorPrivate))
@@ -261,6 +469,12 @@ gfloat getY (ClutterActor *actor, int segment)
 
 /*****************************************************************************/
 
+void addPoint (Point *pointsFromB, float bx, float by, int *pFBCnt)
+{
+        pointsFromB[*pFBCnt].x = bx;
+        pointsFromB[(*pFBCnt)++].y = by;
+}
+
 static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *color, gboolean fill)
 {
         ClutterActorBox allocation = {
@@ -277,11 +491,14 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
 
         float lw = iw_actor_get_stroke_width (IW_ACTOR (actor));
 
-        float ax = IW_CONNECTOR (actor)->priv->ax - allocation.x1;
-        float ay = IW_CONNECTOR (actor)->priv->ay - allocation.y1;
-        float bx = IW_CONNECTOR (actor)->priv->bx - allocation.x1;
-        float by = IW_CONNECTOR (actor)->priv->by - allocation.y1;
+        float ax = IW_CONNECTOR (actor)->priv->ax /*- allocation.x1*/;
+        float ay = IW_CONNECTOR (actor)->priv->ay /*- allocation.y1*/;
+        float bx = IW_CONNECTOR (actor)->priv->bx /*- allocation.x1*/;
+        float by = IW_CONNECTOR (actor)->priv->by /*- allocation.y1*/;
+        Direction aDir = IW_CONNECTOR (actor)->priv->aFacing;
+        Direction bDir = IW_CONNECTOR (actor)->priv->bFacing;
 
+#if 0
         cogl_path_move_to (ax, ay);
 
         //        cogl_path_arc (getX (actor, 0), getY (actor, 0), 10, 10, 0, 90);
@@ -293,6 +510,42 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
         cogl_path_rel_line_to (getX (actor, 4), getY (actor, 4));
         cogl_path_rel_line_to (getX (actor, 3), getY (actor, 3));
         cogl_path_stroke ();
+#endif
+
+        Line s0 = rayNew (ax, ay, aDir);
+        Line s4 = rayNew (bx, by, bDir);
+
+        // printf ("%f, %f, %f, %f\n", ax, ay, bx, by);
+                printf ("%d, %d\n", aDir, bDir);
+
+        // Todo decrease number of elements
+        Point pointsFromA[10];
+        Point pointsFromB[10];
+
+        //        bzero (&pointsFromA, sizeof (pointsFromA) * sizeof (Point));
+        //        bzero (&pointsFromB, sizeof (pointsFromB) * sizeof (Point));
+
+        int pFACnt = 0;
+        int pFBCnt = 0;
+
+        Point p;
+        if (raysCross (&s0, &s4, &p) || raysConnect (&s0, &s4, &p)) {
+                addPoint (pointsFromA, p.x, p.y, &pFACnt);
+                addPoint (pointsFromB, p.x, p.y, &pFBCnt);
+                //                printf (".");
+        }
+
+        cogl_path_move_to (ax, ay);
+
+        for (int i = 0; i < pFACnt; ++i) {
+                cogl_path_line_to (pointsFromA[i].x, pointsFromA[i].y);
+        }
+
+        cogl_path_move_to (bx, by);
+
+        for (int i = 0; i < pFBCnt; ++i) {
+                cogl_path_line_to (pointsFromB[i].x, pointsFromB[i].y);
+        }
 
         for (ClutterActor *iter = clutter_actor_get_first_child (actor); iter != NULL; iter = clutter_actor_get_next_sibling (iter)) {
                 clutter_actor_paint (iter);
