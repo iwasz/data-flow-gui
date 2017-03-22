@@ -53,3 +53,5 @@ Direction getOppositeDirection (Direction d)
                 return NONE;
         }
 }
+
+
