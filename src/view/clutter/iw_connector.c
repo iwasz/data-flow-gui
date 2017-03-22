@@ -256,7 +256,7 @@ Line rayPerpendicular (Line const *perpendicularTo, Point const *towardsPoint, P
 {
         Direction ld;
 
-        if (isVertical(perpendicularTo)) {
+        if (isVertical (perpendicularTo)) {
                 ld = (towardsPoint->x > perpendicularTo->ax) ? (EAST) : (WEST);
                 return rayNew (startPoint->x, startPoint->y, ld);
         }
@@ -329,10 +329,9 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
         if (raysCross (&s0, &s5, &p) || raysConnect (&s0, &s5, &p)) {
                 addPoint (pointsFromA, p.x, p.y, &pFACnt);
                 addPoint (pointsFromB, p.x, p.y, &pFBCnt);
-                printf (".");
         }
 
-        // Step 2. Compute segments s1 and s4 if s0 and s5 did not cross.
+        // Step 2.0 Compute segments s1 and s4 if s0 and s5 did not cross.
         else {
                 // Ray s1
                 float d = distance (&a, &b, s0.direction);
@@ -361,6 +360,55 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
 
                 addPoint (pointsFromB, p.x, p.y, &pFBCnt);
                 s4 = rayPerpendicular (&s5 /*Perpendicular to*/, &a /*Towards point*/, &p /*Starting at point*/);
+
+                // Step 2.1
+                if (raysCross (&s1, &s4, &p) || raysConnect (&s1, &s4, &p)) {
+                        addPoint (pointsFromA, p.x, p.y, &pFACnt);
+                        addPoint (pointsFromB, p.x, p.y, &pFBCnt);
+                }
+                else {
+                        a.x = s1.ax;
+                        a.y = s1.ay;
+                        b.x = s4.ax;
+                        b.y = s4.ay;
+
+                        // Ray s2
+                        float d = distance (&a, &b, s1.direction);
+                        p = advance (&a, s1.direction, MIN_SEGMENT_LENGTH);
+
+                        // Compare distance between head and tail before and after the advance.
+                        if (distance (&p, &b, s1.direction) < d) { // If distance decreased
+                                // Make right turn in half the way between a and b.
+                                p = advance (&a, s1.direction, d / 2);
+                        }
+                        // ELSE (distance increased or stayed the same) Make right turn in point p (MIN_SEGMENT_LENGTH distance from a).
+
+                        addPoint (pointsFromA, p.x, p.y, &pFACnt);
+                        s2 = rayPerpendicular (&s1 /*Perpendicular to*/, &b /*Towards point*/, &p /*Starting at point*/);
+
+                        // Ray s3
+                        d = distance (&b, &a, s4.direction);
+                        p = advance (&b, s4.direction, MIN_SEGMENT_LENGTH);
+
+                        // Compare distance between head and tail before and after the advance.
+                        if (distance (&p, &a, s4.direction) < d) { // If distance decreased
+                                // Make right turn in half the way between a and b.
+                                p = advance (&b, s4.direction, d / 2);
+                        }
+                        // ELSE (distance increased or stayed the same) Make right turn in point p (MIN_SEGMENT_LENGTH distance from a).
+
+                        addPoint (pointsFromB, p.x, p.y, &pFBCnt);
+                        s3 = rayPerpendicular (&s4 /*Perpendicular to*/, &a /*Towards point*/, &p /*Starting at point*/);
+
+                        // Step 2.1
+                        if (raysCross (&s2, &s3, &p) || raysConnect (&s2, &s3, &p)) {
+                                addPoint (pointsFromA, p.x, p.y, &pFACnt);
+                                addPoint (pointsFromB, p.x, p.y, &pFBCnt);
+                        }
+                        else {
+                                printf ("Warning! Rays mismatch!");
+                        }
+                }
         }
 
         /// Step x. Draw.
