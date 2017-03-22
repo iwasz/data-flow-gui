@@ -333,10 +333,9 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
                 addPoint (pointsFromB, p.x, p.y, &pFBCnt);
         }
 
+        // Sum of angles 0 (number of angles 0, 2, 4)
+        // Step 2.0 Compute segments s1 and s4 if s0 and s5 did not cross.
         else {
-
-                // Sum of angles 180 (number of angles 2)
-                //        else {
                 // Ray s1
                 float d = distance (&a, &b, s0.direction);
                 p = advance (&a, s0.direction, MIN_SEGMENT_LENGTH);
@@ -349,13 +348,13 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
                 }
                 // ELSE (distance increased or stayed the same) Make right turn in point p (MIN_SEGMENT_LENGTH distance from a).
 
-                t1 = p;
+                addPoint (pointsFromA, p.x, p.y, &pFACnt);
                 s1 = rayPerpendicular (&s0 /*Perpendicular to*/, &b /*Towards point*/, &p /*Starting at point*/);
 
                 // Ray s4
-                d = distance (&b, &t1, s5.direction);
+                d = distance (&b, &a, s5.direction);
                 p = advance (&b, s5.direction, MIN_SEGMENT_LENGTH);
-                d2 = distance (&p, &t1, s5.direction);
+                d2 = distance (&p, &a, s5.direction);
 
                 // Compare distance between head and tail before and after the advance.
                 if (d2 < d) { // If distance decreased
@@ -364,106 +363,65 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
                 }
                 // ELSE (distance increased or stayed the same) Make right turn in point p (MIN_SEGMENT_LENGTH distance from a).
 
-                t2 = p;
+                addPoint (pointsFromB, p.x, p.y, &pFBCnt);
                 s4 = rayPerpendicular (&s5 /*Perpendicular to*/, &a /*Towards point*/, &p /*Starting at point*/);
 
+                // Step 2.1
+                if (raysConnect (&s1, &s4, &p)) {
+                        addPoint (pointsFromA, p.x, p.y, &pFACnt);
+                        addPoint (pointsFromB, p.x, p.y, &pFBCnt);
+                }
                 if (raysCross (&s1, &s5, &p)) {
-                        addPoint (pointsFromA, t1.x, t1.y, &pFACnt);
-                        addPoint (pointsFromB, t2.x, t2.y, &pFBCnt);
-
                         // Special case 1 : sum of angles = 180
                         addPoint (pointsFromA, p.x, p.y, &pFACnt);
                         addPoint (pointsFromA, b.x, b.y, &pFACnt);
                 }
                 else if (raysCross (&s4, &s0, &p)) {
-                        addPoint (pointsFromA, t1.x, t1.y, &pFACnt);
-                        addPoint (pointsFromB, t2.x, t2.y, &pFBCnt);
-
                         // Special case 2 : sum of angles = 180
                         addPoint (pointsFromB, p.x, p.y, &pFBCnt);
                         addPoint (pointsFromB, a.x, a.y, &pFBCnt);
                 }
-
-                // Sum of angles 0 (number of angles 0, 2, 4)
-                // Step 2.0 Compute segments s1 and s4 if s0 and s5 did not cross.
                 else {
-                        // Ray s1
-                        float d = distance (&a, &b, s0.direction);
-                        p = advance (&a, s0.direction, MIN_SEGMENT_LENGTH);
-                        float d2 = distance (&p, &b, s0.direction);
+                        a.x = s1.ax;
+                        a.y = s1.ay;
+                        b.x = s4.ax;
+                        b.y = s4.ay;
+
+                        // Ray s2
+                        float d = distance (&a, &b, s1.direction);
+                        p = advance (&a, s1.direction, MIN_SEGMENT_LENGTH);
 
                         // Compare distance between head and tail before and after the advance.
-                        if (d2 < d) { // If distance decreased
+                        if (distance (&p, &b, s1.direction) < d) { // If distance decreased
                                 // Make right turn in half the way between a and b.
-                                p = advance (&a, s0.direction, d / 2.0);
+                                p = advance (&a, s1.direction, d / 2.0);
                         }
                         // ELSE (distance increased or stayed the same) Make right turn in point p (MIN_SEGMENT_LENGTH distance from a).
 
                         addPoint (pointsFromA, p.x, p.y, &pFACnt);
-                        s1 = rayPerpendicular (&s0 /*Perpendicular to*/, &b /*Towards point*/, &p /*Starting at point*/);
+                        s2 = rayPerpendicular (&s1 /*Perpendicular to*/, &b /*Towards point*/, &p /*Starting at point*/);
 
-                        // Ray s4
-                        d = distance (&b, &a, s5.direction);
-                        p = advance (&b, s5.direction, MIN_SEGMENT_LENGTH);
-                        d2 = distance (&p, &a, s5.direction);
+                        // Ray s3
+                        d = distance (&b, &a, s4.direction);
+                        p = advance (&b, s4.direction, MIN_SEGMENT_LENGTH);
 
                         // Compare distance between head and tail before and after the advance.
-                        if (d2 < d) { // If distance decreased
+                        if (distance (&p, &a, s4.direction) < d) { // If distance decreased
                                 // Make right turn in half the way between a and b.
-                                p = advance (&b, s5.direction, d / 2.0);
+                                p = advance (&b, s4.direction, d / 2.0);
                         }
                         // ELSE (distance increased or stayed the same) Make right turn in point p (MIN_SEGMENT_LENGTH distance from a).
 
                         addPoint (pointsFromB, p.x, p.y, &pFBCnt);
-                        s4 = rayPerpendicular (&s5 /*Perpendicular to*/, &a /*Towards point*/, &p /*Starting at point*/);
+                        s3 = rayPerpendicular (&s4 /*Perpendicular to*/, &a /*Towards point*/, &p /*Starting at point*/);
 
                         // Step 2.1
-                        if (raysConnect (&s1, &s4, &p)) {
+                        if (raysCross (&s2, &s3, &p) || raysConnect (&s2, &s3, &p)) {
                                 addPoint (pointsFromA, p.x, p.y, &pFACnt);
                                 addPoint (pointsFromB, p.x, p.y, &pFBCnt);
                         }
                         else {
-                                a.x = s1.ax;
-                                a.y = s1.ay;
-                                b.x = s4.ax;
-                                b.y = s4.ay;
-
-                                // Ray s2
-                                float d = distance (&a, &b, s1.direction);
-                                p = advance (&a, s1.direction, MIN_SEGMENT_LENGTH);
-
-                                // Compare distance between head and tail before and after the advance.
-                                if (distance (&p, &b, s1.direction) < d) { // If distance decreased
-                                        // Make right turn in half the way between a and b.
-                                        p = advance (&a, s1.direction, d / 2.0);
-                                }
-                                // ELSE (distance increased or stayed the same) Make right turn in point p (MIN_SEGMENT_LENGTH distance from a).
-
-                                addPoint (pointsFromA, p.x, p.y, &pFACnt);
-                                s2 = rayPerpendicular (&s1 /*Perpendicular to*/, &b /*Towards point*/, &p /*Starting at point*/);
-
-                                // Ray s3
-                                d = distance (&b, &a, s4.direction);
-                                p = advance (&b, s4.direction, MIN_SEGMENT_LENGTH);
-
-                                // Compare distance between head and tail before and after the advance.
-                                if (distance (&p, &a, s4.direction) < d) { // If distance decreased
-                                        // Make right turn in half the way between a and b.
-                                        p = advance (&b, s4.direction, d / 2.0);
-                                }
-                                // ELSE (distance increased or stayed the same) Make right turn in point p (MIN_SEGMENT_LENGTH distance from a).
-
-                                addPoint (pointsFromB, p.x, p.y, &pFBCnt);
-                                s3 = rayPerpendicular (&s4 /*Perpendicular to*/, &a /*Towards point*/, &p /*Starting at point*/);
-
-                                // Step 2.1
-                                if (raysCross (&s2, &s3, &p) || raysConnect (&s2, &s3, &p)) {
-                                        addPoint (pointsFromA, p.x, p.y, &pFACnt);
-                                        addPoint (pointsFromB, p.x, p.y, &pFBCnt);
-                                }
-                                else {
-                                        printf ("Warning! Rays mismatch!");
-                                }
+                                printf ("Warning! Rays mismatch!");
                         }
                 }
         }
