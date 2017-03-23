@@ -10,17 +10,24 @@
 #define GEOMETRY_DF_POINT_H
 
 #include <ReflectionParserAnnotation.h>
+#include <limits>
 #include <string>
+#include <vector>
 
 struct __tiliae_reflect__ Point {
         Point () : x (0), y (0) {}
         Point (float x, float y) : x (x), y (y) {}
         Point (std::string const &s);
+        bool isValid () const { return x != std::numeric_limits<float>::infinity () && y != std::numeric_limits<float>::infinity (); }
         float x;
         float y;
 };
 
+const Point INVALID_POINT = Point (std::numeric_limits<float>::infinity (), std::numeric_limits<float>::infinity ());
+
 extern std::ostream &operator<< (std::ostream &o, Point const &p);
+
+typedef std::vector<Point> PointVector;
 
 struct __tiliae_reflect__ Dimension {
         Dimension () : width (0), height (0) {}
