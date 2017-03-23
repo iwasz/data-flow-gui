@@ -13,9 +13,16 @@
 PointVector ConnectorSolver::solve (Ray const &a, Ray const &b)
 {
         PointVector v;
-        v.push_back(Point (0, 0));
-        v.push_back(Point (0, 100));
-        v.push_back(Point (100, 100));
+        v.push_back (a.getA ());
+        Point p;
+
+        // Sum of angles 90 (number of angles 1)
+        if ((p = a.isCrossing (b)) || (p = a.isConnection (b))) {
+                // Special case : right angle.
+                v.push_back (p);
+        }
+
+        v.push_back (b.getA ());
         return v;
 }
 

@@ -18,7 +18,10 @@ struct __tiliae_reflect__ Point {
         Point () : x (0), y (0) {}
         Point (float x, float y) : x (x), y (y) {}
         Point (std::string const &s);
+
         bool isValid () const { return x != std::numeric_limits<float>::infinity () && y != std::numeric_limits<float>::infinity (); }
+        operator bool() const { return isValid (); }
+
         float x;
         float y;
 };
