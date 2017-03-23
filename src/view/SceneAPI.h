@@ -15,6 +15,9 @@
 #include <container/Container.h>
 #include <string>
 
+class LineConnector;
+class Port;
+
 /**
  * Main entry point for creating objects on stage, both as a response to user GUI actions
  * and programmaticaly for example reading a file.
@@ -26,6 +29,7 @@ public:
 
         /// Creates an onject. Do not delete, managed by SceneAPI.
         IClutterActor *create (std::string const &toolName);
+        void connect (LineConnector *lc, Port *pa, Port *pb);
 
         Container::BeanFactoryContainer *getContainer () const;
         void setContainer (Container::BeanFactoryContainer *value);

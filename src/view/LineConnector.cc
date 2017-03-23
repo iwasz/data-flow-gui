@@ -14,6 +14,21 @@ LineConnector::LineConnector () : Line (), AbstractConnector () {}
 
 /*****************************************************************************/
 
+void LineConnector::setParent (IClutterActor *p)
+{
+        Line::setParent (p);
+
+        /*
+         * Move to bottom. I don't want this to be separate method of AbstractActor to preven polution.
+         * TODO Moving to bottom somehow decreases refresh rate when moving nodes around. It can be seen that
+         * connector moves slower than the node it is connected to.
+         */
+        ClutterActor *parent = clutter_actor_get_parent (getActor ());
+        clutter_actor_set_child_below_sibling (parent, getActor (), nullptr);
+}
+
+/*****************************************************************************/
+
 void LineConnector::onMoveAnchor (const Point &p, Side s)
 {
         if (s == A) {

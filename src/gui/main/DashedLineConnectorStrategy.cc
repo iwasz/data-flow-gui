@@ -59,19 +59,16 @@ void DashedLineConnectorStrategy::onObjectCreated (IClutterActor *a)
                 throw Core::Exception ("DashedLineStrategy::reshape could not cast actor to Line *");
         }
 
-        /*
-         * Move to bottom. I don't want this to be separate method of AbstractActor to preven polution.
-         * TODO Moving to bottom somehow decreases refresh rate when moving nodes around. It can be seen that
-         * connector moves slower than the node it is connected to.
-         */
-        ClutterActor *parent = clutter_actor_get_parent (lc->getActor ());
-        clutter_actor_set_child_below_sibling (parent, lc->getActor (), nullptr);
-
         lc->setPointA (startPoint);
         lc->setPointB (endPoint);
 
+
+
+
         Port *pa = dynamic_cast<Port *> (startObject);
         Port *pb = dynamic_cast<Port *> (endObject);
+
+
 
         if (!pa || !pb) {
                 return;

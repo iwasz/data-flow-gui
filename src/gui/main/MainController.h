@@ -74,6 +74,7 @@ public:
 
         void onKeyPress (unsigned int key);
         void onSelection (ClutterActorVector *s);
+        void onOpen ();
 
 private:
         void updateButtons();

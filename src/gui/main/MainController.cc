@@ -13,6 +13,8 @@
 #include "gui/console/ConsoleBuffer.h"
 #include "gui/main/RectangularSelectorStrategy.h"
 #include "gui/properties/PropertiesController.h"
+#include "view/INodeView.h"
+#include "view/LineConnector.h"
 #include "view/Rectangle.h"
 #include "view/RectangularSelector.h"
 #include "view/ScaleLayer.h"
@@ -65,8 +67,6 @@ struct MainController::Impl {
                 std::string currentTool;
                 /// Draw strategy draws shapes just prior to actual object creation.
                 IDrawStrategy *currentDrawStrategy = nullptr;
-                /// This strategy creates the object we are drawing.
-                IFactoryStrategy *currentFactoryStrategy = nullptr;
                 ISelectorStrategy *currentSelectorStrategy = nullptr;
 
                 // TODO remove encapsulate.
@@ -98,7 +98,6 @@ void MainController::Impl::configureMachine ()
                 ->entry ([this] (const char *, void *arg) {
                         vars.currentTool = "";
                         vars.currentDrawStrategy = nullptr;
-                        vars.currentFactoryStrategy = nullptr;
                         return true;
                 })
                 ->transition (TOOL_SELECTED)->when (eq ("selected.tool"))
@@ -119,7 +118,6 @@ void MainController::Impl::configureMachine ()
                 ->transition (SELECT)->when (eq ("stage.press"))->then ([this] (const char *, void *arg) {
                         vars.currentTool = "select";
                         vars.currentDrawStrategy = toolContainer->getToolMap()[vars.currentTool]->drawStrategy;
-                        vars.currentFactoryStrategy = toolContainer->getToolMap()[vars.currentTool]->factoryStrategy;
                         vars.currentSelectorStrategy = toolContainer->getToolMap()[vars.currentTool]->selectorStrategy;
                         vars.currentDrawStrategy->onButtonPress (*static_cast <Event *> (arg));
                         return true;
@@ -154,7 +152,6 @@ void MainController::Impl::configureMachine ()
                         }
 
                         vars.currentDrawStrategy = toolMap[vars.currentTool]->drawStrategy;
-                        vars.currentFactoryStrategy = toolMap[vars.currentTool]->factoryStrategy;
                         return true;
                 })
                 ->transition (TOOL_SELECTED)->when (eq ("selected.tool"))
@@ -435,6 +432,36 @@ void MainController::onSelection (ClutterActorVector *s) { impl->propertiesContr
 /*****************************************************************************/
 
 PropertiesController *MainController::getPropertiesController () { return impl->propertiesController; }
+
+/*****************************************************************************/
+
+void MainController::onOpen ()
+{
+        SceneAPI *s = impl->sceneAPI;
+        IClutterActor *actor = nullptr;
+        actor = s->create ("addNode");
+        actor->setPosition (Point (4800, 5000));
+        actor->setSize (Dimension (100, 100));
+        actor->setVisible (true);
+        INodeView *nodeViewA = dynamic_cast<INodeView *> (actor);
+
+        actor = s->create ("copyNode");
+        actor->setPosition (Point (5000, 5000));
+        actor->setSize (Dimension (100, 100));
+        actor->setVisible (true);
+        INodeView *nodeViewB = dynamic_cast<INodeView *> (actor);
+
+        // Ports
+        Port *pa = nodeViewA->getPorts ()[2].get ();
+        Port *pb = nodeViewB->getPorts ()[0].get ();
+
+        // Connection
+        actor = s->create ("lineConnector");
+        actor->setVisible (true);
+        LineConnector *lc = dynamic_cast<LineConnector *> (actor);
+
+        s->connect (lc, pa, pb);
+}
 
 /*****************************************************************************/
 

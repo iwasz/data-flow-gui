@@ -7,8 +7,11 @@
  ****************************************************************************/
 
 #include "SceneAPI.h"
+#include "LineConnector.h"
+#include "Port.h"
 #include "gui/main/IFactoryStrategy.h"
 #include <core/variant/Cast.h>
+#include <view/INodeView.h>
 
 struct SceneAPI::Impl {
         Container::BeanFactoryContainer *container = nullptr;
@@ -42,6 +45,47 @@ IClutterActor *SceneAPI::create (std::string const &toolName)
         }
 
         return a;
+}
+
+/*****************************************************************************/
+
+void SceneAPI::connect (LineConnector *lc, Port *pa, Port *pb)
+{
+        if (!pa || !pb) {
+                return;
+        }
+
+        lc->connect (&pa->anchor, IConnector::A);
+        lc->connect (&pb->anchor, IConnector::B);
+
+        /*****************************************************************************/
+        /* Connect flow::INodes                                                      */
+        /*****************************************************************************/
+
+        assert (lc->getArc ());
+        flow::Arc *arc = lc->getArc ().get ();
+
+        if (pa->nodeView && pa->nodeView->getNode ()) {
+                flow::INode *startNode = pa->nodeView->getNode ().get ();
+
+                if (pa->isInput ()) {
+                        startNode->setInput (pa->number, arc);
+                }
+                else {
+                        startNode->addOutput (pa->number, arc);
+                }
+        }
+
+        if (pb->nodeView && pb->nodeView->getNode ()) {
+                flow::INode *endNode = pb->nodeView->getNode ().get ();
+
+                if (pb->isInput ()) {
+                        endNode->setInput (pb->number, arc);
+                }
+                else {
+                        endNode->addOutput (pb->number, arc);
+                }
+        }
 }
 
 /*****************************************************************************/
