@@ -7,7 +7,7 @@
 
   <Program id="program"/>
 
-  <MainController id="mainController" loopDelayMs="5" program="@program" tools="@tools">
+  <MainController id="mainController" loopDelayMs="5" program="@program" toolContainer="@toolContainer" sceneApi="@sceneApi">
     <ref set-as="rectangularSelector" bean="rectangularSelector"/>
     <ref set-as="selectedActors" bean="selectedActors"/>
     <ref set-as="stage" bean="stage"/>

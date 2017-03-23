@@ -194,4 +194,6 @@
 
   </ToolCategoryVector>
 
+  <ToolContainer id="toolContainer" tools="@tools" />
+
 </beans>

@@ -16,6 +16,7 @@
 #include "view/Rectangle.h"
 #include "view/RectangularSelector.h"
 #include "view/ScaleLayer.h"
+#include "view/SceneAPI.h"
 #include "view/Stage.h"
 #include <App.h>
 #include <Logging.h>
@@ -54,9 +55,9 @@ struct MainController::Impl {
         Stage *stage = nullptr;
         Event event; // Tempporary for some handlers.
         ClutterActorVector *selectedActors = nullptr;
-        ToolCategoryVector *tools = nullptr;
-        ToolMap toolMap;
+        ToolContainer *toolContainer = nullptr;
         PropertiesController *propertiesController = nullptr;
+        SceneAPI *sceneAPI = nullptr;
 
         /// Additional state. Used directly in the drawing events (onMove, onRelease).
         struct {
@@ -117,16 +118,16 @@ void MainController::Impl::configureMachine ()
                 })
                 ->transition (SELECT)->when (eq ("stage.press"))->then ([this] (const char *, void *arg) {
                         vars.currentTool = "select";
-                        vars.currentDrawStrategy = toolMap[vars.currentTool]->drawStrategy;
-                        vars.currentFactoryStrategy = toolMap[vars.currentTool]->factoryStrategy;
-                        vars.currentSelectorStrategy = toolMap[vars.currentTool]->selectorStrategy;
+                        vars.currentDrawStrategy = toolContainer->getToolMap()[vars.currentTool]->drawStrategy;
+                        vars.currentFactoryStrategy = toolContainer->getToolMap()[vars.currentTool]->factoryStrategy;
+                        vars.currentSelectorStrategy = toolContainer->getToolMap()[vars.currentTool]->selectorStrategy;
                         vars.currentDrawStrategy->onButtonPress (*static_cast <Event *> (arg));
                         return true;
                 })
                 ->transition (MOVE)->when (eq ("object.press"))->then ([this] (const char *, void *arg) {
                         vars.currentTool = "select";
-                        vars.currentDrawStrategy = toolMap[vars.currentTool]->drawStrategy;
-                        vars.currentSelectorStrategy = toolMap[vars.currentTool]->selectorStrategy;
+                        vars.currentDrawStrategy = toolContainer->getToolMap()[vars.currentTool]->drawStrategy;
+                        vars.currentSelectorStrategy = toolContainer->getToolMap()[vars.currentTool]->selectorStrategy;
                         Event *args = static_cast <Event *> (arg);
 
                         if (std::find (selectedActors->cbegin (), selectedActors->cend (), args->object) == selectedActors->cend ()) {
@@ -147,6 +148,7 @@ void MainController::Impl::configureMachine ()
                         Event *args = static_cast <Event *> (arg);
                         vars.currentTool = args->tool;
 
+                        ToolMap &toolMap = toolContainer->getToolMap ();
                         if (toolMap.find (vars.currentTool) == toolMap.end ()) {
                                 throw Core::Exception ("No such tool : [" + vars.currentTool + "]");
                         }
@@ -176,12 +178,7 @@ void MainController::Impl::configureMachine ()
                                 return true;
                         }
 
-                        IClutterActor *a = nullptr;
-                        if (vars.currentFactoryStrategy) {
-                                Core::Variant v = vars.currentFactoryStrategy->run (*args);
-                                a = ocast <IClutterActor *> (v);
-                        }
-
+                        IClutterActor *a = sceneAPI->create(vars.currentTool);
                         vars.currentDrawStrategy->onObjectCreated (a);
 
                         if (a) {
@@ -415,20 +412,11 @@ void MainController::setStage (Stage *value)
 
 /*****************************************************************************/
 
-ToolCategoryVector const *MainController::getTools () const { return impl->tools; }
+const ToolContainer *MainController::getToolContainer () const { return impl->toolContainer; }
 
 /*****************************************************************************/
 
-void MainController::setTools (ToolCategoryVector *value)
-{
-        impl->tools = value;
-
-        for (ToolCategory *category : *impl->tools) {
-                for (Tool *tool : category->tools) {
-                        impl->toolMap[tool->name] = tool;
-                }
-        }
-}
+void MainController::setToolContainer (ToolContainer *value) { impl->toolContainer = value; }
 
 /*****************************************************************************/
 
@@ -451,6 +439,7 @@ PropertiesController *MainController::getPropertiesController () { return impl->
 /*****************************************************************************/
 
 void MainController::setPropertiesController (PropertiesController *p) { impl->propertiesController = p; }
+void MainController::setSceneApi (SceneAPI *api) { impl->sceneAPI = api; }
 
 /****************************************************************************/
 /* State machine low lewel deps.                                            */

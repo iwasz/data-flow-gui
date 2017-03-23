@@ -25,6 +25,7 @@ struct IDrawStrategy;
 struct IFactoryStrategy;
 class ConsoleBuffer;
 class PropertiesController;
+class SceneAPI;
 namespace flow {
 class Program;
 }
@@ -51,8 +52,8 @@ public:
         void onProgramStop ();
         void pushMessage (std::string const &msg, Event const *event);
 
-        ToolCategoryVector const *getTools () const;
-        void setTools (ToolCategoryVector *value);
+        ToolContainer const *getToolContainer () const;
+        void setToolContainer (ToolContainer *value);
 
         flow::Program *getProgram () const;
         void setProgram (flow::Program *value);
@@ -68,6 +69,8 @@ public:
 
         PropertiesController *getPropertiesController ();
         void setPropertiesController (PropertiesController *p);
+
+        void setSceneApi (SceneAPI *api);
 
         void onKeyPress (unsigned int key);
         void onSelection (ClutterActorVector *s);
