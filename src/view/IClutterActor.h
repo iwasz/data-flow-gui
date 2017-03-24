@@ -9,6 +9,7 @@
 #ifndef CLUTTER_ICONTAINER_H
 #define CLUTTER_ICONTAINER_H
 
+#include "file/IDataFile.h"
 #include "primitives/Color.h"
 #include "primitives/Geometry.h"
 #include <ReflectionParserAnnotation.h>
@@ -61,6 +62,9 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
         virtual Point convertToScaleLayer (Point const &p) const = 0;
 
         virtual Core::StringVector getPropertyViews () const = 0;
+
+        /// Save/load files
+        virtual std::string visit (IDataFile *, IDataFile::Operation o) = 0;
 };
 
 typedef __tiliae_reflect__ std::vector<IClutterActor *> ClutterActorVector;

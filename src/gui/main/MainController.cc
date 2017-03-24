@@ -465,6 +465,18 @@ void MainController::onOpen ()
 
 /*****************************************************************************/
 
+// TODO remove
+IDataFile *ff;
+void MainController::setDataFile (IDataFile *f) { ff = f; }
+
+void MainController::onSave ()
+{
+//        SceneAPI *s = impl->sceneAPI;
+        ff->save("file.xml");
+}
+
+/*****************************************************************************/
+
 void MainController::setPropertiesController (PropertiesController *p) { impl->propertiesController = p; }
 void MainController::setSceneApi (SceneAPI *api) { impl->sceneAPI = api; }
 

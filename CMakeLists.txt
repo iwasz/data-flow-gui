@@ -207,6 +207,9 @@ LIST (APPEND SOURCES
         "src/config/DfDimensionRestoreDatabase.h"
         "src/mapping/ColorMapping.h"
         "src/mapping/ColorMapping.cc"
+        "src/file/IDataFile.h"
+        "src/file/NativeXmlFormat.h"
+        "src/file/NativeXmlFormat.cc"
 )
 
 # Local includes (inside project).

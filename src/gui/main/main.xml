@@ -13,6 +13,9 @@
     <ref set-as="stage" bean="stage"/>
     <value set-as="alsoOpen">consoleController,propertiesController</value>
     <ref set-as="propertiesController" bean="propertiesController" />
+
+    <!-- TODO remove -->
+    <ref set-as="dataFile" bean="nativeXmlFormat" />
   </MainController>
 
   <!-- Setting parent to stage would cause cyclic reference. Stage will set parent in C++ -->

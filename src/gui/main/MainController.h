@@ -75,6 +75,10 @@ public:
         void onKeyPress (unsigned int key);
         void onSelection (ClutterActorVector *s);
         void onOpen ();
+        void onSave ();
+
+        // TODO remove
+        void setDataFile (IDataFile *f);
 
 private:
         void updateButtons();

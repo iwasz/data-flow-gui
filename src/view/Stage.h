@@ -53,6 +53,8 @@ public:
         virtual bool onScroll (Event const &e);
         virtual bool onKeyPress (Event const &e);
 
+        virtual std::string visit (IDataFile *, IDataFile::Operation) { return ""; }
+
 private:
         GtkWidget *clutterWidget;
         ScaleLayer *scaleLayer;

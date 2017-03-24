@@ -6,8 +6,11 @@
   </Config>
 
   <DfDimensionRestoreDatabase id="dimensionRestoreDatabase" />
-<!--  program="@program"-->
+
+  <!--  program="@program"-->
   <SceneAPI id="sceneApi" container="@#container" toolContainer="@toolContainer" />
+
+  <NativeXmlFormat id="nativeXmlFormat" sceneApi="@sceneApi" />
 
   <!-- Tool map for MainController, and ToolList for addNode dialog. All the tools are defined here -->
   <import resource="src/tools.xml" />

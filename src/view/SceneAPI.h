@@ -37,6 +37,9 @@ public:
         ToolContainer const *getToolContainer () const;
         void setToolContainer (ToolContainer *value);
 
+        ClutterActorVector const &getAllActors () const __tiliae_no_reflect__;
+        ClutterActorVector &getAllActors () __tiliae_no_reflect__;
+
 private:
         struct Impl;
         Impl *impl;

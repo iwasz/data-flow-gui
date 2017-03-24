@@ -11,11 +11,13 @@
 #include "Port.h"
 #include "gui/main/IFactoryStrategy.h"
 #include <core/variant/Cast.h>
+#include <vector>
 #include <view/INodeView.h>
 
 struct SceneAPI::Impl {
         Container::BeanFactoryContainer *container = nullptr;
         ToolContainer *toolContainer = nullptr;
+        ClutterActorVector allActors;
 };
 
 /*****************************************************************************/
@@ -44,6 +46,7 @@ IClutterActor *SceneAPI::create (std::string const &toolName)
                 a = ocast<IClutterActor *> (v);
         }
 
+        impl->allActors.push_back (a);
         return a;
 }
 
@@ -103,3 +106,6 @@ const ToolContainer *SceneAPI::getToolContainer () const { return impl->toolCont
 /*****************************************************************************/
 
 void SceneAPI::setToolContainer (ToolContainer *value) { impl->toolContainer = value; }
+
+ClutterActorVector const &SceneAPI::getAllActors () const { return impl->allActors; }
+ClutterActorVector &SceneAPI::getAllActors () { return impl->allActors; }

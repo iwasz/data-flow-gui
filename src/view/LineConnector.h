@@ -31,6 +31,8 @@ public:
 
         virtual void setAFacing (Direction value) {}
         virtual void setBFacing (Direction value) {}
+
+        virtual std::string visit (IDataFile *d, IDataFile::Operation o) { return d->onLineConnector (this, o); }
 };
 
 #endif // LINECONNECTOR_H

@@ -19,6 +19,8 @@ class __tiliae_reflect__ Rectangle : public AbstractActor {
 public:
         Rectangle ();
         virtual ~Rectangle () {}
+
+        virtual std::string visit (IDataFile *d, IDataFile::Operation o) { return d->onConnector (this, o); }
 };
 
 #endif // RECTANGLE_H

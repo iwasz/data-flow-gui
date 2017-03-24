@@ -19,6 +19,7 @@ class __tiliae_reflect__ Circle : public AbstractActor {
 public:
         Circle ();
         virtual ~Circle () {}
+        virtual std::string visit (IDataFile *d, IDataFile::Operation o) { return d->onCircle (this, o); }
 };
 
 #endif // CIRCLE_H
