@@ -17,19 +17,18 @@
 struct IClutterActor;
 
 struct __tiliae_reflect__ IDataFile : public Core::Object {
-        enum Operation { SAVE, LOAD };
 
         virtual ~IDataFile () {}
         virtual void load (std::string const &path) = 0;
         virtual void save (std::string const &path) = 0;
 
-        virtual std::string onButton (IClutterActor *a, Operation o) = 0;
-        virtual std::string onCircle (IClutterActor *a, Operation o) = 0;
-        virtual std::string onCircularNode (IClutterActor *a, Operation o) = 0;
-        virtual std::string onLine (IClutterActor *a, Operation o) = 0;
-        virtual std::string onLineConnector (IClutterActor *a, Operation o) = 0;
-        virtual std::string onConnector (IClutterActor *a, Operation o) = 0;
-        virtual std::string onRectangle (IClutterActor *a, Operation o) = 0;
+        virtual void onButton (IClutterActor *a) = 0;
+        virtual void onCircle (IClutterActor *a) = 0;
+        virtual void onCircularNode (IClutterActor *a) = 0;
+        virtual void onLine (IClutterActor *a) = 0;
+        virtual void onLineConnector (IClutterActor *a) = 0;
+        virtual void onConnector (IClutterActor *a) = 0;
+        virtual void onRectangle (IClutterActor *a) = 0;
 };
 
 #endif // IDATAFILE_H

@@ -20,7 +20,7 @@ public:
         Rectangle ();
         virtual ~Rectangle () {}
 
-        virtual std::string visit (IDataFile *d, IDataFile::Operation o) { return d->onConnector (this, o); }
+        virtual void visit (IDataFile *d) { d->onConnector (this); }
 };
 
 #endif // RECTANGLE_H

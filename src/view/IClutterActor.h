@@ -64,7 +64,7 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
         virtual Core::StringVector getPropertyViews () const = 0;
 
         /// Save/load files
-        virtual std::string visit (IDataFile *, IDataFile::Operation o) = 0;
+        virtual void visit (IDataFile *) = 0;
         virtual std::string getId () const = 0;
 };
 

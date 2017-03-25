@@ -52,7 +52,7 @@ public:
         virtual void onAllocate (Box const &b);
         virtual Point getPortPosition (int i) const;
 
-        virtual std::string visit (IDataFile *d, IDataFile::Operation o) { return d->onCircularNode (this, o); }
+        virtual void visit (IDataFile *d) { d->onCircularNode (this); }
 };
 
 #endif // CIRCULARNODE_H

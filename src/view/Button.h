@@ -39,7 +39,7 @@ public:
         virtual void onRelease ();
         virtual Point getPortPosition (int i) const;
 
-        virtual std::string visit (IDataFile *d, IDataFile::Operation o) { return d->onButton (this, o); }
+        virtual void visit (IDataFile *d) { d->onButton (this); }
 
 private:
         struct Impl;

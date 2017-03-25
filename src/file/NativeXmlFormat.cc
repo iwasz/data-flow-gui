@@ -19,12 +19,15 @@
 #include <iostream>
 
 struct NativeXmlFormatSave::Impl {
-        typedef std::map<INodeView *, unsigned int> NodesForSaveMap;
-        NodesForSaveMap nodesForSaveMap;
-        unsigned int nodesForSaveNum = 0;
+        typedef std::map<INodeView *, unsigned int> NodesMap;
+        NodesMap nodesMap;
+        unsigned int nodesNum = 0;
+        std::ofstream *file;
 
         void reset ();
 };
+
+/*****************************************************************************/
 
 NativeXmlFormatSave::NativeXmlFormatSave () { impl = new Impl; }
 NativeXmlFormatSave::~NativeXmlFormatSave () { delete impl; }
@@ -39,10 +42,15 @@ void NativeXmlFormatSave::save (std::string const &path)
 {
         ClutterActorVector const &allActors = sceneApi->getAllActors ();
         std::ofstream file (path);
+        impl->file = &file;
+
+        file << "<flow>\n";
 
         for (IClutterActor *actor : allActors) {
-                file << actor->visit (this, SAVE);
+                actor->visit (this);
         }
+
+        file << "</flow>" << std::endl;
 }
 
 /*****************************************************************************/
@@ -67,118 +75,78 @@ std::string NativeXmlFormatSave::clutterActorArgumentsStroke (IClutterActor *a)
 
 /*****************************************************************************/
 
-std::string NativeXmlFormatSave::onButton (IClutterActor *a, Operation o)
-{
-        if (o == SAVE) {
-                return "<button/>\n";
-        }
-        else {
-        }
-}
+void NativeXmlFormatSave::onButton (IClutterActor *a) { *impl->file << "<" + a->getId () + " " + clutterActorArguments (a) + "/>\n"; }
 
 /*****************************************************************************/
 
-std::string NativeXmlFormatSave::onCircle (IClutterActor *a, Operation o)
-{
-        if (o == SAVE) {
-                return "<" + a->getId () + " " + clutterActorArguments (a) + "/>\n";
-        }
-        else {
-        }
-}
+void NativeXmlFormatSave::onCircle (IClutterActor *a) { *impl->file << "<" + a->getId () + " " + clutterActorArguments (a) + "/>\n"; }
 
 /*****************************************************************************/
 
-std::string NativeXmlFormatSave::onCircularNode (IClutterActor *a, Operation o)
+void NativeXmlFormatSave::onCircularNode (IClutterActor *a)
 {
-        if (o == SAVE) {
-                CircularNode *cn = dynamic_cast<CircularNode *> (a);
-                INodeView *inv = dynamic_cast<INodeView *> (cn);
-                unsigned int myIdx = impl->nodesForSaveNum++;
-                impl->nodesForSaveMap[inv] = myIdx;
-                std::cerr << (void *)inv << "=" << myIdx << std::endl;
+        CircularNode *cn = dynamic_cast<CircularNode *> (a);
+        INodeView *inv = dynamic_cast<INodeView *> (cn);
+        unsigned int myIdx = impl->nodesNum++;
+        impl->nodesMap[inv] = myIdx;
+        std::cerr << (void *)inv << "=" << myIdx << std::endl;
 
-                return std::string ("<") + a->getId () + " index=\"" + boost::lexical_cast<std::string> (myIdx) + "\" " + clutterActorArguments (a) + "font=\""
+        *impl->file << std::string ("<") + a->getId () + " index=\"" + boost::lexical_cast<std::string> (myIdx) + "\" " + clutterActorArguments (a) + "font=\""
                         + cn->getFont () + "\" fontColor=\"" + Color::toString (cn->getFontColor ()) + "\" />\n";
-        }
-        else {
-        }
 }
 
 /*****************************************************************************/
 
-std::string NativeXmlFormatSave::onLine (IClutterActor *a, Operation o)
+void NativeXmlFormatSave::onLine (IClutterActor *a)
 {
-        if (o == SAVE) {
-                Line *l = dynamic_cast<Line *> (a);
-                return "<" + a->getId () + " " + clutterActorArgumentsStroke (a) + " pointA=\"" + boost::lexical_cast<std::string> (l->getPointA ().x) + ","
+        Line *l = dynamic_cast<Line *> (a);
+        *impl->file << "<" + a->getId () + " " + clutterActorArgumentsStroke (a) + " pointA=\"" + boost::lexical_cast<std::string> (l->getPointA ().x) + ","
                         + boost::lexical_cast<std::string> (l->getPointA ().y) + "\" pointB=\"" + boost::lexical_cast<std::string> (l->getPointB ().x) + ","
                         + boost::lexical_cast<std::string> (l->getPointB ().y) + "\" />\n";
-        }
-        else {
-        }
 }
 
 /*****************************************************************************/
 
-std::string NativeXmlFormatSave::onLineConnector (IClutterActor *a, Operation o)
+void NativeXmlFormatSave::onLineConnector (IClutterActor *a)
 {
-        if (o == SAVE) {
-                LineConnector *lc = dynamic_cast<LineConnector *> (a);
+        AbstractConnector *lc = dynamic_cast<AbstractConnector *> (a);
 
-                if (!lc->getAnchorA () || !lc->getAnchorA ()->getPort () || !lc->getAnchorB () || !lc->getAnchorB ()->getPort ()) {
-                        throw Core::Exception ("NativeXmlFormat::onLineConnector : connector not connected");
-                }
+        if (!lc->getAnchorA () || !lc->getAnchorA ()->getPort () || !lc->getAnchorB () || !lc->getAnchorB ()->getPort ()) {
+                throw Core::Exception ("NativeXmlFormat::onLineConnector : connector not connected");
+        }
 
-                Port *pa = lc->getAnchorA ()->getPort ();
-                Port *pb = lc->getAnchorB ()->getPort ();
+        Port *pa = lc->getAnchorA ()->getPort ();
+        Port *pb = lc->getAnchorB ()->getPort ();
 
-                if (!pa || !pb) {
-                        throw Core::Exception ("NativeXmlFormat::onLineConnector : no port");
-                }
+        if (!pa || !pb) {
+                throw Core::Exception ("NativeXmlFormat::onLineConnector : no port");
+        }
 
-                unsigned int paNum = pa->getViewNumber ();
-                unsigned int pbNum = pb->getViewNumber ();
+        unsigned int paNum = pa->getViewNumber ();
+        unsigned int pbNum = pb->getViewNumber ();
 
-                unsigned int nvaNum = impl->nodesForSaveMap.at (pa->getNodeView ());
-                unsigned int nvbNum = impl->nodesForSaveMap.at (pb->getNodeView ());
+        unsigned int nvaNum = impl->nodesMap.at (pa->getNodeView ());
+        unsigned int nvbNum = impl->nodesMap.at (pb->getNodeView ());
 
-                std::cerr << (void *)pa->getNodeView () << "=" << nvaNum << " " << (void *)pb->getNodeView () << "=" << nvbNum << std::endl;
+        std::cerr << (void *)pa->getNodeView () << "=" << nvaNum << " " << (void *)pb->getNodeView () << "=" << nvbNum << std::endl;
 
-                return "<" + a->getId () + " " + clutterActorArgumentsStroke (a) + " objA=\"" + boost::lexical_cast<std::string> (nvaNum) + "\" portA=\""
+        *impl->file << "<" + a->getId () + " " + clutterActorArgumentsStroke (a) + " objA=\"" + boost::lexical_cast<std::string> (nvaNum) + "\" portA=\""
                         + boost::lexical_cast<std::string> (paNum) + "\"" + " objB=\"" + boost::lexical_cast<std::string> (nvbNum) + "\" portB=\""
                         + boost::lexical_cast<std::string> (pbNum) + "\" />\n";
-        }
-        else {
-        }
 }
 
 /*****************************************************************************/
 
-std::string NativeXmlFormatSave::onConnector (IClutterActor *a, Operation o)
-{
-        if (o == SAVE) {
-                return "<" + a->getId () + " " + clutterActorArgumentsStroke (a) + "/>\n";
-        }
-        else {
-        }
-}
+void NativeXmlFormatSave::onConnector (IClutterActor *a) { onLineConnector (a); }
 
 /*****************************************************************************/
 
-std::string NativeXmlFormatSave::onRectangle (IClutterActor *a, Operation o)
-{
-        if (o == SAVE) {
-                return "<" + a->getId () + " " + clutterActorArguments (a) + "/>\n";
-        }
-        else {
-        }
-}
+void NativeXmlFormatSave::onRectangle (IClutterActor *a) { *impl->file << "<" + a->getId () + " " + clutterActorArguments (a) + "/>\n"; }
 
 /*****************************************************************************/
 
 void NativeXmlFormatSave::Impl::reset ()
 {
-        nodesForSaveMap.clear ();
-        nodesForSaveNum = 0;
+        nodesMap.clear ();
+        nodesNum = 0;
 }

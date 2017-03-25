@@ -38,7 +38,7 @@ public:
         virtual bool isTextEditable () const;
         virtual void setTextEditable (bool b);
 
-        virtual std::string visit (IDataFile *d, IDataFile::Operation o) { return d->onLine (this, o); }
+        virtual void visit (IDataFile *d) { d->onLine (this); }
 };
 
 #endif // LINE_H

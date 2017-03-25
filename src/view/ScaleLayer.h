@@ -46,7 +46,7 @@ public:
         virtual Color getFillColor () const { throw Core::Exception ("Not implemented"); }
         virtual void setFillColor (const Color &value) { throw Core::Exception ("Not implemented"); }
 
-        virtual std::string visit (IDataFile *, IDataFile::Operation) { return ""; }
+        virtual void visit (IDataFile *) {}
 
 private:
         friend class Stage;

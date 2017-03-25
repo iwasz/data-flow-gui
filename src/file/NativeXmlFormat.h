@@ -17,16 +17,17 @@ class __tiliae_reflect__ NativeXmlFormatSave : public IDataFile {
 public:
         NativeXmlFormatSave ();
         virtual ~NativeXmlFormatSave ();
+
         virtual void load (std::string const &path);
         virtual void save (std::string const &path);
 
-        virtual std::string onButton (IClutterActor *a, Operation o);
-        virtual std::string onCircle (IClutterActor *a, Operation o);
-        virtual std::string onCircularNode (IClutterActor *a, Operation o);
-        virtual std::string onLine (IClutterActor *a, Operation o);
-        virtual std::string onLineConnector (IClutterActor *a, Operation o);
-        virtual std::string onConnector (IClutterActor *a, Operation o);
-        virtual std::string onRectangle (IClutterActor *a, Operation o);
+        virtual void onButton (IClutterActor *a);
+        virtual void onCircle (IClutterActor *a);
+        virtual void onCircularNode (IClutterActor *a);
+        virtual void onLine (IClutterActor *a);
+        virtual void onLineConnector (IClutterActor *a);
+        virtual void onConnector (IClutterActor *a);
+        virtual void onRectangle (IClutterActor *a);
 
         void setSceneApi (SceneAPI *value) { sceneApi = value; }
 
