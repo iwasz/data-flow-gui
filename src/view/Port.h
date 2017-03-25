@@ -23,16 +23,26 @@ struct INodeView;
  */
 class __tiliae_reflect__ Port : public Core::Object {
 public:
+        Port () : anchor (this) {}
         virtual ~Port () {}
         virtual bool isInput () const = 0;
 
         Direction getFacing () const { return anchor.getFacing (); }
         void setFacing (Direction value) { anchor.setFacing (value); }
 
+        INodeView *getNodeView () { return nodeView; }
+        void setNodeView (INodeView *value) { nodeView = value; }
+
+        int getNumber () const { return number; }
+        void setNumber (int i) { number = i; }
+
         float angle = 0.0;
         float size = 0.0;
         Color color;
         Anchor anchor;
+
+private:
+
         INodeView *nodeView = nullptr;
         int number = 0;
 };

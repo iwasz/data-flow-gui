@@ -68,25 +68,25 @@ void SceneAPI::connect (LineConnector *lc, Port *pa, Port *pb)
         assert (lc->getArc ());
         flow::Arc *arc = lc->getArc ().get ();
 
-        if (pa->nodeView && pa->nodeView->getNode ()) {
-                flow::INode *startNode = pa->nodeView->getNode ().get ();
+        if (pa->getNodeView () && pa->getNodeView ()->getNode ()) {
+                flow::INode *startNode = pa->getNodeView ()->getNode ().get ();
 
                 if (pa->isInput ()) {
-                        startNode->setInput (pa->number, arc);
+                        startNode->setInput (pa->getNumber (), arc);
                 }
                 else {
-                        startNode->addOutput (pa->number, arc);
+                        startNode->addOutput (pa->getNumber (), arc);
                 }
         }
 
-        if (pb->nodeView && pb->nodeView->getNode ()) {
-                flow::INode *endNode = pb->nodeView->getNode ().get ();
+        if (pb->getNodeView () && pb->getNodeView ()->getNode ()) {
+                flow::INode *endNode = pb->getNodeView ()->getNode ().get ();
 
                 if (pb->isInput ()) {
-                        endNode->setInput (pb->number, arc);
+                        endNode->setInput (pb->getNumber (), arc);
                 }
                 else {
-                        endNode->addOutput (pb->number, arc);
+                        endNode->addOutput (pb->getNumber (), arc);
                 }
         }
 }

@@ -13,9 +13,10 @@
 
 class SceneAPI;
 
-class __tiliae_reflect__ NativeXmlFormat : public IDataFile {
+class __tiliae_reflect__ NativeXmlFormatSave : public IDataFile {
 public:
-        virtual ~NativeXmlFormat () {}
+        NativeXmlFormatSave ();
+        virtual ~NativeXmlFormatSave ();
         virtual void load (std::string const &path);
         virtual void save (std::string const &path);
 
@@ -30,7 +31,12 @@ public:
         void setSceneApi (SceneAPI *value) { sceneApi = value; }
 
 private:
+        std::string clutterActorArguments (IClutterActor *a);
+        std::string clutterActorArgumentsStroke (IClutterActor *a);
+
         SceneAPI *sceneApi = nullptr;
+        struct Impl;
+        Impl *impl;
 };
 
 #endif // NATIVEXMLFORMAT_H

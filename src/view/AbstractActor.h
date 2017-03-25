@@ -39,7 +39,7 @@ public:
         virtual Point getPosition () const;
 
         virtual void setSize (Dimension const &d);
-        virtual Dimension getDimension () const;
+        virtual Dimension getSize () const;
 
         virtual bool isFill () const;
         virtual void setFill (bool value);
@@ -82,6 +82,9 @@ public:
         virtual bool onScroll (Event const &e) { return false; }
         virtual bool onKeyPress (Event const &e) { return false; }
 
+        void contId (std::string const &i) { id = i; }
+        std::string getId () const { return id; }
+
         // TODO private
         Point stagePrev;
         Point parentPrev;
@@ -97,6 +100,7 @@ private:
         bool selectable = true;
         bool clutterDestroyed = false;
         std::string propertyView;
+        std::string id;
 };
 
 #endif // ABSTRACTACTOR_H

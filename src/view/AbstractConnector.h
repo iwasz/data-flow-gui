@@ -29,6 +29,9 @@ public:
         virtual void setAFacing (Direction value) = 0;
         virtual void setBFacing (Direction value) = 0;
 
+        Anchor *getAnchorA () { return a; } /// For load-save
+        Anchor *getAnchorB () { return b; } /// For load-save
+
 private:
         /// Anchor at the start of the connector
         Anchor *a = nullptr;

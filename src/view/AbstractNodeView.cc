@@ -37,13 +37,13 @@ void AbstractNodeView::glueInit ()
         int inputNumber = 0;
         int outputNumber = 0;
         for (std::shared_ptr<Port> p : getPorts ()) {
-                p->nodeView = this;
+                p->setNodeView (this);
 
                 if (p->isInput ()) {
-                        p->number = inputNumber++;
+                        p->setNumber (inputNumber++);
                 }
                 else {
-                        p->number = outputNumber++;
+                        p->setNumber (outputNumber++);
                 }
         }
 }

@@ -104,7 +104,7 @@ void AbstractActor::setSize (Dimension const &d) { clutter_actor_set_size (self,
 
 /*****************************************************************************/
 
-Dimension AbstractActor::getDimension () const
+Dimension AbstractActor::getSize () const
 {
         Dimension d;
         clutter_actor_get_size (self, &d.width, &d.height);

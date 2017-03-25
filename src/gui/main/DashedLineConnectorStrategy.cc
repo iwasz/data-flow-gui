@@ -62,13 +62,8 @@ void DashedLineConnectorStrategy::onObjectCreated (IClutterActor *a)
         lc->setPointA (startPoint);
         lc->setPointB (endPoint);
 
-
-
-
         Port *pa = dynamic_cast<Port *> (startObject);
         Port *pb = dynamic_cast<Port *> (endObject);
-
-
 
         if (!pa || !pb) {
                 return;
@@ -87,28 +82,28 @@ void DashedLineConnectorStrategy::onObjectCreated (IClutterActor *a)
         //        assert (pa->nodeView);
         //        assert (pa->nodeView->getNode ());
 
-        if (pa->nodeView && pa->nodeView->getNode ()) {
-                flow::INode *startNode = pa->nodeView->getNode ().get ();
+        if (pa->getNodeView () && pa->getNodeView ()->getNode ()) {
+                flow::INode *startNode = pa->getNodeView ()->getNode ().get ();
 
                 if (pa->isInput ()) {
-                        startNode->setInput (pa->number, arc);
+                        startNode->setInput (pa->getNumber (), arc);
                 }
                 else {
-                        startNode->addOutput (pa->number, arc);
+                        startNode->addOutput (pa->getNumber (), arc);
                 }
         }
 
         //        assert (pb->nodeView);
         //        assert (pb->nodeView->getNode ());
 
-        if (pb->nodeView && pb->nodeView->getNode ()) {
-                flow::INode *endNode = pb->nodeView->getNode ().get ();
+        if (pb->getNodeView () && pb->getNodeView ()->getNode ()) {
+                flow::INode *endNode = pb->getNodeView ()->getNode ().get ();
 
                 if (pb->isInput ()) {
-                        endNode->setInput (pb->number, arc);
+                        endNode->setInput (pb->getNumber (), arc);
                 }
                 else {
-                        endNode->addOutput (pb->number, arc);
+                        endNode->addOutput (pb->getNumber (), arc);
                 }
         }
 }

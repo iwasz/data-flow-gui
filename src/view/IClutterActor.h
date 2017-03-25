@@ -39,7 +39,7 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
         virtual Point getPosition () const = 0;
 
         virtual void setSize (Dimension const &d) = 0;
-        virtual Dimension getDimension () const = 0;
+        virtual Dimension getSize () const = 0;
 
         virtual bool isFill () const = 0;
         virtual void setFill (bool value) = 0;
@@ -65,6 +65,7 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
 
         /// Save/load files
         virtual std::string visit (IDataFile *, IDataFile::Operation o) = 0;
+        virtual std::string getId () const = 0;
 };
 
 typedef __tiliae_reflect__ std::vector<IClutterActor *> ClutterActorVector;
