@@ -17,7 +17,8 @@
 struct SceneAPI::Impl {
         Container::BeanFactoryContainer *container = nullptr;
         ToolContainer *toolContainer = nullptr;
-        ClutterActorVector allActors;
+        ClutterActorSet allActors;
+        ClutterActorSet allConnectors;
 };
 
 /*****************************************************************************/
@@ -46,7 +47,13 @@ IClutterActor *SceneAPI::create (std::string const &toolName)
                 a = ocast<IClutterActor *> (v);
         }
 
-        impl->allActors.push_back (a);
+        if (dynamic_cast<IConnector *> (a)) {
+                impl->allConnectors.insert (a);
+        }
+        else {
+                impl->allActors.insert (a);
+        }
+
         return a;
 }
 
@@ -107,5 +114,7 @@ const ToolContainer *SceneAPI::getToolContainer () const { return impl->toolCont
 
 void SceneAPI::setToolContainer (ToolContainer *value) { impl->toolContainer = value; }
 
-ClutterActorVector const &SceneAPI::getAllActors () const { return impl->allActors; }
-ClutterActorVector &SceneAPI::getAllActors () { return impl->allActors; }
+ClutterActorSet const &SceneAPI::getAllActors () const { return impl->allActors; }
+ClutterActorSet &SceneAPI::getAllActors () { return impl->allActors; }
+ClutterActorSet const &SceneAPI::getAllConnectors () const { return impl->allConnectors; }
+ClutterActorSet &SceneAPI::getAllConnectors () { return impl->allConnectors; }

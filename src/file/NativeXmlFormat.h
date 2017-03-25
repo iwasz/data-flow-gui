@@ -29,13 +29,12 @@ public:
         virtual void onConnector (IClutterActor *a);
         virtual void onRectangle (IClutterActor *a);
 
-        void setSceneApi (SceneAPI *value) { sceneApi = value; }
+        void setSceneApi (SceneAPI *value);
 
 private:
         std::string clutterActorArguments (IClutterActor *a);
         std::string clutterActorArgumentsStroke (IClutterActor *a);
 
-        SceneAPI *sceneApi = nullptr;
         struct Impl;
         Impl *impl;
 };

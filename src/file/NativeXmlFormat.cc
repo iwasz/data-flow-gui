@@ -22,7 +22,8 @@ struct NativeXmlFormatSave::Impl {
         typedef std::map<INodeView *, unsigned int> NodesMap;
         NodesMap nodesMap;
         unsigned int nodesNum = 0;
-        std::ofstream *file;
+        std::ofstream *file = nullptr;
+        SceneAPI *sceneApi = nullptr;
 
         void reset ();
 };
@@ -40,13 +41,16 @@ void NativeXmlFormatSave::load (std::string const &path) {}
 
 void NativeXmlFormatSave::save (std::string const &path)
 {
-        ClutterActorVector const &allActors = sceneApi->getAllActors ();
         std::ofstream file (path);
         impl->file = &file;
 
         file << "<flow>\n";
 
-        for (IClutterActor *actor : allActors) {
+        for (IClutterActor *actor : impl->sceneApi->getAllActors ()) {
+                actor->visit (this);
+        }
+
+        for (IClutterActor *actor : impl->sceneApi->getAllConnectors ()) {
                 actor->visit (this);
         }
 
@@ -145,8 +149,13 @@ void NativeXmlFormatSave::onRectangle (IClutterActor *a) { *impl->file << "<" + 
 
 /*****************************************************************************/
 
+void NativeXmlFormatSave::setSceneApi (SceneAPI *value) { impl->sceneApi = value; }
+
+/*****************************************************************************/
+
 void NativeXmlFormatSave::Impl::reset ()
 {
         nodesMap.clear ();
         nodesNum = 0;
+        file = nullptr;
 }

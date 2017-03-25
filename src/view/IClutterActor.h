@@ -17,6 +17,7 @@
 #include <core/Object.h>
 #include <core/Typedefs.h>
 #include <memory>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -69,5 +70,6 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
 };
 
 typedef __tiliae_reflect__ std::vector<IClutterActor *> ClutterActorVector;
+typedef std::set<IClutterActor *> ClutterActorSet;
 
 #endif // ICONTAINER_H
