@@ -33,8 +33,11 @@ public:
         INodeView *getNodeView () { return nodeView; }
         void setNodeView (INodeView *value) { nodeView = value; }
 
-        int getNumber () const { return number; }
-        void setNumber (int i) { number = i; }
+        int getProgramNumber () const { return programNumber; }
+        void setProgramNumber (int i) { programNumber = i; }
+
+        int getViewNumber () const { return viewNumber; }
+        void setViewNumber (int i) { viewNumber = i; }
 
         float angle = 0.0;
         float size = 0.0;
@@ -42,9 +45,11 @@ public:
         Anchor anchor;
 
 private:
-
         INodeView *nodeView = nullptr;
-        int number = 0;
+        /// Number for indexing in data-flow program nodes
+        int programNumber = 0;
+        /// Number for indexing in views (like CircularNode).
+        int viewNumber = 0;
 };
 
 class __tiliae_reflect__ InputPort : public Port {

@@ -86,10 +86,10 @@ void DashedLineConnectorStrategy::onObjectCreated (IClutterActor *a)
                 flow::INode *startNode = pa->getNodeView ()->getNode ().get ();
 
                 if (pa->isInput ()) {
-                        startNode->setInput (pa->getNumber (), arc);
+                        startNode->setInput (pa->getProgramNumber (), arc);
                 }
                 else {
-                        startNode->addOutput (pa->getNumber (), arc);
+                        startNode->addOutput (pa->getProgramNumber (), arc);
                 }
         }
 
@@ -100,10 +100,10 @@ void DashedLineConnectorStrategy::onObjectCreated (IClutterActor *a)
                 flow::INode *endNode = pb->getNodeView ()->getNode ().get ();
 
                 if (pb->isInput ()) {
-                        endNode->setInput (pb->getNumber (), arc);
+                        endNode->setInput (pb->getProgramNumber (), arc);
                 }
                 else {
-                        endNode->addOutput (pb->getNumber (), arc);
+                        endNode->addOutput (pb->getProgramNumber (), arc);
                 }
         }
 }

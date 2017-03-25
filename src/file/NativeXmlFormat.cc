@@ -137,8 +137,8 @@ std::string NativeXmlFormatSave::onLineConnector (IClutterActor *a, Operation o)
                         throw Core::Exception ("NativeXmlFormat::onLineConnector : no port");
                 }
 
-                unsigned int paNum = pa->getNumber ();
-                unsigned int pbNum = pb->getNumber ();
+                unsigned int paNum = pa->getViewNumber ();
+                unsigned int pbNum = pb->getViewNumber ();
 
                 unsigned int nvaNum = impl->nodesForSaveMap.at (pa->getNodeView ());
                 unsigned int nvbNum = impl->nodesForSaveMap.at (pb->getNodeView ());
