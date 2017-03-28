@@ -1,2 +1,11 @@
-===Aaaa===
-Ooooo goood!
+=Installation=
+==Ubuntu 16.10==
+Open terminal and issue:
+
+<source lang="bash">
+echo "deb http://iwasz.pl/deb/ ./" >> /etc/apt/sources.list
+wget "http://iwasz.pl/deb/public.gpg"
+apt-key add public.gpg
+apt-get update
+apt-get install data-flow-gui
+</source>
