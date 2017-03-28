@@ -15,14 +15,16 @@
     <ref set-as="propertiesController" bean="propertiesController" />
 
     <!-- TODO remove -->
-    <ref set-as="dataFile" bean="nativeXmlFormat" />
+    <ref set-as="dataFile" bean="nativeXmlFormatSave" />
+    <!-- TODO remove -->
+    <ref set-as="loadFile" bean="nativeXmlFormatLoad" />
   </MainController>
 
   <!-- Setting parent to stage would cause cyclic reference. Stage will set parent in C++ -->
   <ScaleLayer id="scale" />
   <Stage id="stage" fillColor="#ecececff" scaleLayer="@scale"/>
 
-  <MainView id="mainView" file="src/gui/main/mainView.ui" stage="@stage" loadWholeFile="true">
+  <MainView id="mainView" file="gui/main/mainView.ui" stage="@stage" loadWholeFile="true">
     <Mapping add-to="mappings" widget="buttonStep" property="sensitive"/>
     <Mapping add-to="mappings" widget="buttonRun" property="stock-id"/>
     <KeyPressEventAdapter add-to="signalAdapters" />

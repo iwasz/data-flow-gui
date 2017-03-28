@@ -2,5 +2,5 @@
 <beans>
   <ConsoleBuffer id="console" />
   <ConsoleController id="consoleController" console="@console" consoleView="@consoleView" />
-  <ConsoleView id="consoleView" file="src/gui/console/consoleView.ui" console="@console" />
+  <ConsoleView id="consoleView" file="gui/console/consoleView.ui" console="@console" />
 </beans>

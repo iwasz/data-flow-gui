@@ -30,6 +30,9 @@ namespace flow {
 class Program;
 }
 
+// TODO remove
+#include "file/NativeXmlFormatLoad.h"
+
 /**
  * Controller for drawing new objects like nodes, arcs and the like.
  */
@@ -79,6 +82,8 @@ public:
 
         // TODO remove
         void setDataFile (IDataFile *f);
+        // TODO remove
+        void setLoadFile (NativeXmlFormatLoad *l);
 
 private:
         void updateButtons();

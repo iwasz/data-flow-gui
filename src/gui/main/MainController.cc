@@ -434,33 +434,41 @@ void MainController::onSelection (ClutterActorVector *s) { impl->propertiesContr
 PropertiesController *MainController::getPropertiesController () { return impl->propertiesController; }
 
 /*****************************************************************************/
+#include "file/NativeXmlFormatLoad.h"
+
+// TODO remove
+NativeXmlFormatLoad *load = nullptr;
+void MainController::setLoadFile (NativeXmlFormatLoad *l) { load = l; }
 
 void MainController::onOpen ()
 {
-        SceneAPI *s = impl->sceneAPI;
-        IClutterActor *actor = nullptr;
-        actor = s->create ("addNode");
-        actor->setPosition (Point (4800, 5000));
-        actor->setSize (Dimension (100, 100));
-        actor->setVisible (true);
-        INodeView *nodeViewA = dynamic_cast<INodeView *> (actor);
 
-        actor = s->create ("copyNode");
-        actor->setPosition (Point (5000, 5000));
-        actor->setSize (Dimension (100, 100));
-        actor->setVisible (true);
-        INodeView *nodeViewB = dynamic_cast<INodeView *> (actor);
+        load->load ("file.xml");
 
-        // Ports
-        Port *pa = nodeViewA->getPorts ()[2].get ();
-        Port *pb = nodeViewB->getPorts ()[0].get ();
+        //        SceneAPI *s = impl->sceneAPI;
+        //        IClutterActor *actor = nullptr;
+        //        actor = s->create ("addNode");
+        //        actor->setPosition (Point (4800, 5000));
+        //        actor->setSize (Dimension (100, 100));
+        //        actor->setVisible (true);
+        //        INodeView *nodeViewA = dynamic_cast<INodeView *> (actor);
 
-        // Connection
-        actor = s->create ("lineConnector");
-        actor->setVisible (true);
-        LineConnector *lc = dynamic_cast<LineConnector *> (actor);
+        //        actor = s->create ("copyNode");
+        //        actor->setPosition (Point (5000, 5000));
+        //        actor->setSize (Dimension (100, 100));
+        //        actor->setVisible (true);
+        //        INodeView *nodeViewB = dynamic_cast<INodeView *> (actor);
 
-        s->connect (lc, pa, pb);
+        //        // Ports
+        //        Port *pa = nodeViewA->getPorts ()[2].get ();
+        //        Port *pb = nodeViewB->getPorts ()[0].get ();
+
+        //        // Connection
+        //        actor = s->create ("lineConnector");
+        //        actor->setVisible (true);
+        //        LineConnector *lc = dynamic_cast<LineConnector *> (actor);
+
+        //        s->connect (lc, pa, pb);
 }
 
 /*****************************************************************************/
@@ -471,8 +479,8 @@ void MainController::setDataFile (IDataFile *f) { ff = f; }
 
 void MainController::onSave ()
 {
-//        SceneAPI *s = impl->sceneAPI;
-        ff->save("file.xml");
+        //        SceneAPI *s = impl->sceneAPI;
+        ff->save ("file.xml");
 }
 
 /*****************************************************************************/

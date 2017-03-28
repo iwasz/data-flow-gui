@@ -1,14 +1,19 @@
 # Wymagaj tej wersji - dopier w niej jest nowe makro FindPkgConfig
 CMAKE_MINIMUM_REQUIRED (VERSION 2.8.0 FATAL_ERROR)
 
-PROJECT (data-flow-gui)
-SET (CMAKE_EXPORT_COMPILE_COMMANDS ON)
-INCLUDE (../tiliae/tiliae.cmake)
-SET (CMAKE_VERBOSE_MAKEFILE OFF)
-
 if(COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
+
+if(COMMAND cmake_policy)
+    cmake_policy(SET CMP0048 NEW)
+endif(COMMAND cmake_policy)
+
+PROJECT (data-flow-gui VERSION 0.1)
+SET (CMAKE_EXPORT_COMPILE_COMMANDS ON)
+INCLUDE (../tiliae/tiliae.cmake)
+SET (CMAKE_VERBOSE_MAKEFILE OFF)
+SET (CMAKE_INSTALL_PREFIX /usr)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11" CACHE INTERNAL "cxx compiler flags")
 
@@ -78,6 +83,10 @@ link_directories(${GTK_LIBRARY_DIRS})
 pkg_check_modules (CLUTTER_GTK REQUIRED "clutter-gtk-1.0")
 INCLUDE_DIRECTORIES (${CLUTTER_GTK_INCLUDE_DIRS})
 link_directories(${CLUTTER_GTK_LIBRARY_DIRS})
+
+pkg_check_modules (MXML REQUIRED "mxml")
+INCLUDE_DIRECTORIES (${MXML_INCLUDE_DIRS})
+link_directories(${MXML_LIBRARY_DIRS})
 
 # +-------------------------------+
 # | Generate reflection database. |
@@ -208,8 +217,10 @@ LIST (APPEND SOURCES
         "src/mapping/ColorMapping.h"
         "src/mapping/ColorMapping.cc"
         "src/file/IDataFile.h"
-        "src/file/NativeXmlFormat.h"
-        "src/file/NativeXmlFormat.cc"
+        "src/file/NativeXmlFormatSave.h"
+        "src/file/NativeXmlFormatSave.cc"
+        "src/file/NativeXmlFormatLoad.h"
+        "src/file/NativeXmlFormatLoad.cc"
 )
 
 # Local includes (inside project).
@@ -227,11 +238,45 @@ TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${GTK_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${GTKFORMS_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${STATEMACHINE_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${DATAFLOW_LIBRARIES})
+TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${MXML_LIBRARIES})
 
-ADD_CUSTOM_COMMAND (OUTPUT "${CMAKE_BINARY_DIR}/config.xml"
-                    COMMAND ln -s "src/config.xml" "${CMAKE_BINARY_DIR}/config.xml"
-                    DEPENDS "src/config.xml")
+# ADD_CUSTOM_COMMAND (OUTPUT "${CMAKE_BINARY_DIR}/config.xml"
+#                     COMMAND ln -s "src/config.xml" "${CMAKE_BINARY_DIR}/config.xml"
+#                     DEPENDS "src/config.xml")
+#
+# ADD_CUSTOM_COMMAND (OUTPUT "${CMAKE_BINARY_DIR}/ui"
+#                     COMMAND ln -s "ui" "${CMAKE_BINARY_DIR}/ui"
+#                     DEPENDS "ui")
 
-ADD_CUSTOM_COMMAND (OUTPUT "${CMAKE_BINARY_DIR}/ui"
-                    COMMAND ln -s "ui" "${CMAKE_BINARY_DIR}/ui"
-                    DEPENDS "ui")
+
+INSTALL (
+    DIRECTORY "${PROJECT_SOURCE_DIR}/src/"
+    DESTINATION "share/data-flow-gui"
+    FILES_MATCHING
+    PATTERN "*.ui"
+    PATTERN "*.xml"
+    PATTERN "*.png"
+    PATTERN "*.jpg"
+    PATTERN "*.svn*" EXCLUDE
+    PATTERN "*.git*" EXCLUDE
+    PATTERN "*test*" EXCLUDE)
+
+INSTALL (
+    TARGETS data-flow-gui
+    DESTINATION bin
+    PERMISSIONS
+    OWNER_READ OWNER_WRITE OWNER_EXECUTE
+    GROUP_READ GROUP_EXECUTE
+    WORLD_READ WORLD_EXECUTE)
+
+ADD_CUSTOM_TARGET("publish" DEPENDS data-flow-gui COMMAND rm -Rf /tmp/installdir)
+ADD_CUSTOM_COMMAND(TARGET "publish" COMMAND mkdir -p /tmp/installdir)
+ADD_CUSTOM_COMMAND(TARGET "publish" COMMAND make install DESTDIR=/tmp/installdir)
+
+FIND_PROGRAM (FPM fpm)
+ADD_CUSTOM_COMMAND (TARGET "publish" COMMAND ${FPM} -f -s dir -t deb -n data-flow-gui -v ${PROJECT_VERSION} -C /tmp/installdir/ -p data-flow-gui_VERSION_ARCH.deb -d 'libgtkforms >= 0.9' -d 'libclutter-gtk-1.0-0 >= 1.8.0' usr)
+FIND_PROGRAM (DPKGSIG dpkg-sig)
+ADD_CUSTOM_COMMAND (TARGET "publish" COMMAND ${DPKGSIG} -k 9EDE3F68 -s builder *.deb)
+FIND_PROGRAM (SCP scp)
+ADD_CUSTOM_COMMAND (TARGET "publish" COMMAND ${SCP} data-flow-gui_${PROJECT_VERSION}_amd64.deb iwasz@iwasz.pl:/home/iwasz/domains/iwasz.pl/public_html/deb/)
+

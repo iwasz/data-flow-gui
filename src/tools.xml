@@ -125,7 +125,7 @@
   <!-- +===================================================+ -->
 
   <!-- Tool with default image representation -->
-  <Tool id="ToolI" imagePath="src/gui/addNode/add.jpg" />
+  <Tool id="ToolI" imagePath="gui/addNode/add.jpg" />
 
   <ToolCategoryVector id="tools">
     <ToolCategory name="Common">

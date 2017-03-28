@@ -10,15 +10,16 @@
   <!--  program="@program"-->
   <SceneAPI id="sceneApi" container="@#container" toolContainer="@toolContainer" />
 
-  <NativeXmlFormatSave id="nativeXmlFormat" sceneApi="@sceneApi" />
+  <NativeXmlFormatSave id="nativeXmlFormatSave" sceneApi="@sceneApi" />
+  <NativeXmlFormatLoad id="nativeXmlFormatLoad" sceneApi="@sceneApi" wrapper="@#beanWrapperConversionForPrototypes" />
 
   <!-- Tool map for MainController, and ToolList for addNode dialog. All the tools are defined here -->
-  <import resource="src/tools.xml" />
+  <import resource="tools.xml" />
   <!-- Main window -->
-  <import resource="src/gui/main/main.xml" />
+  <import resource="gui/main/main.xml" />
   <!-- Add node (tool selection dialog) -->
-  <import resource="src/gui/addNode/addNode.xml" />
-  <import resource="src/gui/about/about.xml" />
-  <import resource="src/gui/console/console.xml" />
-  <import resource="src/gui/properties/properties.xml" />
+  <import resource="gui/addNode/addNode.xml" />
+  <import resource="gui/about/about.xml" />
+  <import resource="gui/console/console.xml" />
+  <import resource="gui/properties/properties.xml" />
 </beans>

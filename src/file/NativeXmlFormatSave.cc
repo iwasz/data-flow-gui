@@ -6,7 +6,7 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "NativeXmlFormat.h"
+#include "NativeXmlFormatSave.h"
 #include "view/CircularNode.h"
 #include "view/IClutterActor.h"
 #include "view/LineConnector.h"
