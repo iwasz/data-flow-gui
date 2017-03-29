@@ -15,6 +15,7 @@ INCLUDE (../tiliae/tiliae.cmake)
 SET (CMAKE_VERBOSE_MAKEFILE OFF)
 SET (CMAKE_INSTALL_PREFIX /usr)
 SET (WITH_PARSER               ON CACHE BOOL "")
+SET (WITH_CPPABI               ON CACHE BOOL "")
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11" CACHE INTERNAL "cxx compiler flags")
 
