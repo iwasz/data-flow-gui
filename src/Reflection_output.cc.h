@@ -5,7 +5,7 @@
  */
 
 #include <reflection/Reflection.h>
-#include "/home/iwasz/workspace/data-flow-gui/src/Reflection_input.cc"
+#include "Reflection_input.cc"
 
 namespace {
 using namespace Core;
