@@ -14,7 +14,7 @@
 #include <clutter/clutter.h>
 #include <string>
 
-class __tiliae_reflect__ RectangularSelector : public Rectangle {
+class __tiliae_reflect__ RectangularSelector : public Rect {
 public:
         RectangularSelector ();
         virtual ~RectangularSelector () {}

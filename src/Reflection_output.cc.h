@@ -1466,14 +1466,14 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
-		Class *clazz = new Class ("Rectangle", typeid (Rectangle &), new Reflection::PtrDeleter <Rectangle>);
+		Class *clazz = new Class ("Rect", typeid (Rect &), new Reflection::PtrDeleter <Rect>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
 		}
 		else {
 			clazz->addBaseClassName ("AbstractActor");
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Rectangle, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addMethod (new Method ("visit", createMethodWrapper (&Rectangle::visit)));
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Rect, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("visit", createMethodWrapper (&Rect::visit)));
 		}
 	}
 	{
@@ -1482,7 +1482,7 @@ void createReflectionDatabase_dataFlowGui ()
 			delete clazz;
 		}
 		else {
-			clazz->addBaseClassName ("Rectangle");
+			clazz->addBaseClassName ("Rect");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <RectangularSelector, void>::Level1Wrapper::newConstructorPointer ()));
 		}
 	}

@@ -15,10 +15,10 @@
 #include <clutter/clutter.h>
 #include <string>
 
-class __tiliae_reflect__ Rectangle : public AbstractActor {
+class __tiliae_reflect__ Rect : public AbstractActor {
 public:
-        Rectangle ();
-        virtual ~Rectangle () {}
+        Rect ();
+        virtual ~Rect () {}
 
         virtual void visit (IDataFile *d) { d->onConnector (this); }
 };

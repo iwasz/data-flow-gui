@@ -12,7 +12,7 @@
 #include "ISelectorStrategy.h"
 #include "ShapeDrawStrategy.h"
 
-class Rectangle;
+class Rect;
 class ScaleLayer;
 
 /**
@@ -26,8 +26,8 @@ public:
 
         void onButtonPress (Event const &e);
 
-        Rectangle *getRectangularSelector () const { return rectangularSelector; }
-        void setRectangularSelector (Rectangle *value) { rectangularSelector = value; }
+        Rect *getRectangularSelector () const { return rectangularSelector; }
+        void setRectangularSelector (Rect *value) { rectangularSelector = value; }
 
         ClutterActorVector *getSelectedActors () { return selectedActors; }
         void setSelectedActors (ClutterActorVector *value) { selectedActors = value; }
@@ -38,7 +38,7 @@ public:
         void setScaleLayer (ScaleLayer *value) { scaleLayer = value; }
 
 private:
-        Rectangle *rectangularSelector = nullptr;
+        Rect *rectangularSelector = nullptr;
         ClutterActorVector *selectedActors = nullptr;
         ScaleLayer *scaleLayer = nullptr;
 };
