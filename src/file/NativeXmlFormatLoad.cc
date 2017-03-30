@@ -16,13 +16,14 @@
 #include <core/Exception.h>
 #include <cstring>
 #include <fstream>
+#include <iostream>
 #include <map>
 #include <mxml.h>
 #include <stdio.h>
 
 struct NativeXmlFormatLoad::Impl {
-        //        typedef std::map<INodeView *, unsigned int> NodesMap;
-        //        NodesMap nodesMap;
+        typedef std::map<unsigned int, INodeView *> NodesMap;
+        NodesMap nodesMap;
         //        unsigned int nodesNum = 0;
         //        std::ofstream *file = nullptr;
         SceneAPI *sceneApi = nullptr;
@@ -45,6 +46,7 @@ NativeXmlFormatLoad::~NativeXmlFormatLoad () { delete impl; }
 
 void NativeXmlFormatLoad::load (std::string const &path)
 {
+        impl->reset ();
         FILE *file = fopen (path.c_str (), "r");
 
         if (!file) {
@@ -52,7 +54,7 @@ void NativeXmlFormatLoad::load (std::string const &path)
                 throw Core::Exception ("NativeXmlFormatLoad::load : problem loading file [" + path + "]. Erorr : " + strerror (e));
         }
 
-        mxmlSAXLoadFile (nullptr, file, MXML_OPAQUE_CALLBACK, &Impl::saxHandler, &impl);
+        mxmlSAXLoadFile (nullptr, file, MXML_OPAQUE_CALLBACK, &Impl::saxHandler, impl);
         fclose (file);
 }
 
@@ -68,9 +70,8 @@ void NativeXmlFormatLoad::setWrapper (Wrapper::BeanWrapper *value) { impl->wrapp
 
 void NativeXmlFormatLoad::Impl::reset ()
 {
-        //        nodesMap.clear ();
+        nodesMap.clear ();
         //        nodesNum = 0;
-        //        file = nullptr;
 }
 
 /*****************************************************************************/
@@ -108,7 +109,6 @@ void NativeXmlFormatLoad::Impl::saxHandler (mxml_node_t *node, mxml_sax_event_t 
 }
 
 /*****************************************************************************/
-#include <iostream>
 
 void NativeXmlFormatLoad::Impl::onOpenElement (mxml_node_t *node)
 {
@@ -122,7 +122,7 @@ void NativeXmlFormatLoad::Impl::onOpenElement (mxml_node_t *node)
                 return;
         }
 
-#if 1
+#if 0
         std::cerr << "Open [" << name << "]" << std::endl;
 #endif
 
@@ -134,46 +134,58 @@ void NativeXmlFormatLoad::Impl::onOpenElement (mxml_node_t *node)
         int numAttrs = node->value.element.num_attrs;
 
         for (int i = 0; i < numAttrs; ++i) {
-#if 1
-                std::cerr << (attrs + i)->name << " = " << (attrs + i)->value << std::endl;
+                std::string name = (attrs + i)->name;
+                std::string value = (attrs + i)->value;
+
+#if 0
+                std::cerr << name << " = " << value << std::endl;
 #endif
 
-                Core::DebugContext ctx;
+                INodeView *nv;
+                if (name == "index" && (nv = dynamic_cast<INodeView *> (actor))) {
 
-                if (!wrapper->set ((attrs + i)->name, Core::Variant ((attrs + i)->value), &ctx)) {
-                        throw Core::Exception ("NativeXmlFormatLoad::Impl::onOpenElement : " + ctx.getMessage ());
+                        nodesMap[boost::lexical_cast<unsigned int> (value)] = nv;
+                }
+                else if (name == "objA") {
+
+                        unsigned int objAIndex = boost::lexical_cast<unsigned int> (mxmlElementGetAttr (node, "objA"));
+                        unsigned int objBIndex = boost::lexical_cast<unsigned int> (mxmlElementGetAttr (node, "objB"));
+                        unsigned int portANumber = boost::lexical_cast<unsigned int> (mxmlElementGetAttr (node, "portA"));
+                        unsigned int portBNumber = boost::lexical_cast<unsigned int> (mxmlElementGetAttr (node, "portB"));
+
+                        INodeView *nodeViewA = nodesMap[objAIndex];
+                        INodeView *nodeViewB = nodesMap[objBIndex];
+
+                        if (!nodeViewA || !nodeViewB) {
+                                throw Core::Exception ("NativeXmlFormatLoad::Impl::onOpenElement : !nodeViewA || !nodeViewB. Could not cast to ");
+                        }
+
+                        // Ports
+                        Port *pa = nodeViewA->getPorts ()[portANumber].get ();
+                        Port *pb = nodeViewB->getPorts ()[portBNumber].get ();
+
+                        if (!pa || !pb) {
+                                throw Core::Exception ("NativeXmlFormatLoad::Impl::onOpenElement : !pa || !pb. No such port");
+                        }
+
+                        LineConnector *lc = dynamic_cast<LineConnector *> (actor);
+                        sceneApi->connect (lc, pa, pb);
+                }
+                else if (name == "objB" || name == "portA" || name == "portB") {
+                        // skip
+                }
+                else {
+                        Core::DebugContext ctx;
+
+                        if (!wrapper->set (name, Core::Variant (value), &ctx)) {
+                                throw Core::Exception ("NativeXmlFormatLoad::Impl::onOpenElement : " + ctx.getMessage ());
+                        }
                 }
         }
 
         actor->setVisible (true);
-
-        //        if ((argVal = mxmlElementGetAttr (node, "resource"))) {
-        //                imports.push (argVal);
-        //        }
-
-        //        actor->setPosition (Point (4800, 5000));
-        //        actor->setSize (Dimension (100, 100));
-        //        actor->setVisible (true);
-        //        INodeView *nodeViewA = dynamic_cast<INodeView *> (actor);
-
-        //        actor = s->create ("copyNode");
-        //        actor->setPosition (Point (5000, 5000));
-        //        actor->setSize (Dimension (100, 100));
-        //        actor->setVisible (true);
-        //        INodeView *nodeViewB = dynamic_cast<INodeView *> (actor);
-
-        //        // Ports
-        //        Port *pa = nodeViewA->getPorts ()[2].get ();
-        //        Port *pb = nodeViewB->getPorts ()[0].get ();
-
-        //        // Connection
-        //        actor = s->create ("lineConnector");
-        //        actor->setVisible (true);
-        //        LineConnector *lc = dynamic_cast<LineConnector *> (actor);
-
-        //        s->connect (lc, pa, pb);
 }
 
 /****************************************************************************/
 
-void NativeXmlFormatLoad::Impl::onCloseElement (mxml_node_t *node) { char const *name = mxmlGetElement (node); }
+void NativeXmlFormatLoad::Impl::onCloseElement (mxml_node_t *node) { /*char const *name = mxmlGetElement (node);*/ }

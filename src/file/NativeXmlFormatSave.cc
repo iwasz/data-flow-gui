@@ -41,6 +41,7 @@ void NativeXmlFormatSave::load (std::string const &path) {}
 
 void NativeXmlFormatSave::save (std::string const &path)
 {
+        impl->reset ();
         std::ofstream file (path);
         impl->file = &file;
 
