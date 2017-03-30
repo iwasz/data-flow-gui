@@ -7,7 +7,7 @@
  ****************************************************************************/
 
 #include "iw_connector.h"
-#include "connectorSolver.h"
+#include "connectorSolver_c.h"
 #include "drawing_stuff.h"
 #include <math.h>
 #include <memory.h>

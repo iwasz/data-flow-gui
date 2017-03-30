@@ -164,6 +164,7 @@ LIST (APPEND SOURCES
         "src/view/clutter/iw_connector.h"
         "src/view/clutter/ConnectorSolver.cc"
         "src/view/clutter/ConnectorSolver.h"
+        "src/view/clutter/connectorSolver_c.h"
         "src/view/Circle.h"
         "src/view/Circle.cc"
         "src/view/Rectangle.h"

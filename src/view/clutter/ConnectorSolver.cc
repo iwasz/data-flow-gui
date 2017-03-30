@@ -7,7 +7,7 @@
  ****************************************************************************/
 
 #include "ConnectorSolver.h"
-#include "connectorSolver.h"
+#include "connectorSolver_c.h"
 #include <cmath>
 
 PointVector ConnectorSolver::solve (Ray const &a, Ray const &b)
