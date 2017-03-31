@@ -75,7 +75,7 @@ struct MainController::Impl {
                 ISelectorStrategy *currentSelectorStrategy = nullptr;
 
                 // TODO remove encapsulate.
-                Point last;
+                primitives::Point last;
         } vars;
 };
 
@@ -220,7 +220,7 @@ void MainController::Impl::configureMachine ()
                 ->transition (MOVE)->when (eq ("stage.motion"))->then ([this] (const char *, void *arg) {
                         Event *event = static_cast <Event *> (arg);
 
-                        Point p2;
+                        primitives::Point p2;
                         clutter_actor_get_position (rectangularSelector->getActor(), &p2.x, &p2.y);
                         p2.x += event->stageDelta.x;
                         p2.y += event->stageDelta.y;
@@ -242,7 +242,7 @@ void MainController::Impl::configureMachine ()
                 ->transition (STAGE_MOVE)->when (eq ("stage.motion"))->then ([this] (const char *, void *arg) {
                         Event *event = static_cast <Event *> (arg);
 
-                        Point n;
+                        primitives::Point n;
                         n.x = event->positionStageCoords.x - vars.last.x;
                         n.y = event->positionStageCoords.y - vars.last.y;
                         stage->getScaleLayer ()->pan (n);
@@ -451,14 +451,14 @@ void MainController::onOpen ()
         //                SceneAPI *s = impl->sceneAPI;
         //                IClutterActor *actor = nullptr;
         //                actor = s->create ("addNode");
-        //                actor->setPosition (Point (4800, 5000));
-        //                actor->setSize (Dimension (100, 100));
+        //                actor->setPosition (primitives::Point (4800, 5000));
+        //                actor->setSize (primitives::Dimension (100, 100));
         //                actor->setVisible (true);
         //                INodeView *nodeViewA = dynamic_cast<INodeView *> (actor);
 
         //        actor = s->create ("copyNode");
-        //        actor->setPosition (Point (5000, 5000));
-        //        actor->setSize (Dimension (100, 100));
+        //        actor->setPosition (primitives::Point (5000, 5000));
+        //        actor->setSize (primitives::Dimension (100, 100));
         //        actor->setVisible (true);
         //        INodeView *nodeViewB = dynamic_cast<INodeView *> (actor);
 

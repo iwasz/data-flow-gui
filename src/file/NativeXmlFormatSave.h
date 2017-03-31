@@ -32,8 +32,8 @@ public:
         void setSceneApi (SceneAPI *value);
 
 private:
-        std::string clutterActorArguments (IClutterActor *a);
-        std::string clutterActorArgumentsStroke (IClutterActor *a);
+        void clutterActorArguments(IClutterActor *a);
+        void clutterActorArgumentsStroke(IClutterActor *a);
 
         struct Impl;
         Impl *impl;

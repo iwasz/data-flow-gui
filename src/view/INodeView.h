@@ -28,7 +28,7 @@ struct __tiliae_reflect__ INodeView : public virtual Core::Object {
         virtual Anchor const *getAnchor (size_t i) const __tiliae_no_reflect__ = 0;
 
         virtual PortVector &getPorts () = 0;
-        virtual Point getPortPosition (int i) const = 0;
+        virtual primitives::Point getPortPosition (int i) const = 0;
 };
 
 #endif // INODEVIEW_H

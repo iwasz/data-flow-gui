@@ -19,7 +19,7 @@ void DataFlowApp::initBeanWrapper ()
         Wrapper::BeanWrapper *w = getBeanWrapper ();
         Editor::ChainEditor *chain = dynamic_cast<Editor::ChainEditor *> (w->getEditor ());
         Editor::TypeEditor *typeEditor = dynamic_cast<Editor::TypeEditor *> (chain->getEditors ()[0]);
-        typeEditor->addType (Editor::TypeEditor::Type (typeid (std::string), typeid (Color), new ColorEditor));
+        typeEditor->addType (Editor::TypeEditor::Type (typeid (std::string), typeid (primitives::Color), new primitives::ColorEditor));
 }
 
 /*---------------------------------------------------------------------------*/
@@ -27,7 +27,7 @@ void DataFlowApp::initBeanWrapper ()
 std::unique_ptr<Container::BeanFactoryContainer> DataFlowApp::createContainer (Ptr<Container::MetaContainer> metaContainer)
 {
         std::unique_ptr<Container::BeanFactoryContainer> container (Container::ContainerFactory::create (metaContainer, true));
-        container->addConversion (typeid (Color), new ColorEditor); // Auto delete is on.
+        container->addConversion (typeid (primitives::Color), new primitives::ColorEditor); // Auto delete is on.
         container->addConversion (typeid (Direction), directionFromString);
         return container;
 }

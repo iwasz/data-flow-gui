@@ -26,10 +26,10 @@ public:
 
         virtual bool isContainter () const { return true; }
         virtual bool isSelectable () const { return false; }
-        void zoomIn (Point const &center = Point ());
-        void zoomOut (Point const &center = Point ());
+        void zoomIn (primitives::Point const &center = primitives::Point ());
+        void zoomOut (primitives::Point const &center = primitives::Point ());
         void zoom (double f);
-        void pan (Point const &n);
+        void pan (primitives::Point const &n);
 
         virtual bool isFill () const { throw Core::Exception ("Not implemented"); }
         virtual void setFill (bool value) { throw Core::Exception ("Not implemented"); }
@@ -40,11 +40,11 @@ public:
         virtual float getStrokeDash () const { throw Core::Exception ("Not implemented"); }
         virtual void setStrokeDash (float value) { throw Core::Exception ("Not implemented"); }
 
-        virtual Color getStrokeColor () const { throw Core::Exception ("Not implemented"); }
-        virtual void setStrokeColor (const Color &value) { throw Core::Exception ("Not implemented"); }
+        virtual primitives::Color getStrokeColor () const { throw Core::Exception ("Not implemented"); }
+        virtual void setStrokeColor (const primitives::Color &value) { throw Core::Exception ("Not implemented"); }
 
-        virtual Color getFillColor () const { throw Core::Exception ("Not implemented"); }
-        virtual void setFillColor (const Color &value) { throw Core::Exception ("Not implemented"); }
+        virtual primitives::Color getFillColor () const { throw Core::Exception ("Not implemented"); }
+        virtual void setFillColor (const primitives::Color &value) { throw Core::Exception ("Not implemented"); }
 
         virtual void visit (IDataFile *) {}
 

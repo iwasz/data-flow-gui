@@ -29,7 +29,7 @@ void LineConnector::setParent (IClutterActor *p)
 
 /*****************************************************************************/
 
-void LineConnector::onMoveAnchor (const Point &p, Side s)
+void LineConnector::onMoveAnchor (const primitives::Point &p, Side s)
 {
         if (s == A) {
                 setPointA (p);

@@ -21,26 +21,26 @@ Connector::Connector ()
 
 /*****************************************************************************/
 
-void Connector::setPointA (Point const &p) { iw_connector_set_point_a (IW_CONNECTOR (self), p.x, p.y); }
+void Connector::setPointA (primitives::Point const &p) { iw_connector_set_point_a (IW_CONNECTOR (self), p.x, p.y); }
 
 /*****************************************************************************/
 
-Point Connector::getPointA () const
+primitives::Point Connector::getPointA () const
 {
-        Point p;
+        primitives::Point p;
         iw_connector_get_point_a (IW_CONNECTOR (self), &p.x, &p.y);
         return p;
 }
 
 /*****************************************************************************/
 
-void Connector::setPointB (Point const &p) { iw_connector_set_point_b (IW_CONNECTOR (self), p.x, p.y); }
+void Connector::setPointB (primitives::Point const &p) { iw_connector_set_point_b (IW_CONNECTOR (self), p.x, p.y); }
 
 /*****************************************************************************/
 
-Point Connector::getPointB () const
+primitives::Point Connector::getPointB () const
 {
-        Point p;
+        primitives::Point p;
         iw_connector_get_point_a (IW_CONNECTOR (self), &p.x, &p.y);
         return p;
 }
@@ -73,18 +73,18 @@ void Connector::setFont (std::string const t) { iw_connector_set_font (IW_CONNEC
 
 /*****************************************************************************/
 
-Color Connector::getFontColor () const
+primitives::Color Connector::getFontColor () const
 {
         ClutterColor c;
         iw_connector_get_font_color (IW_CONNECTOR (self), &c);
-        return Color (&c);
+        return primitives::Color (&c);
 }
 
 /*****************************************************************************/
 
-void Connector::setFontColor (const Color &value)
+void Connector::setFontColor (const primitives::Color &value)
 {
-        ClutterColor color = Color::toClutterColor (value);
+        ClutterColor color = primitives::Color::toClutterColor (value);
         iw_connector_set_font_color (IW_CONNECTOR (self), &color);
 }
 

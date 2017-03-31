@@ -29,8 +29,8 @@ public:
 
 private:
         Line *line = nullptr;
-        Point startPoint;
-        Point endPoint;
+        primitives::Point startPoint;
+        primitives::Point endPoint;
         Core::Object *startObject = nullptr;
         Core::Object *endObject = nullptr;
 };

@@ -28,16 +28,16 @@ public:
         std::string getFont () const;
         void setFont (std::string const t);
 
-        Color getFontColor () const;
-        void setFontColor (const Color &value);
+        primitives::Color getFontColor () const;
+        void setFontColor (const primitives::Color &value);
 
         /*---------------------------------------------------------------------------*/
 
         virtual void setNode (std::shared_ptr<flow::INode> n);
-        virtual void onAllocate (Box const &b);
+        virtual void onAllocate (primitives::Box const &b);
         virtual void onPress ();
         virtual void onRelease ();
-        virtual Point getPortPosition (int i) const;
+        virtual primitives::Point getPortPosition (int i) const;
 
         virtual void visit (IDataFile *d) { d->onButton (this); }
 

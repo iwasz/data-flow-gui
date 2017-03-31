@@ -68,7 +68,7 @@ RectangularSelector::RectangularSelector () { /*clutter_actor_add_action (self, 
 //        }
 
 //        if (event.object != this) {
-//                //                Point p2;
+//                //                primitives::Point p2;
 //                //                clutter_actor_get_position (getActor(), &p2.x, &p2.y);
 //                //                p2.x += event.stageDelta.x;
 //                //                p2.y += event.stageDelta.y;

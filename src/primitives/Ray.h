@@ -12,6 +12,8 @@
 #include "primitives/Direction.h"
 #include "primitives/Line.h"
 
+namespace primitives {
+
 class Ray : public Line {
 public:
         Ray (Point const &a, Direction d);
@@ -41,5 +43,7 @@ private:
 protected:
         Direction dir;
 };
+
+} // namespace
 
 #endif // RAY_H

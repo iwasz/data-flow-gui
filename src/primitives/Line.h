@@ -11,6 +11,8 @@
 
 #include "Geometry.h"
 
+namespace primitives {
+
 class Line {
 public:
         Line (Point const &a, Point const &b) : a (a), b (b) {}
@@ -26,5 +28,7 @@ protected:
         Point a;
         Point b;
 };
+
+} // namespace
 
 #endif // LINE_H

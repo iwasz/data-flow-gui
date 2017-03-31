@@ -68,8 +68,8 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
 #endif
 
 #if 0
-        Point a = { ax, ay };
-        Point b = { bx, by };
+        primitives::Point a = { ax, ay };
+        primitives::Point b = { bx, by };
         Line s0 = rayNew (ax, ay, aDir);
         Line s1;
         Line s2;
@@ -80,14 +80,14 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
         // printf ("%d, %d\n", aDir, bDir);
 
         // Todo decrease number of elements
-        Point pointsFromA[10];
-        Point pointsFromB[10];
+        primitives::Point pointsFromA[10];
+        primitives::Point pointsFromB[10];
 
         int pFACnt = 0;
         int pFBCnt = 0;
 
         // Step 1. Draw 2 rays from both points (a and b) in correct directions. Check if they corss or connec
-        Point p, t1, t2;
+        primitives::Point p, t1, t2;
 
         // Sum of angles 90 (number of angles 1)
         if (raysCross (&s0, &s5, &p) || raysConnect (&s0, &s5, &p)) {

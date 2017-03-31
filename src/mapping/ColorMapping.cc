@@ -14,8 +14,8 @@
 void ColorMapping::setToView (GtkForms::ViewElementDTO *viewObject, std::string const &finalProperty, Core::Variant valueToSet)
 {
         if (GTK_IS_COLOR_CHOOSER (viewObject->inputWidget)) {
-                Color const *c = vcast<Color const *> (valueToSet);
-                GdkRGBA rgba = Color::toGdkRGBA (*c);
+                primitives::Color const *c = vcast<primitives::Color const *> (valueToSet);
+                GdkRGBA rgba = primitives::Color::toGdkRGBA (*c);
                 gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (viewObject->inputWidget), &rgba);
         }
         else {
@@ -36,5 +36,5 @@ Core::Variant ColorMapping::getFromView (GtkForms::ViewElementDTO *viewObject, s
                 throw Core::Exception ("ColorMapping::getFromView : widget type not supported. Supported types : GtkColorChooser.");
         }
 
-        return Core::Variant (Color (&rgba));
+        return Core::Variant (primitives::Color (&rgba));
 }

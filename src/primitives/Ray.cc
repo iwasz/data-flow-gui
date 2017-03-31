@@ -10,6 +10,8 @@
 #include <cmath>
 #include <limits>
 
+namespace primitives {
+
 Ray::Ray (Point const &a, Direction d) : Line (a, Point ()), dir (d)
 {
         switch (dir) {
@@ -146,3 +148,5 @@ Point Ray::isCrossing (Ray const &b) const
 
         return INVALID_POINT;
 }
+
+} // namespace

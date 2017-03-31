@@ -12,6 +12,8 @@
 #include <core/variant/Cast.h>
 #include <core/variant/Variant.h>
 
+namespace primitives {
+
 /*****************************************************************************/
 
 Color Color::fromString (std::string const &s)
@@ -101,3 +103,5 @@ bool ColorEditor::convert (const Core::Variant &input, Core::Variant *output, Co
 
         return true;
 }
+
+} // namespace

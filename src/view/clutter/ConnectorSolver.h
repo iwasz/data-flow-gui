@@ -20,12 +20,12 @@
  */
 class ConnectorSolver {
 public:
-        static PointVector solve (Ray const &a, Ray const &b);
+        static primitives::PointVector solve (primitives::Ray const &a, primitives::Ray const &b);
 
 private:
-        static Point advance (Point const &point, Direction dir, float length);
-        static float distance (Point const &a, Point const &b, Direction dir);
-        static Ray rayPerpendicular (Ray const &perpendicularTo, Point const &towardsPoint, Point const &startPoint);
+        static primitives::Point advance (primitives::Point const &point, Direction dir, float length);
+        static float distance (primitives::Point const &a, primitives::Point const &b, Direction dir);
+        static primitives::Ray rayPerpendicular (primitives::Ray const &perpendicularTo, primitives::Point const &towardsPoint, primitives::Point const &startPoint);
 };
 
 #endif // CONNECTORSOLVER_H

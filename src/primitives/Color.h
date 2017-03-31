@@ -15,6 +15,8 @@
 #include <gdk/gdk.h>
 #include <string>
 
+namespace primitives {
+
 class Color {
 public:
         Color () : r (255), g (255), b (255), a (255) {}
@@ -69,5 +71,7 @@ public:
          */
         virtual bool convert (const Core::Variant &input, Core::Variant *output, Core::DebugContext *context = NULL);
 };
+
+} // namespace
 
 #endif // COLOR_H

@@ -66,33 +66,33 @@ void CircularNode::setStrokeDash (float value) { iw_circular_node_set_stroke_das
 
 /*****************************************************************************/
 
-Color CircularNode::getStrokeColor () const { return Color (iw_circular_node_get_stroke_color (IW_CIRCULAR_NODE (self))); }
+primitives::Color CircularNode::getStrokeColor () const { return primitives::Color (iw_circular_node_get_stroke_color (IW_CIRCULAR_NODE (self))); }
 
 /*****************************************************************************/
 
-void CircularNode::setStrokeColor (const Color &value)
+void CircularNode::setStrokeColor (const primitives::Color &value)
 {
-        ClutterColor color = Color::toClutterColor (value);
+        ClutterColor color = primitives::Color::toClutterColor (value);
         iw_circular_node_set_stroke_color (IW_CIRCULAR_NODE (self), &color);
 }
 
 /*****************************************************************************/
 
-Color CircularNode::getFillColor () const { return Color (iw_circular_node_get_fill_color (IW_CIRCULAR_NODE (self))); }
+primitives::Color CircularNode::getFillColor () const { return primitives::Color (iw_circular_node_get_fill_color (IW_CIRCULAR_NODE (self))); }
 
 /*****************************************************************************/
 
-void CircularNode::setFillColor (const Color &value)
+void CircularNode::setFillColor (const primitives::Color &value)
 {
-        ClutterColor color = Color::toClutterColor (value);
+        ClutterColor color = primitives::Color::toClutterColor (value);
         iw_circular_node_set_fill_color (IW_CIRCULAR_NODE (self), &color);
 }
 
 /*****************************************************************************/
 
-Point CircularNode::getPortPosition (int i) const
+primitives::Point CircularNode::getPortPosition (int i) const
 {
-        Point p;
+        primitives::Point p;
         iw_circular_node_get_port_position (IW_CIRCULAR_NODE (self), i, &p.x, &p.y);
         return p;
 }
@@ -115,18 +115,18 @@ void CircularNode::setFont (std::string const t) { iw_circular_node_set_font (IW
 
 /*****************************************************************************/
 
-Color CircularNode::getFontColor () const
+primitives::Color CircularNode::getFontColor () const
 {
         ClutterColor c;
         iw_circular_node_get_font_color (IW_CIRCULAR_NODE (self), &c);
-        return Color (&c);
+        return primitives::Color (&c);
 }
 
 /*****************************************************************************/
 
-void CircularNode::setFontColor (const Color &value)
+void CircularNode::setFontColor (const primitives::Color &value)
 {
-        ClutterColor color = Color::toClutterColor (value);
+        ClutterColor color = primitives::Color::toClutterColor (value);
         iw_circular_node_set_font_color (IW_CIRCULAR_NODE (self), &color);
 }
 
@@ -140,7 +140,7 @@ void CircularNode::setTextEditable (bool b) { iw_circular_node_set_editable (IW_
 
 /*****************************************************************************/
 
-void CircularNode::onAllocate (Box const &)
+void CircularNode::onAllocate (primitives::Box const &)
 {
         int i = 0;
         for (std::shared_ptr<Port> p : getPorts ()) {
@@ -154,5 +154,5 @@ void CircularNode::onAllocate (Box const &)
 extern "C" void circularNodeOnAllocate (void *circularNode, float x1, float y1, float x2, float y2)
 {
         CircularNode *cn = static_cast<CircularNode *> (circularNode);
-        cn->onAllocate (Box (Point (x1, y1), Point (x2, y2)));
+        cn->onAllocate (primitives::Box (primitives::Point (x1, y1), primitives::Point (x2, y2)));
 }

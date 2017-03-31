@@ -30,7 +30,7 @@ void Anchor::disconnect (IConnector *c)
         ConnectionVector::iterator i = std::remove_if (connections.begin (), connections.end (), [c](Connection const &con) { return con.connector == c; });
 
         //        for (ConnectionVector::iterator j = i; j < connections.end (); ++j) {
-        //                j->connector->onDisconnectAnchor (Point (), j->side);
+        //                j->connector->onDisconnectAnchor (primitives::Point (), j->side);
         //        }
 
         connections.erase (i, connections.end ());
@@ -38,7 +38,7 @@ void Anchor::disconnect (IConnector *c)
 
 /*****************************************************************************/
 
-void Anchor::notifyMoveAnchor (const Point &p)
+void Anchor::notifyMoveAnchor (const primitives::Point &p)
 {
         for (Connection &c : connections) {
                 c.connector->onMoveAnchor (p, c.side);
@@ -47,4 +47,4 @@ void Anchor::notifyMoveAnchor (const Point &p)
 
 /*****************************************************************************/
 
-Point NodeAnchorPositionProvider::getPosition () const { return dynamic_cast<IClutterActor *> (node)->convertToScaleLayer (node->getPortPosition (i)); }
+primitives::Point NodeAnchorPositionProvider::getPosition () const { return dynamic_cast<IClutterActor *> (node)->convertToScaleLayer (node->getPortPosition (i)); }

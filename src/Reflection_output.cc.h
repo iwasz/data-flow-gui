@@ -742,30 +742,30 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
-		Class *clazz = new Class ("Point", typeid (Point &), new Reflection::PtrDeleter <Point>);
+		Class *clazz = new Class ("Point", typeid (primitives::Point &), new Reflection::PtrDeleter <primitives::Point>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
 		}
 		else {
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Point, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Point, float, float>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Point, const std::string &>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addField (new Field ("x", Reflection::createFieldWrapper (&Point::x)));
-			clazz->addField (new Field ("y", Reflection::createFieldWrapper (&Point::y)));
-			clazz->addMethod (new Method ("isValid", createMethodWrapper (&Point::isValid)));
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <primitives::Point, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <primitives::Point, float, float>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <primitives::Point, const std::string &>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addField (new Field ("x", Reflection::createFieldWrapper (&primitives::Point::x)));
+			clazz->addField (new Field ("y", Reflection::createFieldWrapper (&primitives::Point::y)));
+			clazz->addMethod (new Method ("isValid", createMethodWrapper (&primitives::Point::isValid)));
 		}
 	}
 	{
-		Class *clazz = new Class ("Dimension", typeid (Dimension &), new Reflection::PtrDeleter <Dimension>);
+		Class *clazz = new Class ("Dimension", typeid (primitives::Dimension &), new Reflection::PtrDeleter <primitives::Dimension>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
 		}
 		else {
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Dimension, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Dimension, float, float>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Dimension, const std::string &>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addField (new Field ("width", Reflection::createFieldWrapper (&Dimension::width)));
-			clazz->addField (new Field ("height", Reflection::createFieldWrapper (&Dimension::height)));
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <primitives::Dimension, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <primitives::Dimension, float, float>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <primitives::Dimension, const std::string &>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addField (new Field ("width", Reflection::createFieldWrapper (&primitives::Dimension::width)));
+			clazz->addField (new Field ("height", Reflection::createFieldWrapper (&primitives::Dimension::height)));
 		}
 	}
 	{

@@ -10,6 +10,8 @@
 #include "connectorSolver_c.h"
 #include <cmath>
 
+using namespace primitives;
+
 PointVector ConnectorSolver::solve (Ray const &a, Ray const &b)
 {
         PointVector v;

@@ -36,11 +36,11 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
         virtual bool isReactive () const = 0;
         virtual void setReactive (bool value) = 0;
 
-        virtual void setPosition (Point const &p) = 0;
-        virtual Point getPosition () const = 0;
+        virtual void setPosition (primitives::Point const &p) = 0;
+        virtual primitives::Point getPosition () const = 0;
 
-        virtual void setSize (Dimension const &d) = 0;
-        virtual Dimension getSize () const = 0;
+        virtual void setSize (primitives::Dimension const &d) = 0;
+        virtual primitives::Dimension getSize () const = 0;
 
         virtual bool isFill () const = 0;
         virtual void setFill (bool value) = 0;
@@ -51,16 +51,16 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
         virtual float getStrokeDash () const = 0;
         virtual void setStrokeDash (float value) = 0;
 
-        virtual Color getStrokeColor () const = 0;
-        virtual void setStrokeColor (const Color &value) = 0;
+        virtual primitives::Color getStrokeColor () const = 0;
+        virtual void setStrokeColor (const primitives::Color &value) = 0;
 
-        virtual Color getFillColor () const = 0;
-        virtual void setFillColor (const Color &value) = 0;
+        virtual primitives::Color getFillColor () const = 0;
+        virtual void setFillColor (const primitives::Color &value) = 0;
 
         virtual bool isContainter () const = 0;
 
-        virtual Box getBoundingBox () const = 0;
-        virtual Point convertToScaleLayer (Point const &p) const = 0;
+        virtual primitives::Box getBoundingBox () const = 0;
+        virtual primitives::Point convertToScaleLayer (primitives::Point const &p) const = 0;
 
         virtual Core::StringVector getPropertyViews () const = 0;
 

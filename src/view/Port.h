@@ -41,7 +41,7 @@ public:
 
         float angle = 0.0;
         float size = 0.0;
-        Color color;
+        primitives::Color color;
         Anchor anchor;
 
 private:

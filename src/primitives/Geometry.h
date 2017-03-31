@@ -14,6 +14,8 @@
 #include <string>
 #include <vector>
 
+namespace primitives {
+
 struct __tiliae_reflect__ Point {
         Point () : x (0), y (0) {}
         Point (float x, float y) : x (x), y (y) {}
@@ -81,5 +83,7 @@ private:
         Point a;
         Point b;
 };
+
+} // namespace
 
 #endif // POINT_H

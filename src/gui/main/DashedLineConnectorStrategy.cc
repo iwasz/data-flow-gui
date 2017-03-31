@@ -14,7 +14,7 @@
 void DashedLineConnectorStrategy::onButtonPress (Event const &e)
 {
         startPoint = e.positionParentCoords;
-        endPoint = Point ();
+        endPoint = primitives::Point ();
 
         startObject = e.object;
         endObject = nullptr;

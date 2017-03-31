@@ -13,6 +13,8 @@
 #include <core/Exception.h>
 #include <ostream>
 
+namespace primitives {
+
 /*****************************************************************************/
 
 std::ostream &operator<< (std::ostream &o, Point const &p)
@@ -127,3 +129,5 @@ void Box::sort ()
         b.x = maxX;
         b.y = maxY;
 }
+
+} // namespace

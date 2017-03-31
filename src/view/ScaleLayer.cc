@@ -30,7 +30,7 @@ ScaleLayer::ScaleLayer ()
 
 /*****************************************************************************/
 
-void ScaleLayer::zoomIn (const Point &center)
+void ScaleLayer::zoomIn (const primitives::Point &center)
 {
         double x, y;
         clutter_actor_get_scale (self, &x, &y);
@@ -41,13 +41,13 @@ void ScaleLayer::zoomIn (const Point &center)
 
         double newScale = x * 1.1;
 
-        //        if (center == Point ()) {
+        //        if (center == primitives::Point ()) {
         //                clutter_actor_set_pivot_point (self, 0.5, 0.5);
         //        }
         //        else {
         //                float x = int(center.x * 100 / SCALE_SURFACE_SIZE + 0.5) / 100.0;
         //                float y = int(center.y * 100 / SCALE_SURFACE_SIZE + 0.5) / 100.0;
-        //                std::cerr << center << ", " << center.x / SCALE_SURFACE_SIZE << ", " << center.y / SCALE_SURFACE_SIZE << ", " << Point (x, y) <<
+        //                std::cerr << center << ", " << center.x / SCALE_SURFACE_SIZE << ", " << center.y / SCALE_SURFACE_SIZE << ", " << primitives::Point (x, y) <<
         //                std::endl;
         //                // clutter_actor_set_pivot_point (self, double(center.x) / SCALE_SURFACE_SIZE, double(center.y) / SCALE_SURFACE_SIZE);
         //                clutter_actor_set_pivot_point (self, x, y);
@@ -58,7 +58,7 @@ void ScaleLayer::zoomIn (const Point &center)
 
 /*****************************************************************************/
 
-void ScaleLayer::zoomOut (const Point &center)
+void ScaleLayer::zoomOut (const primitives::Point &center)
 {
         ClutterActor *stage = clutter_actor_get_parent (self);
         float stageW, stageH;
@@ -74,7 +74,7 @@ void ScaleLayer::zoomOut (const Point &center)
                 return;
         }
 
-        if (center == Point ()) {
+        if (center == primitives::Point ()) {
                 clutter_actor_set_pivot_point (self, 0.5, 0.5);
         }
         else {
@@ -84,7 +84,7 @@ void ScaleLayer::zoomOut (const Point &center)
 
         clutter_actor_set_scale (self, x / 1.1, x / 1.1);
 
-        pan (Point ());
+        pan (primitives::Point ());
 }
 
 /*****************************************************************************/
@@ -93,7 +93,7 @@ void ScaleLayer::zoom (double f) { clutter_actor_set_scale (self, f, f); }
 
 /*****************************************************************************/
 
-void ScaleLayer::pan (Point const &n)
+void ScaleLayer::pan (primitives::Point const &n)
 {
 
         float stageW, stageH, scaleW, scaleH, scaleX, scaleY;
@@ -102,7 +102,7 @@ void ScaleLayer::pan (Point const &n)
         clutter_actor_get_transformed_size (self, &scaleW, &scaleH);
         clutter_actor_get_transformed_position (self, &scaleX, &scaleY);
 
-        Point m = n;
+        primitives::Point m = n;
 
         if (scaleX + m.x > 0) {
                 m.x = -scaleX;

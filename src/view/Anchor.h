@@ -17,7 +17,7 @@
 
 struct IAnchorPositionProvider {
         virtual ~IAnchorPositionProvider () {}
-        virtual Point getPosition () const = 0;
+        virtual primitives::Point getPosition () const = 0;
 };
 
 class Port;
@@ -38,8 +38,8 @@ public:
         typedef std::vector<Connection> ConnectionVector;
         friend class AbstractConnector;
 
-        void notifyMoveAnchor (Point const &p);
-        Point getPosition () const { return apProvider->getPosition (); }
+        void notifyMoveAnchor (primitives::Point const &p);
+        primitives::Point getPosition () const { return apProvider->getPosition (); }
         void setApProvider (std::shared_ptr<IAnchorPositionProvider> value) { apProvider = value; }
 
         Direction getFacing () const { return facing; }
@@ -73,7 +73,7 @@ class NodeAnchorPositionProvider : public IAnchorPositionProvider {
 public:
         NodeAnchorPositionProvider (int i, INodeView *n) : i (i), node (n) {}
         virtual ~NodeAnchorPositionProvider () {}
-        virtual Point getPosition () const;
+        virtual primitives::Point getPosition () const;
 
 private:
         int i;

@@ -44,6 +44,7 @@ void NativeXmlFormatSave::save (std::string const &path)
         impl->reset ();
         std::ofstream file (path);
         impl->file = &file;
+        impl->file->imbue (std::locale::classic ());
 
         file << "<flow>\n";
 
@@ -60,31 +61,42 @@ void NativeXmlFormatSave::save (std::string const &path)
 
 /*****************************************************************************/
 
-std::string NativeXmlFormatSave::clutterActorArguments (IClutterActor *a)
+void NativeXmlFormatSave::clutterActorArguments (IClutterActor *a)
 {
-        Point p = a->getPosition ();
-        Dimension d = a->getSize ();
-        return std::string ("position=\"") + boost::lexical_cast<std::string> (p.x) + "," + boost::lexical_cast<std::string> (p.y) + "\" size=\""
-                + boost::lexical_cast<std::string> (d.width) + "," + boost::lexical_cast<std::string> (d.height) + "\" fill=\""
-                + boost::lexical_cast<std::string> (a->isFill ()) + "\" fillColor=\"" + Color::toString (a->getFillColor ()) + "\" "
-                + clutterActorArgumentsStroke (a);
+        primitives::Point p = a->getPosition ();
+        primitives::Dimension d = a->getSize ();
+        // This is output directly to the stream, because it has locale set appropriately, and boost::lexical_cast has not.
+        *impl->file << "position=\"" << p.x << "," << p.y << "\" size=\"" << d.width << "," << d.height << "\" fill=\"" << a->isFill () << "\" fillColor=\""
+                   << primitives::Color::toString (a->getFillColor ()) << "\" ";
+
+        clutterActorArgumentsStroke (a);
 }
 
 /*****************************************************************************/
 
-std::string NativeXmlFormatSave::clutterActorArgumentsStroke (IClutterActor *a)
+void NativeXmlFormatSave::clutterActorArgumentsStroke (IClutterActor *a)
 {
-        return "strokeWidth=\"" + boost::lexical_cast<std::string> (a->getStrokeWidth ()) + "\" strokeColor=\"" + Color::toString (a->getStrokeColor ())
-                + "\" strokeDash=\"" + boost::lexical_cast<std::string> (a->getStrokeDash ()) + "\" ";
+        *impl->file << "strokeWidth=\"" << a->getStrokeWidth () << "\" strokeColor=\"" << primitives::Color::toString (a->getStrokeColor ()) << "\" strokeDash=\""
+                   << a->getStrokeDash () << "\" ";
 }
 
 /*****************************************************************************/
 
-void NativeXmlFormatSave::onButton (IClutterActor *a) { *impl->file << "<" + a->getId () + " " + clutterActorArguments (a) + "/>\n"; }
+void NativeXmlFormatSave::onButton (IClutterActor *a)
+{
+        *impl->file << "<" << a->getId () << " ";
+        clutterActorArguments (a);
+        *impl->file << "/>\n";
+}
 
 /*****************************************************************************/
 
-void NativeXmlFormatSave::onCircle (IClutterActor *a) { *impl->file << "<" + a->getId () + " " + clutterActorArguments (a) + "/>\n"; }
+void NativeXmlFormatSave::onCircle (IClutterActor *a)
+{
+        *impl->file << "<" << a->getId () << " ";
+        clutterActorArguments (a);
+        *impl->file << "/>\n";
+}
 
 /*****************************************************************************/
 
@@ -94,10 +106,12 @@ void NativeXmlFormatSave::onCircularNode (IClutterActor *a)
         INodeView *inv = dynamic_cast<INodeView *> (cn);
         unsigned int myIdx = impl->nodesNum++;
         impl->nodesMap[inv] = myIdx;
-        std::cerr << (void *)inv << "=" << myIdx << std::endl;
 
-        *impl->file << std::string ("<") + a->getId () + " index=\"" + boost::lexical_cast<std::string> (myIdx) + "\" " + clutterActorArguments (a) + "font=\""
-                        + cn->getFont () + "\" fontColor=\"" + Color::toString (cn->getFontColor ()) + "\" />\n";
+        // std::cerr << (void *)inv << "=" << myIdx << std::endl;
+
+        *impl->file << std::string ("<") << a->getId () << " index=\"" << myIdx << "\" ";
+        clutterActorArguments (a);
+        *impl->file << "font=\"" << cn->getFont () << "\" fontColor=\"" << primitives::Color::toString (cn->getFontColor ()) << "\" />\n";
 }
 
 /*****************************************************************************/
@@ -105,9 +119,10 @@ void NativeXmlFormatSave::onCircularNode (IClutterActor *a)
 void NativeXmlFormatSave::onLine (IClutterActor *a)
 {
         Line *l = dynamic_cast<Line *> (a);
-        *impl->file << "<" + a->getId () + " " + clutterActorArgumentsStroke (a) + " pointA=\"" + boost::lexical_cast<std::string> (l->getPointA ().x) + ","
-                        + boost::lexical_cast<std::string> (l->getPointA ().y) + "\" pointB=\"" + boost::lexical_cast<std::string> (l->getPointB ().x) + ","
-                        + boost::lexical_cast<std::string> (l->getPointB ().y) + "\" />\n";
+        *impl->file << "<" << a->getId () << " ";
+        clutterActorArgumentsStroke (a);
+        *impl->file << " pointA=\"" << l->getPointA ().x << "," << l->getPointA ().y << "\" pointB=\"" << l->getPointB ().x << "," << l->getPointB ().y
+                    << "\" />\n";
 }
 
 /*****************************************************************************/
@@ -133,11 +148,12 @@ void NativeXmlFormatSave::onLineConnector (IClutterActor *a)
         unsigned int nvaNum = impl->nodesMap.at (pa->getNodeView ());
         unsigned int nvbNum = impl->nodesMap.at (pb->getNodeView ());
 
-        std::cerr << (void *)pa->getNodeView () << "=" << nvaNum << " " << (void *)pb->getNodeView () << "=" << nvbNum << std::endl;
+        // std::cerr << (void *)pa->getNodeView () << "=" << nvaNum << " " << (void *)pb->getNodeView () << "=" << nvbNum << std::endl;
 
-        *impl->file << "<" + a->getId () + " " + clutterActorArgumentsStroke (a) + " objA=\"" + boost::lexical_cast<std::string> (nvaNum) + "\" portA=\""
-                        + boost::lexical_cast<std::string> (paNum) + "\"" + " objB=\"" + boost::lexical_cast<std::string> (nvbNum) + "\" portB=\""
-                        + boost::lexical_cast<std::string> (pbNum) + "\" />\n";
+        *impl->file << "<" << a->getId () << " ";
+        clutterActorArgumentsStroke (a);
+        *impl->file << " objA=\"" << nvaNum << "\" portA=\"" << paNum << "\""
+                    << " objB=\"" << nvbNum << "\" portB=\"" << pbNum << "\" />\n";
 }
 
 /*****************************************************************************/
@@ -146,7 +162,12 @@ void NativeXmlFormatSave::onConnector (IClutterActor *a) { onLineConnector (a); 
 
 /*****************************************************************************/
 
-void NativeXmlFormatSave::onRectangle (IClutterActor *a) { *impl->file << "<" + a->getId () + " " + clutterActorArguments (a) + "/>\n"; }
+void NativeXmlFormatSave::onRectangle (IClutterActor *a)
+{
+        *impl->file << "<" << a->getId () << " ";
+        clutterActorArguments (a);
+        *impl->file << "/>\n";
+}
 
 /*****************************************************************************/
 
