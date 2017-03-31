@@ -59,7 +59,12 @@ struct MainController::Impl {
         ClutterActorVector *selectedActors = nullptr;
         ToolContainer *toolContainer = nullptr;
         PropertiesController *propertiesController = nullptr;
+
+        // TODO is this necessary?
         SceneAPI *sceneAPI = nullptr;
+
+        // TODO remove
+        NativeXmlFormatLoad *load = nullptr;
 
         /// Additional state. Used directly in the drawing events (onMove, onRelease).
         struct {
@@ -436,22 +441,20 @@ PropertiesController *MainController::getPropertiesController () { return impl->
 /*****************************************************************************/
 #include "file/NativeXmlFormatLoad.h"
 
-// TODO remove
-NativeXmlFormatLoad *load = nullptr;
-void MainController::setLoadFile (NativeXmlFormatLoad *l) { load = l; }
+void MainController::setLoadFile (NativeXmlFormatLoad *l) { impl->load = l; }
 
 void MainController::onOpen ()
 {
 
-        load->load ("file.xml");
+        impl->load->load ("/home/iwasz/file.xml");
 
-        //        SceneAPI *s = impl->sceneAPI;
-        //        IClutterActor *actor = nullptr;
-        //        actor = s->create ("addNode");
-        //        actor->setPosition (Point (4800, 5000));
-        //        actor->setSize (Dimension (100, 100));
-        //        actor->setVisible (true);
-        //        INodeView *nodeViewA = dynamic_cast<INodeView *> (actor);
+        //                SceneAPI *s = impl->sceneAPI;
+        //                IClutterActor *actor = nullptr;
+        //                actor = s->create ("addNode");
+        //                actor->setPosition (Point (4800, 5000));
+        //                actor->setSize (Dimension (100, 100));
+        //                actor->setVisible (true);
+        //                INodeView *nodeViewA = dynamic_cast<INodeView *> (actor);
 
         //        actor = s->create ("copyNode");
         //        actor->setPosition (Point (5000, 5000));
@@ -480,7 +483,7 @@ void MainController::setDataFile (IDataFile *f) { ff = f; }
 void MainController::onSave ()
 {
         //        SceneAPI *s = impl->sceneAPI;
-        ff->save ("file.xml");
+        ff->save ("/home/iwasz/file.xml");
 }
 
 /*****************************************************************************/
