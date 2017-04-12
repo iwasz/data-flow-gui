@@ -193,6 +193,7 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addField (new Field ("key", Reflection::createFieldWrapper (&GtkForms::DimensionRestoreDecorator::key)));
 			clazz->addField (new Field ("database", Reflection::createFieldWrapper (&GtkForms::DimensionRestoreDecorator::database)));
 			clazz->addMethod (new Method ("postShow", createMethodWrapper (&GtkForms::DimensionRestoreDecorator::postShow)));
+			clazz->addMethod (new Method ("preShow", createMethodWrapper (&GtkForms::DimensionRestoreDecorator::preShow)));
 		}
 	}
 	{
@@ -287,56 +288,6 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addBaseClassName ("Console");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <ConsoleNode, void>::Level1Wrapper::newConstructorPointer ()));
 			clazz->addMethod (new Method ("process", createMethodWrapper (&ConsoleNode::process)));
-		}
-	}
-	{
-		Class *clazz = new Class ("IDataFile", typeid (IDataFile &), new Reflection::PtrDeleter <IDataFile>);
-		if (!Manager::add (clazz)) {
-			delete clazz;
-		}
-		else {
-			clazz->addBaseClassName ("Object");
-			clazz->addMethod (new Method ("load", createMethodWrapper (&IDataFile::load)));
-			clazz->addMethod (new Method ("save", createMethodWrapper (&IDataFile::save)));
-			clazz->addMethod (new Method ("onButton", createMethodWrapper (&IDataFile::onButton)));
-			clazz->addMethod (new Method ("onCircle", createMethodWrapper (&IDataFile::onCircle)));
-			clazz->addMethod (new Method ("onCircularNode", createMethodWrapper (&IDataFile::onCircularNode)));
-			clazz->addMethod (new Method ("onLine", createMethodWrapper (&IDataFile::onLine)));
-			clazz->addMethod (new Method ("onLineConnector", createMethodWrapper (&IDataFile::onLineConnector)));
-			clazz->addMethod (new Method ("onConnector", createMethodWrapper (&IDataFile::onConnector)));
-			clazz->addMethod (new Method ("onRectangle", createMethodWrapper (&IDataFile::onRectangle)));
-		}
-	}
-	{
-		Class *clazz = new Class ("NativeXmlFormatSave", typeid (NativeXmlFormatSave &), new Reflection::PtrDeleter <NativeXmlFormatSave>);
-		if (!Manager::add (clazz)) {
-			delete clazz;
-		}
-		else {
-			clazz->addBaseClassName ("IDataFile");
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <NativeXmlFormatSave, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addMethod (new Method ("load", createMethodWrapper (&NativeXmlFormatSave::load)));
-			clazz->addMethod (new Method ("save", createMethodWrapper (&NativeXmlFormatSave::save)));
-			clazz->addMethod (new Method ("onButton", createMethodWrapper (&NativeXmlFormatSave::onButton)));
-			clazz->addMethod (new Method ("onCircle", createMethodWrapper (&NativeXmlFormatSave::onCircle)));
-			clazz->addMethod (new Method ("onCircularNode", createMethodWrapper (&NativeXmlFormatSave::onCircularNode)));
-			clazz->addMethod (new Method ("onLine", createMethodWrapper (&NativeXmlFormatSave::onLine)));
-			clazz->addMethod (new Method ("onLineConnector", createMethodWrapper (&NativeXmlFormatSave::onLineConnector)));
-			clazz->addMethod (new Method ("onConnector", createMethodWrapper (&NativeXmlFormatSave::onConnector)));
-			clazz->addMethod (new Method ("onRectangle", createMethodWrapper (&NativeXmlFormatSave::onRectangle)));
-			clazz->addMethod (new Method ("setSceneApi", createMethodWrapper (&NativeXmlFormatSave::setSceneApi)));
-		}
-	}
-	{
-		Class *clazz = new Class ("NativeXmlFormatLoad", typeid (NativeXmlFormatLoad &), new Reflection::PtrDeleter <NativeXmlFormatLoad>);
-		if (!Manager::add (clazz)) {
-			delete clazz;
-		}
-		else {
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <NativeXmlFormatLoad, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addMethod (new Method ("load", createMethodWrapper (&NativeXmlFormatLoad::load)));
-			clazz->addMethod (new Method ("setSceneApi", createMethodWrapper (&NativeXmlFormatLoad::setSceneApi)));
-			clazz->addMethod (new Method ("setWrapper", createMethodWrapper (&NativeXmlFormatLoad::setWrapper)));
 		}
 	}
 	{
@@ -739,6 +690,23 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("destroyUi", createMethodWrapper (&GtkForms::BuilderView::destroyUi)));
 			clazz->addMethod (new Method ("getUiOrThrow", createMethodWrapper (&GtkForms::BuilderView::getUiOrThrow)));
 			clazz->addMethod (new Method ("connectSignals", createMethodWrapper (&GtkForms::BuilderView::connectSignals)));
+		}
+	}
+	{
+		Class *clazz = new Class ("IDataFileSave", typeid (IDataFileSave &), new Reflection::PtrDeleter <IDataFileSave>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("Object");
+			clazz->addMethod (new Method ("save", createMethodWrapper (&IDataFileSave::save)));
+			clazz->addMethod (new Method ("onButton", createMethodWrapper (&IDataFileSave::onButton)));
+			clazz->addMethod (new Method ("onCircle", createMethodWrapper (&IDataFileSave::onCircle)));
+			clazz->addMethod (new Method ("onCircularNode", createMethodWrapper (&IDataFileSave::onCircularNode)));
+			clazz->addMethod (new Method ("onLine", createMethodWrapper (&IDataFileSave::onLine)));
+			clazz->addMethod (new Method ("onLineConnector", createMethodWrapper (&IDataFileSave::onLineConnector)));
+			clazz->addMethod (new Method ("onConnector", createMethodWrapper (&IDataFileSave::onConnector)));
+			clazz->addMethod (new Method ("onRectangle", createMethodWrapper (&IDataFileSave::onRectangle)));
 		}
 	}
 	{
@@ -1187,10 +1155,6 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("setSceneApi", createMethodWrapper (&MainController::setSceneApi)));
 			clazz->addMethod (new Method ("onKeyPress", createMethodWrapper (&MainController::onKeyPress)));
 			clazz->addMethod (new Method ("onSelection", createMethodWrapper (&MainController::onSelection)));
-			clazz->addMethod (new Method ("onOpen", createMethodWrapper (&MainController::onOpen)));
-			clazz->addMethod (new Method ("onSave", createMethodWrapper (&MainController::onSave)));
-			clazz->addMethod (new Method ("setDataFile", createMethodWrapper (&MainController::setDataFile)));
-			clazz->addMethod (new Method ("setLoadFile", createMethodWrapper (&MainController::setLoadFile)));
 		}
 	}
 	{
@@ -1277,6 +1241,75 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <PropertiesController, void>::Level1Wrapper::newConstructorPointer ()));
 			clazz->addMethod (new Method ("onStart", createMethodWrapper (&PropertiesController::onStart)));
 			clazz->addMethod (new Method ("onSelection", createMethodWrapper (&PropertiesController::onSelection)));
+		}
+	}
+	{
+		Class *clazz = new Class ("IDataFileLoad", typeid (IDataFileLoad &), new Reflection::PtrDeleter <IDataFileLoad>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("Object");
+			clazz->addMethod (new Method ("load", createMethodWrapper (&IDataFileLoad::load)));
+		}
+	}
+	{
+		Class *clazz = new Class ("NativeXmlFormatLoad", typeid (NativeXmlFormatLoad &), new Reflection::PtrDeleter <NativeXmlFormatLoad>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("IDataFileLoad");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <NativeXmlFormatLoad, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("load", createMethodWrapper (&NativeXmlFormatLoad::load)));
+			clazz->addMethod (new Method ("setSceneApi", createMethodWrapper (&NativeXmlFormatLoad::setSceneApi)));
+			clazz->addMethod (new Method ("setWrapper", createMethodWrapper (&NativeXmlFormatLoad::setWrapper)));
+		}
+	}
+	{
+		Class *clazz = new Class ("NativeXmlFormatSave", typeid (NativeXmlFormatSave &), new Reflection::PtrDeleter <NativeXmlFormatSave>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("IDataFileSave");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <NativeXmlFormatSave, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("load", createMethodWrapper (&NativeXmlFormatSave::load)));
+			clazz->addMethod (new Method ("save", createMethodWrapper (&NativeXmlFormatSave::save)));
+			clazz->addMethod (new Method ("onButton", createMethodWrapper (&NativeXmlFormatSave::onButton)));
+			clazz->addMethod (new Method ("onCircle", createMethodWrapper (&NativeXmlFormatSave::onCircle)));
+			clazz->addMethod (new Method ("onCircularNode", createMethodWrapper (&NativeXmlFormatSave::onCircularNode)));
+			clazz->addMethod (new Method ("onLine", createMethodWrapper (&NativeXmlFormatSave::onLine)));
+			clazz->addMethod (new Method ("onLineConnector", createMethodWrapper (&NativeXmlFormatSave::onLineConnector)));
+			clazz->addMethod (new Method ("onConnector", createMethodWrapper (&NativeXmlFormatSave::onConnector)));
+			clazz->addMethod (new Method ("onRectangle", createMethodWrapper (&NativeXmlFormatSave::onRectangle)));
+			clazz->addMethod (new Method ("setSceneApi", createMethodWrapper (&NativeXmlFormatSave::setSceneApi)));
+		}
+	}
+	{
+		Class *clazz = new Class ("OpenFileController", typeid (OpenFileController &), new Reflection::PtrDeleter <OpenFileController>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("AbstractController");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <OpenFileController, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("onStart", createMethodWrapper (&OpenFileController::onStart)));
+			clazz->addMethod (new Method ("onResponse", createMethodWrapper (&OpenFileController::onResponse)));
+			clazz->addMethod (new Method ("setLoadFile", createMethodWrapper (&OpenFileController::setLoadFile)));
+		}
+	}
+	{
+		Class *clazz = new Class ("SaveFileController", typeid (SaveFileController &), new Reflection::PtrDeleter <SaveFileController>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("AbstractController");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <SaveFileController, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("onStart", createMethodWrapper (&SaveFileController::onStart)));
+			clazz->addMethod (new Method ("onResponse", createMethodWrapper (&SaveFileController::onResponse)));
+			clazz->addMethod (new Method ("setDataFile", createMethodWrapper (&SaveFileController::setDataFile)));
 		}
 	}
 	{

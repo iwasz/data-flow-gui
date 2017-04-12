@@ -9,11 +9,11 @@
 #ifndef NATIVEXMLFORMAT_H
 #define NATIVEXMLFORMAT_H
 
-#include "IDataFile.h"
+#include "IDataFileSave.h"
 
 class SceneAPI;
 
-class __tiliae_reflect__ NativeXmlFormatSave : public IDataFile {
+class __tiliae_reflect__ NativeXmlFormatSave : public IDataFileSave {
 public:
         NativeXmlFormatSave ();
         virtual ~NativeXmlFormatSave ();

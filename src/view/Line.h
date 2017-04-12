@@ -38,7 +38,7 @@ public:
         virtual bool isTextEditable () const;
         virtual void setTextEditable (bool b);
 
-        virtual void visit (IDataFile *d) { d->onLine (this); }
+        virtual void visit (IDataFileSave *d) { d->onLine (this); }
 };
 
 #endif // LINE_H

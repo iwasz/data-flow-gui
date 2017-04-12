@@ -53,7 +53,7 @@ public:
         virtual bool onScroll (Event const &e);
         virtual bool onKeyPress (Event const &e);
 
-        virtual void visit (IDataFile *) {}
+        virtual void visit (IDataFileSave *) {}
 
 private:
         GtkWidget *clutterWidget;

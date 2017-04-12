@@ -6,21 +6,31 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef DATA_FLOW_RECTANGLE_H
-#define DATA_FLOW_RECTANGLE_H
+#ifndef LOAD_NATIVEXMLFORMAT_H
+#define LOAD_NATIVEXMLFORMAT_H
 
-#include "AbstractActor.h"
-#include "Stage.h"
+#include "IDataFileLoad.h"
 #include <ReflectionParserAnnotation.h>
-#include <clutter/clutter.h>
 #include <string>
 
-class __tiliae_reflect__ Rect : public AbstractActor {
-public:
-        Rect ();
-        virtual ~Rect () {}
+namespace Wrapper {
+class BeanWrapper;
+}
+class SceneAPI;
 
-        virtual void visit (IDataFileSave *d) { d->onConnector (this); }
+class __tiliae_reflect__ NativeXmlFormatLoad : public IDataFileLoad {
+public:
+        NativeXmlFormatLoad ();
+        virtual ~NativeXmlFormatLoad ();
+
+        virtual void load (std::string const &path);
+
+        void setSceneApi (SceneAPI *value);
+        void setWrapper (Wrapper::BeanWrapper *value);
+
+private:
+        struct Impl;
+        Impl *impl;
 };
 
-#endif // RECTANGLE_H
+#endif // NATIVEXMLFORMAT_H

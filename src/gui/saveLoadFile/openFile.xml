@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+  <OpenFileController id="openFileController">
+    <ref set-as="loadFile" bean="nativeXmlFormatLoad" />
+  </OpenFileController>
+
+  <BuilderView id="openFileView" file="gui/saveLoadFile/openFileView.ui" loadWholeFile="true">
+    <FileChooserAdapter add-to="signalAdapters" />
+    <DimensionRestoreDecorator add-to="decorators" widget="openFileView" database="@dimensionRestoreDatabase" />
+  </BuilderView>
+
+  <SaveFileController id="saveFileController">
+    <ref set-as="dataFile" bean="nativeXmlFormatSave" />
+  </SaveFileController>
+
+  <BuilderView id="saveFileView" file="gui/saveLoadFile/saveFileView.ui" loadWholeFile="true">
+    <FileChooserAdapter add-to="signalAdapters" />
+    <DimensionRestoreDecorator add-to="decorators" widget="saveFileView" database="@dimensionRestoreDatabase" />
+  </BuilderView>
+
+</beans>

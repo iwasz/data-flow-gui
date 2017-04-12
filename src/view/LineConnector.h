@@ -32,7 +32,7 @@ public:
         virtual void setAFacing (Direction value) {}
         virtual void setBFacing (Direction value) {}
 
-        virtual void visit (IDataFile *d) { d->onLineConnector (this); }
+        virtual void visit (IDataFileSave *d) { d->onLineConnector (this); }
 };
 
 #endif // LINECONNECTOR_H

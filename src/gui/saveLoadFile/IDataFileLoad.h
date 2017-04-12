@@ -6,21 +6,18 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef DATA_FLOW_RECTANGLE_H
-#define DATA_FLOW_RECTANGLE_H
+#ifndef IDATAFILE_LOAD_H
+#define IDATAFILE_LOAD_H
 
-#include "AbstractActor.h"
-#include "Stage.h"
 #include <ReflectionParserAnnotation.h>
-#include <clutter/clutter.h>
+#include <core/Exception.h>
+#include <core/Object.h>
 #include <string>
 
-class __tiliae_reflect__ Rect : public AbstractActor {
-public:
-        Rect ();
-        virtual ~Rect () {}
+struct __tiliae_reflect__ IDataFileLoad : public Core::Object {
 
-        virtual void visit (IDataFileSave *d) { d->onConnector (this); }
+        virtual ~IDataFileLoad () {}
+        virtual void load (std::string const &path) = 0;
 };
 
-#endif // RECTANGLE_H
+#endif // IDATAFILE_H

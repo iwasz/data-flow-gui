@@ -39,7 +39,7 @@ public:
         virtual void onRelease ();
         virtual primitives::Point getPortPosition (int i) const;
 
-        virtual void visit (IDataFile *d) { d->onButton (this); }
+        virtual void visit (IDataFileSave *d) { d->onButton (this); }
 
 private:
         struct Impl;

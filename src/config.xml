@@ -22,4 +22,5 @@
   <import resource="gui/about/about.xml" />
   <import resource="gui/console/console.xml" />
   <import resource="gui/properties/properties.xml" />
+  <import resource="gui/saveLoadFile/openFile.xml" />
 </beans>

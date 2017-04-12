@@ -63,9 +63,6 @@ struct MainController::Impl {
         // TODO is this necessary?
         SceneAPI *sceneAPI = nullptr;
 
-        // TODO remove
-        NativeXmlFormatLoad *load = nullptr;
-
         /// Additional state. Used directly in the drawing events (onMove, onRelease).
         struct {
                 /// Name of curently selected tool (arc, node etc).
@@ -437,54 +434,6 @@ void MainController::onSelection (ClutterActorVector *s) { impl->propertiesContr
 /*****************************************************************************/
 
 PropertiesController *MainController::getPropertiesController () { return impl->propertiesController; }
-
-/*****************************************************************************/
-#include "file/NativeXmlFormatLoad.h"
-
-void MainController::setLoadFile (NativeXmlFormatLoad *l) { impl->load = l; }
-
-void MainController::onOpen ()
-{
-
-        impl->load->load ("/home/iwasz/file.xml");
-
-        //                SceneAPI *s = impl->sceneAPI;
-        //                IClutterActor *actor = nullptr;
-        //                actor = s->create ("addNode");
-        //                actor->setPosition (primitives::Point (4800, 5000));
-        //                actor->setSize (primitives::Dimension (100, 100));
-        //                actor->setVisible (true);
-        //                INodeView *nodeViewA = dynamic_cast<INodeView *> (actor);
-
-        //        actor = s->create ("copyNode");
-        //        actor->setPosition (primitives::Point (5000, 5000));
-        //        actor->setSize (primitives::Dimension (100, 100));
-        //        actor->setVisible (true);
-        //        INodeView *nodeViewB = dynamic_cast<INodeView *> (actor);
-
-        //        // Ports
-        //        Port *pa = nodeViewA->getPorts ()[2].get ();
-        //        Port *pb = nodeViewB->getPorts ()[0].get ();
-
-        //        // Connection
-        //        actor = s->create ("lineConnector");
-        //        actor->setVisible (true);
-        //        LineConnector *lc = dynamic_cast<LineConnector *> (actor);
-
-        //        s->connect (lc, pa, pb);
-}
-
-/*****************************************************************************/
-
-// TODO remove
-IDataFile *ff;
-void MainController::setDataFile (IDataFile *f) { ff = f; }
-
-void MainController::onSave ()
-{
-        //        SceneAPI *s = impl->sceneAPI;
-        ff->save ("/home/iwasz/file.xml");
-}
 
 /*****************************************************************************/
 

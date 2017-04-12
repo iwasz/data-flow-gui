@@ -9,7 +9,7 @@
 #ifndef CLUTTER_ICONTAINER_H
 #define CLUTTER_ICONTAINER_H
 
-#include "file/IDataFile.h"
+#include "gui/saveLoadFile/IDataFileSave.h"
 #include "primitives/Color.h"
 #include "primitives/Geometry.h"
 #include <ReflectionParserAnnotation.h>
@@ -65,7 +65,7 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
         virtual Core::StringVector getPropertyViews () const = 0;
 
         /// Save/load files
-        virtual void visit (IDataFile *) = 0;
+        virtual void visit (IDataFileSave *) = 0;
         virtual std::string getId () const = 0;
 };
 

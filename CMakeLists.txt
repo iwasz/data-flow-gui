@@ -150,6 +150,16 @@ LIST (APPEND SOURCES
         "src/gui/properties/PropertiesController.cc"
         "src/gui/properties/PropertiesController.h"
         "src/gui/properties/DoubleToFloatEditor.h"
+        "src/gui/saveLoadFile/OpenFileController.h"
+        "src/gui/saveLoadFile/OpenFileController.cc"
+        "src/gui/saveLoadFile/SaveFileController.h"
+        "src/gui/saveLoadFile/SaveFileController.cc"
+        "src/gui/saveLoadFile/IDataFileSave.h"
+        "src/gui/saveLoadFile/IDataFileLoad.h"
+        "src/gui/saveLoadFile/NativeXmlFormatSave.h"
+        "src/gui/saveLoadFile/NativeXmlFormatSave.cc"
+        "src/gui/saveLoadFile/NativeXmlFormatLoad.h"
+        "src/gui/saveLoadFile/NativeXmlFormatLoad.cc"
         "src/view/clutter/drawing_stuff.c"
         "src/view/clutter/drawing_stuff.h"
         "src/view/clutter/iw_button.c"
@@ -225,11 +235,6 @@ LIST (APPEND SOURCES
         "src/config/DfDimensionRestoreDatabase.h"
         "src/mapping/ColorMapping.h"
         "src/mapping/ColorMapping.cc"
-        "src/file/IDataFile.h"
-        "src/file/NativeXmlFormatSave.h"
-        "src/file/NativeXmlFormatSave.cc"
-        "src/file/NativeXmlFormatLoad.h"
-        "src/file/NativeXmlFormatLoad.cc"
 )
 
 # Local includes (inside project).

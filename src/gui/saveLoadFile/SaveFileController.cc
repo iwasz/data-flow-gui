@@ -6,21 +6,20 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef DATA_FLOW_RECTANGLE_H
-#define DATA_FLOW_RECTANGLE_H
+#include "SaveFileController.h"
+#include <App.h>
+#include <Logging.h>
 
-#include "AbstractActor.h"
-#include "Stage.h"
-#include <ReflectionParserAnnotation.h>
-#include <clutter/clutter.h>
-#include <string>
+static src::logger_mt &lg = logger::get ();
 
-class __tiliae_reflect__ Rect : public AbstractActor {
-public:
-        Rect ();
-        virtual ~Rect () {}
+GtkForms::ViewsToOpen SaveFileController::onStart () { return "saveFileView"; }
 
-        virtual void visit (IDataFileSave *d) { d->onConnector (this); }
-};
+/*****************************************************************************/
 
-#endif // RECTANGLE_H
+void SaveFileController::onResponse (int responseId, std::string const &path)
+{
+        if (responseId == GTK_RESPONSE_ACCEPT) {
+                saveService->save (path);
+                closeThis ();
+        }
+}

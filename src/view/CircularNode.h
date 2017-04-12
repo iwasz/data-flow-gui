@@ -52,7 +52,7 @@ public:
         virtual void onAllocate (primitives::Box const &b);
         virtual primitives::Point getPortPosition (int i) const;
 
-        virtual void visit (IDataFile *d) { d->onCircularNode (this); }
+        virtual void visit (IDataFileSave *d) { d->onCircularNode (this); }
 };
 
 #endif // CIRCULARNODE_H

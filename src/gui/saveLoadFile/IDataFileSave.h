@@ -6,8 +6,8 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef IDATAFILE_H
-#define IDATAFILE_H
+#ifndef IDATAFILESAVE_SAVE_H
+#define IDATAFILESAVE_SAVE_H
 
 #include <ReflectionParserAnnotation.h>
 #include <core/Exception.h>
@@ -16,10 +16,9 @@
 
 struct IClutterActor;
 
-struct __tiliae_reflect__ IDataFile : public Core::Object {
+struct __tiliae_reflect__ IDataFileSave : public Core::Object {
 
-        virtual ~IDataFile () {}
-        virtual void load (std::string const &path) = 0;
+        virtual ~IDataFileSave () {}
         virtual void save (std::string const &path) = 0;
 
         virtual void onButton (IClutterActor *a) = 0;
@@ -31,4 +30,4 @@ struct __tiliae_reflect__ IDataFile : public Core::Object {
         virtual void onRectangle (IClutterActor *a) = 0;
 };
 
-#endif // IDATAFILE_H
+#endif // IDataFileSave_H

@@ -6,30 +6,21 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef LOAD_NATIVEXMLFORMAT_H
-#define LOAD_NATIVEXMLFORMAT_H
+#include "OpenFileController.h"
+#include <App.h>
+#include <Logging.h>
 
-#include <ReflectionParserAnnotation.h>
-#include <string>
+static src::logger_mt &lg = logger::get ();
 
-namespace Wrapper {
-class BeanWrapper;
+GtkForms::ViewsToOpen OpenFileController::onStart () { return "openFileView"; }
+
+/*****************************************************************************/
+
+void OpenFileController::onResponse (int responseId, std::string const &path)
+{
+        if (responseId == GTK_RESPONSE_ACCEPT) {
+                loadService->load (path);
+                closeThis ();
+                // ff->save ("/home/iwasz/file.xml");
+        }
 }
-class SceneAPI;
-
-class __tiliae_reflect__ NativeXmlFormatLoad {
-public:
-        NativeXmlFormatLoad ();
-        virtual ~NativeXmlFormatLoad ();
-
-        virtual void load (std::string const &path);
-
-        void setSceneApi (SceneAPI *value);
-        void setWrapper (Wrapper::BeanWrapper *value);
-
-private:
-        struct Impl;
-        Impl *impl;
-};
-
-#endif // NATIVEXMLFORMAT_H

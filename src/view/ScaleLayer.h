@@ -46,7 +46,7 @@ public:
         virtual primitives::Color getFillColor () const { throw Core::Exception ("Not implemented"); }
         virtual void setFillColor (const primitives::Color &value) { throw Core::Exception ("Not implemented"); }
 
-        virtual void visit (IDataFile *) {}
+        virtual void visit (IDataFileSave *) {}
 
 private:
         friend class Stage;
