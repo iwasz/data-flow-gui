@@ -8,6 +8,7 @@
 
 #include "DashedLineConnectorStrategy.h"
 #include "view/Port.h"
+#include "view/SceneAPI.h"
 #include <core/Core.h>
 #include <view/INodeView.h>
 
@@ -65,45 +66,5 @@ void DashedLineConnectorStrategy::onObjectCreated (IClutterActor *a)
         Port *pa = dynamic_cast<Port *> (startObject);
         Port *pb = dynamic_cast<Port *> (endObject);
 
-        if (!pa || !pb) {
-                return;
-        }
-
-        lc->connect (&pa->anchor, IConnector::A);
-        lc->connect (&pb->anchor, IConnector::B);
-
-        /*****************************************************************************/
-        /* Connect flow::INodes                                                      */
-        /*****************************************************************************/
-
-        assert (lc->getArc ());
-        flow::Arc *arc = lc->getArc ().get ();
-
-        //        assert (pa->nodeView);
-        //        assert (pa->nodeView->getNode ());
-
-        if (pa->getNodeView () && pa->getNodeView ()->getNode ()) {
-                flow::INode *startNode = pa->getNodeView ()->getNode ().get ();
-
-                if (pa->isInput ()) {
-                        startNode->setInput (pa->getProgramNumber (), arc);
-                }
-                else {
-                        startNode->addOutput (pa->getProgramNumber (), arc);
-                }
-        }
-
-        //        assert (pb->nodeView);
-        //        assert (pb->nodeView->getNode ());
-
-        if (pb->getNodeView () && pb->getNodeView ()->getNode ()) {
-                flow::INode *endNode = pb->getNodeView ()->getNode ().get ();
-
-                if (pb->isInput ()) {
-                        endNode->setInput (pb->getProgramNumber (), arc);
-                }
-                else {
-                        endNode->addOutput (pb->getProgramNumber (), arc);
-                }
-        }
+        SceneAPI::connect (lc, pa, pb);
 }

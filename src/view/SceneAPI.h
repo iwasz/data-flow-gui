@@ -29,7 +29,7 @@ public:
 
         /// Creates an onject. Do not delete, managed by SceneAPI.
         IClutterActor *create (std::string const &toolName);
-        void connect (LineConnector *lc, Port *pa, Port *pb);
+        static void connect (LineConnector *lc, Port *pa, Port *pb);
 
         Container::BeanFactoryContainer *getContainer () const;
         void setContainer (Container::BeanFactoryContainer *value);

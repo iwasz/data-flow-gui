@@ -1554,7 +1554,6 @@ void createReflectionDatabase_dataFlowGui ()
 		else {
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <SceneAPI, void>::Level1Wrapper::newConstructorPointer ()));
 			clazz->addMethod (new Method ("create", createMethodWrapper (&SceneAPI::create)));
-			clazz->addMethod (new Method ("connect", createMethodWrapper (&SceneAPI::connect)));
 			clazz->addMethod (new Method ("getContainer", createMethodWrapper (&SceneAPI::getContainer)));
 			clazz->addMethod (new Method ("setContainer", createMethodWrapper (&SceneAPI::setContainer)));
 			clazz->addMethod (new Method ("getToolContainer", createMethodWrapper (&SceneAPI::getToolContainer)));
