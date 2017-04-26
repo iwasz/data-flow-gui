@@ -45,6 +45,8 @@ struct __tiliae_reflect__ Dimension {
         float height;
 };
 
+extern std::ostream &operator<< (std::ostream &o, Dimension const &d);
+
 extern Dimension operator- (Point const &a, Point const &b);
 extern bool operator== (Point const &a, Point const &b);
 

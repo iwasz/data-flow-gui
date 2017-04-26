@@ -19,7 +19,7 @@
 class __tiliae_reflect__ ScaleLayer : public AbstractActor {
 public:
         ScaleLayer ();
-        virtual ~ScaleLayer () {}
+        virtual ~ScaleLayer ();
 
         /// Warning, warning! It returns somethig only after container created the instance.
         static ScaleLayer *singleton () { return instance; }
@@ -51,6 +51,9 @@ public:
 private:
         friend class Stage;
         static ScaleLayer *instance;
+
+        struct Impl;
+        Impl *impl;
 };
 
 #endif // SCALELAYER_H

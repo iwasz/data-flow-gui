@@ -25,6 +25,14 @@ std::ostream &operator<< (std::ostream &o, Point const &p)
 
 /*****************************************************************************/
 
+std::ostream &operator<< (std::ostream &o, Dimension const &d)
+{
+        o << "[" << d.width << ", " << d.height << "]";
+        return o;
+}
+
+/*****************************************************************************/
+
 Point::Point (std::string const &s)
 {
         typedef boost::tokenizer<boost::char_separator<char>> tokenizer;
