@@ -23,6 +23,7 @@ struct ScaleLayer::Impl {
         Point initialFocal;
         Point prevCenter;
         bool prevCenterSet = false;
+        float scale = 1;
 };
 
 /*****************************************************************************/
@@ -164,6 +165,7 @@ void ScaleLayer::zoomOut (const Point &center)
 }
 #endif
 
+#if 0
 void ScaleLayer::zoomOut (const Point &center)
 {
         ClutterActor *stage = clutter_actor_get_parent (self);
@@ -194,7 +196,150 @@ void ScaleLayer::zoomOut (const Point &center)
 
         clutter_actor_set_scale (self, scaleX / 1.1, scaleY / 1.1);
 }
+#endif
 
+#if 0
+void ScaleLayer::zoomOut (const Point &center)
+{
+        ClutterActor *stage = clutter_actor_get_parent (self);
+
+        float stageW, stageH;
+        clutter_actor_get_size (stage, &stageW, &stageH);
+
+        float scaleLayerNW, scaleLayerNH;
+        clutter_actor_get_size (self, &scaleLayerNW, &scaleLayerNH);
+
+        float dim = std::max (stageW, stageH);
+        double minScale = dim / SCALE_SURFACE_SIZE + 0.05;
+
+        /*---------------------------------------------------------------------------*/
+
+        ClutterMatrix transform;
+        clutter_matrix_init_identity (&transform);
+        //clutter_actor_get_transform (self, &transform);
+
+        ClutterActorBox box;
+        clutter_actor_get_allocation_box (self, &box);
+
+        float pivot_x = (box.x2 - box.x1) * (double(center.x) / scaleLayerNW);
+        float pivot_y = (box.y2 - box.y1) * (double(center.y) / scaleLayerNH);
+
+        std::cerr << pivot_x << ", " << pivot_y << std::endl;
+
+        gfloat tx, ty, tz;
+        clutter_actor_get_translation (self, &tx, &ty, &tz);
+
+        float px = pivot_x + tx;
+        float py = pivot_y + ty;
+
+        cogl_matrix_translate (&transform, px, py, 0);
+        impl->scale /= 1.1;
+        cogl_matrix_scale (&transform, impl->scale, impl->scale, 1);
+        cogl_matrix_translate (&transform, -px, -py, 0);
+
+        clutter_actor_set_transform (self, &transform);
+}
+#endif
+
+/*****************************************************************************/
+
+#if 0
+void ScaleLayer::zoomOut (const Point &center)
+{
+        ClutterActor *stage = clutter_actor_get_parent (self);
+
+        float stageW, stageH;
+        clutter_actor_get_size (stage, &stageW, &stageH);
+
+        float scaleLayerNW, scaleLayerNH;
+        clutter_actor_get_size (self, &scaleLayerNW, &scaleLayerNH);
+
+        float dim = std::max (stageW, stageH);
+        double minScale = dim / SCALE_SURFACE_SIZE + 0.05;
+
+        /*---------------------------------------------------------------------------*/
+
+        ClutterMatrix transform;
+        clutter_matrix_init_identity (&transform);
+
+
+
+
+        ClutterActorBox box;
+        //clutter_actor_get_allocation_box (self, &box);
+
+
+        float scaleLayerW, scaleLayerH;
+        clutter_actor_get_transformed_size (self, &scaleLayerW, &scaleLayerH);
+
+        float scaleLayerX, scaleLayerY;
+        clutter_actor_get_transformed_position (self, &scaleLayerX, &scaleLayerY);
+
+        float pivot_x = (scaleLayerW) * (double(center.x) / scaleLayerNW);
+        float pivot_y = (scaleLayerH) * (double(center.y) / scaleLayerNH);
+
+        std::cerr << pivot_x << ", " << pivot_y << std::endl;
+
+        gfloat tx, ty, tz;
+        clutter_actor_get_translation (self, &tx, &ty, &tz);
+
+        float px = -scaleLayerX + pivot_x + tx;
+        float py = -scaleLayerY + pivot_y + ty;
+
+        cogl_matrix_translate (&transform, px, py, 0);
+        impl->scale /= 1.1;
+        cogl_matrix_scale (&transform, impl->scale, impl->scale, 1);
+        cogl_matrix_translate (&transform, -px, -py, 0);
+
+        clutter_actor_set_transform (self, &transform);
+}
+#endif
+
+#if 1
+void ScaleLayer::zoomOut (const Point &center)
+{
+        ClutterActor *stage = clutter_actor_get_parent (self);
+
+        float stageW, stageH;
+        clutter_actor_get_size (stage, &stageW, &stageH);
+
+        float scaleLayerNW, scaleLayerNH;
+        clutter_actor_get_size (self, &scaleLayerNW, &scaleLayerNH);
+
+        float dim = std::max (stageW, stageH);
+        double minScale = dim / SCALE_SURFACE_SIZE + 0.05;
+
+        /*---------------------------------------------------------------------------*/
+
+        ClutterMatrix transform;
+        clutter_matrix_init_identity (&transform);
+        //clutter_actor_get_transform (self, &transform);
+
+        ClutterActorBox box;
+        clutter_actor_get_allocation_box (self, &box);
+
+        float cx1, cy1;
+        clutter_actor_transform_stage_point (self, center.x, center.y, &cx1, &cy1);
+
+        float pivot_x = (box.x2 - box.x1) * (double(cx1) / scaleLayerNW);
+        float pivot_y = (box.y2 - box.y1) * (double(cy1) / scaleLayerNH);
+
+        std::cerr << pivot_x << ", " << pivot_y << std::endl;
+
+        gfloat tx, ty, tz;
+        clutter_actor_get_translation (self, &tx, &ty, &tz);
+
+        float px = pivot_x + tx;
+        float py = pivot_y + ty;
+
+        cogl_matrix_translate (&transform, px, py, 0);
+        impl->scale /= 1.1;
+        cogl_matrix_scale (&transform, impl->scale, impl->scale, 1);
+        cogl_matrix_translate (&transform, -px, -py, 0);
+
+        clutter_actor_set_transform (self, &transform);
+}
+#endif
 /*****************************************************************************/
 
 void ScaleLayer::zoom (double f) { clutter_actor_set_scale (self, f, f); }
