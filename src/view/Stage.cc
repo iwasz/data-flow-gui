@@ -153,7 +153,7 @@ bool Stage::onScroll (Event const &e)
 
         switch (e.scrollDirection) {
         case CLUTTER_SCROLL_UP:
-                scale->zoomIn (e.positionParentCoords);
+                scale->zoomIn (e.positionStageCoords);
                 break;
 
         case CLUTTER_SCROLL_DOWN:
@@ -165,7 +165,7 @@ bool Stage::onScroll (Event const &e)
                         scale->zoomOut (e.positionStageCoords);
                 }
                 else if (e.scrollY < 0) {
-                        scale->zoomIn (e.positionParentCoords);
+                        scale->zoomIn (e.positionStageCoords);
                 }
         } break;
 
