@@ -49,6 +49,10 @@ public:
         virtual void visit (IDataFileSave *) {}
 
 private:
+
+        void scale (primitives::Point const &center, float scale);
+
+
         friend class Stage;
         static ScaleLayer *instance;
 
