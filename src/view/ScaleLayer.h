@@ -29,7 +29,7 @@ public:
         void zoomIn (primitives::Point const &center = primitives::Point ());
         void zoomOut (primitives::Point const &center = primitives::Point ());
         void zoom (double f);
-        void pan (primitives::Point const &n);
+        void pan (primitives::Point const &delta);
 
         virtual bool isFill () const { throw Core::Exception ("Not implemented"); }
         virtual void setFill (bool value) { throw Core::Exception ("Not implemented"); }

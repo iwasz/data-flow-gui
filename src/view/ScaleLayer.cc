@@ -27,7 +27,7 @@ ScaleLayer::ScaleLayer () : impl (new Impl)
         clutter_actor_set_reactive (self, true);
         clutter_actor_set_size (self, SCALE_SURFACE_SIZE, SCALE_SURFACE_SIZE);
 
-#if 1
+#if 0
         static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
         clutter_actor_set_background_color (self, &c);
 #endif
@@ -46,14 +46,14 @@ void ScaleLayer::zoomIn (const Point &center)
         double x, y;
         clutter_actor_get_scale (self, &x, &y);
 
-        if (x >= 1) {
+        if (x >= 10) {
                 return;
         }
 
         double newScale = x * 1.1;
 
-        if (newScale >= 1) {
-                newScale = 1;
+        if (newScale >= 10) {
+                newScale = 10;
         }
 
         scale (center, newScale);
@@ -123,32 +123,7 @@ void ScaleLayer::zoom (double f) { clutter_actor_set_scale (self, f, f); }
 
 /*****************************************************************************/
 
-void ScaleLayer::pan (Point const &n)
+void ScaleLayer::pan (Point const &delta)
 {
-        float stageW, stageH, scaleW, scaleH, scaleX, scaleY;
-        ClutterActor *stage = clutter_actor_get_parent (self);
-        clutter_actor_get_size (stage, &stageW, &stageH);
-        clutter_actor_get_transformed_size (self, &scaleW, &scaleH);
-        clutter_actor_get_transformed_position (self, &scaleX, &scaleY);
-
-        Point m = n;
-
-        if (scaleX + m.x > 0) {
-                m.x = -scaleX;
-        }
-
-        if (scaleX + m.x < -(scaleW - stageW)) {
-                m.x = -(scaleW - stageW) - scaleX;
-        }
-
-        if (scaleY + m.y > 0) {
-                m.y = -scaleY;
-        }
-
-        if (scaleY + m.y < -(scaleH - stageH)) {
-                m.y = -(scaleH - stageH) - scaleY;
-        }
-
-        clutter_actor_move_by (self, m.x, m.y);
-//        std::cerr << "Move by : " << m << std::endl;
+        clutter_actor_move_by (self, delta.x, delta.y);
 }
