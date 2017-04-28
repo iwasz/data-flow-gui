@@ -16,6 +16,7 @@ ScaleLayer *ScaleLayer::instance;
 /*****************************************************************************/
 
 struct ScaleLayer::Impl {
+        Point lastCenter = Point ();
 };
 
 /*****************************************************************************/
@@ -83,20 +84,30 @@ void ScaleLayer::zoomOut (const Point &center)
 
 /*****************************************************************************/
 
-void ScaleLayer::scale (primitives::Point const &center, float newScale)
+void ScaleLayer::scale (Point const &c, float newScale)
 {
+        Point center = c;
+
         float cx1, cy1;
-        clutter_actor_transform_stage_point (self, center.x, center.y, &cx1, &cy1);
 
         if (center == Point ()) {
-                clutter_actor_set_pivot_point (self, 0.5, 0.5);
+                if (impl->lastCenter == Point ()) {
+                        float stageW, stageH;
+                        ClutterActor *stage = clutter_actor_get_parent (self);
+                        clutter_actor_get_size (stage, &stageW, &stageH);
+                        impl->lastCenter = Point (stageW / 2.0, stageH / 2.0);
+                }
+
+                center = impl->lastCenter;
         }
         else {
-                float scaleLayerNW, scaleLayerNH;
-                clutter_actor_get_size (self, &scaleLayerNW, &scaleLayerNH);
-                clutter_actor_set_pivot_point (self, double(cx1) / scaleLayerNW, double(cy1) / scaleLayerNH);
+                impl->lastCenter = center;
         }
 
+        clutter_actor_transform_stage_point (self, center.x, center.y, &cx1, &cy1);
+        float scaleLayerNW, scaleLayerNH;
+        clutter_actor_get_size (self, &scaleLayerNW, &scaleLayerNH);
+        clutter_actor_set_pivot_point (self, double(cx1) / scaleLayerNW, double(cy1) / scaleLayerNH);
         clutter_actor_set_scale (self, newScale, newScale);
 
         // Idea taken from here : https://community.oracle.com/thread/1263955
@@ -123,7 +134,4 @@ void ScaleLayer::zoom (double f) { clutter_actor_set_scale (self, f, f); }
 
 /*****************************************************************************/
 
-void ScaleLayer::pan (Point const &delta)
-{
-        clutter_actor_move_by (self, delta.x, delta.y);
-}
+void ScaleLayer::pan (Point const &delta) { clutter_actor_move_by (self, delta.x, delta.y); }
