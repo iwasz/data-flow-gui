@@ -13,6 +13,19 @@
 #include "primitives/Geometry.h"
 #include "primitives/Ray.h"
 
+struct SolverState {
+        SolverState (primitives::Ray const &a, primitives::Ray const &b) : a (a), b (b) {}
+        primitives::Ray a;
+        primitives::Ray b;
+};
+
+struct IRule {
+        virtual ~IRule () {}
+        virtual void run (primitives::Ray const &ray, float *max, float *min, Direction *dir) const = 0;
+};
+
+using RuleVector = std::vector<std::unique_ptr<IRule>>;
+
 /**
  * Class forcomputing a shape of segmented connector connecting 2 points like
  * in Libre Office draw or Visio. Implementing this was way, way harder than I
@@ -20,12 +33,17 @@
  */
 class ConnectorSolver {
 public:
-        static primitives::PointVector solve (primitives::Ray const &a, primitives::Ray const &b);
+        ConnectorSolver (primitives::Ray const &a, primitives::Ray const &b);
+        primitives::PointVector solve ();
 
 private:
-        static primitives::Point advance (primitives::Point const &point, Direction dir, float length);
-        static float distance (primitives::Point const &a, primitives::Point const &b, Direction dir);
-        static primitives::Ray rayPerpendicular (primitives::Ray const &perpendicularTo, primitives::Point const &towardsPoint, primitives::Point const &startPoint);
+        primitives::Ray findNewRay (primitives::Ray const &ray) const;
+
+        const int MAX_LOOPS = 10;
+
+private:
+        SolverState state;
+        RuleVector rules;
 };
 
 #endif // CONNECTORSOLVER_H

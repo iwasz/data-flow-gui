@@ -37,6 +37,8 @@ public:
         /// Returns if two perpendicullar rays cross (at right angle).
         Point isCrossing (Ray const &b) const;
 
+        bool operator== (Ray const &r) const { return r.dir == dir && r.getA () == getA (); }
+
 private:
         void setB (Point const &p) {}
 

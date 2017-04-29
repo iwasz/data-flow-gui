@@ -227,6 +227,8 @@ LIST (APPEND SOURCES
         "src/primitives/Line.cc"
         "src/primitives/Ray.h"
         "src/primitives/Ray.cc"
+        "src/primitives/PrimitiveOperations.h"
+        "src/primitives/PrimitiveOperations.cc"
         "src/customNode/ConsoleNode.h"
         "src/customNode/ConsoleNode.cc"
         "src/config/UserConfig.h"

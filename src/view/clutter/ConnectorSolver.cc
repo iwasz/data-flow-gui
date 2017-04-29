@@ -8,10 +8,90 @@
 
 #include "ConnectorSolver.h"
 #include "connectorSolver_c.h"
-#include <cmath>
+#include "primitives/PrimitiveOperations.h"
 
 using namespace primitives;
 
+PointVector ConnectorSolver::solve ()
+{
+        PointVector v;
+        v.push_back (state.a.getA ());
+
+        Ray currentRay = state.a;
+        int infGuard = 0;
+
+        while (true) {
+                if (Point p = currentRay.isCrossing (state.b)) {
+                        v.push_back (p);
+                        v.push_back (state.b.getA ());
+                        return v;
+                }
+
+                currentRay = findNewRay (currentRay);
+
+                if (++infGuard >= MAX_LOOPS) {
+                        v.push_back (state.b.getA ());
+                        return v;
+                }
+        }
+}
+
+/*****************************************************************************/
+
+Ray ConnectorSolver::findNewRay (Ray const &ray) const
+{
+        float max = 0;
+        float min = 0;
+        Direction dir = NONE;
+
+        for (RuleVector::const_iterator i = rules.cbegin (); i != rules.cend (); ++i) {
+                (*i)->run (ray, &min, &max, &dir);
+        }
+
+        // If new ray was found.
+        if (min == max && dir != NONE) {
+                return Ray (advance (ray.getA (), ray.getDirection (), min), dir);
+        }
+
+        return ray;
+}
+
+/*****************************************************************************/
+
+class AbstractRule : public IRule {
+public:
+        AbstractRule (SolverState *state) : state (state) {}
+        virtual ~AbstractRule () {}
+
+protected:
+        SolverState *state;
+};
+
+/*****************************************************************************/
+
+class MinDistanceRule : public AbstractRule {
+public:
+        enum { MIN_DISTANCE = 50 };
+
+        MinDistanceRule (SolverState *state) : AbstractRule (state) {}
+        virtual ~MinDistanceRule () {}
+
+        virtual void run (primitives::Ray const &ray, float *max, float *min, Direction *dir) const
+        {
+                if (ray == state->a) {
+                        *min = MIN_DISTANCE;
+                }
+        }
+};
+
+/*****************************************************************************/
+
+ConnectorSolver::ConnectorSolver (primitives::Ray const &a, primitives::Ray const &b) : state (a, b)
+{
+        rules.push_back (std::unique_ptr<IRule> (new MinDistanceRule (&state)));
+}
+
+#if 0
 PointVector ConnectorSolver::solve (Ray const &a, Ray const &b)
 {
         PointVector v;
@@ -27,76 +107,14 @@ PointVector ConnectorSolver::solve (Ray const &a, Ray const &b)
         v.push_back (b.getA ());
         return v;
 }
-
-/**
- * Move point "point" according direction dir (always horizontally or vertically)
- * by length.
- */
-Point ConnectorSolver::advance (Point const &point, Direction dir, float length)
-{
-        Point p = point;
-
-        switch (dir) {
-        case NORTH:
-                p.y -= length;
-                break;
-
-        case SOUTH:
-                p.y += length;
-                break;
-
-        case EAST:
-                p.x += length;
-                break;
-
-        case WEST:
-                p.x -= length;
-                break;
-
-        case NONE:
-        default:
-                break;
-        }
-
-        return p;
-}
-
-/**
- * Distance between two points a and b, but according to direction dir, so
- * if dir is N or S it returns dinstance between Y coordinates, and when dir
- * is E or W, between X coordinates.
- */
-float ConnectorSolver::distance (Point const &a, Point const &b, Direction dir)
-{
-        if (dir == NORTH || dir == SOUTH) {
-                return fabs (a.y - b.y);
-        }
-        else if (dir == EAST || dir == WEST) {
-                return fabs (a.x - b.x);
-        }
-
-        return 0;
-}
-
-Ray ConnectorSolver::rayPerpendicular (Ray const &perpendicularTo, Point const &towardsPoint, Point const &startPoint)
-{
-        Direction ld;
-
-        if (perpendicularTo.isVertical ()) {
-                ld = (towardsPoint.x > perpendicularTo.getA ().x) ? (EAST) : (WEST);
-        }
-        else {
-                ld = (towardsPoint.y > perpendicularTo.getA ().y) ? (SOUTH) : (NORTH);
-        }
-
-        return Ray (startPoint, ld);
-}
+#endif
 
 /*****************************************************************************/
 
 extern "C" void solve (float ax, float ay, Direction aDir, float bx, float by, Direction bDir, CPoint outputPoints[], int *numOfPoints)
 {
-        PointVector v = ConnectorSolver::solve (Ray (Point (ax, ay), aDir), Ray (Point (bx, by), bDir));
+        ConnectorSolver solver (Ray (Point (ax, ay), aDir), Ray (Point (bx, by), bDir));
+        PointVector v = solver.solve ();
 
         *numOfPoints = v.size ();
         int i = 0;
