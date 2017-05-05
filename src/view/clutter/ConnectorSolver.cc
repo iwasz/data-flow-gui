@@ -128,10 +128,10 @@ private:
 /**
  * We are at the first ray which origins from node A.
  */
-struct CurrentRayIsACheck : public ICheck {
-        virtual ~CurrentRayIsACheck () {}
-        virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const { return (currentRay == state->a); }
-};
+// struct CurrentRayIsACheck : public ICheck {
+//        virtual ~CurrentRayIsACheck () {}
+//        virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const { return (currentRay == state->a); }
+//};
 
 struct RaysSameDir : public ICheck {
         virtual ~RaysSameDir () {}
@@ -141,22 +141,34 @@ struct RaysSameDir : public ICheck {
         }
 };
 
+struct RaysPerpendicular : public ICheck {
+        virtual ~RaysPerpendicular () {}
+        virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
+        {
+                return currentRay.isPerpendicularTo (state->b);
+        }
+};
+
 struct RayDistanceGreaterCheck : public ICheck {
         virtual ~RayDistanceGreaterCheck () {}
         virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
         {
-                if (currentRay.getDirection () == state->b.getDirection ()) {
+//                if (currentRay.isParallelTo (state->b)) {
                         if (currentRay.isVertical ()) {
                                 return fabs (currentRay.getA ().x - state->b.getA ().x) > MIN_DISTANCE_RAYS;
                         }
                         else {
                                 return fabs (currentRay.getA ().y - state->b.getA ().y) > MIN_DISTANCE_RAYS;
                         }
-                }
-                else {
-                        // TODO
-                        return false;
-                }
+//                }
+//                else {
+//                        if (currentRay.isVertical ()) {
+//                                return fabs (currentRay.getA ().x - state->b.getA ().x) > MIN_DISTANCE_RAYS;
+//                        }
+//                        else {
+//                                return fabs (currentRay.getA ().y - state->b.getA ().y) > MIN_DISTANCE_RAYS;
+//                        }
+//                }
         }
 };
 
@@ -373,6 +385,13 @@ ConnectorSolver::ConnectorSolver (primitives::Ray const &a, primitives::Ray cons
                 static AndCheck andCheck (&raysDifferentDirs, &projectionsOverlapCheck);
                 static B3Rule b3Rule (&andCheck);
                 rules.push_back (&b3Rule);
+        }
+
+        {
+                static RaysPerpendicular raysPerpendicular;
+                static AndCheck andCheck (&raysPerpendicular, &rayDistanceGreater);
+                static A3Rule a3Rule (&andCheck);
+                rules.push_back (&a3Rule);
         }
 
         // rules.push_back (std::unique_ptr<IRule> (new MinDistanceRule (new CurrentRayIsACheck)));
