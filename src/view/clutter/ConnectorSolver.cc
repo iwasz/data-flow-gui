@@ -11,6 +11,11 @@
 #include "primitives/PrimitiveOperations.h"
 #include <cmath>
 
+#define SOLVER_DEBUG_1
+#ifdef SOLVER_DEBUG_1
+#include <iostream>
+#endif
+
 using namespace primitives;
 enum { MIN_DISTANCE_BEND = 50, MIN_DISTANCE_RAYS = 100 };
 
@@ -80,7 +85,14 @@ Direction direction (SolverState const *state, primitives::Ray const &currentRay
 
 struct AlwaysTrueCheck : public ICheck {
         virtual ~AlwaysTrueCheck () {}
-        virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const { return true; }
+        virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
+        {
+#ifdef SOLVER_DEBUG_1
+                std::cerr << "AlwaysTrue ";
+#endif
+
+                return true;
+        }
 };
 
 class OrCheck : public ICheck {
@@ -118,6 +130,10 @@ public:
 
         virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
         {
+#ifdef SOLVER_DEBUG_1
+                std::cerr << "Not ";
+#endif
+
                 return !a->check (state, currentRay, d, dir);
         }
 
@@ -137,7 +153,31 @@ struct RaysSameDir : public ICheck {
         virtual ~RaysSameDir () {}
         virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
         {
-                return currentRay.getDirection () == state->b.getDirection ();
+                bool b = currentRay.getDirection () == state->b.getDirection ();
+
+#ifdef SOLVER_DEBUG_1
+                if (b) {
+                        std::cerr << "RaysSameDir ";
+                }
+#endif
+
+                return b;
+        }
+};
+
+struct RaysOppositeDir : public ICheck {
+        virtual ~RaysOppositeDir () {}
+        virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
+        {
+                bool b = currentRay.isOppositeDirection (state->b);
+
+#ifdef SOLVER_DEBUG_1
+                if (b) {
+                        std::cerr << "RaysOppositeDir ";
+                }
+#endif
+
+                return b;
         }
 };
 
@@ -145,7 +185,15 @@ struct RaysPerpendicular : public ICheck {
         virtual ~RaysPerpendicular () {}
         virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
         {
-                return currentRay.isPerpendicularTo (state->b);
+                bool b = currentRay.isPerpendicularTo (state->b);
+
+#ifdef SOLVER_DEBUG_1
+                if (b) {
+                        std::cerr << "RaysPerpendicular ";
+                }
+#endif
+
+                return b;
         }
 };
 
@@ -153,13 +201,14 @@ struct RayDistanceGreaterCheck : public ICheck {
         virtual ~RayDistanceGreaterCheck () {}
         virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
         {
-//                if (currentRay.isParallelTo (state->b)) {
-                        if (currentRay.isVertical ()) {
-                                return fabs (currentRay.getA ().x - state->b.getA ().x) > MIN_DISTANCE_RAYS;
-                        }
-                        else {
-                                return fabs (currentRay.getA ().y - state->b.getA ().y) > MIN_DISTANCE_RAYS;
-                        }
+                bool b;
+                //                if (currentRay.isParallelTo (state->b)) {
+                if (currentRay.isVertical ()) {
+                        b = fabs (currentRay.getA ().x - state->b.getA ().x) > MIN_DISTANCE_RAYS;
+                }
+                else {
+                        b = fabs (currentRay.getA ().y - state->b.getA ().y) > MIN_DISTANCE_RAYS;
+                }
 //                }
 //                else {
 //                        if (currentRay.isVertical ()) {
@@ -169,6 +218,14 @@ struct RayDistanceGreaterCheck : public ICheck {
 //                                return fabs (currentRay.getA ().y - state->b.getA ().y) > MIN_DISTANCE_RAYS;
 //                        }
 //                }
+
+#ifdef SOLVER_DEBUG_1
+                if (b) {
+                        std::cerr << "RaysDistanceGreater ";
+                }
+#endif
+
+                return b;
         }
 };
 
@@ -178,6 +235,7 @@ struct ProjectionsOverlapCheck : public ICheck {
         virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
         {
                 Ray const &b = state->b;
+                bool ret = false;
 
                 if (b.isPerpendicularTo (currentRay)) {
                         return false;
@@ -189,7 +247,7 @@ struct ProjectionsOverlapCheck : public ICheck {
                         float aa = currentRay.getA ().y;
                         float ab = currentRay.getB ().y;
 
-                        return (ba >= aa && ba < ab) || (bb >= aa && bb < ab) || (aa >= ba && aa < bb) || (ab >= ba && ab < bb);
+                        ret = (ba >= aa && ba < ab) || (bb >= aa && bb < ab) || (aa >= ba && aa < bb) || (ab >= ba && ab < bb);
                 }
                 else if (b.isHorizontal ()) {
                         float ba = b.getA ().x;
@@ -197,10 +255,16 @@ struct ProjectionsOverlapCheck : public ICheck {
                         float aa = currentRay.getA ().x;
                         float ab = currentRay.getB ().x;
 
-                        return (ba >= aa && ba < ab) || (bb >= aa && bb < ab) || (aa >= ba && aa < bb) || (ab >= ba && ab < bb);
+                        ret = (ba >= aa && ba < ab) || (bb >= aa && bb < ab) || (aa >= ba && aa < bb) || (ab >= ba && ab < bb);
                 }
 
-                return false;
+#ifdef SOLVER_DEBUG_1
+                if (ret) {
+                        std::cerr << "ProjectionsOverlap ";
+                }
+#endif
+
+                return ret;
         }
 };
 
@@ -208,17 +272,29 @@ struct ProjectionsOverlapCheck : public ICheck {
 
 class AbstractRule : public IRule {
 public:
-        AbstractRule (ICheck *check) : check (check) {}
+        AbstractRule (ICheck *check, std::string const &n) : name (n), check (check) {}
         virtual ~AbstractRule () { /*delete check;*/}
 
         void run (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
         {
                 if (check && check->check (state, currentRay, d, dir)) {
+#ifdef SOLVER_DEBUG_1
+                        std::cerr << " ---> " << name << std::endl;
+#endif
+
                         runImpl (state, currentRay, d, dir);
                 }
+#ifdef SOLVER_DEBUG_1
+                else {
+                        std::cerr << std::endl;
+                }
+#endif
         }
 
         virtual void runImpl (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const = 0;
+
+protected:
+        std::string name;
 
 private:
         ICheck *check;
@@ -226,7 +302,7 @@ private:
 
 struct A3Rule : public AbstractRule {
 public:
-        A3Rule (ICheck *check) : AbstractRule (check) {}
+        A3Rule (ICheck *check, std::string const &n) : AbstractRule (check, n) {}
         virtual ~A3Rule () {}
 
         virtual void runImpl (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
@@ -272,15 +348,12 @@ public:
         }
 };
 
-//#include <iostream>
-
 struct B3Rule : public AbstractRule {
-        B3Rule (ICheck *check) : AbstractRule (check) {}
+        B3Rule (ICheck *check, std::string const &n) : AbstractRule (check, n) {}
         virtual ~B3Rule () {}
 
         virtual void runImpl (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
         {
-                //                std::cerr << "3B" << std::endl;
                 *dir = direction (state, currentRay);
 
                 if (currentRay.isHorizontal ()) {
@@ -292,79 +365,79 @@ struct B3Rule : public AbstractRule {
         }
 };
 
-class MinDistanceRule : public AbstractRule {
-public:
-        MinDistanceRule (ICheck *check) : AbstractRule (check) {}
-        virtual ~MinDistanceRule () {}
+// class MinDistanceRule : public AbstractRule {
+// public:
+//        MinDistanceRule (ICheck *check) : AbstractRule (check) {}
+//        virtual ~MinDistanceRule () {}
 
-        virtual void runImpl (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const { *d = MIN_DISTANCE_BEND; }
-};
-
-/*****************************************************************************/
-
-class DirectionRule : public AbstractRule {
-public:
-        DirectionRule (ICheck *check) : AbstractRule (check) {}
-        virtual ~DirectionRule () {}
-
-        virtual void runImpl (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
-        {
-                *dir = direction (state, currentRay);
-        }
-};
+//        virtual void runImpl (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const { *d = MIN_DISTANCE_BEND; }
+//};
 
 /*****************************************************************************/
 
-bool isChanceOfCrossing (Ray const &current, Ray const &b0)
-{
-        Ray b = Ray (advance (b0.getA (), b0.getDirection (), MIN_DISTANCE_BEND), b0.getDirection ());
+// class DirectionRule : public AbstractRule {
+// public:
+//        DirectionRule (ICheck *check) : AbstractRule (check) {}
+//        virtual ~DirectionRule () {}
 
-        if (b.isPerpendicularTo (current)) {
-                return false;
-        }
-
-        if (b.isVertical ()) {
-                return (b.getA ().y >= current.getA ().y && b.getA ().y < current.getB ().y)
-                        || (b.getB ().y >= current.getA ().y && b.getB ().y < current.getB ().y);
-        }
-        else if (b.isHorizontal ()) {
-                return (b.getA ().x >= current.getA ().x && b.getA ().x < current.getB ().x)
-                        || (b.getB ().x >= current.getA ().x && b.getB ().x < current.getB ().x);
-        }
-
-        return false;
-}
-
-class HalfDistanceRule : public AbstractRule {
-public:
-        HalfDistanceRule (ICheck *check) : AbstractRule (check) {}
-        virtual ~HalfDistanceRule () {}
-
-        virtual void runImpl (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
-        {
-                // ?
-                if (!isChanceOfCrossing (currentRay, state->b)) {
-                        return;
-                }
-
-                if (currentRay.isVertical ()) {
-                        *d = fabs (currentRay.getA ().y - state->b.getA ().y) / 2;
-                }
-                else if (currentRay.isHorizontal ()) {
-                        *d = fabs (currentRay.getA ().x - state->b.getA ().x) / 2;
-                }
-        }
-};
+//        virtual void runImpl (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
+//        {
+//                *dir = direction (state, currentRay);
+//        }
+//};
 
 /*****************************************************************************/
 
-class ExtendForCrossingRule : public AbstractRule {
-public:
-        ExtendForCrossingRule (ICheck *check) : AbstractRule (check) {}
-        virtual ~ExtendForCrossingRule () {}
+// bool isChanceOfCrossing (Ray const &current, Ray const &b0)
+//{
+//        Ray b = Ray (advance (b0.getA (), b0.getDirection (), MIN_DISTANCE_BEND), b0.getDirection ());
 
-        virtual void runImpl (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const {}
-};
+//        if (b.isPerpendicularTo (current)) {
+//                return false;
+//        }
+
+//        if (b.isVertical ()) {
+//                return (b.getA ().y >= current.getA ().y && b.getA ().y < current.getB ().y)
+//                        || (b.getB ().y >= current.getA ().y && b.getB ().y < current.getB ().y);
+//        }
+//        else if (b.isHorizontal ()) {
+//                return (b.getA ().x >= current.getA ().x && b.getA ().x < current.getB ().x)
+//                        || (b.getB ().x >= current.getA ().x && b.getB ().x < current.getB ().x);
+//        }
+
+//        return false;
+//}
+
+// class HalfDistanceRule : public AbstractRule {
+// public:
+//        HalfDistanceRule (ICheck *check) : AbstractRule (check) {}
+//        virtual ~HalfDistanceRule () {}
+
+//        virtual void runImpl (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
+//        {
+//                // ?
+//                if (!isChanceOfCrossing (currentRay, state->b)) {
+//                        return;
+//                }
+
+//                if (currentRay.isVertical ()) {
+//                        *d = fabs (currentRay.getA ().y - state->b.getA ().y) / 2;
+//                }
+//                else if (currentRay.isHorizontal ()) {
+//                        *d = fabs (currentRay.getA ().x - state->b.getA ().x) / 2;
+//                }
+//        }
+//};
+
+/*****************************************************************************/
+
+// class ExtendForCrossingRule : public AbstractRule {
+// public:
+//        ExtendForCrossingRule (ICheck *check) : AbstractRule (check) {}
+//        virtual ~ExtendForCrossingRule () {}
+
+//        virtual void runImpl (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const {}
+//};
 
 /*****************************************************************************/
 
@@ -373,26 +446,50 @@ ConnectorSolver::ConnectorSolver (primitives::Ray const &a, primitives::Ray cons
         static RaysSameDir raysSameDir;
         static RayDistanceGreaterCheck rayDistanceGreater;
         static ProjectionsOverlapCheck projectionsOverlapCheck;
+        static NotCheck projectionsNotOverlapCheck (&projectionsOverlapCheck);
+        static NotCheck rayDistanceNotGreater (&rayDistanceGreater);
+        static RaysOppositeDir raysOppositeDir;
 
-        {
+        { // 3A
                 static AndCheck andCheck (&raysSameDir, &rayDistanceGreater);
-                static A3Rule a3Rule (&andCheck);
+                static A3Rule a3Rule (&andCheck, "3A");
                 rules.push_back (&a3Rule);
         }
 
-        {
+        { // 3B
                 static NotCheck raysDifferentDirs (&raysSameDir);
                 static AndCheck andCheck (&raysDifferentDirs, &projectionsOverlapCheck);
-                static B3Rule b3Rule (&andCheck);
+                static B3Rule b3Rule (&andCheck, "3B");
                 rules.push_back (&b3Rule);
         }
 
-        {
+        { // 4A
                 static RaysPerpendicular raysPerpendicular;
                 static AndCheck andCheck (&raysPerpendicular, &rayDistanceGreater);
-                static A3Rule a3Rule (&andCheck);
+                static A3Rule a3Rule (&andCheck, "4A");
                 rules.push_back (&a3Rule);
         }
+
+        { // 4B
+                static RaysPerpendicular raysPerpendicular;
+                static AndCheck andCheck (&raysPerpendicular, &rayDistanceNotGreater);
+                static B3Rule b3Rule (&andCheck, "4B");
+                rules.push_back (&b3Rule);
+        }
+
+        //        { // 5A
+        //                static AndCheck andCheck (&raysOppositeDir, &projectionsNotOverlapCheck);
+        //                static AndCheck andCheck2 (&andCheck, &rayDistanceNotGreater);
+        //                static A3Rule a3Rule (&andCheck2);
+        //                rules.push_back (&a3Rule, "5A");
+        //        }
+
+        //        { // 5B
+        //                static AndCheck andCheck (&raysOppositeDir, &projectionsNotOverlapCheck);
+        //                static AndCheck andCheck2 (&andCheck, &rayDistanceGreater);
+        //                static A3Rule a3Rule (&andCheck2, "5B");
+        //                rules.push_back (&a3Rule);
+        //        }
 
         // rules.push_back (std::unique_ptr<IRule> (new MinDistanceRule (new CurrentRayIsACheck)));
         // rules.push_back (std::unique_ptr<IRule> (new HalfDistanceRule (&state)));
