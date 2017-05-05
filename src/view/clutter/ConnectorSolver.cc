@@ -144,10 +144,10 @@ private:
 /**
  * We are at the first ray which origins from node A.
  */
-// struct CurrentRayIsACheck : public ICheck {
-//        virtual ~CurrentRayIsACheck () {}
-//        virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const { return (currentRay == state->a); }
-//};
+struct CurrentRayIsACheck : public ICheck {
+        virtual ~CurrentRayIsACheck () {}
+        virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const { return (currentRay == state->a); }
+};
 
 struct RaysSameDir : public ICheck {
         virtual ~RaysSameDir () {}
@@ -222,6 +222,26 @@ struct RayDistanceGreaterCheck : public ICheck {
 #ifdef SOLVER_DEBUG_1
                 if (b) {
                         std::cerr << "RaysDistanceGreater ";
+                }
+#endif
+
+                return b;
+        }
+};
+
+struct XCheck : public ICheck {
+        virtual ~XCheck () {}
+        virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
+        {
+                bool b = false;
+
+                if (currentRay.getDirection () == EAST) {
+                        b = state->b.getA ().x < currentRay.getA ().x + MIN_DISTANCE_RAYS && state->b.getA ().y > currentRay.getA ().y - MIN_DISTANCE_RAYS;
+                }
+
+#ifdef SOLVER_DEBUG_1
+                if (b) {
+                        std::cerr << "XCheck ";
                 }
 #endif
 
@@ -449,9 +469,14 @@ ConnectorSolver::ConnectorSolver (primitives::Ray const &a, primitives::Ray cons
         static NotCheck projectionsNotOverlapCheck (&projectionsOverlapCheck);
         static NotCheck rayDistanceNotGreater (&rayDistanceGreater);
         static RaysOppositeDir raysOppositeDir;
+        static RaysPerpendicular raysPerpendicular;
+        static CurrentRayIsACheck rayIsA;
+        static NotCheck rayIsNotA (&rayIsA);
 
         { // 3A
-                static AndCheck andCheck (&raysSameDir, &rayDistanceGreater);
+                static AndCheck andCheck0 (&rayIsA, &rayDistanceGreater);
+                static OrCheck orCheck (&rayIsNotA, &andCheck0);
+                static AndCheck andCheck (&raysSameDir, &orCheck);
                 static A3Rule a3Rule (&andCheck, "3A");
                 rules.push_back (&a3Rule);
         }
@@ -464,18 +489,16 @@ ConnectorSolver::ConnectorSolver (primitives::Ray const &a, primitives::Ray cons
         }
 
         { // 4A
-                static RaysPerpendicular raysPerpendicular;
-                static AndCheck andCheck (&raysPerpendicular, &rayDistanceGreater);
+                static XCheck xCheck;
+                static AndCheck andCheck (&raysPerpendicular, &xCheck);
                 static A3Rule a3Rule (&andCheck, "4A");
                 rules.push_back (&a3Rule);
         }
 
-        { // 4B
-                static RaysPerpendicular raysPerpendicular;
-                static AndCheck andCheck (&raysPerpendicular, &rayDistanceNotGreater);
-                static B3Rule b3Rule (&andCheck, "4B");
-                rules.push_back (&b3Rule);
-        }
+        //        { // 4B
+        //                static B3Rule b3Rule (&raysPerpendicular, "4B");
+        //                rules.push_back (&b3Rule);
+        //        }
 
         //        { // 5A
         //                static AndCheck andCheck (&raysOppositeDir, &projectionsNotOverlapCheck);
