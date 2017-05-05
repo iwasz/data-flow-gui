@@ -111,6 +111,20 @@ private:
         ICheck *b;
 };
 
+class NotCheck : public ICheck {
+public:
+        NotCheck (ICheck *a) : a (a) {}
+        virtual ~NotCheck () {}
+
+        virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
+        {
+                return !a->check (state, currentRay, d, dir);
+        }
+
+private:
+        ICheck *a;
+};
+
 /**
  * We are at the first ray which origins from node A.
  */
@@ -127,8 +141,8 @@ struct RaysSameDir : public ICheck {
         }
 };
 
-struct RayDistanceGreater : public ICheck {
-        virtual ~RayDistanceGreater () {}
+struct RayDistanceGreaterCheck : public ICheck {
+        virtual ~RayDistanceGreaterCheck () {}
         virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
         {
                 if (currentRay.getDirection () == state->b.getDirection ()) {
@@ -143,6 +157,38 @@ struct RayDistanceGreater : public ICheck {
                         // TODO
                         return false;
                 }
+        }
+};
+
+struct ProjectionsOverlapCheck : public ICheck {
+        virtual ~ProjectionsOverlapCheck () {}
+
+        virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
+        {
+                Ray const &b = state->b;
+
+                if (b.isPerpendicularTo (currentRay)) {
+                        return false;
+                }
+
+                if (b.isVertical ()) {
+                        float ba = b.getA ().y;
+                        float bb = b.getB ().y;
+                        float aa = currentRay.getA ().y;
+                        float ab = currentRay.getB ().y;
+
+                        return (ba >= aa && ba < ab) || (bb >= aa && bb < ab) || (aa >= ba && aa < bb) || (ab >= ba && ab < bb);
+                }
+                else if (b.isHorizontal ()) {
+                        float ba = b.getA ().x;
+                        float bb = b.getB ().x;
+                        float aa = currentRay.getA ().x;
+                        float ab = currentRay.getB ().x;
+
+                        return (ba >= aa && ba < ab) || (bb >= aa && bb < ab) || (aa >= ba && aa < bb) || (ab >= ba && ab < bb);
+                }
+
+                return false;
         }
 };
 
@@ -214,12 +260,25 @@ public:
         }
 };
 
-// class CrossingRule : public AbstractRule {
-//        CrossingRule (ICheck *c) : AbstractRule (c) {}
-//        virtual ~CrossingRule () {}
+//#include <iostream>
 
-//        virtual void runImpl (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const { *d = MIN_DISTANCE; }
-//};
+struct B3Rule : public AbstractRule {
+        B3Rule (ICheck *check) : AbstractRule (check) {}
+        virtual ~B3Rule () {}
+
+        virtual void runImpl (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
+        {
+                //                std::cerr << "3B" << std::endl;
+                *dir = direction (state, currentRay);
+
+                if (currentRay.isHorizontal ()) {
+                        *d = fabs (state->b.getA ().x - currentRay.getA ().x) / 2.0;
+                }
+                else {
+                        *d = fabs (state->b.getA ().y - currentRay.getA ().y) / 2.0;
+                }
+        }
+};
 
 class MinDistanceRule : public AbstractRule {
 public:
@@ -300,12 +359,20 @@ public:
 ConnectorSolver::ConnectorSolver (primitives::Ray const &a, primitives::Ray const &b) : state (a, b)
 {
         static RaysSameDir raysSameDir;
-        static RayDistanceGreater rayDistanceGreater;
+        static RayDistanceGreaterCheck rayDistanceGreater;
+        static ProjectionsOverlapCheck projectionsOverlapCheck;
 
         {
                 static AndCheck andCheck (&raysSameDir, &rayDistanceGreater);
                 static A3Rule a3Rule (&andCheck);
                 rules.push_back (&a3Rule);
+        }
+
+        {
+                static NotCheck raysDifferentDirs (&raysSameDir);
+                static AndCheck andCheck (&raysDifferentDirs, &projectionsOverlapCheck);
+                static B3Rule b3Rule (&andCheck);
+                rules.push_back (&b3Rule);
         }
 
         // rules.push_back (std::unique_ptr<IRule> (new MinDistanceRule (new CurrentRayIsACheck)));
