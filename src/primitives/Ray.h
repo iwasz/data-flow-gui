@@ -28,6 +28,7 @@ public:
         bool isVertical () const { return dir == NORTH || dir == SOUTH; }
         bool isHorizontal () const { return dir == WEST || dir == EAST; }
         bool isPerpendicularTo (Ray const &b) const { return (isVertical () && b.isHorizontal ()) || (isHorizontal () && b.isVertical ()); }
+        bool isParallelTo (Ray const &b) const { return (isVertical () && b.isVertical ()) || (isHorizontal () && b.isHorizontal ()); }
         bool isOppositeDirection (Ray const &b) const;
         bool isFacing (Ray const &b) const;
 

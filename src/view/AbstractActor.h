@@ -37,6 +37,7 @@ public:
 
         virtual void setPosition (primitives::Point const &p);
         virtual primitives::Point getPosition () const;
+//        virtual primitives::Point getScaleLayerPosition () const;
 
         virtual void setSize (primitives::Dimension const &d);
         virtual primitives::Dimension getSize () const;

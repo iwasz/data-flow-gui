@@ -38,6 +38,8 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
 
         virtual void setPosition (primitives::Point const &p) = 0;
         virtual primitives::Point getPosition () const = 0;
+//        Selected items position is returned inconsistently (problems during save).
+//        virtual primitives::Point getScaleLayerPosition () const = 0;
 
         virtual void setSize (primitives::Dimension const &d) = 0;
         virtual primitives::Dimension getSize () const = 0;

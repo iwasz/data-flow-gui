@@ -63,8 +63,9 @@ void NativeXmlFormatSave::save (std::string const &path)
 
 void NativeXmlFormatSave::clutterActorArguments (IClutterActor *a)
 {
-        primitives::Point p = a->getPosition ();
+        primitives::Point p = a->getPosition();
         primitives::Dimension d = a->getSize ();
+
         // This is output directly to the stream, because it has locale set appropriately, and boost::lexical_cast has not.
         *impl->file << "position=\"" << p.x << "," << p.y << "\" size=\"" << d.width << "," << d.height << "\" fill=\"" << a->isFill () << "\" fillColor=\""
                    << primitives::Color::toString (a->getFillColor ()) << "\" ";

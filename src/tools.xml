@@ -187,7 +187,7 @@
       <ToolI add-to="tools" name="rect" drawStrategy="@dashedRect">
         <ContainerFactoryStrategy set-as="factoryStrategy" beanName="rect" container="@#container"/>
       </ToolI>
-      <ToolI add-to="tools" name="test" drawStrategy="@dashedRect">
+      <ToolI add-to="tools" name="testNode" drawStrategy="@dashedRect">
         <ContainerFactoryStrategy set-as="factoryStrategy" beanName="testNode" container="@#container"/>
       </ToolI>
     </ToolCategory>

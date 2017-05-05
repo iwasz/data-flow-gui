@@ -100,6 +100,30 @@ primitives::Point AbstractActor::getPosition () const
 
 /*****************************************************************************/
 
+//primitives::Point AbstractActor::getScaleLayerPosition () const
+//{
+//        ClutterActor *parent = self;
+//        bool emdeddedInNotSaveable = false;
+
+//        while (true) {
+//                parent = clutter_actor_get_parent (parent);
+//                IClutterActor *cppParent = static_cast<IClutterActor *> (g_object_get_data (G_OBJECT (child), CPP_IMPLEMENTATION_KEY));
+
+//                if (!cppParent->isSaveToFile ()) {
+//                        emdeddedInNotSaveable = true;
+//                }
+
+//                if (!parent || !cppParent) {
+//                        return
+//                }
+//        }
+
+//        clutter_actor_get_transformed_position (self, &p.x, &p.y);
+//        return p;
+//}
+
+/*****************************************************************************/
+
 void AbstractActor::setSize (primitives::Dimension const &d) { clutter_actor_set_size (self, d.width, d.height); }
 
 /*****************************************************************************/

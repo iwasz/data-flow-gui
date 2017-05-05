@@ -21,10 +21,15 @@ struct SolverState {
 
 struct IRule {
         virtual ~IRule () {}
-        virtual void run (primitives::Ray const &ray, float *max, float *min, Direction *dir) const = 0;
+        virtual void run (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const = 0;
 };
 
-using RuleVector = std::vector<std::unique_ptr<IRule>>;
+struct ICheck {
+        virtual ~ICheck () {}
+        virtual bool check (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const = 0;
+};
+
+using RuleVector = std::vector<IRule *>;
 
 /**
  * Class forcomputing a shape of segmented connector connecting 2 points like
