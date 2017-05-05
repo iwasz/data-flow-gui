@@ -56,7 +56,9 @@ Ray ConnectorSolver::findNewRay (Ray const &ray) const
         Direction dir = NONE;
 
         for (RuleVector::const_iterator i = rules.cbegin (); i != rules.cend (); ++i) {
-                (*i)->run (&state, ray, &d, &dir);
+                if ((*i)->run (&state, ray, &d, &dir)) {
+                        break;
+                }
         }
 
         // If new ray was found.
@@ -295,7 +297,7 @@ public:
         AbstractRule (ICheck *check, std::string const &n) : name (n), check (check) {}
         virtual ~AbstractRule () { /*delete check;*/}
 
-        void run (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
+        bool run (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const
         {
                 if (check && check->check (state, currentRay, d, dir)) {
 #ifdef SOLVER_DEBUG_1
@@ -303,12 +305,13 @@ public:
 #endif
 
                         runImpl (state, currentRay, d, dir);
+                        return true;
                 }
+
 #ifdef SOLVER_DEBUG_1
-                else {
-                        std::cerr << std::endl;
-                }
+                std::cerr << std::endl;
 #endif
+                return false;
         }
 
         virtual void runImpl (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const = 0;
@@ -495,10 +498,10 @@ ConnectorSolver::ConnectorSolver (primitives::Ray const &a, primitives::Ray cons
                 rules.push_back (&a3Rule);
         }
 
-        //        { // 4B
-        //                static B3Rule b3Rule (&raysPerpendicular, "4B");
-        //                rules.push_back (&b3Rule);
-        //        }
+        { // 4B
+                static B3Rule b3Rule (&raysPerpendicular, "4B");
+                rules.push_back (&b3Rule);
+        }
 
         //        { // 5A
         //                static AndCheck andCheck (&raysOppositeDir, &projectionsNotOverlapCheck);

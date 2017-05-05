@@ -21,7 +21,7 @@ struct SolverState {
 
 struct IRule {
         virtual ~IRule () {}
-        virtual void run (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const = 0;
+        virtual bool run (SolverState const *state, primitives::Ray const &currentRay, float *d, Direction *dir) const = 0;
 };
 
 struct ICheck {
