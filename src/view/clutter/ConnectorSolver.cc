@@ -194,7 +194,22 @@ public:
                         }
                 }
                 else {
-                        *d = fabs (currentRay.getA ().y - state->b.getA ().y) + MIN_DISTANCE_BEND;
+                        if (currentRay.getA ().y < state->b.getA ().y) {
+                                if (currentRay.getDirection () == SOUTH) {
+                                        *d = state->b.getA ().y - currentRay.getA ().y + MIN_DISTANCE_BEND;
+                                }
+                                else {
+                                        *d = MIN_DISTANCE_BEND;
+                                }
+                        }
+                        else {
+                                if (currentRay.getDirection () == SOUTH) {
+                                        *d = MIN_DISTANCE_BEND;
+                                }
+                                else {
+                                        *d = currentRay.getA ().y - state->b.getA ().y + MIN_DISTANCE_BEND;
+                                }
+                        }
                 }
         }
 };
