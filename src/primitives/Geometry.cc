@@ -13,11 +13,21 @@
 #include <core/Exception.h>
 #include <ostream>
 
+namespace primitives {
+
 /*****************************************************************************/
 
 std::ostream &operator<< (std::ostream &o, Point const &p)
 {
         o << "[" << p.x << ", " << p.y << "]";
+        return o;
+}
+
+/*****************************************************************************/
+
+std::ostream &operator<< (std::ostream &o, Dimension const &d)
+{
+        o << "[" << d.width << ", " << d.height << "]";
         return o;
 }
 
@@ -127,3 +137,5 @@ void Box::sort ()
         b.x = maxX;
         b.y = maxY;
 }
+
+} // namespace

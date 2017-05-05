@@ -12,7 +12,7 @@
   <dashedCircle id="dashedCircleMinSize" minSize="100, 100"/>
 
   <ShapeDrawStrategy id="dashedRect" maxSize="1000, 1000">
-    <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" reactive="false"/>
+    <Rect set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" reactive="false"/>
   </ShapeDrawStrategy>
 
   <!-- std::vector of selected actors -->
@@ -21,7 +21,7 @@
   <RectangularSelector id="rectangularSelector" parent="@scale" fill="false" strokeColor="#d1d1d1ff"
         strokeDash="10" visible="false" selectable="false" />
   <RectangularSelectorStrategy id="selectionDashedRect" rectangularSelector="@rectangularSelector" selectedActors="@selectedActors" scaleLayer="@scale">
-    <Rectangle set-as="actor" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="5" visible="false" reactive="false"/>
+    <Rect set-as="actor" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="5" visible="false" reactive="false"/>
   </RectangularSelectorStrategy>
 
   <DashedLineStrategy id="dashedLine">
@@ -41,7 +41,7 @@
   <!-- +===================================================+ -->
 
   <Circle scope="prototype" id="circle" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>
-  <Rectangle scope="prototype" id="rect" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>
+  <Rect scope="prototype" id="rect" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>
   <Line scope="prototype" id="line" parent="@scale" strokeColor="#0096c6c9" visible="false" strokeWidth="1"/>
 
   <InputPort id="inputPort" scope="prototype" angle="2.6415" color="#d1d1d1ff" size="20" facing="W" />
@@ -125,7 +125,7 @@
   <!-- +===================================================+ -->
 
   <!-- Tool with default image representation -->
-  <Tool id="ToolI" imagePath="src/gui/addNode/add.jpg" />
+  <Tool id="ToolI" imagePath="gui/addNode/add.jpg" />
 
   <ToolCategoryVector id="tools">
     <ToolCategory name="Common">
@@ -187,11 +187,13 @@
       <ToolI add-to="tools" name="rect" drawStrategy="@dashedRect">
         <ContainerFactoryStrategy set-as="factoryStrategy" beanName="rect" container="@#container"/>
       </ToolI>
-      <ToolI add-to="tools" name="test" drawStrategy="@dashedRect">
+      <ToolI add-to="tools" name="testNode" drawStrategy="@dashedRect">
         <ContainerFactoryStrategy set-as="factoryStrategy" beanName="testNode" container="@#container"/>
       </ToolI>
     </ToolCategory>
 
   </ToolCategoryVector>
+
+  <ToolContainer id="toolContainer" tools="@tools" />
 
 </beans>

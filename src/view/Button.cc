@@ -65,16 +65,16 @@ void Button::init ()
 
 /*****************************************************************************/
 
-Point Button::getPortPosition (int i) const
+primitives::Point Button::getPortPosition (int i) const
 {
-        Point p;
+        primitives::Point p;
         iw_button_get_port_position (IW_BUTTON (self), &p.x, &p.y);
         return p;
 }
 
 /*****************************************************************************/
 
-void Button::onAllocate (Box const &)
+void Button::onAllocate (primitives::Box const &)
 {
         if (!getPorts ().empty ()) {
                 getPorts ()[0]->anchor.notifyMoveAnchor (convertToScaleLayer (getPortPosition (0)));
@@ -101,18 +101,18 @@ void Button::setFont (std::string const t) { iw_button_set_font (IW_BUTTON (self
 
 /*****************************************************************************/
 
-Color Button::getFontColor () const
+primitives::Color Button::getFontColor () const
 {
         ClutterColor c;
         iw_button_get_font_color (IW_BUTTON (self), &c);
-        return Color (&c);
+        return primitives::Color (&c);
 }
 
 /*****************************************************************************/
 
-void Button::setFontColor (const Color &value)
+void Button::setFontColor (const primitives::Color &value)
 {
-        ClutterColor color = Color::toClutterColor (value);
+        ClutterColor color = primitives::Color::toClutterColor (value);
         iw_button_set_font_color (IW_BUTTON (self), &color);
 }
 
@@ -131,7 +131,7 @@ void Button::onRelease () { impl->arc.put (0); }
 extern "C" void buttonOnAllocate (void *ptr, float x1, float y1, float x2, float y2)
 {
         Button *cn = static_cast<Button *> (ptr);
-        cn->onAllocate (Box (Point (x1, y1), Point (x2, y2)));
+        cn->onAllocate (primitives::Box (primitives::Point (x1, y1), primitives::Point (x2, y2)));
 }
 
 /*****************************************************************************/

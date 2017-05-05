@@ -2,10 +2,10 @@
 <beans>
   <AddNodeController id="addNodeController" tools="@tools" mainController="@mainController" />
 
-  <BuilderView id="addNodeView" file="src/gui/addNode/addNodeView.ui" loadWholeFile="true">
+  <BuilderView id="addNodeView" file="gui/addNode/addNodeView.ui" loadWholeFile="true">
     <TableMapping add-to="mappings" widget="nodesList" model="tools">
       <Column add-to="columns" />
-      <PixbufColumn add-to="columns" constValue="src/gui/addNode/computer.png"/>
+      <PixbufColumn add-to="columns" constValue="gui/addNode/computer.png"/>
       <Column add-to="columns" model="name" />
       <Column add-to="columns" model="description" />
       <Column add-to="columns">
@@ -14,7 +14,7 @@
 
       <TableMapping add-to="columns" model="tools">
         <Column add-to="columns" storeThisRow="true" />
-        <PixbufColumn add-to="columns" constValue="src/gui/addNode/disk.png"/>
+        <PixbufColumn add-to="columns" constValue="gui/addNode/disk.png"/>
         <Column add-to="columns" model="name" />
         <Column add-to="columns" model="description" />
         <Column add-to="columns">

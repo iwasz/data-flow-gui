@@ -11,11 +11,11 @@
 void ShapeDrawStrategy::onButtonPress (const Event &e)
 {
         startPoint = e.positionParentCoords;
-        endPoint = Point ();
+        endPoint = primitives::Point ();
 
         startPointActor = e.positionStageCoords;
         actor->setPosition (startPointActor);
-        actor->setSize (Dimension ());
+        actor->setSize (primitives::Dimension ());
         actor->setVisible (true);
 }
 
@@ -23,7 +23,7 @@ void ShapeDrawStrategy::onButtonPress (const Event &e)
 
 void ShapeDrawStrategy::onMotion (const Event &e)
 {
-        Dimension req = e.positionStageCoords - startPointActor;
+        primitives::Dimension req = e.positionStageCoords - startPointActor;
 
         if (maxSize.height > 0 && maxSize.width > 0) {
                 if (req.height > maxSize.height) {
@@ -51,7 +51,7 @@ bool ShapeDrawStrategy::onButtonRelease (const Event &e)
 void ShapeDrawStrategy::onObjectCreated (IClutterActor *a)
 {
         a->setPosition (startPoint);
-        Dimension size = endPoint - startPoint;
+        primitives::Dimension size = endPoint - startPoint;
 
         if (minSize.height > 0 || minSize.width > 0) {
                 if (size.height < minSize.height) {

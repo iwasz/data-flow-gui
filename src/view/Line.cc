@@ -20,26 +20,26 @@ Line::Line ()
 
 /*****************************************************************************/
 
-void Line::setPointA (Point const &p) { iw_line_set_point_a (IW_LINE (self), p.x, p.y); }
+void Line::setPointA (primitives::Point const &p) { iw_line_set_point_a (IW_LINE (self), p.x, p.y); }
 
 /*****************************************************************************/
 
-Point Line::getPointA () const
+primitives::Point Line::getPointA () const
 {
-        Point p;
+        primitives::Point p;
         iw_line_get_point_a (IW_LINE (self), &p.x, &p.y);
         return p;
 }
 
 /*****************************************************************************/
 
-void Line::setPointB (Point const &p) { iw_line_set_point_b (IW_LINE (self), p.x, p.y); }
+void Line::setPointB (primitives::Point const &p) { iw_line_set_point_b (IW_LINE (self), p.x, p.y); }
 
 /*****************************************************************************/
 
-Point Line::getPointB () const
+primitives::Point Line::getPointB () const
 {
-        Point p;
+        primitives::Point p;
         iw_line_get_point_a (IW_LINE (self), &p.x, &p.y);
         return p;
 }
@@ -62,18 +62,18 @@ void Line::setFont (std::string const t) { iw_line_set_font (IW_LINE (self), t.c
 
 /*****************************************************************************/
 
-Color Line::getFontColor () const
+primitives::Color Line::getFontColor () const
 {
         ClutterColor c;
         iw_line_get_font_color (IW_LINE (self), &c);
-        return Color (&c);
+        return primitives::Color (&c);
 }
 
 /*****************************************************************************/
 
-void Line::setFontColor (const Color &value)
+void Line::setFontColor (const primitives::Color &value)
 {
-        ClutterColor color = Color::toClutterColor (value);
+        ClutterColor color = primitives::Color::toClutterColor (value);
         iw_line_set_font_color (IW_LINE (self), &color);
 }
 

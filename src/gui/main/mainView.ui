@@ -77,6 +77,8 @@
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="$controller.open('openFileController')" swapped="no"/>
+                        <accelerator key="o" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -86,6 +88,8 @@
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="$controller.open('saveFileController')" swapped="no"/>
+                        <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -237,6 +241,7 @@
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-play</property>
                 <signal name="clicked" handler="$controller.onProgramRun ()" swapped="no"/>
+                <accelerator key="F5" signal="clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -252,6 +257,7 @@
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-go-forward</property>
                 <signal name="clicked" handler="$controller.onProgramStep ()" swapped="no"/>
+                <accelerator key="F10" signal="clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>

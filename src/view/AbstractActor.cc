@@ -87,26 +87,50 @@ void AbstractActor::setVisible (bool value)
 
 /*****************************************************************************/
 
-void AbstractActor::setPosition (Point const &p) { clutter_actor_set_position (self, p.x, p.y); }
+void AbstractActor::setPosition (primitives::Point const &p) { clutter_actor_set_position (self, p.x, p.y); }
 
 /*****************************************************************************/
 
-Point AbstractActor::getPosition () const
+primitives::Point AbstractActor::getPosition () const
 {
-        Point p;
+        primitives::Point p;
         clutter_actor_get_position (self, &p.x, &p.y);
         return p;
 }
 
 /*****************************************************************************/
 
-void AbstractActor::setSize (Dimension const &d) { clutter_actor_set_size (self, d.width, d.height); }
+//primitives::Point AbstractActor::getScaleLayerPosition () const
+//{
+//        ClutterActor *parent = self;
+//        bool emdeddedInNotSaveable = false;
+
+//        while (true) {
+//                parent = clutter_actor_get_parent (parent);
+//                IClutterActor *cppParent = static_cast<IClutterActor *> (g_object_get_data (G_OBJECT (child), CPP_IMPLEMENTATION_KEY));
+
+//                if (!cppParent->isSaveToFile ()) {
+//                        emdeddedInNotSaveable = true;
+//                }
+
+//                if (!parent || !cppParent) {
+//                        return
+//                }
+//        }
+
+//        clutter_actor_get_transformed_position (self, &p.x, &p.y);
+//        return p;
+//}
 
 /*****************************************************************************/
 
-Dimension AbstractActor::getDimension () const
+void AbstractActor::setSize (primitives::Dimension const &d) { clutter_actor_set_size (self, d.width, d.height); }
+
+/*****************************************************************************/
+
+primitives::Dimension AbstractActor::getSize () const
 {
-        Dimension d;
+        primitives::Dimension d;
         clutter_actor_get_size (self, &d.width, &d.height);
         return d;
 }
@@ -117,20 +141,20 @@ void AbstractActor::setCppImplementation () { g_object_set_data (G_OBJECT (self)
 
 /*****************************************************************************/
 
-Box AbstractActor::getBoundingBox () const
+primitives::Box AbstractActor::getBoundingBox () const
 {
 
         //        ClutterActorBox actorBox;
         //        if (!clutter_actor_get_paint_box (self, &actorBox)) {
         //                throw Core::Exception ("AbstractActor::getBoundingBox : !clutter_actor_get_paint_box");
         //        }
-        //        return Box (Point (actorBox.x1, actorBox.y1), Point (actorBox.x2, actorBox.y2));
+        //        return primitives::Box (primitives::Point (actorBox.x1, actorBox.y1), primitives::Point (actorBox.x2, actorBox.y2));
 
         // Assuming, that IClutterActors won't be scalled or rotated.
         float x, y, w, h;
         clutter_actor_get_position (self, &x, &y);
         clutter_actor_get_size (self, &w, &h);
-        return Box (Point (x, y), Dimension (w, h));
+        return primitives::Box (primitives::Point (x, y), primitives::Dimension (w, h));
 }
 
 /*****************************************************************************/
@@ -143,7 +167,7 @@ void AbstractActor::setReactive (bool value) { clutter_actor_set_reactive (self,
 
 /*****************************************************************************/
 
-Point AbstractActor::convertToScaleLayer (Point const &p) const
+primitives::Point AbstractActor::convertToScaleLayer (primitives::Point const &p) const
 {
         if (clutter_actor_get_parent (self) == ScaleLayer::singleton ()->getActor ()) {
                 return p;
@@ -153,7 +177,7 @@ Point AbstractActor::convertToScaleLayer (Point const &p) const
         in.x = p.x;
         in.y = p.y;
         clutter_actor_apply_relative_transform_to_point (CLUTTER_ACTOR (self), ScaleLayer::singleton ()->getActor (), &in, &out);
-        Point b, pos = getPosition ();
+        primitives::Point b, pos = getPosition ();
         b.x = out.x - pos.x;
         b.y = out.y - pos.y;
 
@@ -186,25 +210,25 @@ void AbstractActor::setStrokeDash (float value) { iw_actor_set_stroke_dash (IW_A
 
 /*****************************************************************************/
 
-Color AbstractActor::getStrokeColor () const { return Color (iw_actor_get_stroke_color (IW_ACTOR (self))); }
+primitives::Color AbstractActor::getStrokeColor () const { return primitives::Color (iw_actor_get_stroke_color (IW_ACTOR (self))); }
 
 /*****************************************************************************/
 
-Color AbstractActor::getFillColor () const { return Color (iw_actor_get_fill_color (IW_ACTOR (self))); }
+primitives::Color AbstractActor::getFillColor () const { return primitives::Color (iw_actor_get_fill_color (IW_ACTOR (self))); }
 
 /*****************************************************************************/
 
-void AbstractActor::setStrokeColor (const Color &value)
+void AbstractActor::setStrokeColor (const primitives::Color &value)
 {
-        ClutterColor color = Color::toClutterColor (value);
+        ClutterColor color = primitives::Color::toClutterColor (value);
         iw_actor_set_stroke_color (IW_ACTOR (self), &color);
 }
 
 /*****************************************************************************/
 
-void AbstractActor::setFillColor (const Color &value)
+void AbstractActor::setFillColor (const primitives::Color &value)
 {
-        ClutterColor color = Color::toClutterColor (value);
+        ClutterColor color = primitives::Color::toClutterColor (value);
         iw_actor_set_fill_color (IW_ACTOR (self), &color);
 }
 
@@ -258,7 +282,7 @@ void processEvent (ClutterActor *stage, ClutterEvent *ev, Event *event)
 
         } while ((actor = clutter_actor_get_parent (actor)) != CLUTTER_ACTOR (stage));
 
-        event->positionStageCoords = Point (x, y);
+        event->positionStageCoords = primitives::Point (x, y);
         event->object = cActor;
 
         /*---------------------------------------------------------------------------*/
@@ -334,8 +358,8 @@ gboolean on_actor_motion (ClutterActor *stage, ClutterEvent *ev, gpointer data)
                 that->parentPrev = event.positionParentCoords;
         }
         else {
-                event.stageDelta = Point ();
-                event.parentDelta = Point ();
+                event.stageDelta = primitives::Point ();
+                event.parentDelta = primitives::Point ();
         }
 
         //        std::cerr << event.stageDelta << ", " << event.parentDelta << std::endl;

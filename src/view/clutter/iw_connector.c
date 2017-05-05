@@ -7,6 +7,7 @@
  ****************************************************************************/
 
 #include "iw_connector.h"
+#include "connectorSolver_c.h"
 #include "drawing_stuff.h"
 #include <math.h>
 #include <memory.h>
@@ -29,245 +30,6 @@ void onTextChangedConnector (void *lineConnector, const char *text);
 
 /*****************************************************************************/
 
-/// Ray or line segment (not a line).
-struct _Line {
-        float ax, ay, bx, by;
-        Direction direction;
-};
-
-typedef struct _Line Line;
-
-struct _Point {
-        float x, y;
-};
-
-typedef struct _Point Point;
-
-/// TODO if not used, remove and change names from Line to Ray.
-Line lineNew (float ax, float ay, float bx, float by)
-{
-        Line l;
-        l.ax = ax;
-        l.ay = ay;
-        l.bx = bx;
-        l.by = by;
-        l.direction = NONE;
-        return l;
-}
-
-Line rayNew (float ax, float ay, Direction dir)
-{
-        Line l;
-        l.ax = ax;
-        l.ay = ay;
-
-        switch (dir) {
-        case NORTH:
-                l.bx = ax;
-                l.by = -INFINITY;
-                break;
-
-        case SOUTH:
-                l.bx = ax;
-                l.by = INFINITY;
-                break;
-
-        case EAST:
-                l.bx = INFINITY;
-                l.by = ay;
-                break;
-
-        case WEST:
-                l.bx = -INFINITY;
-                l.by = ay;
-                break;
-
-        case NONE:
-        default:
-                break;
-        }
-
-        l.direction = dir;
-        return l;
-}
-
-bool isVertical (Line const *a) { return a->direction == NORTH || a->direction == SOUTH; }
-bool isHorizontal (Line const *a) { return a->direction == WEST || a->direction == EAST; }
-
-bool arePerpendicular (Line const *a, Line const *b) { return (isVertical (a) && isHorizontal (b)) || (isHorizontal (a) && isVertical (b)); }
-
-/// Tells if Line is a ray.
-bool isRay (Line const *l) { return l->direction != NONE; }
-
-/// Returns if two rays facing one another overlays.
-bool raysConnect (Line const *a, Line const *b, Point *pointOfConnection)
-{
-        // Consider only rays
-        if (!isRay (a) || !isRay (b)) {
-                return false;
-        }
-
-        // Only rays facing eachother will be taken into account.
-        if (a->direction != getOppositeDirection (b->direction)) {
-                return false;
-        }
-
-        //        printf ("%f, %f, %f, %f\n", a->ax, b->ax, a->ax, b->ax);
-
-        // Only facing each other
-        if ((a->direction == NORTH && a->ay < b->ay) || (a->direction == SOUTH && a->ay > b->ay) || (a->direction == EAST && a->ax > b->ax)
-            || (a->direction == WEST && a->ax < b->ax)) {
-                return false;
-        }
-
-        // If vertical
-        if (a->direction == NORTH || a->direction == SOUTH) {
-                pointOfConnection->x = a->ax;
-                pointOfConnection->y = fabs (a->ay - b->ay) / 2.0;
-                return ((int)a->ax == (int)b->ax);
-        }
-        else if (a->direction == WEST || a->direction == EAST) {
-                pointOfConnection->x = fabs (a->ax - b->ax) / 2.0;
-                pointOfConnection->y = a->ay;
-                return ((int)a->ay == (int)b->ay);
-        }
-
-        return false;
-}
-
-/// Returns if two perpendicullar rays cross (at right angle).
-bool raysCross (Line const *a, Line const *b, Point *pointOfCrossing)
-{
-        // Consider only rays
-        if (!isRay (a) || !isRay (b)) {
-                return false;
-        }
-
-        if (!arePerpendicular (a, b)) {
-                return false;
-        }
-
-        float aax = a->ax; /* lineGetAx (a); */
-        float aay = a->ay; /* lineGetAy (a); */
-        float abx = a->bx; /* lineGetBx (a); */
-        float aby = a->by; /* lineGetBy (a); */
-        float bax = b->ax; /* lineGetAx (b); */
-        float bay = b->ay; /* lineGetAy (b); */
-        float bbx = b->bx; /* lineGetBx (b); */
-        float bby = b->by; /* lineGetBy (b); */
-
-        // Normalised coordinates of horizontal ray. Point A is on the left, point B is on the right.
-        float hax, hay, hbx, hby;
-        // Normalised coordinates of vertical ray. Point A is on the top, point B is on the bottom.
-        float vax, vay, vbx, vby;
-
-        if (a->direction == NORTH || a->direction == SOUTH) {
-                vax = aax;
-                vay = fmin (aay, aby);
-                vbx = aax;
-                vby = fmax (aay, aby);
-        }
-        else {
-                hax = fmin (aax, abx);
-                hay = aay;
-                hbx = fmax (aax, abx);
-                hby = aay;
-        }
-
-        if (b->direction == NORTH || b->direction == SOUTH) {
-                vax = bax;
-                vay = fmin (bay, bby);
-                vbx = bax;
-                vby = fmax (bay, bby);
-        }
-        else {
-                hax = fmin (bax, bbx);
-                hay = bay;
-                hbx = fmax (bax, bbx);
-                hby = bay;
-        }
-
-        pointOfCrossing->x = vax;
-        pointOfCrossing->y = hay;
-        return (hay >= vay && hay <= vby) && (vax >= hax && vax <= hbx);
-}
-
-/*****************************************************************************/
-
-void addPoint (Point *pointsFromB, float bx, float by, int *pFBCnt)
-{
-        pointsFromB[*pFBCnt].x = bx;
-        pointsFromB[(*pFBCnt)++].y = by;
-}
-
-/**
- * Move point "point" according direction dir (always horizontally or vertically)
- * by length.
- */
-Point advance (Point const *point, Direction dir, float length)
-{
-        Point p = *point;
-
-        switch (dir) {
-        case NORTH:
-                p.y -= length;
-                break;
-
-        case SOUTH:
-                p.y += length;
-                break;
-
-        case EAST:
-                p.x += length;
-                break;
-
-        case WEST:
-                p.x -= length;
-                break;
-
-        case NONE:
-        default:
-                break;
-        }
-
-        return p;
-}
-
-/**
- * Distance between two points a and b, but according to direction dir, so
- * if dir is N or S it returns dinstance between Y coordinates, and when dir
- * is E or W, between X coordinates.
- */
-float distance (Point const *a, Point const *b, Direction dir)
-{
-        if (dir == NORTH || dir == SOUTH) {
-                return fabs (a->y - b->y);
-        }
-        else if (dir == EAST || dir == WEST) {
-                return fabs (a->x - b->x);
-        }
-
-        return 0;
-}
-
-/*****************************************************************************/
-
-Line rayPerpendicular (Line const *perpendicularTo, Point const *towardsPoint, Point const *startPoint)
-{
-        Direction ld;
-
-        if (isVertical (perpendicularTo)) {
-                ld = (towardsPoint->x > perpendicularTo->ax) ? (EAST) : (WEST);
-                return rayNew (startPoint->x, startPoint->y, ld);
-        }
-        else {
-                ld = (towardsPoint->y > perpendicularTo->ay) ? (SOUTH) : (NORTH);
-                return rayNew (startPoint->x, startPoint->y, ld);
-        }
-}
-
-/*****************************************************************************/
-
 static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *color, gboolean fill)
 {
         ClutterActorBox allocation = {
@@ -279,8 +41,8 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
         clutter_actor_get_allocation_box (actor, &allocation);
         clutter_actor_box_get_size (&allocation, &width, &height);
 
-        cogl_path_new ();
-        cogl_set_source_color4ub (color->red, color->green, color->blue, color->alpha);
+        //        cogl_path_new ();
+        // cogl_set_source_color4ub (color->red, color->green, color->blue, color->alpha);
 
         float lw = iw_actor_get_stroke_width (IW_ACTOR (actor));
 
@@ -305,8 +67,9 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
         cogl_path_stroke ();
 #endif
 
-        Point a = { ax, ay };
-        Point b = { bx, by };
+#if 0
+        primitives::Point a = { ax, ay };
+        primitives::Point b = { bx, by };
         Line s0 = rayNew (ax, ay, aDir);
         Line s1;
         Line s2;
@@ -314,33 +77,37 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
         Line s4;
         Line s5 = rayNew (bx, by, bDir);
 
-        // printf ("%f, %f, %f, %f\n", ax, ay, bx, by);
-        printf ("%d, %d\n", aDir, bDir);
+        // printf ("%d, %d\n", aDir, bDir);
 
         // Todo decrease number of elements
-        Point pointsFromA[10];
-        Point pointsFromB[10];
+        primitives::Point pointsFromA[10];
+        primitives::Point pointsFromB[10];
 
         int pFACnt = 0;
         int pFBCnt = 0;
 
         // Step 1. Draw 2 rays from both points (a and b) in correct directions. Check if they corss or connec
-        Point p;
+        primitives::Point p, t1, t2;
+
+        // Sum of angles 90 (number of angles 1)
         if (raysCross (&s0, &s5, &p) || raysConnect (&s0, &s5, &p)) {
+                // Special case : right angle.
                 addPoint (pointsFromA, p.x, p.y, &pFACnt);
                 addPoint (pointsFromB, p.x, p.y, &pFBCnt);
         }
 
+        // Sum of angles 0 (number of angles 0, 2, 4)
         // Step 2.0 Compute segments s1 and s4 if s0 and s5 did not cross.
         else {
                 // Ray s1
                 float d = distance (&a, &b, s0.direction);
                 p = advance (&a, s0.direction, MIN_SEGMENT_LENGTH);
+                float d2 = distance (&p, &b, s0.direction);
 
                 // Compare distance between head and tail before and after the advance.
-                if (distance (&p, &b, s0.direction) < d) { // If distance decreased
+                if (d2 < d) { // If distance decreased
                         // Make right turn in half the way between a and b.
-                        p = advance (&a, s0.direction, d / 2);
+                        p = advance (&a, s0.direction, d / 2.0);
                 }
                 // ELSE (distance increased or stayed the same) Make right turn in point p (MIN_SEGMENT_LENGTH distance from a).
 
@@ -350,11 +117,12 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
                 // Ray s4
                 d = distance (&b, &a, s5.direction);
                 p = advance (&b, s5.direction, MIN_SEGMENT_LENGTH);
+                d2 = distance (&p, &a, s5.direction);
 
                 // Compare distance between head and tail before and after the advance.
-                if (distance (&p, &a, s5.direction) < d) { // If distance decreased
+                if (d2 < d) { // If distance decreased
                         // Make right turn in half the way between a and b.
-                        p = advance (&b, s5.direction, d / 2);
+                        p = advance (&b, s5.direction, d / 2.0);
                 }
                 // ELSE (distance increased or stayed the same) Make right turn in point p (MIN_SEGMENT_LENGTH distance from a).
 
@@ -362,9 +130,19 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
                 s4 = rayPerpendicular (&s5 /*Perpendicular to*/, &a /*Towards point*/, &p /*Starting at point*/);
 
                 // Step 2.1
-                if (raysCross (&s1, &s4, &p) || raysConnect (&s1, &s4, &p)) {
+                if (raysConnect (&s1, &s4, &p)) {
                         addPoint (pointsFromA, p.x, p.y, &pFACnt);
                         addPoint (pointsFromB, p.x, p.y, &pFBCnt);
+                }
+                if (raysCross (&s1, &s5, &p)) {
+                        // Special case 1 : sum of angles = 180
+                        addPoint (pointsFromA, p.x, p.y, &pFACnt);
+                        addPoint (pointsFromA, b.x, b.y, &pFACnt);
+                }
+                else if (raysCross (&s4, &s0, &p)) {
+                        // Special case 2 : sum of angles = 180
+                        addPoint (pointsFromB, p.x, p.y, &pFBCnt);
+                        addPoint (pointsFromB, a.x, a.y, &pFBCnt);
                 }
                 else {
                         a.x = s1.ax;
@@ -379,7 +157,7 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
                         // Compare distance between head and tail before and after the advance.
                         if (distance (&p, &b, s1.direction) < d) { // If distance decreased
                                 // Make right turn in half the way between a and b.
-                                p = advance (&a, s1.direction, d / 2);
+                                p = advance (&a, s1.direction, d / 2.0);
                         }
                         // ELSE (distance increased or stayed the same) Make right turn in point p (MIN_SEGMENT_LENGTH distance from a).
 
@@ -393,7 +171,7 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
                         // Compare distance between head and tail before and after the advance.
                         if (distance (&p, &a, s4.direction) < d) { // If distance decreased
                                 // Make right turn in half the way between a and b.
-                                p = advance (&b, s4.direction, d / 2);
+                                p = advance (&b, s4.direction, d / 2.0);
                         }
                         // ELSE (distance increased or stayed the same) Make right turn in point p (MIN_SEGMENT_LENGTH distance from a).
 
@@ -410,7 +188,6 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
                         }
                 }
         }
-
         /// Step x. Draw.
 
         cogl_path_move_to (ax, ay);
@@ -426,9 +203,29 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
         }
 
         cogl_path_stroke ();
+#endif
 
-        for (ClutterActor *iter = clutter_actor_get_first_child (actor); iter != NULL; iter = clutter_actor_get_next_sibling (iter)) {
-                clutter_actor_paint (iter);
+        CPoint v[10];
+        int vlen = 0;
+        solve (ax, ay, aDir, bx, by, bDir, v, &vlen);
+
+        static ClutterColor roygbiv[7] = { { 255, 0, 0 }, { 255, 132, 0 }, { 255, 255, 0 }, { 0, 255, 0 }, { 0, 0, 255 }, { 75, 0, 130 }, { 127, 0, 255 } };
+
+        int i;
+        for (i = 0; i < vlen - 1; ++i) {
+                cogl_path_new ();
+                cogl_path_move_to (v[i].x, v[i].y);
+                cogl_set_source_color4ub (roygbiv[i].red, roygbiv[i].green, roygbiv[i].blue, 255);
+                cogl_path_line_to (v[i + 1].x, v[i + 1].y);
+                cogl_path_stroke ();
+        }
+
+        ClutterActor *iter = clutter_actor_get_first_child (actor);
+
+        if (iter) {
+                for (; iter != NULL; iter = clutter_actor_get_next_sibling (iter)) {
+                        clutter_actor_paint (iter);
+                }
         }
 }
 

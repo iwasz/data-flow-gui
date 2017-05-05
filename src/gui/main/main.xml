@@ -7,7 +7,7 @@
 
   <Program id="program"/>
 
-  <MainController id="mainController" loopDelayMs="5" program="@program" tools="@tools">
+  <MainController id="mainController" loopDelayMs="5" program="@program" toolContainer="@toolContainer" sceneApi="@sceneApi">
     <ref set-as="rectangularSelector" bean="rectangularSelector"/>
     <ref set-as="selectedActors" bean="selectedActors"/>
     <ref set-as="stage" bean="stage"/>
@@ -19,7 +19,7 @@
   <ScaleLayer id="scale" />
   <Stage id="stage" fillColor="#ecececff" scaleLayer="@scale"/>
 
-  <MainView id="mainView" file="src/gui/main/mainView.ui" stage="@stage" loadWholeFile="true">
+  <MainView id="mainView" file="gui/main/mainView.ui" stage="@stage" loadWholeFile="true">
     <Mapping add-to="mappings" widget="buttonStep" property="sensitive"/>
     <Mapping add-to="mappings" widget="buttonRun" property="stock-id"/>
     <KeyPressEventAdapter add-to="signalAdapters" />

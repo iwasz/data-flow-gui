@@ -20,8 +20,8 @@
  */
 struct Event {
         std::string tool;
-        Point positionStageCoords;
-        Point positionParentCoords;
+        primitives::Point positionStageCoords;
+        primitives::Point positionParentCoords;
         Core::Object *object = nullptr;
         int button = -1;
         unsigned int key = 0;
@@ -31,8 +31,8 @@ struct Event {
         ClutterScrollDirection scrollDirection;
         double scrollX = 0;
         double scrollY = 0;
-        Point stageDelta;
-        Point parentDelta;
+        primitives::Point stageDelta;
+        primitives::Point parentDelta;
 };
 
 #endif // EVENT_H

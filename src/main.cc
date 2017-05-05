@@ -6,16 +6,16 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
+#include "DataFlowApp.h"
 #include <clutter-gtk/clutter-gtk.h>
 #include <gtk/gtk.h>
-#include "DataFlowApp.h"
 
 //// TODO czemu to musi tu być? Czemu tiliaeparser zamienia bool na to _Bool?
 #define _Bool bool
 #include "Reflection_output.cc.h"
+#include "Reflection_output_data_flow.cc.h"
 #include "Reflection_output_gtkforms.cc.h"
 #include "Reflection_output_tiliae.cc.h"
-#include "Reflection_output_data_flow.cc.h"
 
 /*****************************************************************************/
 
@@ -28,6 +28,6 @@ int main (int argc, char **argv)
         }
 
         DataFlowApp app;
-        app.init ("src/config.xml", "mainController");
+        app.init ("config.xml", "mainController", { "../src", ".", "/usr/share/data-flow-gui" });
         gtk_main ();
 }

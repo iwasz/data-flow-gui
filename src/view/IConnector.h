@@ -28,8 +28,8 @@ struct __tiliae_reflect__ IConnector {
 
         // Event handlers
 
-        virtual void onConnectAnchor (Point const &p, Side s) = 0;
-        virtual void onMoveAnchor (Point const &p, Side s) = 0;
+        virtual void onConnectAnchor (primitives::Point const &p, Side s) = 0;
+        virtual void onMoveAnchor (primitives::Point const &p, Side s) = 0;
         virtual void onDisconnectAnchor (/*Side s*/) = 0;
 };
 

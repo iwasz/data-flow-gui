@@ -12,7 +12,7 @@
 
 /*****************************************************************************/
 
-Rectangle::Rectangle ()
+Rect::Rect ()
 {
         self = iw_rectangle_new ();
         clutter_actor_set_reactive (self, TRUE);

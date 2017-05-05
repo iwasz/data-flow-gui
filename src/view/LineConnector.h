@@ -18,8 +18,11 @@ public:
         LineConnector ();
         virtual ~LineConnector () {}
 
-        virtual void onConnectAnchor (Point const &p, Side s) { onMoveAnchor (p, s); }
-        virtual void onMoveAnchor (Point const &p, Side s);
+        // TODO this is a hack, remove someday.
+        virtual void setParent (IClutterActor *parent);
+
+        virtual void onConnectAnchor (primitives::Point const &p, Side s) { onMoveAnchor (p, s); }
+        virtual void onMoveAnchor (primitives::Point const &p, Side s);
         virtual void onDisconnectAnchor (/*Side s*/) { delete this; }
         virtual void onTextChanged (std::string const &text);
 
@@ -28,6 +31,8 @@ public:
 
         virtual void setAFacing (Direction value) {}
         virtual void setBFacing (Direction value) {}
+
+        virtual void visit (IDataFileSave *d) { d->onLineConnector (this); }
 };
 
 #endif // LINECONNECTOR_H

@@ -13,9 +13,12 @@
 #include "gui/console/ConsoleBuffer.h"
 #include "gui/main/RectangularSelectorStrategy.h"
 #include "gui/properties/PropertiesController.h"
+#include "view/INodeView.h"
+#include "view/LineConnector.h"
 #include "view/Rectangle.h"
 #include "view/RectangularSelector.h"
 #include "view/ScaleLayer.h"
+#include "view/SceneAPI.h"
 #include "view/Stage.h"
 #include <App.h>
 #include <Logging.h>
@@ -54,9 +57,11 @@ struct MainController::Impl {
         Stage *stage = nullptr;
         Event event; // Tempporary for some handlers.
         ClutterActorVector *selectedActors = nullptr;
-        ToolCategoryVector *tools = nullptr;
-        ToolMap toolMap;
+        ToolContainer *toolContainer = nullptr;
         PropertiesController *propertiesController = nullptr;
+
+        // TODO is this necessary?
+        SceneAPI *sceneAPI = nullptr;
 
         /// Additional state. Used directly in the drawing events (onMove, onRelease).
         struct {
@@ -64,12 +69,10 @@ struct MainController::Impl {
                 std::string currentTool;
                 /// Draw strategy draws shapes just prior to actual object creation.
                 IDrawStrategy *currentDrawStrategy = nullptr;
-                /// This strategy creates the object we are drawing.
-                IFactoryStrategy *currentFactoryStrategy = nullptr;
                 ISelectorStrategy *currentSelectorStrategy = nullptr;
 
                 // TODO remove encapsulate.
-                Point last;
+                primitives::Point last;
         } vars;
 };
 
@@ -97,7 +100,6 @@ void MainController::Impl::configureMachine ()
                 ->entry ([this] (const char *, void *arg) {
                         vars.currentTool = "";
                         vars.currentDrawStrategy = nullptr;
-                        vars.currentFactoryStrategy = nullptr;
                         return true;
                 })
                 ->transition (TOOL_SELECTED)->when (eq ("selected.tool"))
@@ -117,16 +119,15 @@ void MainController::Impl::configureMachine ()
                 })
                 ->transition (SELECT)->when (eq ("stage.press"))->then ([this] (const char *, void *arg) {
                         vars.currentTool = "select";
-                        vars.currentDrawStrategy = toolMap[vars.currentTool]->drawStrategy;
-                        vars.currentFactoryStrategy = toolMap[vars.currentTool]->factoryStrategy;
-                        vars.currentSelectorStrategy = toolMap[vars.currentTool]->selectorStrategy;
+                        vars.currentDrawStrategy = toolContainer->getToolMap()[vars.currentTool]->drawStrategy;
+                        vars.currentSelectorStrategy = toolContainer->getToolMap()[vars.currentTool]->selectorStrategy;
                         vars.currentDrawStrategy->onButtonPress (*static_cast <Event *> (arg));
                         return true;
                 })
                 ->transition (MOVE)->when (eq ("object.press"))->then ([this] (const char *, void *arg) {
                         vars.currentTool = "select";
-                        vars.currentDrawStrategy = toolMap[vars.currentTool]->drawStrategy;
-                        vars.currentSelectorStrategy = toolMap[vars.currentTool]->selectorStrategy;
+                        vars.currentDrawStrategy = toolContainer->getToolMap()[vars.currentTool]->drawStrategy;
+                        vars.currentSelectorStrategy = toolContainer->getToolMap()[vars.currentTool]->selectorStrategy;
                         Event *args = static_cast <Event *> (arg);
 
                         if (std::find (selectedActors->cbegin (), selectedActors->cend (), args->object) == selectedActors->cend ()) {
@@ -147,12 +148,12 @@ void MainController::Impl::configureMachine ()
                         Event *args = static_cast <Event *> (arg);
                         vars.currentTool = args->tool;
 
+                        ToolMap &toolMap = toolContainer->getToolMap ();
                         if (toolMap.find (vars.currentTool) == toolMap.end ()) {
                                 throw Core::Exception ("No such tool : [" + vars.currentTool + "]");
                         }
 
                         vars.currentDrawStrategy = toolMap[vars.currentTool]->drawStrategy;
-                        vars.currentFactoryStrategy = toolMap[vars.currentTool]->factoryStrategy;
                         return true;
                 })
                 ->transition (TOOL_SELECTED)->when (eq ("selected.tool"))
@@ -176,12 +177,7 @@ void MainController::Impl::configureMachine ()
                                 return true;
                         }
 
-                        IClutterActor *a = nullptr;
-                        if (vars.currentFactoryStrategy) {
-                                Core::Variant v = vars.currentFactoryStrategy->run (*args);
-                                a = ocast <IClutterActor *> (v);
-                        }
-
+                        IClutterActor *a = sceneAPI->create(vars.currentTool);
                         vars.currentDrawStrategy->onObjectCreated (a);
 
                         if (a) {
@@ -221,7 +217,7 @@ void MainController::Impl::configureMachine ()
                 ->transition (MOVE)->when (eq ("stage.motion"))->then ([this] (const char *, void *arg) {
                         Event *event = static_cast <Event *> (arg);
 
-                        Point p2;
+                        primitives::Point p2;
                         clutter_actor_get_position (rectangularSelector->getActor(), &p2.x, &p2.y);
                         p2.x += event->stageDelta.x;
                         p2.y += event->stageDelta.y;
@@ -243,7 +239,7 @@ void MainController::Impl::configureMachine ()
                 ->transition (STAGE_MOVE)->when (eq ("stage.motion"))->then ([this] (const char *, void *arg) {
                         Event *event = static_cast <Event *> (arg);
 
-                        Point n;
+                        primitives::Point n;
                         n.x = event->positionStageCoords.x - vars.last.x;
                         n.y = event->positionStageCoords.y - vars.last.y;
                         stage->getScaleLayer ()->pan (n);
@@ -415,20 +411,11 @@ void MainController::setStage (Stage *value)
 
 /*****************************************************************************/
 
-ToolCategoryVector const *MainController::getTools () const { return impl->tools; }
+const ToolContainer *MainController::getToolContainer () const { return impl->toolContainer; }
 
 /*****************************************************************************/
 
-void MainController::setTools (ToolCategoryVector *value)
-{
-        impl->tools = value;
-
-        for (ToolCategory *category : *impl->tools) {
-                for (Tool *tool : category->tools) {
-                        impl->toolMap[tool->name] = tool;
-                }
-        }
-}
+void MainController::setToolContainer (ToolContainer *value) { impl->toolContainer = value; }
 
 /*****************************************************************************/
 
@@ -451,6 +438,7 @@ PropertiesController *MainController::getPropertiesController () { return impl->
 /*****************************************************************************/
 
 void MainController::setPropertiesController (PropertiesController *p) { impl->propertiesController = p; }
+void MainController::setSceneApi (SceneAPI *api) { impl->sceneAPI = api; }
 
 /****************************************************************************/
 /* State machine low lewel deps.                                            */

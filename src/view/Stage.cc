@@ -33,18 +33,18 @@ Stage::Stage () : scaleLayer (nullptr)
 
 /*****************************************************************************/
 
-Color Stage::getFillColor () const
+primitives::Color Stage::getFillColor () const
 {
         ClutterColor color;
         clutter_actor_get_background_color (self, &color);
-        return Color (&color);
+        return primitives::Color (&color);
 }
 
 /*****************************************************************************/
 
-void Stage::setFillColor (const Color &value)
+void Stage::setFillColor (const primitives::Color &value)
 {
-        ClutterColor color = Color::toClutterColor (value);
+        ClutterColor color = primitives::Color::toClutterColor (value);
         clutter_actor_set_background_color (self, &color);
 }
 
@@ -62,8 +62,8 @@ void on_stage_resize (ClutterActor *actor, ClutterActorBox *box, ClutterAllocati
                 return;
         }
 
-        Box bb (Point (box->x1, box->y1), Point (box->x2, box->y2));
-        Dimension dim = bb.getDimension ();
+        primitives::Box bb (primitives::Point (box->x1, box->y1), primitives::Point (box->x2, box->y2));
+        primitives::Dimension dim = bb.getDimension ();
         // clutter_actor_set_size (scale, dim.width, dim.height);
         clutter_actor_set_position (scale, -(SCALE_SURFACE_SIZE - dim.width) / 2.0, -(SCALE_SURFACE_SIZE - dim.height) / 2.0);
 }
@@ -153,19 +153,19 @@ bool Stage::onScroll (Event const &e)
 
         switch (e.scrollDirection) {
         case CLUTTER_SCROLL_UP:
-                scale->zoomIn (e.positionParentCoords);
+                scale->zoomIn (e.positionStageCoords);
                 break;
 
         case CLUTTER_SCROLL_DOWN:
-                scale->zoomOut (e.positionParentCoords);
+                scale->zoomOut (e.positionStageCoords);
                 break;
 
         case CLUTTER_SCROLL_SMOOTH: {
                 if (e.scrollY > 0) {
-                        scale->zoomOut (e.positionParentCoords);
+                        scale->zoomOut (e.positionStageCoords);
                 }
                 else if (e.scrollY < 0) {
-                        scale->zoomIn (e.positionParentCoords);
+                        scale->zoomIn (e.positionStageCoords);
                 }
         } break;
 

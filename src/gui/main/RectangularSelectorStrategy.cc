@@ -21,8 +21,8 @@ void RectangularSelectorStrategy::onObjectCreated (IClutterActor *) { onObjectCr
 
 void RectangularSelectorStrategy::onObjectCreated (IClutterActor *, bool inside)
 {
-        Box selectionBox = Box (startPoint, endPoint - startPoint);
-        Box minimalSelectionBox;
+        primitives::Box selectionBox = primitives::Box (startPoint, endPoint - startPoint);
+        primitives::Box minimalSelectionBox;
 
         ClutterActor *root = scaleLayer->getActor ();
 
@@ -38,7 +38,7 @@ void RectangularSelectorStrategy::onObjectCreated (IClutterActor *, bool inside)
                         continue;
                 }
 
-                Box boundingBox = actor->getBoundingBox ();
+                primitives::Box boundingBox = actor->getBoundingBox ();
 
                 if (inside) {
                         if (!boundingBox.isInside (selectionBox)) {
@@ -55,14 +55,14 @@ void RectangularSelectorStrategy::onObjectCreated (IClutterActor *, bool inside)
                 selectedActors->push_back (actor);
         }
 
-        if (minimalSelectionBox.getDimension () != Dimension ()) {
+        if (minimalSelectionBox.getDimension () != primitives::Dimension ()) {
                 rectangularSelector->setPosition (minimalSelectionBox.getA ());
                 rectangularSelector->setSize (minimalSelectionBox.getDimension ());
                 rectangularSelector->setVisible (true);
 
                 for (IClutterActor *actor : *selectedActors) {
                         actor->setParent (rectangularSelector);
-                        Point pos = actor->getPosition ();
+                        primitives::Point pos = actor->getPosition ();
                         pos.x -= minimalSelectionBox.getA ().x;
                         pos.y -= minimalSelectionBox.getA ().y;
                         actor->setPosition (pos);
@@ -91,10 +91,10 @@ void RectangularSelectorStrategy::unselectAll ()
         ClutterActor *stage = clutter_actor_get_parent (rectangularSelector->getActor ());
         IClutterActor *stageActor = static_cast<IClutterActor *> (g_object_get_data (G_OBJECT (stage), CPP_IMPLEMENTATION_KEY));
 
-        Point selectionRectanglePosition = rectangularSelector->getPosition ();
+        primitives::Point selectionRectanglePosition = rectangularSelector->getPosition ();
         for (IClutterActor *actor : *selectedActors) {
                 actor->setParent (stageActor);
-                Point pos = actor->getPosition ();
+                primitives::Point pos = actor->getPosition ();
                 pos.x += selectionRectanglePosition.x;
                 pos.y += selectionRectanglePosition.y;
                 actor->setPosition (pos);

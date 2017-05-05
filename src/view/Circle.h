@@ -19,6 +19,7 @@ class __tiliae_reflect__ Circle : public AbstractActor {
 public:
         Circle ();
         virtual ~Circle () {}
+        virtual void visit (IDataFileSave *d) { d->onCircle (this); }
 };
 
 #endif // CIRCLE_H

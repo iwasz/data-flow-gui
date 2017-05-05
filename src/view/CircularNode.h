@@ -31,11 +31,11 @@ public:
         float getStrokeDash () const;
         void setStrokeDash (float value);
 
-        Color getStrokeColor () const;
-        void setStrokeColor (const Color &value);
+        primitives::Color getStrokeColor () const;
+        void setStrokeColor (const primitives::Color &value);
 
-        Color getFillColor () const;
-        void setFillColor (const Color &value);
+        primitives::Color getFillColor () const;
+        void setFillColor (const primitives::Color &value);
 
         virtual std::string getText () const;
         virtual void setText (std::string const t);
@@ -43,14 +43,16 @@ public:
         virtual std::string getFont () const;
         virtual void setFont (std::string const t);
 
-        virtual Color getFontColor () const;
-        virtual void setFontColor (const Color &value);
+        virtual primitives::Color getFontColor () const;
+        virtual void setFontColor (const primitives::Color &value);
 
         virtual bool isTextEditable () const;
         virtual void setTextEditable (bool b);
 
-        virtual void onAllocate (Box const &b);
-        virtual Point getPortPosition (int i) const;
+        virtual void onAllocate (primitives::Box const &b);
+        virtual primitives::Point getPortPosition (int i) const;
+
+        virtual void visit (IDataFileSave *d) { d->onCircularNode (this); }
 };
 
 #endif // CIRCULARNODE_H

@@ -11,7 +11,7 @@
 void DashedLineStrategy::onButtonPress (const Event &e)
 {
         startPoint = e.positionParentCoords;
-        endPoint = Point ();
+        endPoint = primitives::Point ();
         line->setPointA (e.positionStageCoords);
         line->setPointB (e.positionStageCoords);
         line->setVisible (true);

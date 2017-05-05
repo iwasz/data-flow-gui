@@ -44,4 +44,20 @@ struct __tiliae_reflect__ ToolCategory {
 typedef __tiliae_reflect__ std::vector<ToolCategory *> ToolCategoryVector;
 typedef std::map<std::string, Tool *> ToolMap;
 
+/**
+ * @brief The ToolContainer class
+ */
+class __tiliae_reflect__ ToolContainer {
+public:
+        ToolCategoryVector const *getTools () const { return tools; }
+        void setTools (ToolCategoryVector *value);
+
+        ToolMap const &getToolMap () const __tiliae_no_reflect__ { return toolMap; }
+        ToolMap &getToolMap () __tiliae_no_reflect__ { return toolMap; }
+
+private:
+        ToolCategoryVector *tools = nullptr;
+        ToolMap toolMap;
+};
+
 #endif // TOOL_H

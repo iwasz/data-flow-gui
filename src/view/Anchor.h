@@ -17,14 +17,17 @@
 
 struct IAnchorPositionProvider {
         virtual ~IAnchorPositionProvider () {}
-        virtual Point getPosition () const = 0;
+        virtual primitives::Point getPosition () const = 0;
 };
+
+class Port;
 
 /**
  * The logic behind anchors.
  */
 class Anchor {
 public:
+        Anchor (Port *p) : port (p) {}
         ~Anchor ();
 
         struct Connection {
@@ -35,12 +38,15 @@ public:
         typedef std::vector<Connection> ConnectionVector;
         friend class AbstractConnector;
 
-        void notifyMoveAnchor (Point const &p);
-        Point getPosition () const { return apProvider->getPosition (); }
+        void notifyMoveAnchor (primitives::Point const &p);
+        primitives::Point getPosition () const { return apProvider->getPosition (); }
         void setApProvider (std::shared_ptr<IAnchorPositionProvider> value) { apProvider = value; }
 
         Direction getFacing () const { return facing; }
         void setFacing (Direction value) { facing = value; }
+
+        Port *getPort () { return port; }
+        Port const *getPort () const { return port; }
 
 private:
         void connect (IConnector *c, IConnector::Side s);
@@ -51,6 +57,9 @@ private:
 
         /// Tells which side a connector conected to this anchor should face (N,S,W,E)
         Direction facing = NONE;
+
+        /// Round reference was needed for file-saving functionality;
+        Port *port;
 };
 
 typedef std::vector<std::unique_ptr<Anchor>> AnchorVector;
@@ -64,7 +73,7 @@ class NodeAnchorPositionProvider : public IAnchorPositionProvider {
 public:
         NodeAnchorPositionProvider (int i, INodeView *n) : i (i), node (n) {}
         virtual ~NodeAnchorPositionProvider () {}
-        virtual Point getPosition () const;
+        virtual primitives::Point getPosition () const;
 
 private:
         int i;

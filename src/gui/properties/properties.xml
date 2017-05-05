@@ -4,18 +4,18 @@
 
   <PropertiesController id="propertiesController" />
 
-  <BuilderView id="abstractActorPropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" alsoLoad="adjustment1,adjustment2">
+  <BuilderView id="abstractActorPropertiesView" file="gui/properties/abstractActorPropertiesView.ui" alsoLoad="adjustment1,adjustment2">
     <AdjustmentMapping add-to="mappings" widget="actor.strokeWidth" v2mEditor="@double2FloatEditor" />
     <AdjustmentMapping add-to="mappings" widget="actor.strokeDash" v2mEditor="@double2FloatEditor" />
     <ColorMapping add-to="mappings" widget="actor.fillColor"/>
     <ColorMapping add-to="mappings" widget="actor.strokeColor"/>
   </BuilderView>
-  <BuilderView id="buttonPropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />
-  <BuilderView id="copyNodePropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />
-  <BuilderView id="addNodePropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />
-  <BuilderView id="consoleNodePropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />
-  <BuilderView id="constPropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui" />
-  <BuilderView id="circularNodePropertiesView" file="src/gui/properties/abstractActorPropertiesView.ui">
+  <BuilderView id="buttonPropertiesView" file="gui/properties/abstractActorPropertiesView.ui" />
+  <BuilderView id="copyNodePropertiesView" file="gui/properties/abstractActorPropertiesView.ui" />
+  <BuilderView id="addNodePropertiesView" file="gui/properties/abstractActorPropertiesView.ui" />
+  <BuilderView id="consoleNodePropertiesView" file="gui/properties/abstractActorPropertiesView.ui" />
+  <BuilderView id="constPropertiesView" file="gui/properties/abstractActorPropertiesView.ui" />
+  <BuilderView id="circularNodePropertiesView" file="gui/properties/abstractActorPropertiesView.ui">
     <ColorMapping add-to="mappings" widget="actor.fontColor"/>
   </BuilderView>
 </beans>

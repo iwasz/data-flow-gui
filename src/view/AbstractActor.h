@@ -35,11 +35,12 @@ public:
         virtual bool isReactive () const;
         virtual void setReactive (bool value);
 
-        virtual void setPosition (Point const &p);
-        virtual Point getPosition () const;
+        virtual void setPosition (primitives::Point const &p);
+        virtual primitives::Point getPosition () const;
+//        virtual primitives::Point getScaleLayerPosition () const;
 
-        virtual void setSize (Dimension const &d);
-        virtual Dimension getDimension () const;
+        virtual void setSize (primitives::Dimension const &d);
+        virtual primitives::Dimension getSize () const;
 
         virtual bool isFill () const;
         virtual void setFill (bool value);
@@ -50,17 +51,17 @@ public:
         virtual float getStrokeDash () const;
         virtual void setStrokeDash (float value);
 
-        virtual Color getStrokeColor () const;
-        virtual void setStrokeColor (const Color &value);
+        virtual primitives::Color getStrokeColor () const;
+        virtual void setStrokeColor (const primitives::Color &value);
 
-        virtual Color getFillColor () const;
-        virtual void setFillColor (const Color &value);
+        virtual primitives::Color getFillColor () const;
+        virtual void setFillColor (const primitives::Color &value);
 
-        virtual Box getBoundingBox () const;
+        virtual primitives::Box getBoundingBox () const;
         virtual bool isContainter () const { return false; }
 
         /// For converting coordinates to common space. Works after container has done its job.
-        virtual Point convertToScaleLayer (Point const &p) const;
+        virtual primitives::Point convertToScaleLayer (primitives::Point const &p) const;
 
         /// Stores this into self as g_object value.
         virtual void setCppImplementation ();
@@ -82,9 +83,12 @@ public:
         virtual bool onScroll (Event const &e) { return false; }
         virtual bool onKeyPress (Event const &e) { return false; }
 
+        void contId (std::string const &i) { id = i; }
+        std::string getId () const { return id; }
+
         // TODO private
-        Point stagePrev;
-        Point parentPrev;
+        primitives::Point stagePrev;
+        primitives::Point parentPrev;
 
 protected:
         friend void abstractActorOnFinalize (void *ptr);
@@ -97,6 +101,7 @@ private:
         bool selectable = true;
         bool clutterDestroyed = false;
         std::string propertyView;
+        std::string id;
 };
 
 #endif // ABSTRACTACTOR_H

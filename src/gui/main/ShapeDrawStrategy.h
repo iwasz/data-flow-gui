@@ -25,19 +25,19 @@ public:
         AbstractActor *getActor () const { return actor; }
         void setActor (AbstractActor *value) { actor = value; }
 
-        Dimension getMinSize () const { return minSize; }
-        void setMinSize (const Dimension &value) { minSize = value; }
+        primitives::Dimension getMinSize () const { return minSize; }
+        void setMinSize (const primitives::Dimension &value) { minSize = value; }
 
-        Dimension getMaxSize () const { return maxSize; }
-        void setMaxSize (const Dimension &value) { maxSize = value; }
+        primitives::Dimension getMaxSize () const { return maxSize; }
+        void setMaxSize (const primitives::Dimension &value) { maxSize = value; }
 
 protected:
         AbstractActor *actor = nullptr; // Actor must be on stage, not on scale.
-        Point startPoint;
-        Point endPoint;
-        Dimension minSize;
-        Dimension maxSize;
-        Point startPointActor; // In stage coords.
+        primitives::Point startPoint;
+        primitives::Point endPoint;
+        primitives::Dimension minSize;
+        primitives::Dimension maxSize;
+        primitives::Point startPointActor; // In stage coords.
 };
 
 #endif // DASHEDCIRCLESTRATEGY_H

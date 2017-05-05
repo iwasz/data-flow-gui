@@ -33,11 +33,11 @@ public:
         virtual float getStrokeDash () const { throw Core::Exception ("Not implemented"); }
         virtual void setStrokeDash (float value) { throw Core::Exception ("Not implemented"); }
 
-        virtual Color getStrokeColor () const { throw Core::Exception ("Not implemented"); }
-        virtual void setStrokeColor (const Color &value) { throw Core::Exception ("Not implemented"); }
+        virtual primitives::Color getStrokeColor () const { throw Core::Exception ("Not implemented"); }
+        virtual void setStrokeColor (const primitives::Color &value) { throw Core::Exception ("Not implemented"); }
 
-        virtual Color getFillColor () const;
-        virtual void setFillColor (const Color &value);
+        virtual primitives::Color getFillColor () const;
+        virtual void setFillColor (const primitives::Color &value);
 
         virtual bool isSelectable () const { return false; }
 
@@ -52,6 +52,8 @@ public:
         virtual bool onMotion (Event const &e);
         virtual bool onScroll (Event const &e);
         virtual bool onKeyPress (Event const &e);
+
+        virtual void visit (IDataFileSave *) {}
 
 private:
         GtkWidget *clutterWidget;
