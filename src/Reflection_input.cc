@@ -26,6 +26,7 @@
 #include "view/Circle.h"
 #include "view/CircularNode.h"
 #include "view/Connector.h"
+#include "view/FlowDiagram.h"
 #include "view/Line.h"
 #include "view/LineConnector.h"
 #include "view/Rectangle.h"

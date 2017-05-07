@@ -16,6 +16,7 @@
 #include <clutter-gtk/clutter-gtk.h>
 #include <core/Object.h>
 #include <core/Typedefs.h>
+#include <libavoid/libavoid.h>
 #include <memory>
 #include <set>
 #include <string>
@@ -38,8 +39,7 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
 
         virtual void setPosition (primitives::Point const &p) = 0;
         virtual primitives::Point getPosition () const = 0;
-//        Selected items position is returned inconsistently (problems during save).
-//        virtual primitives::Point getScaleLayerPosition () const = 0;
+        virtual primitives::Point getScaleLayerPosition () const = 0;
 
         virtual void setSize (primitives::Dimension const &d) = 0;
         virtual primitives::Dimension getSize () const = 0;
@@ -65,6 +65,9 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
         virtual primitives::Point convertToScaleLayer (primitives::Point const &p) const = 0;
 
         virtual Core::StringVector getPropertyViews () const = 0;
+
+        virtual Avoid::Router *getRouter () = 0;
+        virtual Avoid::Router const *getRouter () const = 0;
 
         /// Save/load files
         virtual void visit (IDataFileSave *) = 0;

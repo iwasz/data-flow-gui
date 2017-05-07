@@ -10,6 +10,7 @@
 #include "ScaleLayer.h"
 #include <clutter/clutter.h>
 #include <core/Exception.h>
+#include <libavoid/libavoid.h>
 
 /*****************************************************************************/
 
@@ -18,7 +19,13 @@ gboolean button_callback_clutter (GtkWidget *widget, GdkEvent *event, gpointer c
 
 /*****************************************************************************/
 
-Stage::Stage () : scaleLayer (nullptr)
+struct Stage::Impl {
+        Avoid::Router router{ Avoid::OrthogonalRouting };
+};
+
+/*****************************************************************************/
+
+Stage::Stage () : scaleLayer (nullptr), impl (new Impl)
 {
         clutterWidget = gtk_clutter_embed_new ();
         self = gtk_clutter_embed_get_stage (GTK_CLUTTER_EMBED (clutterWidget));
@@ -30,6 +37,10 @@ Stage::Stage () : scaleLayer (nullptr)
         g_signal_connect (getClutterWidget (), "button_press_event", G_CALLBACK (button_callback_clutter), nullptr);
         setCppImplementation ();
 }
+
+/*****************************************************************************/
+
+Stage::~Stage () { delete impl; }
 
 /*****************************************************************************/
 
@@ -187,3 +198,8 @@ bool Stage::onKeyPress (Event const &event)
 
         return false;
 }
+
+/*****************************************************************************/
+
+Avoid::Router *Stage::getRouter () { return &impl->router; }
+Avoid::Router const *Stage::getRouter () const { return &impl->router; }

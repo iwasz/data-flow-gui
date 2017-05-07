@@ -7,7 +7,6 @@
  ****************************************************************************/
 
 #include "iw_connector.h"
-#include "connectorSolver_c.h"
 #include "drawing_stuff.h"
 #include <math.h>
 #include <memory.h>
@@ -205,20 +204,20 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
         cogl_path_stroke ();
 #endif
 
-        CPoint v[10];
-        int vlen = 0;
-        solve (ax, ay, aDir, bx, by, bDir, v, &vlen);
+//        CPoint v[10];
+//        int vlen = 0;
+//        solve (ax, ay, aDir, bx, by, bDir, v, &vlen);
 
-        static ClutterColor roygbiv[7] = { { 255, 0, 0 }, { 255, 132, 0 }, { 255, 255, 0 }, { 0, 255, 0 }, { 0, 0, 255 }, { 75, 0, 130 }, { 127, 0, 255 } };
+//        static ClutterColor roygbiv[7] = { { 255, 0, 0 }, { 255, 132, 0 }, { 255, 255, 0 }, { 0, 255, 0 }, { 0, 0, 255 }, { 75, 0, 130 }, { 127, 0, 255 } };
 
-        int i;
-        for (i = 0; i < vlen - 1; ++i) {
-                cogl_path_new ();
-                cogl_path_move_to (v[i].x, v[i].y);
-                cogl_set_source_color4ub (roygbiv[i].red, roygbiv[i].green, roygbiv[i].blue, 255);
-                cogl_path_line_to (v[i + 1].x, v[i + 1].y);
-                cogl_path_stroke ();
-        }
+//        int i;
+//        for (i = 0; i < vlen - 1; ++i) {
+//                cogl_path_new ();
+//                cogl_path_move_to (v[i].x, v[i].y);
+//                cogl_set_source_color4ub (roygbiv[i].red, roygbiv[i].green, roygbiv[i].blue, 255);
+//                cogl_path_line_to (v[i + 1].x, v[i + 1].y);
+//                cogl_path_stroke ();
+//        }
 
         ClutterActor *iter = clutter_actor_get_first_child (actor);
 

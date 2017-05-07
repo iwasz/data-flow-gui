@@ -37,7 +37,7 @@ public:
 
         virtual void setPosition (primitives::Point const &p);
         virtual primitives::Point getPosition () const;
-//        virtual primitives::Point getScaleLayerPosition () const;
+        virtual primitives::Point getScaleLayerPosition () const;
 
         virtual void setSize (primitives::Dimension const &d);
         virtual primitives::Dimension getSize () const;
@@ -72,6 +72,9 @@ public:
         virtual Core::StringVector getPropertyViews () const __tiliae_no_reflect__;
         void setPropertyView (const std::string &value) { propertyView = value; }
 
+        virtual Avoid::Router *getRouter () { return router; }
+        virtual Avoid::Router const *getRouter () const { return router; }
+
         /*---------------------------------------------------------------------------*/
 
         virtual bool isConnectSignals () { return false; }
@@ -93,6 +96,7 @@ public:
 protected:
         friend void abstractActorOnFinalize (void *ptr);
         void onFinalize () { clutterDestroyed = true; }
+        void setRouter (Avoid::Router *r) { router = r; }
 
         ClutterActor *self = 0;
 
@@ -102,6 +106,8 @@ private:
         bool clutterDestroyed = false;
         std::string propertyView;
         std::string id;
+        Avoid::Router *router = nullptr;
+        Avoid::ShapeRef *shapeRef = nullptr;
 };
 
 #endif // ABSTRACTACTOR_H

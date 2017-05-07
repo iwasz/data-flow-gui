@@ -94,6 +94,10 @@ pkg_check_modules (MXML REQUIRED "mxml")
 INCLUDE_DIRECTORIES (${MXML_INCLUDE_DIRS})
 link_directories(${MXML_LIBRARY_DIRS})
 
+pkg_check_modules (AVOID REQUIRED "libavoid")
+INCLUDE_DIRECTORIES (${AVOID_INCLUDE_DIRS})
+link_directories(${AVOID_LIBRARY_DIRS})
+
 # +-------------------------------+
 # | Generate reflection database. |
 # +-------------------------------+
@@ -176,9 +180,6 @@ LIST (APPEND SOURCES
         "src/view/clutter/iw_line.h"
         "src/view/clutter/iw_connector.c"
         "src/view/clutter/iw_connector.h"
-        "src/view/clutter/ConnectorSolver.cc"
-        "src/view/clutter/ConnectorSolver.h"
-        "src/view/clutter/connectorSolver_c.h"
         "src/view/Circle.h"
         "src/view/Circle.cc"
         "src/view/Rectangle.h"
@@ -189,6 +190,8 @@ LIST (APPEND SOURCES
         "src/view/Line.cc"
         "src/view/Stage.h"
         "src/view/Stage.cc"
+        "src/view/FlowDiagram.h"
+        "src/view/FlowDiagram.cc"
         "src/view/ScaleLayer.h"
         "src/view/ScaleLayer.cc"
         "src/view/CircularNode.h"
@@ -260,6 +263,7 @@ ENDIF ()
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${STATEMACHINE_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${DATAFLOW_LIBRARIES})
 
+TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${AVOID_STATIC_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${CLUTTER_GTK_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${GTK_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${Boost_LIBRARIES})

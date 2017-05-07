@@ -1499,6 +1499,16 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
+		Class *clazz = new Class ("FlowDiagram", typeid (FlowDiagram &), new Reflection::PtrDeleter <FlowDiagram>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("Stage");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <FlowDiagram, void>::Level1Wrapper::newConstructorPointer ()));
+		}
+	}
+	{
 		Class *clazz = new Class ("Rect", typeid (Rect &), new Reflection::PtrDeleter <Rect>);
 		if (!Manager::add (clazz)) {
 			delete clazz;

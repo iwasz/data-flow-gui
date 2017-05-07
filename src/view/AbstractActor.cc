@@ -34,6 +34,10 @@ AbstractActor::~AbstractActor ()
                         g_critical ("AbstractActor::~AbstractActor : clutter_actor_get_parent (self) == nullptr");
                 }
         }
+
+        if (router) {
+                router->deleteShape (shapeRef);
+        }
 }
 
 /*****************************************************************************/
@@ -48,6 +52,13 @@ void AbstractActor::init ()
                 g_signal_connect (self, "leave-event", G_CALLBACK (on_actor_leave), this);
                 g_signal_connect (self, "scroll-event", G_CALLBACK (on_actor_scroll), this);
                 g_signal_connect (self, "key-press-event", G_CALLBACK (on_actor_key_press), this);
+        }
+
+        if (router) {
+                primitives::Point p = getScaleLayerPosition ();
+                primitives::Dimension d = getSize ();
+                Avoid::Rectangle rectangle (Avoid::Point (p.x, p.y), Avoid::Point (p.x + d.width, p.y + d.height));
+                shapeRef = new Avoid::ShapeRef (router, rectangle);
         }
 }
 
@@ -67,6 +78,8 @@ void AbstractActor::setParent (IClutterActor *parent)
         if (oldParent) {
                 g_object_unref (self);
         }
+
+        setRouter (parent->getRouter ());
 }
 
 /*****************************************************************************/
@@ -87,7 +100,17 @@ void AbstractActor::setVisible (bool value)
 
 /*****************************************************************************/
 
-void AbstractActor::setPosition (primitives::Point const &p) { clutter_actor_set_position (self, p.x, p.y); }
+void AbstractActor::setPosition (primitives::Point const &p)
+{
+        primitives::Point p1 = getScaleLayerPosition ();
+        clutter_actor_set_position (self, p.x, p.y);
+
+        if (router) {
+                primitives::Point p2 = getScaleLayerPosition ();
+                primitives::Dimension d = p2 - p1;
+                router->moveShape (shapeRef, d.width, d.height);
+        }
+}
 
 /*****************************************************************************/
 
@@ -100,31 +123,20 @@ primitives::Point AbstractActor::getPosition () const
 
 /*****************************************************************************/
 
-//primitives::Point AbstractActor::getScaleLayerPosition () const
-//{
-//        ClutterActor *parent = self;
-//        bool emdeddedInNotSaveable = false;
-
-//        while (true) {
-//                parent = clutter_actor_get_parent (parent);
-//                IClutterActor *cppParent = static_cast<IClutterActor *> (g_object_get_data (G_OBJECT (child), CPP_IMPLEMENTATION_KEY));
-
-//                if (!cppParent->isSaveToFile ()) {
-//                        emdeddedInNotSaveable = true;
-//                }
-
-//                if (!parent || !cppParent) {
-//                        return
-//                }
-//        }
-
-//        clutter_actor_get_transformed_position (self, &p.x, &p.y);
-//        return p;
-//}
+primitives::Point AbstractActor::getScaleLayerPosition () const { return convertToScaleLayer (getPosition ()); }
 
 /*****************************************************************************/
 
-void AbstractActor::setSize (primitives::Dimension const &d) { clutter_actor_set_size (self, d.width, d.height); }
+void AbstractActor::setSize (primitives::Dimension const &d)
+{
+        clutter_actor_set_size (self, d.width, d.height);
+
+        if (router) {
+                primitives::Point p = getScaleLayerPosition ();
+                Avoid::Rectangle rectangle (Avoid::Point (p.x, p.y), Avoid::Point (p.x + d.width, p.y + d.height));
+                router->moveShape (shapeRef, rectangle);
+        }
+}
 
 /*****************************************************************************/
 
@@ -169,6 +181,11 @@ void AbstractActor::setReactive (bool value) { clutter_actor_set_reactive (self,
 
 primitives::Point AbstractActor::convertToScaleLayer (primitives::Point const &p) const
 {
+        if (!ScaleLayer::singleton ()) {
+                return p;
+        }
+
+        // TODO ScaleLayer shall not be singleton!
         if (clutter_actor_get_parent (self) == ScaleLayer::singleton ()->getActor ()) {
                 return p;
         }

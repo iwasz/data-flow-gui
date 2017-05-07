@@ -6,33 +6,20 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef C_HEADER_CONNECTORSOLVER_H
-#define C_HEADER_CONNECTORSOLVER_H
+#include "FlowDiagram.h"
+#include <libavoid/libavoid.h>
 
-#include "primitives/Direction.h"
+/*****************************************************************************/
 
-/// Ray or line segment (not a line).
-struct _CRay {
-        float ax, ay;
-        Direction direction;
+struct FlowDiagram::Impl {
+
+        Avoid::Router router{ Avoid::OrthogonalRouting };
 };
 
-typedef struct _CRay CRay;
+/*****************************************************************************/
 
-struct _CPoint {
-        float x, y;
-};
+FlowDiagram::FlowDiagram () { impl = new Impl; }
 
-typedef struct _CPoint CPoint;
+/*****************************************************************************/
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-void solve (float ax, float ay, Direction aDir, float bx, float by, Direction bDir, CPoint outputPoints[], int *numOfPoints);
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif // CONNECTORSOLVER_H
+FlowDiagram::~FlowDiagram () { delete impl; }

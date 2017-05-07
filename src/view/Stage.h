@@ -19,7 +19,7 @@ class ScaleLayer;
 class __tiliae_reflect__ Stage : public AbstractActor {
 public:
         Stage ();
-        virtual ~Stage () {}
+        virtual ~Stage ();
 
         GtkWidget *getClutterWidget () { return clutterWidget; }
         void setParent (IClutterActor *parent) { throw Core::Exception ("Not implemented"); }
@@ -44,6 +44,9 @@ public:
         ScaleLayer *getScaleLayer () const { return scaleLayer; }
         void setScaleLayer (ScaleLayer *layer);
 
+        Avoid::Router *getRouter ();
+        Avoid::Router const *getRouter () const;
+
         /*---------------------------------------------------------------------------*/
 
         virtual bool isConnectSignals () { return true; }
@@ -58,6 +61,8 @@ public:
 private:
         GtkWidget *clutterWidget;
         ScaleLayer *scaleLayer;
+        struct Impl;
+        Impl *impl;
 };
 
 #endif // STAGE_H
