@@ -35,6 +35,9 @@ public:
         virtual bool isReactive () const;
         virtual void setReactive (bool value);
 
+        bool isRouting () const { return routing; }
+        void setRouting (bool value) { routing = value; }
+
         virtual void setPosition (primitives::Point const &p);
         virtual primitives::Point getPosition () const;
         virtual primitives::Point getScaleLayerPosition () const;
@@ -72,8 +75,8 @@ public:
         virtual Core::StringVector getPropertyViews () const __tiliae_no_reflect__;
         void setPropertyView (const std::string &value) { propertyView = value; }
 
-        virtual Avoid::Router *getRouter () { return router; }
-        virtual Avoid::Router const *getRouter () const { return router; }
+        virtual Avoid::Router *getRouter () __tiliae_no_reflect__ { return router; }
+        virtual Avoid::ShapeRef *getShapeRef () __tiliae_no_reflect__ { return shapeRef; }
 
         /*---------------------------------------------------------------------------*/
 
@@ -104,6 +107,7 @@ private:
         IDrawingEventHandler *eventHandler = nullptr;
         bool selectable = true;
         bool clutterDestroyed = false;
+        bool routing = true;
         std::string propertyView;
         std::string id;
         Avoid::Router *router = nullptr;

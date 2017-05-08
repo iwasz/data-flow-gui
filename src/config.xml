@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <beans init-method="init" id-method="contId">
   <Config id="config">
-    <value set-as="logMappings">true</value>
+    <value set-as="logMappings">false</value>
     <value set-as="useWidgetId">true</value>
   </Config>
 

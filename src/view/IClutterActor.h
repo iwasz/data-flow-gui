@@ -66,8 +66,8 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
 
         virtual Core::StringVector getPropertyViews () const = 0;
 
-        virtual Avoid::Router *getRouter () = 0;
-        virtual Avoid::Router const *getRouter () const = 0;
+        virtual Avoid::Router *getRouter () __tiliae_no_reflect__ = 0;
+        virtual Avoid::ShapeRef *getShapeRef () __tiliae_no_reflect__ = 0;
 
         /// Save/load files
         virtual void visit (IDataFileSave *) = 0;

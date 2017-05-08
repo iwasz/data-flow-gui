@@ -11,8 +11,10 @@
 
 #include "primitives/Geometry.h"
 #include <ReflectionParserAnnotation.h>
+// TODO Remove
+#include <libavoid.h>
 
-class Anchor;
+class Port;
 
 /**
  * Straight or bent line (whatever, impl. will define), directed or not (whetever, impl. will define),
@@ -23,14 +25,17 @@ struct __tiliae_reflect__ IConnector {
         enum Side { A, B };
         virtual ~IConnector () {}
 
-        virtual void connect (Anchor *a, Side s) = 0;
+        virtual void connect (Port *a, Side s) = 0;
         virtual void disconnect (/*Side s*/) = 0;
 
         // Event handlers
 
-        virtual void onConnectAnchor (primitives::Point const &p, Side s) = 0;
-        virtual void onMoveAnchor (primitives::Point const &p, Side s) = 0;
-        virtual void onDisconnectAnchor (/*Side s*/) = 0;
+        //        virtual void onConnectAnchor (primitives::Point const &p, Side s) = 0;
+        //        virtual void onMoveAnchor (primitives::Point const &p, Side s) = 0;
+        //        virtual void onDisconnectAnchor (/*Side s*/) = 0;
+
+        /// TODO change API from conRef to some primitives::polygon
+        virtual void onReroute (Avoid::ConnRef *) = 0;
 };
 
 #endif // ICONNECTOR_H

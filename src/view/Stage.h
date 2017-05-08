@@ -44,8 +44,7 @@ public:
         ScaleLayer *getScaleLayer () const { return scaleLayer; }
         void setScaleLayer (ScaleLayer *layer);
 
-        Avoid::Router *getRouter ();
-        Avoid::Router const *getRouter () const;
+        Avoid::Router *getRouter () __tiliae_no_reflect__;
 
         /*---------------------------------------------------------------------------*/
 

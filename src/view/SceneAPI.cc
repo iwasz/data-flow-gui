@@ -7,7 +7,7 @@
  ****************************************************************************/
 
 #include "SceneAPI.h"
-#include "LineConnector.h"
+#include "IConnector.h"
 #include "Port.h"
 #include "gui/main/IFactoryStrategy.h"
 #include <core/variant/Cast.h>
@@ -59,19 +59,23 @@ IClutterActor *SceneAPI::create (std::string const &toolName)
 
 /*****************************************************************************/
 
-void SceneAPI::connect (LineConnector *lc, Port *pa, Port *pb)
+void SceneAPI::connect (IConnector *lc, Port *pa, Port *pb)
 {
         if (!pa || !pb) {
                 return;
         }
 
-        lc->connect (&pa->anchor, IConnector::A);
-        lc->connect (&pb->anchor, IConnector::B);
+//        lc->connect (&pa->anchor, IConnector::A);
+//        lc->connect (&pb->anchor, IConnector::B);
+        lc->connect (pa, IConnector::A);
+        lc->connect (pb, IConnector::B);
 
-        /*****************************************************************************/
-        /* Connect flow::INodes                                                      */
-        /*****************************************************************************/
+/*****************************************************************************/
+/* Connect flow::INodes                                                      */
+/*****************************************************************************/
 
+//        TODO
+#if 0
         assert (lc->getArc ());
         flow::Arc *arc = lc->getArc ().get ();
 
@@ -96,6 +100,7 @@ void SceneAPI::connect (LineConnector *lc, Port *pa, Port *pb)
                         endNode->addOutput (pb->getProgramNumber (), arc);
                 }
         }
+#endif
 }
 
 /*****************************************************************************/

@@ -23,11 +23,6 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">ic_settings_overscan_black_24dp.png</property>
   </object>
-  <object class="GtkImage" id="lineConnectorIcon">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">ic_timeline_black_24dp.png</property>
-  </object>
   <object class="GtkImage" id="lineConnectorIcon1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -388,20 +383,6 @@
                           </object>
                           <packing>
                             <property name="position">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="lineConnectorButton">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">Line connector</property>
-                            <property name="label" translatable="yes">Line connector</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_widget">lineConnectorIcon</property>
-                            <signal name="clicked" handler="$controller.onNewNodeToolClicked ('lineConnector')" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="position">4</property>
                           </packing>
                         </child>
                       </object>

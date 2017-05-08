@@ -40,9 +40,9 @@ void Anchor::disconnect (IConnector *c)
 
 void Anchor::notifyMoveAnchor (const primitives::Point &p)
 {
-        for (Connection &c : connections) {
-                c.connector->onMoveAnchor (p, c.side);
-        }
+//        for (Connection &c : connections) {
+//                c.connector->onMoveAnchor (p, c.side);
+//        }
 }
 
 /*****************************************************************************/

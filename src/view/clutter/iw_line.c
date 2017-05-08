@@ -102,7 +102,7 @@ static void on_text_changed (ClutterText *self, gpointer user_data)
         /*printf ("%s\n", clutter_text_get_text (self));*/
         IwLine *line = (IwLine *)user_data;
         iw_line_resize_accordingly (line);
-        onTextChanged (iw_actor_get_user_data (IW_ACTOR (line)), clutter_text_get_text (self));
+//        onTextChanged (iw_actor_get_user_data (IW_ACTOR (line)), clutter_text_get_text (self));
 }
 
 /*****************************************************************************/

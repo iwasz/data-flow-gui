@@ -753,6 +753,7 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("setReactive", createMethodWrapper (&IClutterActor::setReactive)));
 			clazz->addMethod (new Method ("setPosition", createMethodWrapper (&IClutterActor::setPosition)));
 			clazz->addMethod (new Method ("getPosition", createMethodWrapper (&IClutterActor::getPosition)));
+			clazz->addMethod (new Method ("getScaleLayerPosition", createMethodWrapper (&IClutterActor::getScaleLayerPosition)));
 			clazz->addMethod (new Method ("setSize", createMethodWrapper (&IClutterActor::setSize)));
 			clazz->addMethod (new Method ("getSize", createMethodWrapper (&IClutterActor::getSize)));
 			clazz->addMethod (new Method ("isFill", createMethodWrapper (&IClutterActor::isFill)));
@@ -822,8 +823,11 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("setSelectable", createMethodWrapper (&AbstractActor::setSelectable)));
 			clazz->addMethod (new Method ("isReactive", createMethodWrapper (&AbstractActor::isReactive)));
 			clazz->addMethod (new Method ("setReactive", createMethodWrapper (&AbstractActor::setReactive)));
+			clazz->addMethod (new Method ("isRouting", createMethodWrapper (&AbstractActor::isRouting)));
+			clazz->addMethod (new Method ("setRouting", createMethodWrapper (&AbstractActor::setRouting)));
 			clazz->addMethod (new Method ("setPosition", createMethodWrapper (&AbstractActor::setPosition)));
 			clazz->addMethod (new Method ("getPosition", createMethodWrapper (&AbstractActor::getPosition)));
+			clazz->addMethod (new Method ("getScaleLayerPosition", createMethodWrapper (&AbstractActor::getScaleLayerPosition)));
 			clazz->addMethod (new Method ("setSize", createMethodWrapper (&AbstractActor::setSize)));
 			clazz->addMethod (new Method ("getSize", createMethodWrapper (&AbstractActor::getSize)));
 			clazz->addMethod (new Method ("isFill", createMethodWrapper (&AbstractActor::isFill)));
@@ -977,59 +981,6 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
-		Class *clazz = new Class ("IArcView", typeid (IArcView &), new Reflection::PtrDeleter <IArcView>);
-		if (!Manager::add (clazz)) {
-			delete clazz;
-		}
-		else {
-			clazz->addBaseClassName ("Object");
-			clazz->addMethod (new Method ("getArc", createMethodWrapper (&IArcView::getArc)));
-			clazz->addMethod (new Method ("setArc", createMethodWrapper (&IArcView::setArc)));
-		}
-	}
-	{
-		Class *clazz = new Class ("AbstractArcView", typeid (AbstractArcView &), new Reflection::PtrDeleter <AbstractArcView>);
-		if (!Manager::add (clazz)) {
-			delete clazz;
-		}
-		else {
-			clazz->addBaseClassName ("IArcView");
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <AbstractArcView, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addMethod (new Method ("getArc", createMethodWrapper (&AbstractArcView::getArc)));
-			clazz->addMethod (new Method ("setArc", createMethodWrapper (&AbstractArcView::setArc)));
-		}
-	}
-	{
-		Class *clazz = new Class ("IConnector", typeid (IConnector &), new Reflection::PtrDeleter <IConnector>);
-		if (!Manager::add (clazz)) {
-			delete clazz;
-		}
-		else {
-			clazz->addMethod (new Method ("connect", createMethodWrapper (&IConnector::connect)));
-			clazz->addMethod (new Method ("disconnect", createMethodWrapper (&IConnector::disconnect)));
-			clazz->addMethod (new Method ("onConnectAnchor", createMethodWrapper (&IConnector::onConnectAnchor)));
-			clazz->addMethod (new Method ("onMoveAnchor", createMethodWrapper (&IConnector::onMoveAnchor)));
-			clazz->addMethod (new Method ("onDisconnectAnchor", createMethodWrapper (&IConnector::onDisconnectAnchor)));
-		}
-	}
-	{
-		Class *clazz = new Class ("AbstractConnector", typeid (AbstractConnector &), new Reflection::PtrDeleter <AbstractConnector>);
-		if (!Manager::add (clazz)) {
-			delete clazz;
-		}
-		else {
-			clazz->addBaseClassName ("IConnector");
-			clazz->addMethod (new Method ("connect", createMethodWrapper (&AbstractConnector::connect)));
-			clazz->addMethod (new Method ("disconnect", createMethodWrapper (&AbstractConnector::disconnect)));
-			clazz->addMethod (new Method ("getAFacing", createMethodWrapper (&AbstractConnector::getAFacing)));
-			clazz->addMethod (new Method ("getBFacing", createMethodWrapper (&AbstractConnector::getBFacing)));
-			clazz->addMethod (new Method ("setAFacing", createMethodWrapper (&AbstractConnector::setAFacing)));
-			clazz->addMethod (new Method ("setBFacing", createMethodWrapper (&AbstractConnector::setBFacing)));
-			clazz->addMethod (new Method ("getAnchorA", createMethodWrapper (&AbstractConnector::getAnchorA)));
-			clazz->addMethod (new Method ("getAnchorB", createMethodWrapper (&AbstractConnector::getAnchorB)));
-		}
-	}
-	{
 		Class *clazz = new Class ("Line", typeid (Line &), new Reflection::PtrDeleter <Line>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
@@ -1050,28 +1001,6 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("isTextEditable", createMethodWrapper (&Line::isTextEditable)));
 			clazz->addMethod (new Method ("setTextEditable", createMethodWrapper (&Line::setTextEditable)));
 			clazz->addMethod (new Method ("visit", createMethodWrapper (&Line::visit)));
-		}
-	}
-	{
-		Class *clazz = new Class ("LineConnector", typeid (LineConnector &), new Reflection::PtrDeleter <LineConnector>);
-		if (!Manager::add (clazz)) {
-			delete clazz;
-		}
-		else {
-			clazz->addBaseClassName ("Line");
-			clazz->addBaseClassName ("AbstractConnector");
-			clazz->addBaseClassName ("AbstractArcView");
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <LineConnector, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addMethod (new Method ("setParent", createMethodWrapper (&LineConnector::setParent)));
-			clazz->addMethod (new Method ("onConnectAnchor", createMethodWrapper (&LineConnector::onConnectAnchor)));
-			clazz->addMethod (new Method ("onMoveAnchor", createMethodWrapper (&LineConnector::onMoveAnchor)));
-			clazz->addMethod (new Method ("onDisconnectAnchor", createMethodWrapper (&LineConnector::onDisconnectAnchor)));
-			clazz->addMethod (new Method ("onTextChanged", createMethodWrapper (&LineConnector::onTextChanged)));
-			clazz->addMethod (new Method ("getAFacing", createMethodWrapper (&LineConnector::getAFacing)));
-			clazz->addMethod (new Method ("getBFacing", createMethodWrapper (&LineConnector::getBFacing)));
-			clazz->addMethod (new Method ("setAFacing", createMethodWrapper (&LineConnector::setAFacing)));
-			clazz->addMethod (new Method ("setBFacing", createMethodWrapper (&LineConnector::setBFacing)));
-			clazz->addMethod (new Method ("visit", createMethodWrapper (&LineConnector::visit)));
 		}
 	}
 	{
@@ -1323,6 +1252,17 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
+		Class *clazz = new Class ("IConnector", typeid (IConnector &), new Reflection::PtrDeleter <IConnector>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addMethod (new Method ("connect", createMethodWrapper (&IConnector::connect)));
+			clazz->addMethod (new Method ("disconnect", createMethodWrapper (&IConnector::disconnect)));
+			clazz->addMethod (new Method ("onReroute", createMethodWrapper (&IConnector::onReroute)));
+		}
+	}
+	{
 		Class *clazz = new Class ("Port", typeid (Port &), new Reflection::PtrDeleter <Port>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
@@ -1342,6 +1282,8 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("setProgramNumber", createMethodWrapper (&Port::setProgramNumber)));
 			clazz->addMethod (new Method ("getViewNumber", createMethodWrapper (&Port::getViewNumber)));
 			clazz->addMethod (new Method ("setViewNumber", createMethodWrapper (&Port::setViewNumber)));
+			clazz->addMethod (new Method ("createPin", createMethodWrapper (&Port::createPin)));
+			clazz->addMethod (new Method ("getShapeRef", createMethodWrapper (&Port::getShapeRef)));
 		}
 	}
 	{
@@ -1472,13 +1414,52 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
+		Class *clazz = new Class ("IArcView", typeid (IArcView &), new Reflection::PtrDeleter <IArcView>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("Object");
+			clazz->addMethod (new Method ("getArc", createMethodWrapper (&IArcView::getArc)));
+			clazz->addMethod (new Method ("setArc", createMethodWrapper (&IArcView::setArc)));
+		}
+	}
+	{
+		Class *clazz = new Class ("AbstractArcView", typeid (AbstractArcView &), new Reflection::PtrDeleter <AbstractArcView>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("IArcView");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <AbstractArcView, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("getArc", createMethodWrapper (&AbstractArcView::getArc)));
+			clazz->addMethod (new Method ("setArc", createMethodWrapper (&AbstractArcView::setArc)));
+		}
+	}
+	{
+		Class *clazz = new Class ("AbstractConnector", typeid (AbstractConnector &), new Reflection::PtrDeleter <AbstractConnector>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("IConnector");
+			clazz->addMethod (new Method ("connect", createMethodWrapper (&AbstractConnector::connect)));
+			clazz->addMethod (new Method ("disconnect", createMethodWrapper (&AbstractConnector::disconnect)));
+			clazz->addMethod (new Method ("getAnchorA", createMethodWrapper (&AbstractConnector::getAnchorA)));
+			clazz->addMethod (new Method ("getAnchorB", createMethodWrapper (&AbstractConnector::getAnchorB)));
+		}
+	}
+	{
 		Class *clazz = new Class ("Connector", typeid (Connector &), new Reflection::PtrDeleter <Connector>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
 		}
 		else {
-			clazz->addBaseClassName ("LineConnector");
+			clazz->addBaseClassName ("AbstractActor");
+			clazz->addBaseClassName ("AbstractConnector");
+			clazz->addBaseClassName ("AbstractArcView");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Connector, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("setParent", createMethodWrapper (&Connector::setParent)));
 			clazz->addMethod (new Method ("setPointA", createMethodWrapper (&Connector::setPointA)));
 			clazz->addMethod (new Method ("getPointA", createMethodWrapper (&Connector::getPointA)));
 			clazz->addMethod (new Method ("setPointB", createMethodWrapper (&Connector::setPointB)));
@@ -1491,10 +1472,8 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("setFontColor", createMethodWrapper (&Connector::setFontColor)));
 			clazz->addMethod (new Method ("isTextEditable", createMethodWrapper (&Connector::isTextEditable)));
 			clazz->addMethod (new Method ("setTextEditable", createMethodWrapper (&Connector::setTextEditable)));
-			clazz->addMethod (new Method ("getAFacing", createMethodWrapper (&Connector::getAFacing)));
-			clazz->addMethod (new Method ("getBFacing", createMethodWrapper (&Connector::getBFacing)));
-			clazz->addMethod (new Method ("setAFacing", createMethodWrapper (&Connector::setAFacing)));
-			clazz->addMethod (new Method ("setBFacing", createMethodWrapper (&Connector::setBFacing)));
+			clazz->addMethod (new Method ("onReroute", createMethodWrapper (&Connector::onReroute)));
+			clazz->addMethod (new Method ("onTextChanged", createMethodWrapper (&Connector::onTextChanged)));
 			clazz->addMethod (new Method ("visit", createMethodWrapper (&Connector::visit)));
 		}
 	}

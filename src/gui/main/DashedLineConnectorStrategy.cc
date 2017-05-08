@@ -23,15 +23,15 @@ void DashedLineConnectorStrategy::onButtonPress (Event const &e)
         line->setPointA (e.positionStageCoords);
         line->setPointB (e.positionStageCoords);
 
-        AbstractConnector *lc;
-        if ((lc = dynamic_cast<AbstractConnector *> (line))) {
-                Port *pa = dynamic_cast<Port *> (startObject);
+        //        IConnector *lc;
+        //        if ((lc = dynamic_cast<IConnector *> (line))) {
+        //                Port *pa = dynamic_cast<Port *> (startObject);
 
-                if (pa) {
-                        lc->setAFacing (pa->getFacing ());
-                        lc->setBFacing (getOppositeDirection (pa->getFacing ()));
-                }
-        }
+        //                if (pa) {
+        //                        lc->setAFacing (pa->getFacing ());
+        //                        lc->setBFacing (getOppositeDirection (pa->getFacing ()));
+        //                }
+        //        }
 
         line->setVisible (true);
 }
@@ -54,14 +54,14 @@ bool DashedLineConnectorStrategy::onButtonRelease (const Event &e)
 
 void DashedLineConnectorStrategy::onObjectCreated (IClutterActor *a)
 {
-        LineConnector *lc = dynamic_cast<LineConnector *> (a);
+        IConnector *lc = dynamic_cast<IConnector *> (a);
 
         if (!lc) {
                 throw Core::Exception ("DashedLineStrategy::reshape could not cast actor to Line *");
         }
 
-        lc->setPointA (startPoint);
-        lc->setPointB (endPoint);
+//        lc->setPointA (startPoint);
+//        lc->setPointB (endPoint);
 
         Port *pa = dynamic_cast<Port *> (startObject);
         Port *pb = dynamic_cast<Port *> (endObject);

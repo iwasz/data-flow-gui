@@ -292,9 +292,12 @@ void MainController::onStop () {}
 void MainController::onIdle ()
 {
         impl->machine.run ();
+
         if (impl->runProgram) {
                 impl->program->step ();
         }
+
+//        impl->stage->getRouter ()->processTransaction ();
 }
 
 /****************************************************************************/
@@ -348,6 +351,7 @@ void MainController::onProgramStop ()
         impl->runProgram = false;
         impl->program->reset ();
         updateButtons ();
+        impl->stage->getRouter ()->processTransaction ();
 }
 
 /*****************************************************************************/

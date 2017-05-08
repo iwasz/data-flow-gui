@@ -13,6 +13,7 @@
 #include "primitives/Color.h"
 #include "primitives/Direction.h"
 #include <ReflectionParserAnnotation.h>
+#include <libavoid.h>
 #include <vector>
 
 struct INodeView;
@@ -39,9 +40,14 @@ public:
         int getViewNumber () const { return viewNumber; }
         void setViewNumber (int i) { viewNumber = i; }
 
+        void createPin ();
+        Avoid::ShapeRef *getShapeRef ();
+
         float angle = 0.0;
         float size = 0.0;
         primitives::Color color;
+
+        // TODO remove
         Anchor anchor;
 
 private:
@@ -50,6 +56,7 @@ private:
         int programNumber = 0;
         /// Number for indexing in views (like CircularNode).
         int viewNumber = 0;
+        Avoid::ShapeConnectionPin *pin = nullptr;
 };
 
 class __tiliae_reflect__ InputPort : public Port {

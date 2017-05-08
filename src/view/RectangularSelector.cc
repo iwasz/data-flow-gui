@@ -13,11 +13,11 @@
 
 /*****************************************************************************/
 
-RectangularSelector::RectangularSelector () { /*clutter_actor_add_action (self, clutter_drag_action_new ());*/}
+RectangularSelector::RectangularSelector () { setRouting (false); }
 
 /*****************************************************************************/
 
-//bool RectangularSelector::onButtonPress (Event const &event)
+// bool RectangularSelector::onButtonPress (Event const &event)
 //{
 //        if (!getEventHandler ()) {
 //                return false;
@@ -39,7 +39,7 @@ RectangularSelector::RectangularSelector () { /*clutter_actor_add_action (self, 
 
 ///*****************************************************************************/
 
-//bool RectangularSelector::onButtonRelease (Event const &event)
+// bool RectangularSelector::onButtonRelease (Event const &event)
 //{
 //        if (!getEventHandler ()) {
 //                return false;
@@ -61,7 +61,7 @@ RectangularSelector::RectangularSelector () { /*clutter_actor_add_action (self, 
 
 ///*****************************************************************************/
 
-//bool RectangularSelector::onMotion (Event const &event)
+// bool RectangularSelector::onMotion (Event const &event)
 //{
 //        if (!getEventHandler ()) {
 //                return false;

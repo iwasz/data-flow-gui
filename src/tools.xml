@@ -6,13 +6,13 @@
   <!-- +===================================================+ -->
 
   <ShapeDrawStrategy id="dashedCircle" maxSize="1000, 1000">
-    <Circle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" reactive="false"/>
+    <Circle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" reactive="false" routing="false"/>
   </ShapeDrawStrategy>
 
   <dashedCircle id="dashedCircleMinSize" minSize="100, 100"/>
 
   <ShapeDrawStrategy id="dashedRect" maxSize="1000, 1000">
-    <Rect set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" reactive="false"/>
+    <Rect set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" reactive="false" routing="false"/>
   </ShapeDrawStrategy>
 
   <!-- std::vector of selected actors -->
@@ -20,20 +20,18 @@
 
   <RectangularSelector id="rectangularSelector" parent="@scale" fill="false" strokeColor="#d1d1d1ff"
         strokeDash="10" visible="false" selectable="false" />
+
   <RectangularSelectorStrategy id="selectionDashedRect" rectangularSelector="@rectangularSelector" selectedActors="@selectedActors" scaleLayer="@scale">
-    <Rect set-as="actor" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="5" visible="false" reactive="false"/>
+    <Rect set-as="actor" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="5" visible="false" reactive="false" routing="false" />
   </RectangularSelectorStrategy>
 
   <DashedLineStrategy id="dashedLine">
     <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="5" reactive="false"/>
   </DashedLineStrategy>
 
-  <DashedLineConnectorStrategy id="dashedLineConnector">
-    <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="5" reactive="false"/>
-  </DashedLineConnectorStrategy>
-
   <DashedLineConnectorStrategy id="dashedAngleConnector">
-    <Connector set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="5" reactive="false"/>
+<!--    <Connector set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="5" reactive="false"/>-->
+    <Line set-as="line" parent="@stage" strokeColor="#8d8d8dff" strokeDash="5" visible="false" strokeWidth="5" reactive="false"/>
   </DashedLineConnectorStrategy>
 
   <!-- +===================================================+ -->
@@ -111,11 +109,6 @@
     <value set-as="propertyView">constPropertiesView</value>
   </CircularNode>
 
-  <LineConnector scope="prototype" id="lineConnector" parent="@scale" strokeColor="#d1d1d1ff"
-        fontColor="#8d8d8dff" visible="false" strokeWidth="5" text="0" textEditable="true" selectable="false">
-    <Arc scope="prototype" set-as="arc"/>
-  </LineConnector>
-
   <Connector scope="prototype" id="angleConnector" parent="@scale" strokeColor="#0096c6c9" visible="false" strokeWidth="5" selectable="false">
     <Arc scope="prototype" set-as="arc"/>
   </Connector>
@@ -168,9 +161,6 @@
       </ToolI>
       <ToolI add-to="tools" name="buttonNode" drawStrategy="@dashedRect">
         <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="buttonNode" container="@#container" program="@program"/>
-      </ToolI>
-      <ToolI add-to="tools" name="lineConnector" drawStrategy="@dashedLineConnector">
-        <ContainerFactoryStrategy set-as="factoryStrategy" beanName="lineConnector" container="@#container"/>
       </ToolI>
       <ToolI add-to="tools" name="angleConnector" drawStrategy="@dashedAngleConnector">
         <ContainerFactoryStrategy set-as="factoryStrategy" beanName="angleConnector" container="@#container"/>

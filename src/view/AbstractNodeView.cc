@@ -49,6 +49,7 @@ void AbstractNodeView::glueInit ()
                         p->setViewNumber (viewNumber);
                 }
 
+                p->createPin ();
                 ++viewNumber;
         }
 }

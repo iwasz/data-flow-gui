@@ -23,7 +23,7 @@ struct IAnchorPositionProvider {
 class Port;
 
 /**
- * The logic behind anchors.
+ * The logic behind ports.
  */
 class Anchor {
 public:

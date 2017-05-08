@@ -36,6 +36,7 @@ Stage::Stage () : scaleLayer (nullptr), impl (new Impl)
         g_signal_connect (self, "allocation-changed", G_CALLBACK (on_stage_resize), this);
         g_signal_connect (getClutterWidget (), "button_press_event", G_CALLBACK (button_callback_clutter), nullptr);
         setCppImplementation ();
+        setRouting (false);
 }
 
 /*****************************************************************************/
@@ -202,4 +203,3 @@ bool Stage::onKeyPress (Event const &event)
 /*****************************************************************************/
 
 Avoid::Router *Stage::getRouter () { return &impl->router; }
-Avoid::Router const *Stage::getRouter () const { return &impl->router; }

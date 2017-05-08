@@ -9,14 +9,17 @@
 #ifndef ANGLE_CONNECTOR_H
 #define ANGLE_CONNECTOR_H
 
+#include "AbstractActor.h"
 #include "AbstractArcView.h"
 #include "AbstractConnector.h"
-#include "LineConnector.h"
 
-class __tiliae_reflect__ Connector : public LineConnector {
+class __tiliae_reflect__ Connector : public AbstractActor, public AbstractConnector, public AbstractArcView {
 public:
         Connector ();
         virtual ~Connector () {}
+
+        // TODO this is a hack, remove someday.
+        virtual void setParent (IClutterActor *parent);
 
         /*---------------------------------------------------------------------------*/
 
@@ -38,11 +41,21 @@ public:
         virtual bool isTextEditable () const;
         virtual void setTextEditable (bool b);
 
-        virtual Direction getAFacing () const;
-        virtual Direction getBFacing () const;
+        /*---------------------------------------------------------------------------*/
 
-        virtual void setAFacing (Direction value);
-        virtual void setBFacing (Direction value);
+//        virtual void onConnectAnchor (primitives::Point const &p, Side s) { onMoveAnchor (p, s); }
+//        virtual void onMoveAnchor (primitives::Point const &p, Side s);
+//        virtual void onDisconnectAnchor (/*Side s*/) { delete this; }
+
+        virtual void onReroute (Avoid::ConnRef *);
+
+        virtual void onTextChanged (std::string const &text);
+
+        //        virtual Direction getAFacing () const;
+        //        virtual Direction getBFacing () const;
+
+        //        virtual void setAFacing (Direction value);
+        //        virtual void setBFacing (Direction value);
 
         virtual void visit (IDataFileSave *d) { d->onConnector (this); }
 };

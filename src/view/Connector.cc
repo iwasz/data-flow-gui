@@ -47,13 +47,13 @@ primitives::Point Connector::getPointB () const
 
 /*****************************************************************************/
 
-Direction Connector::getAFacing () const { return iw_connector_get_a_facing (IW_CONNECTOR (self)); }
-Direction Connector::getBFacing () const { return iw_connector_get_b_facing (IW_CONNECTOR (self)); }
+// Direction Connector::getAFacing () const { return iw_connector_get_a_facing (IW_CONNECTOR (self)); }
+// Direction Connector::getBFacing () const { return iw_connector_get_b_facing (IW_CONNECTOR (self)); }
 
-/*****************************************************************************/
+///*****************************************************************************/
 
-void Connector::setAFacing (Direction value) { iw_connector_set_a_facing (IW_CONNECTOR (self), value); }
-void Connector::setBFacing (Direction value) { iw_connector_set_b_facing (IW_CONNECTOR (self), value); }
+// void Connector::setAFacing (Direction value) { iw_connector_set_a_facing (IW_CONNECTOR (self), value); }
+// void Connector::setBFacing (Direction value) { iw_connector_set_b_facing (IW_CONNECTOR (self), value); }
 
 /*****************************************************************************/
 
@@ -95,6 +95,76 @@ bool Connector::isTextEditable () const { return iw_connector_is_editable (IW_CO
 /*****************************************************************************/
 
 void Connector::setTextEditable (bool b) { iw_connector_set_editable (IW_CONNECTOR (self), b); }
+
+/*****************************************************************************/
+
+void Connector::setParent (IClutterActor *p)
+{
+        AbstractActor::setParent (p);
+
+        /*
+         * Move to bottom. I don't want this to be separate method of AbstractActor to preven polution.
+         * TODO Moving to bottom somehow decreases refresh rate when moving nodes around. It can be seen that
+         * connector moves slower than the node it is connected to.
+         */
+        ClutterActor *parent = clutter_actor_get_parent (getActor ());
+        clutter_actor_set_child_below_sibling (parent, getActor (), nullptr);
+}
+
+/*****************************************************************************/
+
+// void Connector::onMoveAnchor (const primitives::Point &p, Side s)
+//{
+//        if (s == A) {
+//                setPointA (p);
+//        }
+//        else {
+//                setPointB (p);
+//        }
+//}
+
+/*****************************************************************************/
+
+// TODO encapsulate in a strategy
+void Connector::onTextChanged (std::string const &text)
+{
+        flow::Arc *arc = getArc ().get ();
+
+        if (!arc) {
+                /*
+                 * During early phases of Connector life, when you use Line::setText, but the arc is not
+                 * set (it can be set with setArc), you'll get nullptr here.
+                 */
+                return;
+        }
+
+        try {
+                if (text.empty ()) {
+                        // Clear the arc.
+                        arc->get ();
+                }
+                else {
+                        arc->put (boost::lexical_cast<int> (text));
+                }
+        }
+        catch (boost::bad_lexical_cast const &e) {
+                // TODO !!!
+                return;
+        }
+}
+
+/*****************************************************************************/
+
+void Connector::onReroute (Avoid::ConnRef *connRef)
+{
+        std::cerr << "onReroute();" << std::endl;
+
+        const Avoid::PolyLine route = connRef->displayRoute ();
+        for (size_t i = 0; i < route.size (); ++i) {
+                Avoid::Point point = route.at (i);
+                printf ("%f, %f\n", point.x, point.y);
+        }
+}
 
 /*****************************************************************************/
 

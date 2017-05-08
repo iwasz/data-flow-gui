@@ -9,7 +9,7 @@
 #include "NativeXmlFormatLoad.h"
 #include "view/CircularNode.h"
 #include "view/IClutterActor.h"
-#include "view/LineConnector.h"
+#include "view/IConnector.h"
 #include "view/SceneAPI.h"
 #include <beanWrapper/BeanWrapper.h>
 #include <boost/lexical_cast.hpp>
@@ -168,7 +168,7 @@ void NativeXmlFormatLoad::Impl::onOpenElement (mxml_node_t *node)
                                 throw Core::Exception ("NativeXmlFormatLoad::Impl::onOpenElement : !pa || !pb. No such port");
                         }
 
-                        LineConnector *lc = dynamic_cast<LineConnector *> (actor);
+                        IConnector *lc = dynamic_cast<IConnector *> (actor);
                         sceneApi->connect (lc, pa, pb);
                 }
                 else if (name == "objB" || name == "portA" || name == "portB") {
@@ -188,4 +188,4 @@ void NativeXmlFormatLoad::Impl::onOpenElement (mxml_node_t *node)
 
 /****************************************************************************/
 
-void NativeXmlFormatLoad::Impl::onCloseElement (mxml_node_t *node) { /*char const *name = mxmlGetElement (node);*/ }
+void NativeXmlFormatLoad::Impl::onCloseElement (mxml_node_t *node) { /*char const *name = mxmlGetElement (node);*/}

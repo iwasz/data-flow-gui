@@ -8,8 +8,9 @@
 
 #include "NativeXmlFormatSave.h"
 #include "view/CircularNode.h"
+#include "view/Connector.h"
 #include "view/IClutterActor.h"
-#include "view/LineConnector.h"
+#include "view/Line.h"
 #include "view/SceneAPI.h"
 #include <boost/lexical_cast.hpp>
 #include <core/Exception.h>
@@ -63,12 +64,12 @@ void NativeXmlFormatSave::save (std::string const &path)
 
 void NativeXmlFormatSave::clutterActorArguments (IClutterActor *a)
 {
-        primitives::Point p = a->getPosition();
+        primitives::Point p = a->getPosition ();
         primitives::Dimension d = a->getSize ();
 
         // This is output directly to the stream, because it has locale set appropriately, and boost::lexical_cast has not.
         *impl->file << "position=\"" << p.x << "," << p.y << "\" size=\"" << d.width << "," << d.height << "\" fill=\"" << a->isFill () << "\" fillColor=\""
-                   << primitives::Color::toString (a->getFillColor ()) << "\" ";
+                    << primitives::Color::toString (a->getFillColor ()) << "\" ";
 
         clutterActorArgumentsStroke (a);
 }
@@ -77,8 +78,8 @@ void NativeXmlFormatSave::clutterActorArguments (IClutterActor *a)
 
 void NativeXmlFormatSave::clutterActorArgumentsStroke (IClutterActor *a)
 {
-        *impl->file << "strokeWidth=\"" << a->getStrokeWidth () << "\" strokeColor=\"" << primitives::Color::toString (a->getStrokeColor ()) << "\" strokeDash=\""
-                   << a->getStrokeDash () << "\" ";
+        *impl->file << "strokeWidth=\"" << a->getStrokeWidth () << "\" strokeColor=\"" << primitives::Color::toString (a->getStrokeColor ())
+                    << "\" strokeDash=\"" << a->getStrokeDash () << "\" ";
 }
 
 /*****************************************************************************/

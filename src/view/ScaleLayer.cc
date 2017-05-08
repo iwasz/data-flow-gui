@@ -34,6 +34,7 @@ ScaleLayer::ScaleLayer () : impl (new Impl)
 #endif
 
         setCppImplementation ();
+        setRouting (false);
 }
 
 /*****************************************************************************/

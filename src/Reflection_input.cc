@@ -28,7 +28,6 @@
 #include "view/Connector.h"
 #include "view/FlowDiagram.h"
 #include "view/Line.h"
-#include "view/LineConnector.h"
 #include "view/Rectangle.h"
 #include "view/RectangularSelector.h"
 #include "view/ScaleLayer.h"
