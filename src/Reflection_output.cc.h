@@ -1460,10 +1460,6 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addBaseClassName ("AbstractArcView");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Connector, void>::Level1Wrapper::newConstructorPointer ()));
 			clazz->addMethod (new Method ("setParent", createMethodWrapper (&Connector::setParent)));
-			clazz->addMethod (new Method ("setPointA", createMethodWrapper (&Connector::setPointA)));
-			clazz->addMethod (new Method ("getPointA", createMethodWrapper (&Connector::getPointA)));
-			clazz->addMethod (new Method ("setPointB", createMethodWrapper (&Connector::setPointB)));
-			clazz->addMethod (new Method ("getPointB", createMethodWrapper (&Connector::getPointB)));
 			clazz->addMethod (new Method ("getText", createMethodWrapper (&Connector::getText)));
 			clazz->addMethod (new Method ("setText", createMethodWrapper (&Connector::setText)));
 			clazz->addMethod (new Method ("getFont", createMethodWrapper (&Connector::getFont)));

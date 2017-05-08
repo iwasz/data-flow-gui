@@ -12,6 +12,7 @@
 #include "AbstractActor.h"
 #include "AbstractArcView.h"
 #include "AbstractConnector.h"
+#include "clutter/iw_connector.h"
 
 class __tiliae_reflect__ Connector : public AbstractActor, public AbstractConnector, public AbstractArcView {
 public:
@@ -23,11 +24,11 @@ public:
 
         /*---------------------------------------------------------------------------*/
 
-        virtual void setPointA (primitives::Point const &p);
-        virtual primitives::Point getPointA () const;
+//        virtual void setPointA (primitives::Point const &p);
+//        virtual primitives::Point getPointA () const;
 
-        virtual void setPointB (primitives::Point const &p);
-        virtual primitives::Point getPointB () const;
+//        virtual void setPointB (primitives::Point const &p);
+//        virtual primitives::Point getPointB () const;
 
         virtual std::string getText () const;
         virtual void setText (std::string const t);
@@ -58,6 +59,10 @@ public:
         //        virtual void setBFacing (Direction value);
 
         virtual void visit (IDataFileSave *d) { d->onConnector (this); }
+
+private:
+
+        std::vector <CPoint> pointsCache;
 };
 
 #endif // LINECONNECTOR_H

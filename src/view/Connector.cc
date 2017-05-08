@@ -7,7 +7,6 @@
  ****************************************************************************/
 
 #include "Connector.h"
-#include "clutter/iw_connector.h"
 #include <boost/lexical_cast.hpp>
 #include <core/Core.h>
 
@@ -21,29 +20,29 @@ Connector::Connector ()
 
 /*****************************************************************************/
 
-void Connector::setPointA (primitives::Point const &p) { iw_connector_set_point_a (IW_CONNECTOR (self), p.x, p.y); }
+// void Connector::setPointA (primitives::Point const &p) { iw_connector_set_point_a (IW_CONNECTOR (self), p.x, p.y); }
 
-/*****************************************************************************/
+///*****************************************************************************/
 
-primitives::Point Connector::getPointA () const
-{
-        primitives::Point p;
-        iw_connector_get_point_a (IW_CONNECTOR (self), &p.x, &p.y);
-        return p;
-}
+// primitives::Point Connector::getPointA () const
+//{
+//        primitives::Point p;
+//        iw_connector_get_point_a (IW_CONNECTOR (self), &p.x, &p.y);
+//        return p;
+//}
 
-/*****************************************************************************/
+///*****************************************************************************/
 
-void Connector::setPointB (primitives::Point const &p) { iw_connector_set_point_b (IW_CONNECTOR (self), p.x, p.y); }
+// void Connector::setPointB (primitives::Point const &p) { iw_connector_set_point_b (IW_CONNECTOR (self), p.x, p.y); }
 
-/*****************************************************************************/
+///*****************************************************************************/
 
-primitives::Point Connector::getPointB () const
-{
-        primitives::Point p;
-        iw_connector_get_point_a (IW_CONNECTOR (self), &p.x, &p.y);
-        return p;
-}
+// primitives::Point Connector::getPointB () const
+//{
+//        primitives::Point p;
+//        iw_connector_get_point_a (IW_CONNECTOR (self), &p.x, &p.y);
+//        return p;
+//}
 
 /*****************************************************************************/
 
@@ -157,13 +156,17 @@ void Connector::onTextChanged (std::string const &text)
 
 void Connector::onReroute (Avoid::ConnRef *connRef)
 {
-        std::cerr << "onReroute();" << std::endl;
-
         const Avoid::PolyLine route = connRef->displayRoute ();
+        pointsCache.resize (route.size ());
+
         for (size_t i = 0; i < route.size (); ++i) {
                 Avoid::Point point = route.at (i);
-                printf ("%f, %f\n", point.x, point.y);
+                pointsCache[i].x = point.x;
+                pointsCache[i].y = point.y;
+                // printf ("%f, %f\n", point.x, point.y);
         }
+
+        iw_connector_set_points (IW_CONNECTOR (self), pointsCache.data (), pointsCache.size ());
 }
 
 /*****************************************************************************/

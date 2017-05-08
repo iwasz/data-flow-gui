@@ -16,10 +16,8 @@ G_DEFINE_TYPE (IwConnector, iw_connector, IW_TYPE_ACTOR);
 #define IW_CONNECTOR_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IW_TYPE_CONNECTOR, IwConnectorPrivate))
 
 struct _IwConnectorPrivate {
-        gfloat ax, ay; // Begin
-        Direction aFacing;
-        gfloat bx, by; // End
-        Direction bFacing;
+        CPoint *points;
+        size_t len;
         ClutterActor *label;
 };
 
@@ -36,21 +34,13 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
         };
 
         gfloat width, height;
-
         clutter_actor_get_allocation_box (actor, &allocation);
         clutter_actor_box_get_size (&allocation, &width, &height);
 
-        //        cogl_path_new ();
-        // cogl_set_source_color4ub (color->red, color->green, color->blue, color->alpha);
+        cogl_path_new ();
+        cogl_set_source_color4ub (color->red, color->green, color->blue, color->alpha);
 
         float lw = iw_actor_get_stroke_width (IW_ACTOR (actor));
-
-        float ax = IW_CONNECTOR (actor)->priv->ax - allocation.x1;
-        float ay = IW_CONNECTOR (actor)->priv->ay - allocation.y1;
-        float bx = IW_CONNECTOR (actor)->priv->bx - allocation.x1;
-        float by = IW_CONNECTOR (actor)->priv->by - allocation.y1;
-        Direction aDir = IW_CONNECTOR (actor)->priv->aFacing;
-        Direction bDir = IW_CONNECTOR (actor)->priv->bFacing;
 
 #if 0
         cogl_path_move_to (ax, ay);
@@ -204,20 +194,15 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
         cogl_path_stroke ();
 #endif
 
-//        CPoint v[10];
-//        int vlen = 0;
-//        solve (ax, ay, aDir, bx, by, bDir, v, &vlen);
+        CPoint *points = IW_CONNECTOR (actor)->priv->points;
+        size_t len = IW_CONNECTOR (actor)->priv->len;
 
-//        static ClutterColor roygbiv[7] = { { 255, 0, 0 }, { 255, 132, 0 }, { 255, 255, 0 }, { 0, 255, 0 }, { 0, 0, 255 }, { 75, 0, 130 }, { 127, 0, 255 } };
+        for (int i = 0; i < len; ++i) {
+                CPoint *p = points + i;
+                cogl_path_line_to (p->x, p->y);
+        }
 
-//        int i;
-//        for (i = 0; i < vlen - 1; ++i) {
-//                cogl_path_new ();
-//                cogl_path_move_to (v[i].x, v[i].y);
-//                cogl_set_source_color4ub (roygbiv[i].red, roygbiv[i].green, roygbiv[i].blue, 255);
-//                cogl_path_line_to (v[i + 1].x, v[i + 1].y);
-//                cogl_path_stroke ();
-//        }
+        cogl_path_stroke ();
 
         ClutterActor *iter = clutter_actor_get_first_child (actor);
 
@@ -262,7 +247,7 @@ static void iw_connector_class_init (IwConnectorClass *klass)
 static void on_text_changed (ClutterText *self, gpointer user_data)
 {
         IwConnector *line = (IwConnector *)user_data;
-        iw_connector_resize_accordingly (line);
+        //        iw_connector_resize_accordingly (line);
         onTextChangedConnector (iw_actor_get_user_data (IW_ACTOR (line)), clutter_text_get_text (self));
 }
 
@@ -271,12 +256,8 @@ static void on_text_changed (ClutterText *self, gpointer user_data)
 static void iw_connector_init (IwConnector *self)
 {
         IwConnectorPrivate *priv = self->priv = IW_CONNECTOR_GET_PRIVATE (self);
-        priv->ax = 0;
-        priv->ay = 0;
-        priv->bx = 0;
-        priv->by = 0;
-        priv->aFacing = NONE;
-        priv->bFacing = NONE;
+        priv->points = NULL;
+        priv->len = 0;
 
         priv->label = clutter_text_new ();
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->label);
@@ -296,6 +277,7 @@ static void iw_connector_init (IwConnector *self)
 
 /*****************************************************************************/
 
+#if 0
 static void iw_connector_resize_accordingly (IwConnector *self)
 {
         gfloat strokeWidth = iw_actor_get_stroke_width (IW_ACTOR (self));
@@ -339,76 +321,7 @@ static void iw_connector_resize_accordingly (IwConnector *self)
 
         clutter_text_set_editable (CLUTTER_TEXT (self->priv->label), TRUE);
 }
-
-/*****************************************************************************/
-
-void iw_connector_set_point_a (IwConnector *self, gfloat x, gfloat y)
-{
-        g_return_if_fail (IW_IS_CONNECTOR (self));
-        self->priv->ax = x;
-        self->priv->ay = y;
-        iw_connector_resize_accordingly (self);
-}
-
-/*****************************************************************************/
-
-void iw_connector_get_point_a (IwConnector *self, gfloat *x, gfloat *y)
-{
-        g_return_if_fail (IW_IS_CONNECTOR (self));
-        *x = self->priv->ax;
-        *y = self->priv->ay;
-}
-
-/*****************************************************************************/
-
-void iw_connector_set_point_b (IwConnector *self, gfloat x, gfloat y)
-{
-        g_return_if_fail (IW_IS_CONNECTOR (self));
-        self->priv->bx = x;
-        self->priv->by = y;
-        iw_connector_resize_accordingly (self);
-}
-
-/*****************************************************************************/
-
-void iw_connector_get_point_b (IwConnector *self, gfloat *x, gfloat *y)
-{
-        g_return_if_fail (IW_IS_CONNECTOR (self));
-        *x = self->priv->bx;
-        *y = self->priv->by;
-}
-
-/*****************************************************************************/
-
-void iw_connector_set_a_facing (IwConnector *self, Direction d)
-{
-        g_return_if_fail (IW_IS_CONNECTOR (self));
-        self->priv->aFacing = d;
-}
-
-/*****************************************************************************/
-
-Direction iw_connector_get_a_facing (IwConnector *self)
-{
-        g_return_val_if_fail (IW_IS_CONNECTOR (self), NONE);
-        return self->priv->aFacing;
-}
-
-/*****************************************************************************/
-
-void iw_connector_set_b_facing (IwConnector *self, Direction d)
-{
-        g_return_if_fail (IW_IS_CONNECTOR (self));
-        self->priv->bFacing = d;
-}
-
-/*****************************************************************************/
-
-Direction iw_connector_get_b_facing (IwConnector *self)
-{
-        g_return_val_if_fail (IW_IS_CONNECTOR (self), NONE);
-        return self->priv->bFacing;
-}
+#endif
 
 /*****************************************************************************/
 
@@ -480,234 +393,10 @@ void iw_connector_set_editable (IwConnector *self, gboolean b)
 
 /*****************************************************************************/
 
-gfloat getX (ClutterActor *actor, int segment)
+void iw_connector_set_points (IwConnector *self, CPoint points[], size_t len)
 {
-        ClutterActorBox allocation;
-        clutter_actor_get_allocation_box (actor, &allocation);
-        float ax = IW_CONNECTOR (actor)->priv->ax - allocation.x1;
-        float ay = IW_CONNECTOR (actor)->priv->ay - allocation.y1;
-        float bx = IW_CONNECTOR (actor)->priv->bx - allocation.x1;
-        float by = IW_CONNECTOR (actor)->priv->by - allocation.y1;
-
-        if (segment == 0) {
-                switch (IW_CONNECTOR (actor)->priv->aFacing) {
-                case EAST:
-                        if (bx - ax > 2 * MIN_SEGMENT_LENGTH) {
-                                return (bx - ax) / 2;
-                        }
-                        else {
-                                return MIN_SEGMENT_LENGTH;
-                        }
-                case WEST:
-                        if (ax - bx > 2 * MIN_SEGMENT_LENGTH) {
-                                return (bx - ax) / 2;
-                        }
-                        else {
-                                return -MIN_SEGMENT_LENGTH;
-                        }
-
-                case NORTH:
-                case SOUTH:
-                case NONE:
-                default:
-                        return 0;
-                }
-        }
-        if (segment == 1) {
-                switch (IW_CONNECTOR (actor)->priv->aFacing) {
-                case NORTH:
-                case SOUTH:
-                        return -(ax - bx) / 2;
-
-                case EAST:
-                case WEST:
-                case NONE:
-                default:
-                        return 0;
-                }
-        }
-
-        if (segment == 2) {
-                switch (IW_CONNECTOR (actor)->priv->aFacing) {
-                case EAST:
-                        if (bx - ax < 2 * MIN_SEGMENT_LENGTH) {
-                                return (bx - ax) - 2 * MIN_SEGMENT_LENGTH;
-                        }
-                        else {
-                                return 0;
-                        }
-
-                case WEST:
-                        if (ax - bx < 2 * MIN_SEGMENT_LENGTH) {
-                                return (bx - ax) + 2 * MIN_SEGMENT_LENGTH;
-                        }
-                        else {
-                                return 0;
-                        }
-
-                case NORTH:
-                case SOUTH:
-                case NONE:
-                default:
-                        return 0;
-                }
-        }
-
-        if (segment == 3) {
-                switch (IW_CONNECTOR (actor)->priv->bFacing) {
-                case NORTH:
-                case SOUTH:
-                        return (ax - bx) / 2;
-
-                case EAST:
-                case WEST:
-                case NONE:
-                default:
-                        return 0;
-                }
-        }
-        if (segment == 4) {
-                switch (IW_CONNECTOR (actor)->priv->bFacing) {
-                case EAST:
-                        if (ax - bx > 2 * MIN_SEGMENT_LENGTH) {
-                                return -(bx - ax) / 2;
-                        }
-                        else {
-                                return MIN_SEGMENT_LENGTH;
-                        }
-                case WEST:
-                        if (bx - ax > 2 * MIN_SEGMENT_LENGTH) {
-                                return -(bx - ax) / 2;
-                        }
-                        else {
-                                return -MIN_SEGMENT_LENGTH;
-                        }
-                case NORTH:
-                case SOUTH:
-                case NONE:
-                default:
-                        return 0;
-                }
-        }
-
-        return 0;
-}
-
-/*****************************************************************************/
-
-gfloat getY (ClutterActor *actor, int segment)
-{
-        ClutterActorBox allocation;
-        clutter_actor_get_allocation_box (actor, &allocation);
-        float ax = IW_CONNECTOR (actor)->priv->ax - allocation.x1;
-        float ay = IW_CONNECTOR (actor)->priv->ay - allocation.y1;
-        float bx = IW_CONNECTOR (actor)->priv->bx - allocation.x1;
-        float by = IW_CONNECTOR (actor)->priv->by - allocation.y1;
-
-        if (segment == 0) {
-                switch (IW_CONNECTOR (actor)->priv->aFacing) {
-                case NORTH:
-                        if (ay - by > 2 * MIN_SEGMENT_LENGTH) {
-                                return (by - ay) / 2;
-                        }
-                        else {
-                                return -MIN_SEGMENT_LENGTH;
-                        }
-
-                case SOUTH:
-                        if (by - ay > 2 * MIN_SEGMENT_LENGTH) {
-                                return (by - ay) / 2;
-                        }
-                        else {
-                                return MIN_SEGMENT_LENGTH;
-                        }
-
-                case EAST:
-                case WEST:
-                case NONE:
-                default:
-                        return 0;
-                }
-        }
-
-        if (segment == 1) {
-                switch (IW_CONNECTOR (actor)->priv->aFacing) {
-                case EAST:
-                case WEST:
-                        return -(ay - by) / 2;
-
-                case NORTH:
-                case SOUTH:
-                case NONE:
-                default:
-                        return 0;
-                }
-        }
-
-        if (segment == 2) {
-                switch (IW_CONNECTOR (actor)->priv->aFacing) {
-                case SOUTH:
-                        if (by - ay < 2 * MIN_SEGMENT_LENGTH) {
-                                return (by - ay) - 2 * MIN_SEGMENT_LENGTH;
-                        }
-                        else {
-                                return 0;
-                        }
-
-                case NORTH:
-                        if (ay - by < 2 * MIN_SEGMENT_LENGTH) {
-                                return (by - ay) + 2 * MIN_SEGMENT_LENGTH;
-                        }
-                        else {
-                                return 0;
-                        }
-
-                case WEST:
-                case EAST:
-                case NONE:
-                default:
-                        return 0;
-                }
-        }
-
-        if (segment == 3) {
-                switch (IW_CONNECTOR (actor)->priv->bFacing) {
-                case EAST:
-                case WEST:
-                        return (ay - by) / 2;
-
-                case NORTH:
-                case SOUTH:
-                case NONE:
-                default:
-                        return 0;
-                }
-        }
-
-        if (segment == 4) {
-                switch (IW_CONNECTOR (actor)->priv->bFacing) {
-                case NORTH:
-                        if (by - ay > 2 * MIN_SEGMENT_LENGTH) {
-                                return -(by - ay) / 2;
-                        }
-                        else {
-                                return -MIN_SEGMENT_LENGTH;
-                        }
-
-                case SOUTH:
-                        if (ay - by > 2 * MIN_SEGMENT_LENGTH) {
-                                return -(by - ay) / 2;
-                        }
-                        else {
-                                return MIN_SEGMENT_LENGTH;
-                        }
-                case EAST:
-                case WEST:
-                case NONE:
-                default:
-                        return 0;
-                }
-        }
-
-        return 0;
+        g_return_if_fail (IW_IS_CONNECTOR (self));
+        self->priv->points = points;
+        self->priv->len = len;
+        clutter_actor_queue_redraw (CLUTTER_ACTOR (self));
 }

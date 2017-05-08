@@ -40,19 +40,29 @@ struct _IwConnectorClass {
         IwActorClass parent_class;
 };
 
+struct _CPoint {
+        double x;
+        double y;
+};
+
+typedef struct _CPoint CPoint;
+
 ClutterActor *iw_connector_new (void);
 
-void iw_connector_set_point_a (IwConnector *self, gfloat x, gfloat y);
-void iw_connector_get_point_a (IwConnector *self, gfloat *x, gfloat *y);
+/// Do not owns. User owns points, and user must delete it.
+void iw_connector_set_points (IwConnector *self, CPoint points[], size_t len);
 
-void iw_connector_set_a_facing (IwConnector *self, Direction d);
-Direction iw_connector_get_a_facing (IwConnector *self);
+//void iw_connector_set_point_a (IwConnector *self, gfloat x, gfloat y);
+//void iw_connector_get_point_a (IwConnector *self, gfloat *x, gfloat *y);
 
-void iw_connector_set_point_b (IwConnector *self, gfloat x, gfloat y);
-void iw_connector_get_point_b (IwConnector *self, gfloat *x, gfloat *y);
+//void iw_connector_set_a_facing (IwConnector *self, Direction d);
+//Direction iw_connector_get_a_facing (IwConnector *self);
 
-void iw_connector_set_b_facing (IwConnector *self, Direction d);
-Direction iw_connector_get_b_facing (IwConnector *self);
+//void iw_connector_set_point_b (IwConnector *self, gfloat x, gfloat y);
+//void iw_connector_get_point_b (IwConnector *self, gfloat *x, gfloat *y);
+
+//void iw_connector_set_b_facing (IwConnector *self, Direction d);
+//Direction iw_connector_get_b_facing (IwConnector *self);
 
 const gchar *iw_connector_get_text (IwConnector *self);
 void iw_connector_set_text (IwConnector *self, const gchar *s);
