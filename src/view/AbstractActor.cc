@@ -112,7 +112,7 @@ void AbstractActor::setPosition (primitives::Point const &p)
         if (isRouting () && router) {
                 primitives::Point p2 = getScaleLayerPosition ();
                 primitives::Dimension d = p2 - p1;
-                std::cerr << "setPosition : " << d << std::endl;
+                std::cerr << "setPosition : " << d << ", " << typeid (*this).name () << std::endl;
                 router->moveShape (shapeRef, d.width, d.height);
         }
 }

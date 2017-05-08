@@ -20,7 +20,7 @@ gboolean button_callback_clutter (GtkWidget *widget, GdkEvent *event, gpointer c
 /*****************************************************************************/
 
 struct Stage::Impl {
-        Avoid::Router router{ Avoid::OrthogonalRouting };
+        Avoid::Router router{ Avoid::PolyLineRouting };
 };
 
 /*****************************************************************************/
