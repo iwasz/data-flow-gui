@@ -39,6 +39,7 @@ public:
         void setRouting (bool value) { routing = value; }
 
         virtual void setPosition (primitives::Point const &p);
+        virtual void move (primitives::Dimension const &d);
         virtual primitives::Point getPosition () const;
         virtual primitives::Point getScaleLayerPosition () const;
 

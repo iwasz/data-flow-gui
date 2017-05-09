@@ -209,20 +209,13 @@ void MainController::Impl::configureMachine ()
         /*---------------------------------------------------------------------------*/
 
         machine.state (MOVE)
-//                ->entry ([this] (const char *, void *arg) {
-//                        Event *event = static_cast <Event *> (arg);
-//                        vars.last = event->positionStageCoords;
-//                        return true;
-//                })
                 ->transition (MOVE)->when (eq ("stage.motion"))->then ([this] (const char *, void *arg) {
                         Event *event = static_cast <Event *> (arg);
+                        rectangularSelector->move (event->stageDelta);
 
-                        primitives::Point p2;
-                        clutter_actor_get_position (rectangularSelector->getActor(), &p2.x, &p2.y);
-                        p2.x += event->stageDelta.x;
-                        p2.y += event->stageDelta.y;
-                        //std::cerr << "++ " << event.stageDelta << std::endl;
-                        clutter_actor_set_position (rectangularSelector->getActor (), p2.x, p2.y);
+                        for (IClutterActor *actor : *selectedActors) {
+                                actor->move (event->stageDelta);
+                        }
 
                         return true;
                 })
@@ -297,7 +290,7 @@ void MainController::onIdle ()
                 impl->program->step ();
         }
 
-//        impl->stage->getRouter ()->processTransaction ();
+        //        impl->stage->getRouter ()->processTransaction ();
 }
 
 /****************************************************************************/

@@ -60,13 +60,13 @@ void RectangularSelectorStrategy::onObjectCreated (IClutterActor *, bool inside)
                 rectangularSelector->setSize (minimalSelectionBox.getDimension ());
                 rectangularSelector->setVisible (true);
 
-                for (IClutterActor *actor : *selectedActors) {
-                        actor->setParent (rectangularSelector);
-                        primitives::Point pos = actor->getPosition ();
-                        pos.x -= minimalSelectionBox.getA ().x;
-                        pos.y -= minimalSelectionBox.getA ().y;
-                        actor->setPosition (pos);
-                }
+//                for (IClutterActor *actor : *selectedActors) {
+//                        actor->setParent (rectangularSelector);
+//                        primitives::Point pos = actor->getPosition ();
+//                        pos.x -= minimalSelectionBox.getA ().x;
+//                        pos.y -= minimalSelectionBox.getA ().y;
+//                        actor->setPosition (pos);
+//                }
         }
         else {
                 rectangularSelector->setVisible (false);
@@ -92,13 +92,14 @@ void RectangularSelectorStrategy::unselectAll ()
         IClutterActor *stageActor = static_cast<IClutterActor *> (g_object_get_data (G_OBJECT (stage), CPP_IMPLEMENTATION_KEY));
 
         primitives::Point selectionRectanglePosition = rectangularSelector->getPosition ();
-        for (IClutterActor *actor : *selectedActors) {
-                actor->setParent (stageActor);
-                primitives::Point pos = actor->getPosition ();
-                pos.x += selectionRectanglePosition.x;
-                pos.y += selectionRectanglePosition.y;
-                actor->setPosition (pos);
-        }
+
+//        for (IClutterActor *actor : *selectedActors) {
+//                actor->setParent (stageActor);
+//                primitives::Point pos = actor->getPosition ();
+//                pos.x += selectionRectanglePosition.x;
+//                pos.y += selectionRectanglePosition.y;
+//                actor->setPosition (pos);
+//        }
 
         selectedActors->clear ();
 }

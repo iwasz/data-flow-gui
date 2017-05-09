@@ -31,7 +31,7 @@ struct Event {
         ClutterScrollDirection scrollDirection;
         double scrollX = 0;
         double scrollY = 0;
-        primitives::Point stageDelta;
+        primitives::Dimension stageDelta;
         primitives::Point parentDelta;
 };
 

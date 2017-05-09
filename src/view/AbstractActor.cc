@@ -119,6 +119,20 @@ void AbstractActor::setPosition (primitives::Point const &p)
 
 /*****************************************************************************/
 
+void AbstractActor::move (primitives::Dimension const &d)
+{
+        clutter_actor_move_by (self, d.width, d.height);
+
+        if (isRouting () && router) {
+#if 1
+                std::cerr << "move : " << d << ", " << typeid (*this).name () << std::endl;
+#endif
+                router->moveShape (shapeRef, d.width, d.height);
+        }
+}
+
+/*****************************************************************************/
+
 primitives::Point AbstractActor::getPosition () const
 {
         primitives::Point p;
@@ -373,19 +387,20 @@ gboolean on_actor_motion (ClutterActor *stage, ClutterEvent *ev, gpointer data)
         AbstractActor *that = static_cast<AbstractActor *> (data);
 
         if (clutter_event_get_state (ev) & CLUTTER_BUTTON1_MASK) {
-                event.stageDelta.x = event.positionStageCoords.x - that->stagePrev.x;
-                event.stageDelta.y = event.positionStageCoords.y - that->stagePrev.y;
+                event.stageDelta = event.positionStageCoords - that->stagePrev;
                 event.parentDelta.x = event.positionParentCoords.x - that->parentPrev.x;
                 event.parentDelta.y = event.positionParentCoords.y - that->parentPrev.y;
                 that->stagePrev = event.positionStageCoords;
                 that->parentPrev = event.positionParentCoords;
         }
         else {
-                event.stageDelta = primitives::Point ();
+                event.stageDelta = primitives::Dimension ();
                 event.parentDelta = primitives::Point ();
         }
 
-        //        std::cerr << event.stageDelta << ", " << event.parentDelta << std::endl;
+#if 0
+        std::cerr << event.stageDelta << ", " << event.parentDelta << std::endl;
+#endif
 
         if (clutter_event_get_state (ev) & CLUTTER_BUTTON1_MASK) {
                 event.button = 1;

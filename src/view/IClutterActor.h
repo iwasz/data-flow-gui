@@ -38,6 +38,7 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
         virtual void setReactive (bool value) = 0;
 
         virtual void setPosition (primitives::Point const &p) = 0;
+        virtual void move (primitives::Dimension const &d) = 0;
         virtual primitives::Point getPosition () const = 0;
         virtual primitives::Point getScaleLayerPosition () const = 0;
 
