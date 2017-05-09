@@ -290,7 +290,7 @@ void MainController::onIdle ()
                 impl->program->step ();
         }
 
-        //        impl->stage->getRouter ()->processTransaction ();
+        impl->stage->getRouter ()->processTransaction ();
 }
 
 /****************************************************************************/
@@ -344,7 +344,7 @@ void MainController::onProgramStop ()
         impl->runProgram = false;
         impl->program->reset ();
         updateButtons ();
-        impl->stage->getRouter ()->processTransaction ();
+//        impl->stage->getRouter ()->processTransaction ();
 }
 
 /*****************************************************************************/
