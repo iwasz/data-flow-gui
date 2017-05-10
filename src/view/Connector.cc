@@ -16,44 +16,7 @@ Connector::Connector ()
         clutter_actor_set_reactive (self, TRUE);
         iw_actor_set_user_data (IW_ACTOR (self), this);
         setCppImplementation ();
-        setRouting (false);
 }
-
-/*****************************************************************************/
-
-// void Connector::setPointA (primitives::Point const &p) { iw_connector_set_point_a (IW_CONNECTOR (self), p.x, p.y); }
-
-///*****************************************************************************/
-
-// primitives::Point Connector::getPointA () const
-//{
-//        primitives::Point p;
-//        iw_connector_get_point_a (IW_CONNECTOR (self), &p.x, &p.y);
-//        return p;
-//}
-
-///*****************************************************************************/
-
-// void Connector::setPointB (primitives::Point const &p) { iw_connector_set_point_b (IW_CONNECTOR (self), p.x, p.y); }
-
-///*****************************************************************************/
-
-// primitives::Point Connector::getPointB () const
-//{
-//        primitives::Point p;
-//        iw_connector_get_point_a (IW_CONNECTOR (self), &p.x, &p.y);
-//        return p;
-//}
-
-/*****************************************************************************/
-
-// Direction Connector::getAFacing () const { return iw_connector_get_a_facing (IW_CONNECTOR (self)); }
-// Direction Connector::getBFacing () const { return iw_connector_get_b_facing (IW_CONNECTOR (self)); }
-
-///*****************************************************************************/
-
-// void Connector::setAFacing (Direction value) { iw_connector_set_a_facing (IW_CONNECTOR (self), value); }
-// void Connector::setBFacing (Direction value) { iw_connector_set_b_facing (IW_CONNECTOR (self), value); }
 
 /*****************************************************************************/
 
@@ -113,18 +76,6 @@ void Connector::setParent (IClutterActor *p)
 
 /*****************************************************************************/
 
-// void Connector::onMoveAnchor (const primitives::Point &p, Side s)
-//{
-//        if (s == A) {
-//                setPointA (p);
-//        }
-//        else {
-//                setPointB (p);
-//        }
-//}
-
-/*****************************************************************************/
-
 // TODO encapsulate in a strategy
 void Connector::onTextChanged (std::string const &text)
 {
@@ -164,7 +115,6 @@ void Connector::onReroute (Avoid::ConnRef *connRef)
                 Avoid::Point point = route.at (i);
                 pointsCache[i].x = point.x;
                 pointsCache[i].y = point.y;
-                // printf ("%f, %f\n", point.x, point.y);
         }
 
         iw_connector_set_points (IW_CONNECTOR (self), pointsCache.data (), pointsCache.size ());

@@ -24,12 +24,6 @@ public:
 
         /*---------------------------------------------------------------------------*/
 
-//        virtual void setPointA (primitives::Point const &p);
-//        virtual primitives::Point getPointA () const;
-
-//        virtual void setPointB (primitives::Point const &p);
-//        virtual primitives::Point getPointB () const;
-
         virtual std::string getText () const;
         virtual void setText (std::string const t);
 
@@ -44,19 +38,8 @@ public:
 
         /*---------------------------------------------------------------------------*/
 
-//        virtual void onConnectAnchor (primitives::Point const &p, Side s) { onMoveAnchor (p, s); }
-//        virtual void onMoveAnchor (primitives::Point const &p, Side s);
-//        virtual void onDisconnectAnchor (/*Side s*/) { delete this; }
-
         virtual void onReroute (Avoid::ConnRef *);
-
         virtual void onTextChanged (std::string const &text);
-
-        //        virtual Direction getAFacing () const;
-        //        virtual Direction getBFacing () const;
-
-        //        virtual void setAFacing (Direction value);
-        //        virtual void setBFacing (Direction value);
 
         virtual void visit (IDataFileSave *d) { d->onConnector (this); }
 

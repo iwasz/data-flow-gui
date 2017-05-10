@@ -13,7 +13,7 @@
 
 /*****************************************************************************/
 
-RectangularSelector::RectangularSelector () { setRouting (false); }
+RectangularSelector::RectangularSelector () {}
 
 /*****************************************************************************/
 

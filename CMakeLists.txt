@@ -190,8 +190,6 @@ LIST (APPEND SOURCES
         "src/view/Line.cc"
         "src/view/Stage.h"
         "src/view/Stage.cc"
-        "src/view/FlowDiagram.h"
-        "src/view/FlowDiagram.cc"
         "src/view/ScaleLayer.h"
         "src/view/ScaleLayer.cc"
         "src/view/CircularNode.h"

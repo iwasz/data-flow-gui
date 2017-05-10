@@ -17,6 +17,7 @@ CircularNode::CircularNode ()
         clutter_actor_set_reactive (self, TRUE);
         iw_circular_node_set_user_data (IW_CIRCULAR_NODE (self), this);
         setCppImplementation ();
+        setRouting (true);
 }
 
 /*****************************************************************************/

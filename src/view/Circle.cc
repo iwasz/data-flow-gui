@@ -18,4 +18,5 @@ Circle::Circle ()
         clutter_actor_set_reactive (self, TRUE);
         iw_actor_set_user_data (IW_ACTOR (self), this);
         setCppImplementation ();
+        setRouting (true);
 }

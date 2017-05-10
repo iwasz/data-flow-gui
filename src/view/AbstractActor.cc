@@ -10,6 +10,7 @@
 #include "ScaleLayer.h"
 #include "clutter/iw_actor.h"
 #include <boost/algorithm/string.hpp>
+#define ROUTING_DEBUGS
 
 /*****************************************************************************/
 
@@ -57,12 +58,22 @@ void AbstractActor::init ()
         if (isRouting () && router) {
                 primitives::Point p = getScaleLayerPosition ();
                 primitives::Dimension d = getSize ();
+#ifdef ROUTING_DEBUGS
                 std::cerr << "init : " << p << ", " << d << ", " << typeid (*this).name () << std::endl;
+#endif
 
-                /// TODO if size == 0, do not create. If user resizes to 0, remove
-                //                 Avoid::Rectangle rectangle (Avoid::Point (p.x, p.y), Avoid::Point (p.x + d.width, p.y + d.height));
-                Avoid::Rectangle rectangle (Avoid::Point (0, 0), Avoid::Point (1, 1));
-                shapeRef = new Avoid::ShapeRef (router, rectangle);
+                if (!shapeRef) {
+                        if (d.width <= 0) {
+                                d.width = 1;
+                        }
+
+                        if (d.height <= 0) {
+                                d.height = 1;
+                        }
+
+                        Avoid::Rectangle rectangle (Avoid::Point (p.x, p.y), Avoid::Point (p.x + d.width, p.y + d.height));
+                        shapeRef = new Avoid::ShapeRef (router, rectangle);
+                }
         }
 }
 
@@ -70,7 +81,6 @@ void AbstractActor::init ()
 
 void AbstractActor::setParent (IClutterActor *parent)
 {
-
         ClutterActor *oldParent;
         if ((oldParent = clutter_actor_get_parent (self)) != nullptr) {
                 g_object_ref (self);
@@ -112,7 +122,9 @@ void AbstractActor::setPosition (primitives::Point const &p)
         if (isRouting () && router) {
                 primitives::Point p2 = getScaleLayerPosition ();
                 primitives::Dimension d = p2 - p1;
+#ifdef ROUTING_DEBUGS
                 std::cerr << "setPosition : " << d << ", " << typeid (*this).name () << std::endl;
+#endif
                 router->moveShape (shapeRef, d.width, d.height);
         }
 }
@@ -124,7 +136,7 @@ void AbstractActor::move (primitives::Dimension const &d)
         clutter_actor_move_by (self, d.width, d.height);
 
         if (isRouting () && router) {
-#if 1
+#ifdef ROUTING_DEBUGS
                 std::cerr << "move : " << d << ", " << typeid (*this).name () << std::endl;
 #endif
                 router->moveShape (shapeRef, d.width, d.height);
@@ -146,14 +158,26 @@ primitives::Point AbstractActor::getScaleLayerPosition () const { return convert
 
 /*****************************************************************************/
 
-void AbstractActor::setSize (primitives::Dimension const &d)
+void AbstractActor::setSize (primitives::Dimension const &d0)
 {
-        clutter_actor_set_size (self, d.width, d.height);
+        clutter_actor_set_size (self, d0.width, d0.height);
 
         if (isRouting () && router) {
                 primitives::Point p = getScaleLayerPosition ();
+                primitives::Dimension d = d0;
+
+                if (d.width <= 0) {
+                        d.width = 1;
+                }
+
+                if (d.height <= 0) {
+                        d.height = 1;
+                }
+
                 Avoid::Rectangle rectangle (Avoid::Point (p.x, p.y), Avoid::Point (p.x + d.width, p.y + d.height));
+#ifdef ROUTING_DEBUGS
                 std::cerr << "setSize : " << p << ", " << d << std::endl;
+#endif
                 router->moveShape (shapeRef, rectangle);
         }
 }

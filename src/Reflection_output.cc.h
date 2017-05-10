@@ -752,6 +752,7 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("isReactive", createMethodWrapper (&IClutterActor::isReactive)));
 			clazz->addMethod (new Method ("setReactive", createMethodWrapper (&IClutterActor::setReactive)));
 			clazz->addMethod (new Method ("setPosition", createMethodWrapper (&IClutterActor::setPosition)));
+			clazz->addMethod (new Method ("move", createMethodWrapper (&IClutterActor::move)));
 			clazz->addMethod (new Method ("getPosition", createMethodWrapper (&IClutterActor::getPosition)));
 			clazz->addMethod (new Method ("getScaleLayerPosition", createMethodWrapper (&IClutterActor::getScaleLayerPosition)));
 			clazz->addMethod (new Method ("setSize", createMethodWrapper (&IClutterActor::setSize)));
@@ -826,6 +827,7 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("isRouting", createMethodWrapper (&AbstractActor::isRouting)));
 			clazz->addMethod (new Method ("setRouting", createMethodWrapper (&AbstractActor::setRouting)));
 			clazz->addMethod (new Method ("setPosition", createMethodWrapper (&AbstractActor::setPosition)));
+			clazz->addMethod (new Method ("move", createMethodWrapper (&AbstractActor::move)));
 			clazz->addMethod (new Method ("getPosition", createMethodWrapper (&AbstractActor::getPosition)));
 			clazz->addMethod (new Method ("getScaleLayerPosition", createMethodWrapper (&AbstractActor::getScaleLayerPosition)));
 			clazz->addMethod (new Method ("setSize", createMethodWrapper (&AbstractActor::setSize)));
@@ -1471,16 +1473,6 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("onReroute", createMethodWrapper (&Connector::onReroute)));
 			clazz->addMethod (new Method ("onTextChanged", createMethodWrapper (&Connector::onTextChanged)));
 			clazz->addMethod (new Method ("visit", createMethodWrapper (&Connector::visit)));
-		}
-	}
-	{
-		Class *clazz = new Class ("FlowDiagram", typeid (FlowDiagram &), new Reflection::PtrDeleter <FlowDiagram>);
-		if (!Manager::add (clazz)) {
-			delete clazz;
-		}
-		else {
-			clazz->addBaseClassName ("Stage");
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <FlowDiagram, void>::Level1Wrapper::newConstructorPointer ()));
 		}
 	}
 	{

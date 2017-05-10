@@ -102,13 +102,13 @@ protected:
         void onFinalize () { clutterDestroyed = true; }
         void setRouter (Avoid::Router *r) { router = r; }
 
-        ClutterActor *self = 0;
+        ClutterActor *self = nullptr;
 
 private:
         IDrawingEventHandler *eventHandler = nullptr;
         bool selectable = true;
         bool clutterDestroyed = false;
-        bool routing = true;
+        bool routing = false;
         std::string propertyView;
         std::string id;
         Avoid::Router *router = nullptr;

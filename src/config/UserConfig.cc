@@ -8,12 +8,6 @@
 
 #include "UserConfig.h"
 
-void UserConfig::set (const std::string &name, Core::Variant data)
-{
+void UserConfig::set (const std::string &name, Core::Variant data) {}
 
-}
-
-Core::Variant UserConfig::get (const std::string &path)
-{
-
-}
+Core::Variant UserConfig::get (const std::string &path) { return Core::Variant (); }
