@@ -1254,17 +1254,6 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
-		Class *clazz = new Class ("IConnector", typeid (IConnector &), new Reflection::PtrDeleter <IConnector>);
-		if (!Manager::add (clazz)) {
-			delete clazz;
-		}
-		else {
-			clazz->addMethod (new Method ("connect", createMethodWrapper (&IConnector::connect)));
-			clazz->addMethod (new Method ("disconnect", createMethodWrapper (&IConnector::disconnect)));
-			clazz->addMethod (new Method ("onReroute", createMethodWrapper (&IConnector::onReroute)));
-		}
-	}
-	{
 		Class *clazz = new Class ("Port", typeid (Port &), new Reflection::PtrDeleter <Port>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
@@ -1274,10 +1263,7 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addField (new Field ("angle", Reflection::createFieldWrapper (&Port::angle)));
 			clazz->addField (new Field ("size", Reflection::createFieldWrapper (&Port::size)));
 			clazz->addField (new Field ("color", Reflection::createFieldWrapper (&Port::color)));
-			clazz->addField (new Field ("anchor", Reflection::createFieldWrapper (&Port::anchor)));
 			clazz->addMethod (new Method ("isInput", createMethodWrapper (&Port::isInput)));
-			clazz->addMethod (new Method ("getFacing", createMethodWrapper (&Port::getFacing)));
-			clazz->addMethod (new Method ("setFacing", createMethodWrapper (&Port::setFacing)));
 			clazz->addMethod (new Method ("getNodeView", createMethodWrapper (&Port::getNodeView)));
 			clazz->addMethod (new Method ("setNodeView", createMethodWrapper (&Port::setNodeView)));
 			clazz->addMethod (new Method ("getProgramNumber", createMethodWrapper (&Port::getProgramNumber)));
@@ -1375,7 +1361,6 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("getFontColor", createMethodWrapper (&Button::getFontColor)));
 			clazz->addMethod (new Method ("setFontColor", createMethodWrapper (&Button::setFontColor)));
 			clazz->addMethod (new Method ("setNode", createMethodWrapper (&Button::setNode)));
-			clazz->addMethod (new Method ("onAllocate", createMethodWrapper (&Button::onAllocate)));
 			clazz->addMethod (new Method ("onPress", createMethodWrapper (&Button::onPress)));
 			clazz->addMethod (new Method ("onRelease", createMethodWrapper (&Button::onRelease)));
 			clazz->addMethod (new Method ("getPortPosition", createMethodWrapper (&Button::getPortPosition)));
@@ -1410,7 +1395,6 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("setFontColor", createMethodWrapper (&CircularNode::setFontColor)));
 			clazz->addMethod (new Method ("isTextEditable", createMethodWrapper (&CircularNode::isTextEditable)));
 			clazz->addMethod (new Method ("setTextEditable", createMethodWrapper (&CircularNode::setTextEditable)));
-			clazz->addMethod (new Method ("onAllocate", createMethodWrapper (&CircularNode::onAllocate)));
 			clazz->addMethod (new Method ("getPortPosition", createMethodWrapper (&CircularNode::getPortPosition)));
 			clazz->addMethod (new Method ("visit", createMethodWrapper (&CircularNode::visit)));
 		}
@@ -1439,6 +1423,17 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
+		Class *clazz = new Class ("IConnector", typeid (IConnector &), new Reflection::PtrDeleter <IConnector>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addMethod (new Method ("connect", createMethodWrapper (&IConnector::connect)));
+			clazz->addMethod (new Method ("disconnect", createMethodWrapper (&IConnector::disconnect)));
+			clazz->addMethod (new Method ("onReroute", createMethodWrapper (&IConnector::onReroute)));
+		}
+	}
+	{
 		Class *clazz = new Class ("AbstractConnector", typeid (AbstractConnector &), new Reflection::PtrDeleter <AbstractConnector>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
@@ -1447,8 +1442,6 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addBaseClassName ("IConnector");
 			clazz->addMethod (new Method ("connect", createMethodWrapper (&AbstractConnector::connect)));
 			clazz->addMethod (new Method ("disconnect", createMethodWrapper (&AbstractConnector::disconnect)));
-			clazz->addMethod (new Method ("getAnchorA", createMethodWrapper (&AbstractConnector::getAnchorA)));
-			clazz->addMethod (new Method ("getAnchorB", createMethodWrapper (&AbstractConnector::getAnchorB)));
 		}
 	}
 	{

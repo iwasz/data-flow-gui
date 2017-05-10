@@ -133,12 +133,12 @@ void NativeXmlFormatSave::onLineConnector (IClutterActor *a)
 {
         AbstractConnector *lc = dynamic_cast<AbstractConnector *> (a);
 
-        if (!lc->getAnchorA () || !lc->getAnchorA ()->getPort () || !lc->getAnchorB () || !lc->getAnchorB ()->getPort ()) {
+        if (!lc->getPort (IConnector::Side::A) || !lc->getPort (IConnector::Side::B)) {
                 throw Core::Exception ("NativeXmlFormat::onLineConnector : connector not connected");
         }
 
-        Port *pa = lc->getAnchorA ()->getPort ();
-        Port *pb = lc->getAnchorB ()->getPort ();
+        Port *pa = lc->getPort (IConnector::Side::A);
+        Port *pb = lc->getPort (IConnector::Side::B);
 
         if (!pa || !pb) {
                 throw Core::Exception ("NativeXmlFormat::onLineConnector : no port");

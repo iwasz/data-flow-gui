@@ -14,6 +14,7 @@
 #include <core/INode.h>
 #include <core/Object.h>
 #include <memory>
+#include <primitives/Geometry.h>
 
 /**
  * Representing a visual container for a flow::INode.
@@ -23,9 +24,6 @@ struct __tiliae_reflect__ INodeView : public virtual Core::Object {
 
         virtual std::shared_ptr<flow::INode> getNode () = 0;
         virtual void setNode (std::shared_ptr<flow::INode> n) = 0;
-
-        virtual Anchor *getAnchor (size_t i) __tiliae_no_reflect__ = 0;
-        virtual Anchor const *getAnchor (size_t i) const __tiliae_no_reflect__ = 0;
 
         virtual PortVector &getPorts () = 0;
         virtual primitives::Point getPortPosition (int i) const = 0;

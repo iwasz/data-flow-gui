@@ -66,8 +66,7 @@ static void iw_button_allocate (ClutterActor *actor, const ClutterActorBox *box,
         child_box.x2 = child_box.x1 + portR;
         child_box.y2 = child_box.y1 + portR;
         clutter_actor_allocate (priv->port, &child_box, flags);
-
-        buttonOnAllocate (iw_actor_get_user_data (IW_ACTOR (actor)), child_box.x1, child_box.y1, child_box.x2, child_box.y2);
+//        buttonOnAllocate (iw_actor_get_user_data (IW_ACTOR (actor)), child_box.x1, child_box.y1, child_box.x2, child_box.y2);
 }
 
 /*****************************************************************************/

@@ -34,7 +34,6 @@ void CircularNode::init ()
                 ClutterColor c = p->color.toClutterColor ();
                 iw_circular_node_set_port_color (IW_CIRCULAR_NODE (self), portNumber, &c);
                 iw_circular_node_set_port_user_data (IW_CIRCULAR_NODE (self), portNumber, p.get ());
-                p->anchor.setApProvider (std::make_shared<NodeAnchorPositionProvider> (portNumber, this));
                 ++portNumber;
         }
 
@@ -141,19 +140,14 @@ void CircularNode::setTextEditable (bool b) { iw_circular_node_set_editable (IW_
 
 /*****************************************************************************/
 
-void CircularNode::onAllocate (primitives::Box const &)
-{
-        int i = 0;
-        for (std::shared_ptr<Port> p : getPorts ()) {
-                p->anchor.notifyMoveAnchor (convertToScaleLayer (getPortPosition (i)));
-                ++i;
-        }
-}
+//void CircularNode::onAllocate (primitives::Box const &)
+//{
+//}
 
 /*****************************************************************************/
 
-extern "C" void circularNodeOnAllocate (void *circularNode, float x1, float y1, float x2, float y2)
-{
-        CircularNode *cn = static_cast<CircularNode *> (circularNode);
-        cn->onAllocate (primitives::Box (primitives::Point (x1, y1), primitives::Point (x2, y2)));
-}
+//extern "C" void circularNodeOnAllocate (void *circularNode, float x1, float y1, float x2, float y2)
+//{
+//        CircularNode *cn = static_cast<CircularNode *> (circularNode);
+//        cn->onAllocate (primitives::Box (primitives::Point (x1, y1), primitives::Point (x2, y2)));
+//}

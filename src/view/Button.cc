@@ -58,7 +58,6 @@ void Button::init ()
                 ClutterColor c = p->color.toClutterColor ();
                 iw_button_set_port_color (IW_BUTTON (self), &c);
                 iw_button_set_port_user_data (IW_BUTTON (self), p);
-                p->anchor.setApProvider (std::make_shared<NodeAnchorPositionProvider> (0, this));
         }
 
         glueInit ();
@@ -75,12 +74,12 @@ primitives::Point Button::getPortPosition (int i) const
 
 /*****************************************************************************/
 
-void Button::onAllocate (primitives::Box const &)
-{
-        if (!getPorts ().empty ()) {
-                getPorts ()[0]->anchor.notifyMoveAnchor (convertToScaleLayer (getPortPosition (0)));
-        }
-}
+//void Button::onAllocate (primitives::Box const &)
+//{
+////        if (!getPorts ().empty ()) {
+////                getPorts ()[0]->anchor.notifyMoveAnchor (convertToScaleLayer (getPortPosition (0)));
+////        }
+//}
 
 /*****************************************************************************/
 // Getters/setters
@@ -129,11 +128,11 @@ void Button::onRelease () { impl->arc.put (0); }
 
 /*****************************************************************************/
 
-extern "C" void buttonOnAllocate (void *ptr, float x1, float y1, float x2, float y2)
-{
-        Button *cn = static_cast<Button *> (ptr);
-        cn->onAllocate (primitives::Box (primitives::Point (x1, y1), primitives::Point (x2, y2)));
-}
+//extern "C" void buttonOnAllocate (void *ptr, float x1, float y1, float x2, float y2)
+//{
+//        Button *cn = static_cast<Button *> (ptr);
+//        cn->onAllocate (primitives::Box (primitives::Point (x1, y1), primitives::Point (x2, y2)));
+//}
 
 /*****************************************************************************/
 

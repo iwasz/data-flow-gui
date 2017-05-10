@@ -10,25 +10,25 @@
 
 /*****************************************************************************/
 
-Anchor *AbstractNodeView::getAnchor (size_t i)
-{
-        if (i >= getPorts ().size ()) {
-                throw Core::Exception ("AbstractNodeView::getAnchor no sucho node");
-        }
+//Anchor *AbstractNodeView::getAnchor (size_t i)
+//{
+//        if (i >= getPorts ().size ()) {
+//                throw Core::Exception ("AbstractNodeView::getAnchor no sucho node");
+//        }
 
-        return &getPorts ()[i]->anchor;
-}
+//        return &getPorts ()[i]->anchor;
+//}
 
-/*****************************************************************************/
+///*****************************************************************************/
 
-Anchor const *AbstractNodeView::getAnchor (size_t i) const
-{
-        if (i >= ports.size ()) {
-                throw Core::Exception ("AbstractNodeView::getAnchor no sucho node");
-        }
+//Anchor const *AbstractNodeView::getAnchor (size_t i) const
+//{
+//        if (i >= ports.size ()) {
+//                throw Core::Exception ("AbstractNodeView::getAnchor no sucho node");
+//        }
 
-        return &ports[i]->anchor;
-}
+//        return &ports[i]->anchor;
+//}
 
 /*****************************************************************************/
 

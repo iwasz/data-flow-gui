@@ -10,7 +10,7 @@
 #include "ScaleLayer.h"
 #include "clutter/iw_actor.h"
 #include <boost/algorithm/string.hpp>
-#define ROUTING_DEBUGS
+// #define ROUTING_DEBUGS
 
 /*****************************************************************************/
 

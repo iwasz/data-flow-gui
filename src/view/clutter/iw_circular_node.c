@@ -117,7 +117,7 @@ static void iw_circular_node_allocate (ClutterActor *actor, const ClutterActorBo
         childBox.y2 = clutter_actor_box_get_height (&newBox);
 
         clutter_actor_allocate (priv->mainCircle, &childBox, flags);
-        circularNodeOnAllocate (priv->userData, newBox.x1, newBox.y1, newBox.x2, newBox.y2);
+//        circularNodeOnAllocate (priv->userData, newBox.x1, newBox.y1, newBox.x2, newBox.y2);
 }
 
 /*****************************************************************************/

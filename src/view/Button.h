@@ -34,7 +34,7 @@ public:
         /*---------------------------------------------------------------------------*/
 
         virtual void setNode (std::shared_ptr<flow::INode> n);
-        virtual void onAllocate (primitives::Box const &b);
+//        virtual void onAllocate (primitives::Box const &b);
         virtual void onPress ();
         virtual void onRelease ();
         virtual primitives::Point getPortPosition (int i) const;

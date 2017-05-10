@@ -19,32 +19,19 @@
  */
 class __tiliae_reflect__ AbstractConnector : public IConnector {
 public:
-//        AbstractConnector ();
         virtual ~AbstractConnector () {}
 
         virtual void connect (Port *an, Side s);
-        virtual void disconnect (/*Side s*/);
+        virtual void disconnect ();
 
-        //        virtual Direction getAFacing () const = 0;
-        //        virtual Direction getBFacing () const = 0;
-
-        //        virtual void setAFacing (Direction value) = 0;
-        //        virtual void setBFacing (Direction value) = 0;
-
-        Anchor *getAnchorA () { return a; } /// For load-save
-        Anchor *getAnchorB () { return b; } /// For load-save
+        Port *getPort (Side s) __tiliae_no_reflect__ { return (Side::A) ? (a) : (b); }
+        Port const *getPort (Side s) const __tiliae_no_reflect__ { return (Side::A) ? (a) : (b); }
 
 private:
-
         static void onRerouteCallback (void *v);
-
-        /// Anchor at the start of the connector
-        Anchor *a = nullptr;
-        /// Anchor at the start of the connector
-        Anchor *b = nullptr;
-
         Avoid::ConnRef *connRef = nullptr;
-
+        Port *a = nullptr;
+        Port *b = nullptr;
 };
 
 #endif // ABSTRACTCONNECTOR_H

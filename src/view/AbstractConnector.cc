@@ -21,11 +21,11 @@
 void AbstractConnector::connect (Port *port, Side s)
 {
         // TODO get rid of this cast
-        IClutterActor *a = dynamic_cast<IClutterActor *> (this);
+        IClutterActor *actor = dynamic_cast<IClutterActor *> (this);
 
         // TODO dirty hack!
         if (!connRef) {
-                connRef = new Avoid::ConnRef (a->getRouter ());
+                connRef = new Avoid::ConnRef (actor->getRouter ());
                 connRef->setCallback (&AbstractConnector::onRerouteCallback, this);
         }
 
@@ -33,30 +33,12 @@ void AbstractConnector::connect (Port *port, Side s)
 
         if (s == Side::A) {
                 connRef->setSourceEndpoint (newSrcPt);
+                a = port;
         }
         else {
                 connRef->setDestEndpoint (newSrcPt);
+                b = port;
         }
-
-//        const Avoid::PolyLine route = connRef->displayRoute ();
-//        for (size_t i = 0; i < route.size (); ++i) {
-//                Avoid::Point point = route.at (i);
-//                printf ("%f, %f\n", point.x, point.y);
-//        }
-
-        /*---------------------------------------------------------------------------*/
-
-        //        an->connect (this, s);
-        //        if (s == A) {
-        //                a = an;
-        ////                setAFacing (a->getFacing ());
-        //        }
-        //        else {
-        //                b = an;
-        ////                setBFacing (b->getFacing ());
-        //        }
-
-        //        onConnectAnchor (an->getPosition (), s);
 }
 
 /*****************************************************************************/
@@ -70,21 +52,6 @@ void AbstractConnector::onRerouteCallback (void *v)
 /*****************************************************************************/
 void AbstractConnector::disconnect (/*Side s*/)
 {
-        //        a->disconnect (this, A);
-        //        if (s == A) {
-        //                a = nullptr;
-        //        }
-        //                onDisconnectAnchor (a->getPosition (), s);
-        //        else {
-        //                b = nullptr;
-        //                onDisconnectAnchor (b->getPosition (), s);
-        //        }
-
-        //        setAFacing (NONE);
-        //        setBFacing (NONE);
-        a->disconnect (this);
-        b->disconnect (this);
-        a = nullptr;
-        b = nullptr;
-        //        onDisconnectAnchor (/*a->getPosition (), s*/);
+        // TODO
+        a = b = nullptr;
 }

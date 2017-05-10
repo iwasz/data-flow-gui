@@ -42,8 +42,9 @@
   <Rect scope="prototype" id="rect" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false"/>
   <Line scope="prototype" id="line" parent="@scale" strokeColor="#0096c6c9" visible="false" strokeWidth="1"/>
 
-  <InputPort id="inputPort" scope="prototype" angle="2.6415" color="#d1d1d1ff" size="20" facing="W" />
-  <OutputPort id="outputPort" scope="prototype" angle="6.283" color="#8d8d8dff" size="20" facing="E" />
+<!--  <InputPort id="inputPort" scope="prototype" angle="2.6415" color="#d1d1d1ff" size="20" facing="W" />-->
+  <InputPort id="inputPort" scope="prototype" angle="2.6415" color="#d1d1d1ff" size="20" />
+  <OutputPort id="outputPort" scope="prototype" angle="6.283" color="#8d8d8dff" size="20" />
 
   <CircularNode scope="prototype" id="mathNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
     <inputPort add-to="ports" angle="2.6415" />
@@ -83,9 +84,9 @@
 
   <CircularNode scope="prototype" id="testNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
     <inputPort add-to="ports" angle="3.1415" />
-    <inputPort add-to="ports" angle="4.7124" facing="N" />
+    <inputPort add-to="ports" angle="4.7124" />
     <outputPort add-to="ports" />
-    <outputPort add-to="ports" angle="7.85398" facing="S" />
+    <outputPort add-to="ports" angle="7.85398" />
     <value set-as="font">22px</value>
     <value set-as="text">test</value>
     <value set-as="fontColor">#ff0000ff</value>

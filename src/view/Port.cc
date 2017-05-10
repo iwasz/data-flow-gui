@@ -15,7 +15,7 @@ void Port::createPin ()
         // TODO this cast is bad, API is bad if cast is needed.
         IClutterActor *a = dynamic_cast<IClutterActor *> (getNodeView ());
         // TODO cope with this "+1". libavoid wont let you set 0 there.
-        pin = new Avoid::ShapeConnectionPin (a->getShapeRef (), getViewNumber () + 1, 0, 0, false, 0, Avoid::ConnDirRight);
+        pin = new Avoid::ShapeConnectionPin (a->getShapeRef (), getViewNumber () + 1, 0, 0, false, 0, Avoid::ConnDirAll);
 }
 
 Avoid::ShapeRef *Port::getShapeRef ()
