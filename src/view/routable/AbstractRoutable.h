@@ -18,12 +18,12 @@ public:
         virtual void init (primitives::Point const &p, primitives::Dimension const &d, IRoutableObserver *o = nullptr) __tiliae_no_reflect__;
 
         virtual Avoid::Router *getRouter () __tiliae_no_reflect__ { return router; }
+        virtual void setRouter (Avoid::Router *r) __tiliae_no_reflect__ { router = r; }
         virtual Avoid::ShapeRef *getShapeRef () __tiliae_no_reflect__ { return shapeRef; }
 
+        // TODO remove
         virtual bool isRouting () const { return routing; }
         virtual void setRouting (bool value) { routing = value; }
-
-        virtual void setParent (IRoutable *parent) __tiliae_no_reflect__ { router = parent->getRouter (); }
 
         virtual primitives::Point getPosition () const __tiliae_no_reflect__;
         virtual void setPosition (primitives::Point const &p) __tiliae_no_reflect__;
@@ -36,7 +36,7 @@ public:
         virtual void connect (RoutablePin *pin, Side s) __tiliae_no_reflect__ {}
 
 private:
-        bool routing = false;
+        bool routing = true;
         Avoid::Router *router = nullptr;
         Avoid::ShapeRef *shapeRef = nullptr;
         IRoutableObserver *observer = nullptr;

@@ -39,7 +39,6 @@ AbstractActor::~AbstractActor ()
         if (routable) {
                 delete routable;
         }
-
 }
 
 /*****************************************************************************/
@@ -57,7 +56,11 @@ void AbstractActor::init ()
         }
 
         if (routable) {
-                routable->init (getScaleLayerPosition (), getSize ());
+                if (parent && parent->getRoutable ()) {
+                        routable->setRouter (parent->getRoutable ()->getRouter ());
+                }
+
+                routable->init (getScaleLayerPosition (), getSize (), this);
         }
 }
 
@@ -65,6 +68,7 @@ void AbstractActor::init ()
 
 void AbstractActor::setParent (IClutterActor *parent)
 {
+        this->parent = parent;
         ClutterActor *oldParent;
         if ((oldParent = clutter_actor_get_parent (self)) != nullptr) {
                 g_object_ref (self);
@@ -75,11 +79,6 @@ void AbstractActor::setParent (IClutterActor *parent)
 
         if (oldParent) {
                 g_object_unref (self);
-        }
-
-        // Delegate.
-        if (routable) {
-                routable->setParent (parent->getRoutable ());
         }
 }
 

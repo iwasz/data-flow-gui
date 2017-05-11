@@ -16,7 +16,7 @@ public:
         virtual ~RoutableRoot () {}
         Avoid::Router *getRouter () __tiliae_no_reflect__ { return &router; }
         bool processTransaction () { return router.processTransaction (); }
-        virtual void setParent (IRoutable *parent) __tiliae_no_reflect__ {}
+        virtual void setRouter (Avoid::Router *r) __tiliae_no_reflect__ {}
 
 private:
         Avoid::Router router{ Avoid::PolyLineRouting };

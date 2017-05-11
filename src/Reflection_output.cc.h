@@ -1581,6 +1581,36 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("setToolContainer", createMethodWrapper (&SceneAPI::setToolContainer)));
 		}
 	}
+	{
+		Class *clazz = new Class ("ConnectorRoutable", typeid (ConnectorRoutable &), new Reflection::PtrDeleter <ConnectorRoutable>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("AbstractRoutable");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <ConnectorRoutable, void>::Level1Wrapper::newConstructorPointer ()));
+		}
+	}
+	{
+		Class *clazz = new Class ("NodeRoutable", typeid (NodeRoutable &), new Reflection::PtrDeleter <NodeRoutable>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("AbstractRoutable");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <NodeRoutable, void>::Level1Wrapper::newConstructorPointer ()));
+		}
+	}
+	{
+		Class *clazz = new Class ("ObstacleRoutable", typeid (ObstacleRoutable &), new Reflection::PtrDeleter <ObstacleRoutable>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("AbstractRoutable");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <ObstacleRoutable, void>::Level1Wrapper::newConstructorPointer ()));
+		}
+	}
 }
 
 struct Sentinel_dataFlowGui {

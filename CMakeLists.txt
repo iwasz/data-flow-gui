@@ -246,6 +246,7 @@ LIST (APPEND SOURCES
         "src/view/routable/AbstractRoutable.cc"
         "src/view/routable/RoutableRoot.h"
         "src/view/routable/NodeRoutable.h"
+        "src/view/routable/ObstacleRoutable.h"
         "src/view/routable/ConnectorRoutable.h"
         "src/view/routable/ConnectorRoutable.cc"
         "src/view/routable/RoutablePin.h"

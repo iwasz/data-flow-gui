@@ -17,7 +17,7 @@ extern "C" void abstractActorOnFinalize (void *ptr);
 /**
  * @brief The AbstractActor class
  */
-class __tiliae_reflect__ AbstractActor : public IClutterActor {
+class __tiliae_reflect__ AbstractActor : public IClutterActor, public IRoutableObserver {
 public:
         virtual void init ();
         virtual ~AbstractActor ();
@@ -75,19 +75,23 @@ public:
         IRoutable *getRoutable () { return routable; }
         void setRoutable (IRoutable *r) { routable = r; }
 
-        /*---------------------------------------------------------------------------*/
-
-        virtual bool isConnectSignals () { return false; }
-        virtual bool onButtonPress (Event const &e) { return false; }
-        virtual bool onButtonRelease (Event const &e) { return false; }
-        virtual bool onMotion (Event const &e) { return false; }
-        virtual bool onEnter (Event const &e) { return false; }
-        virtual bool onLeave (Event const &e) { return false; }
-        virtual bool onScroll (Event const &e) { return false; }
-        virtual bool onKeyPress (Event const &e) { return false; }
-
         void contId (std::string const &i) { id = i; }
         std::string getId () const { return id; }
+
+        /*---------------------------------------------------------------------------*/
+
+        virtual bool isConnectSignals () __tiliae_no_reflect__ { return false; }
+        virtual bool onButtonPress (Event const &e) __tiliae_no_reflect__ { return false; }
+        virtual bool onButtonRelease (Event const &e) __tiliae_no_reflect__ { return false; }
+        virtual bool onMotion (Event const &e) __tiliae_no_reflect__ { return false; }
+        virtual bool onEnter (Event const &e) __tiliae_no_reflect__ { return false; }
+        virtual bool onLeave (Event const &e) __tiliae_no_reflect__ { return false; }
+        virtual bool onScroll (Event const &e) __tiliae_no_reflect__ { return false; }
+        virtual bool onKeyPress (Event const &e) __tiliae_no_reflect__ { return false; }
+
+        /*---------------------------------------------------------------------------*/
+
+        virtual void onReroute (Avoid::ConnRef *) __tiliae_no_reflect__ {}
 
 protected:
         friend void abstractActorOnFinalize (void *ptr);
@@ -99,6 +103,7 @@ private:
         friend gboolean on_actor_motion (ClutterActor *stage, ClutterEvent *ev, gpointer data);
         friend gboolean on_actor_button_press (ClutterActor *actor, ClutterEvent *ev, gpointer data);
 
+        IClutterActor *parent = nullptr;
         IDrawingEventHandler *eventHandler = nullptr;
         bool selectable = true;
         bool clutterDestroyed = false;

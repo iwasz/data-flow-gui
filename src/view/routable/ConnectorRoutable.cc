@@ -11,6 +11,8 @@
 
 void ConnectorRoutable::init (primitives::Point const &p, primitives::Dimension const &d0, IRoutableObserver *o)
 {
+        setObserver (o);
+
         if (!getRouter ()) {
                 return;
         }

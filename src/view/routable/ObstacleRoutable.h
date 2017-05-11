@@ -6,21 +6,14 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "Port.h"
-#include "IClutterActor.h"
-#include "INodeView.h"
-#include "NodeActor.h"
-#include "routable/RoutablePin.h"
+#ifndef OBSTACLEROUTABLE_H
+#define OBSTACLEROUTABLE_H
 
-/*****************************************************************************/
+#include "AbstractRoutable.h"
 
-void Port::init ()
-{
-        if (routablePin && nodeActor) {
-                routablePin->init (getPosition (), nodeActor->getRoutable ());
-        }
-}
+class __tiliae_reflect__ ObstacleRoutable : public AbstractRoutable {
+public:
+        virtual ~ObstacleRoutable () {}
+};
 
-/*****************************************************************************/
-
-primitives::Point Port::getPosition () const { return nodeActor->getPortPosition (this); }
+#endif // OBSTACLEROUTABLE_H

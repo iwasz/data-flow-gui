@@ -52,7 +52,7 @@ primitives::Point AbstractRoutable::getPosition () const
                 return primitives::Point ();
         }
 
-        Avoid::Rectangle const &r = dynamic_cast<Avoid::Rectangle const &> (shapeRef->polygon ());
+        Avoid::Polygon const &r = shapeRef->polygon ();
         return primitives::Point (r.at (0).x, r.at (0).y);
 }
 

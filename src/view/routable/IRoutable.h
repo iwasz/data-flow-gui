@@ -30,10 +30,11 @@ struct __tiliae_reflect__ IRoutable : public virtual Core::Object {
         virtual void init (primitives::Point const &p, primitives::Dimension const &d, IRoutableObserver *o = nullptr) __tiliae_no_reflect__ = 0;
 
         virtual Avoid::Router *getRouter () __tiliae_no_reflect__ = 0;
+        virtual void setRouter (Avoid::Router *r) __tiliae_no_reflect__ = 0;
         virtual Avoid::ShapeRef *getShapeRef () __tiliae_no_reflect__ = 0;
 
+        // TODO remove
         virtual bool isRouting () const = 0;
-        virtual void setParent (IRoutable *parent) __tiliae_no_reflect__ = 0;
 
         virtual primitives::Point getPosition () const __tiliae_no_reflect__ = 0;
         virtual void setPosition (primitives::Point const &p) __tiliae_no_reflect__ = 0;

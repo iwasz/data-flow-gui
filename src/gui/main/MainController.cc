@@ -292,7 +292,10 @@ void MainController::onIdle ()
                 impl->program->step ();
         }
 
-        impl->routableRoot->processTransaction ();
+        // TODO move to state machine and fire upon events when its needed.
+        if (impl->routableRoot) {
+                impl->routableRoot->processTransaction ();
+        }
 }
 
 /****************************************************************************/

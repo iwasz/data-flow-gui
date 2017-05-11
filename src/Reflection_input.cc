@@ -32,3 +32,8 @@
 #include "view/ScaleLayer.h"
 #include "view/SceneAPI.h"
 #include "view/Stage.h"
+#include "view/routable/ConnectorRoutable.h"
+#include "view/routable/NodeRoutable.h"
+#include "view/routable/ObstacleRoutable.h"
+#include "view/routable/RoutablePin.h"
+#include "view/routable/RoutableRoot.h"
