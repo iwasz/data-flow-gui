@@ -14,6 +14,7 @@
 #include "Tool.h"
 #include "primitives/Geometry.h"
 #include "view/Stage.h"
+#include "view/routable/RoutableRoot.h"
 #include <ReflectionParserAnnotation.h>
 #include <controller/AbstractController.h>
 #include <map>
@@ -70,13 +71,16 @@ public:
         PropertiesController *getPropertiesController ();
         void setPropertiesController (PropertiesController *p);
 
+        RoutableRoot *getRoutableRoot ();
+        void setRoutableRoot (RoutableRoot *value);
+
         void setSceneApi (SceneAPI *api);
 
         void onKeyPress (unsigned int key);
         void onSelection (ClutterActorVector *s);
 
 private:
-        void updateButtons();
+        void updateButtons ();
 
         struct Impl;
         Impl *impl;

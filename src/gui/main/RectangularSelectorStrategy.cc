@@ -87,11 +87,11 @@ void RectangularSelectorStrategy::unselectAll ()
 {
         rectangularSelector->setVisible (false);
 
-        // This can be stage, but can be some other container actor (in the future?)
-        ClutterActor *stage = clutter_actor_get_parent (rectangularSelector->getActor ());
-        IClutterActor *stageActor = static_cast<IClutterActor *> (g_object_get_data (G_OBJECT (stage), CPP_IMPLEMENTATION_KEY));
+//        // This can be stage, but can be some other container actor (in the future?)
+//        ClutterActor *stage = clutter_actor_get_parent (rectangularSelector->getActor ());
+//        IClutterActor *stageActor = static_cast<IClutterActor *> (g_object_get_data (G_OBJECT (stage), CPP_IMPLEMENTATION_KEY));
 
-        primitives::Point selectionRectanglePosition = rectangularSelector->getPosition ();
+//        primitives::Point selectionRectanglePosition = rectangularSelector->getPosition ();
 
 //        for (IClutterActor *actor : *selectedActors) {
 //                actor->setParent (stageActor);

@@ -7,9 +7,9 @@
  ****************************************************************************/
 
 #include "NativeXmlFormatLoad.h"
-#include "view/CircularNode.h"
+#include "view/ConnectorActor.h"
 #include "view/IClutterActor.h"
-#include "view/IConnector.h"
+#include "view/NodeActor.h"
 #include "view/SceneAPI.h"
 #include <beanWrapper/BeanWrapper.h>
 #include <boost/lexical_cast.hpp>
@@ -22,7 +22,7 @@
 #include <stdio.h>
 
 struct NativeXmlFormatLoad::Impl {
-        typedef std::map<unsigned int, INodeView *> NodesMap;
+        typedef std::map<unsigned int, NodeActor *> NodesMap;
         NodesMap nodesMap;
         //        unsigned int nodesNum = 0;
         //        std::ofstream *file = nullptr;
@@ -141,9 +141,8 @@ void NativeXmlFormatLoad::Impl::onOpenElement (mxml_node_t *node)
                 std::cerr << name << " = " << value << std::endl;
 #endif
 
-                INodeView *nv;
-                if (name == "index" && (nv = dynamic_cast<INodeView *> (actor))) {
-
+                NodeActor *nv;
+                if (name == "index" && (nv = dynamic_cast<NodeActor *> (actor))) {
                         nodesMap[boost::lexical_cast<unsigned int> (value)] = nv;
                 }
                 else if (name == "objA") {
@@ -153,8 +152,8 @@ void NativeXmlFormatLoad::Impl::onOpenElement (mxml_node_t *node)
                         unsigned int portANumber = boost::lexical_cast<unsigned int> (mxmlElementGetAttr (node, "portA"));
                         unsigned int portBNumber = boost::lexical_cast<unsigned int> (mxmlElementGetAttr (node, "portB"));
 
-                        INodeView *nodeViewA = nodesMap[objAIndex];
-                        INodeView *nodeViewB = nodesMap[objBIndex];
+                        NodeActor *nodeViewA = nodesMap[objAIndex];
+                        NodeActor *nodeViewB = nodesMap[objBIndex];
 
                         if (!nodeViewA || !nodeViewB) {
                                 throw Core::Exception ("NativeXmlFormatLoad::Impl::onOpenElement : !nodeViewA || !nodeViewB. Could not cast to ");
@@ -168,7 +167,7 @@ void NativeXmlFormatLoad::Impl::onOpenElement (mxml_node_t *node)
                                 throw Core::Exception ("NativeXmlFormatLoad::Impl::onOpenElement : !pa || !pb. No such port");
                         }
 
-                        IConnector *lc = dynamic_cast<IConnector *> (actor);
+                        ConnectorActor *lc = dynamic_cast<ConnectorActor *> (actor);
                         sceneApi->connect (lc, pa, pb);
                 }
                 else if (name == "objB" || name == "portA" || name == "portB") {

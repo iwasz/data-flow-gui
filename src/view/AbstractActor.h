@@ -10,7 +10,6 @@
 #define ABSTRACTACTOR_H
 
 #include "IClutterActor.h"
-#include "gui/main/IDrawingEventHandler.h"
 #include <core/Exception.h>
 
 extern "C" void abstractActorOnFinalize (void *ptr);
@@ -20,7 +19,7 @@ extern "C" void abstractActorOnFinalize (void *ptr);
  */
 class __tiliae_reflect__ AbstractActor : public IClutterActor {
 public:
-        void init ();
+        virtual void init ();
         virtual ~AbstractActor ();
 
         virtual void setParent (IClutterActor *parent);
@@ -34,9 +33,6 @@ public:
 
         virtual bool isReactive () const;
         virtual void setReactive (bool value);
-
-        bool isRouting () const { return routing; }
-        void setRouting (bool value) { routing = value; }
 
         virtual void setPosition (primitives::Point const &p);
         virtual void move (primitives::Dimension const &d);
@@ -76,8 +72,8 @@ public:
         virtual Core::StringVector getPropertyViews () const __tiliae_no_reflect__;
         void setPropertyView (const std::string &value) { propertyView = value; }
 
-        virtual Avoid::Router *getRouter () __tiliae_no_reflect__ { return router; }
-        virtual Avoid::ShapeRef *getShapeRef () __tiliae_no_reflect__ { return shapeRef; }
+        IRoutable *getRoutable () { return routable; }
+        void setRoutable (IRoutable *r) { routable = r; }
 
         /*---------------------------------------------------------------------------*/
 
@@ -93,26 +89,24 @@ public:
         void contId (std::string const &i) { id = i; }
         std::string getId () const { return id; }
 
-        // TODO private
-        primitives::Point stagePrev;
-        primitives::Point parentPrev;
-
 protected:
         friend void abstractActorOnFinalize (void *ptr);
         void onFinalize () { clutterDestroyed = true; }
-        void setRouter (Avoid::Router *r) { router = r; }
 
         ClutterActor *self = nullptr;
 
 private:
+        friend gboolean on_actor_motion (ClutterActor *stage, ClutterEvent *ev, gpointer data);
+        friend gboolean on_actor_button_press (ClutterActor *actor, ClutterEvent *ev, gpointer data);
+
         IDrawingEventHandler *eventHandler = nullptr;
         bool selectable = true;
         bool clutterDestroyed = false;
-        bool routing = false;
         std::string propertyView;
         std::string id;
-        Avoid::Router *router = nullptr;
-        Avoid::ShapeRef *shapeRef = nullptr;
+        primitives::Point stagePrev;
+        primitives::Point parentPrev;
+        IRoutable *routable = nullptr;
 };
 
 #endif // ABSTRACTACTOR_H

@@ -20,6 +20,7 @@
 #include "view/ScaleLayer.h"
 #include "view/SceneAPI.h"
 #include "view/Stage.h"
+#include "view/routable/RoutableRoot.h"
 #include <App.h>
 #include <Logging.h>
 #include <Program.h>
@@ -59,6 +60,7 @@ struct MainController::Impl {
         ClutterActorVector *selectedActors = nullptr;
         ToolContainer *toolContainer = nullptr;
         PropertiesController *propertiesController = nullptr;
+        RoutableRoot *routableRoot = nullptr;
 
         // TODO is this necessary?
         SceneAPI *sceneAPI = nullptr;
@@ -290,7 +292,7 @@ void MainController::onIdle ()
                 impl->program->step ();
         }
 
-        impl->stage->getRouter ()->processTransaction ();
+        impl->routableRoot->processTransaction ();
 }
 
 /****************************************************************************/
@@ -344,7 +346,7 @@ void MainController::onProgramStop ()
         impl->runProgram = false;
         impl->program->reset ();
         updateButtons ();
-//        impl->stage->getRouter ()->processTransaction ();
+        //        impl->stage->getRouter ()->processTransaction ();
 }
 
 /*****************************************************************************/
@@ -431,6 +433,14 @@ void MainController::onSelection (ClutterActorVector *s) { impl->propertiesContr
 /*****************************************************************************/
 
 PropertiesController *MainController::getPropertiesController () { return impl->propertiesController; }
+
+/*****************************************************************************/
+
+RoutableRoot *MainController::getRoutableRoot () { return impl->routableRoot; }
+
+/*****************************************************************************/
+
+void MainController::setRoutableRoot (RoutableRoot *value) { impl->routableRoot = value; }
 
 /*****************************************************************************/
 

@@ -12,15 +12,16 @@
 #include "AbstractActor.h"
 #include "AbstractNodeView.h"
 #include "primitives/Geometry.h"
+#include "NodeActor.h"
 
 /**
  * This is only a view.
  */
-class __tiliae_reflect__ CircularNode : public AbstractActor, public AbstractNodeView {
+class __tiliae_reflect__ CircularNode : public NodeActor, public AbstractNodeView {
 public:
         CircularNode ();
         virtual ~CircularNode () {}
-        void init ();
+        virtual void init ();
 
         bool isFill () const;
         void setFill (bool value);
@@ -49,8 +50,7 @@ public:
         virtual bool isTextEditable () const;
         virtual void setTextEditable (bool b);
 
-//        virtual void onAllocate (primitives::Box const &b);
-        virtual primitives::Point getPortPosition (int i) const;
+        virtual primitives::Point getPortPosition (Port const *p) const;
 
         virtual void visit (IDataFileSave *d) { d->onCircularNode (this); }
 };

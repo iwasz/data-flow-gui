@@ -693,23 +693,6 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
-		Class *clazz = new Class ("IDataFileSave", typeid (IDataFileSave &), new Reflection::PtrDeleter <IDataFileSave>);
-		if (!Manager::add (clazz)) {
-			delete clazz;
-		}
-		else {
-			clazz->addBaseClassName ("Object");
-			clazz->addMethod (new Method ("save", createMethodWrapper (&IDataFileSave::save)));
-			clazz->addMethod (new Method ("onButton", createMethodWrapper (&IDataFileSave::onButton)));
-			clazz->addMethod (new Method ("onCircle", createMethodWrapper (&IDataFileSave::onCircle)));
-			clazz->addMethod (new Method ("onCircularNode", createMethodWrapper (&IDataFileSave::onCircularNode)));
-			clazz->addMethod (new Method ("onLine", createMethodWrapper (&IDataFileSave::onLine)));
-			clazz->addMethod (new Method ("onLineConnector", createMethodWrapper (&IDataFileSave::onLineConnector)));
-			clazz->addMethod (new Method ("onConnector", createMethodWrapper (&IDataFileSave::onConnector)));
-			clazz->addMethod (new Method ("onRectangle", createMethodWrapper (&IDataFileSave::onRectangle)));
-		}
-	}
-	{
 		Class *clazz = new Class ("Point", typeid (primitives::Point &), new Reflection::PtrDeleter <primitives::Point>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
@@ -734,6 +717,42 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <primitives::Dimension, const std::string &>::Level1Wrapper::newConstructorPointer ()));
 			clazz->addField (new Field ("width", Reflection::createFieldWrapper (&primitives::Dimension::width)));
 			clazz->addField (new Field ("height", Reflection::createFieldWrapper (&primitives::Dimension::height)));
+		}
+	}
+	{
+		Class *clazz = new Class ("IDrawingEventHandler", typeid (IDrawingEventHandler &), new Reflection::PtrDeleter <IDrawingEventHandler>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addMethod (new Method ("pushMessage", createMethodWrapper (&IDrawingEventHandler::pushMessage)));
+		}
+	}
+	{
+		Class *clazz = new Class ("IDataFileSave", typeid (IDataFileSave &), new Reflection::PtrDeleter <IDataFileSave>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("Object");
+			clazz->addMethod (new Method ("save", createMethodWrapper (&IDataFileSave::save)));
+			clazz->addMethod (new Method ("onButton", createMethodWrapper (&IDataFileSave::onButton)));
+			clazz->addMethod (new Method ("onCircle", createMethodWrapper (&IDataFileSave::onCircle)));
+			clazz->addMethod (new Method ("onCircularNode", createMethodWrapper (&IDataFileSave::onCircularNode)));
+			clazz->addMethod (new Method ("onLine", createMethodWrapper (&IDataFileSave::onLine)));
+			clazz->addMethod (new Method ("onLineConnector", createMethodWrapper (&IDataFileSave::onLineConnector)));
+			clazz->addMethod (new Method ("onConnector", createMethodWrapper (&IDataFileSave::onConnector)));
+			clazz->addMethod (new Method ("onRectangle", createMethodWrapper (&IDataFileSave::onRectangle)));
+		}
+	}
+	{
+		Class *clazz = new Class ("IRoutable", typeid (IRoutable &), new Reflection::PtrDeleter <IRoutable>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("Object");
+			clazz->addMethod (new Method ("isRouting", createMethodWrapper (&IRoutable::isRouting)));
 		}
 	}
 	{
@@ -773,6 +792,15 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("getPropertyViews", createMethodWrapper (&IClutterActor::getPropertyViews)));
 			clazz->addMethod (new Method ("visit", createMethodWrapper (&IClutterActor::visit)));
 			clazz->addMethod (new Method ("getId", createMethodWrapper (&IClutterActor::getId)));
+			clazz->addMethod (new Method ("getRoutable", createMethodWrapper (&IClutterActor::getRoutable)));
+			clazz->addMethod (new Method ("isConnectSignals", createMethodWrapper (&IClutterActor::isConnectSignals)));
+			clazz->addMethod (new Method ("onButtonPress", createMethodWrapper (&IClutterActor::onButtonPress)));
+			clazz->addMethod (new Method ("onButtonRelease", createMethodWrapper (&IClutterActor::onButtonRelease)));
+			clazz->addMethod (new Method ("onMotion", createMethodWrapper (&IClutterActor::onMotion)));
+			clazz->addMethod (new Method ("onEnter", createMethodWrapper (&IClutterActor::onEnter)));
+			clazz->addMethod (new Method ("onLeave", createMethodWrapper (&IClutterActor::onLeave)));
+			clazz->addMethod (new Method ("onScroll", createMethodWrapper (&IClutterActor::onScroll)));
+			clazz->addMethod (new Method ("onKeyPress", createMethodWrapper (&IClutterActor::onKeyPress)));
 		}
 	}
 	{
@@ -798,23 +826,12 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
-		Class *clazz = new Class ("IDrawingEventHandler", typeid (IDrawingEventHandler &), new Reflection::PtrDeleter <IDrawingEventHandler>);
-		if (!Manager::add (clazz)) {
-			delete clazz;
-		}
-		else {
-			clazz->addMethod (new Method ("pushMessage", createMethodWrapper (&IDrawingEventHandler::pushMessage)));
-		}
-	}
-	{
 		Class *clazz = new Class ("AbstractActor", typeid (AbstractActor &), new Reflection::PtrDeleter <AbstractActor>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
 		}
 		else {
 			clazz->addBaseClassName ("IClutterActor");
-			clazz->addField (new Field ("stagePrev", Reflection::createFieldWrapper (&AbstractActor::stagePrev)));
-			clazz->addField (new Field ("parentPrev", Reflection::createFieldWrapper (&AbstractActor::parentPrev)));
 			clazz->addMethod (new Method ("init", createMethodWrapper (&AbstractActor::init)));
 			clazz->addMethod (new Method ("setParent", createMethodWrapper (&AbstractActor::setParent)));
 			clazz->addMethod (new Method ("getActor", createMethodWrapper (&AbstractActor::getActor)));
@@ -824,8 +841,6 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("setSelectable", createMethodWrapper (&AbstractActor::setSelectable)));
 			clazz->addMethod (new Method ("isReactive", createMethodWrapper (&AbstractActor::isReactive)));
 			clazz->addMethod (new Method ("setReactive", createMethodWrapper (&AbstractActor::setReactive)));
-			clazz->addMethod (new Method ("isRouting", createMethodWrapper (&AbstractActor::isRouting)));
-			clazz->addMethod (new Method ("setRouting", createMethodWrapper (&AbstractActor::setRouting)));
 			clazz->addMethod (new Method ("setPosition", createMethodWrapper (&AbstractActor::setPosition)));
 			clazz->addMethod (new Method ("move", createMethodWrapper (&AbstractActor::move)));
 			clazz->addMethod (new Method ("getPosition", createMethodWrapper (&AbstractActor::getPosition)));
@@ -849,6 +864,8 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("getEventHandler", createMethodWrapper (&AbstractActor::getEventHandler)));
 			clazz->addMethod (new Method ("setEventHandler", createMethodWrapper (&AbstractActor::setEventHandler)));
 			clazz->addMethod (new Method ("setPropertyView", createMethodWrapper (&AbstractActor::setPropertyView)));
+			clazz->addMethod (new Method ("getRoutable", createMethodWrapper (&AbstractActor::getRoutable)));
+			clazz->addMethod (new Method ("setRoutable", createMethodWrapper (&AbstractActor::setRoutable)));
 			clazz->addMethod (new Method ("isConnectSignals", createMethodWrapper (&AbstractActor::isConnectSignals)));
 			clazz->addMethod (new Method ("onButtonPress", createMethodWrapper (&AbstractActor::onButtonPress)));
 			clazz->addMethod (new Method ("onButtonRelease", createMethodWrapper (&AbstractActor::onButtonRelease)));
@@ -1052,6 +1069,29 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
+		Class *clazz = new Class ("AbstractRoutable", typeid (AbstractRoutable &), new Reflection::PtrDeleter <AbstractRoutable>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("IRoutable");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <AbstractRoutable, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("isRouting", createMethodWrapper (&AbstractRoutable::isRouting)));
+			clazz->addMethod (new Method ("setRouting", createMethodWrapper (&AbstractRoutable::setRouting)));
+		}
+	}
+	{
+		Class *clazz = new Class ("RoutableRoot", typeid (RoutableRoot &), new Reflection::PtrDeleter <RoutableRoot>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("AbstractRoutable");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <RoutableRoot, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("processTransaction", createMethodWrapper (&RoutableRoot::processTransaction)));
+		}
+	}
+	{
 		Class *clazz = new Class ("MainController", typeid (MainController &), new Reflection::PtrDeleter <MainController>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
@@ -1083,6 +1123,8 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("setStage", createMethodWrapper (&MainController::setStage)));
 			clazz->addMethod (new Method ("getPropertiesController", createMethodWrapper (&MainController::getPropertiesController)));
 			clazz->addMethod (new Method ("setPropertiesController", createMethodWrapper (&MainController::setPropertiesController)));
+			clazz->addMethod (new Method ("getRoutableRoot", createMethodWrapper (&MainController::getRoutableRoot)));
+			clazz->addMethod (new Method ("setRoutableRoot", createMethodWrapper (&MainController::setRoutableRoot)));
 			clazz->addMethod (new Method ("setSceneApi", createMethodWrapper (&MainController::setSceneApi)));
 			clazz->addMethod (new Method ("onKeyPress", createMethodWrapper (&MainController::onKeyPress)));
 			clazz->addMethod (new Method ("onSelection", createMethodWrapper (&MainController::onSelection)));
@@ -1254,6 +1296,17 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
+		Class *clazz = new Class ("RoutablePin", typeid (RoutablePin &), new Reflection::PtrDeleter <RoutablePin>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <RoutablePin, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("setClassNumber", createMethodWrapper (&RoutablePin::setClassNumber)));
+			clazz->addMethod (new Method ("getClassNumber", createMethodWrapper (&RoutablePin::getClassNumber)));
+		}
+	}
+	{
 		Class *clazz = new Class ("Port", typeid (Port &), new Reflection::PtrDeleter <Port>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
@@ -1264,14 +1317,16 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addField (new Field ("size", Reflection::createFieldWrapper (&Port::size)));
 			clazz->addField (new Field ("color", Reflection::createFieldWrapper (&Port::color)));
 			clazz->addMethod (new Method ("isInput", createMethodWrapper (&Port::isInput)));
-			clazz->addMethod (new Method ("getNodeView", createMethodWrapper (&Port::getNodeView)));
-			clazz->addMethod (new Method ("setNodeView", createMethodWrapper (&Port::setNodeView)));
+			clazz->addMethod (new Method ("getNodeActor", createMethodWrapper (&Port::getNodeActor)));
+			clazz->addMethod (new Method ("setNodeActor", createMethodWrapper (&Port::setNodeActor)));
 			clazz->addMethod (new Method ("getProgramNumber", createMethodWrapper (&Port::getProgramNumber)));
 			clazz->addMethod (new Method ("setProgramNumber", createMethodWrapper (&Port::setProgramNumber)));
 			clazz->addMethod (new Method ("getViewNumber", createMethodWrapper (&Port::getViewNumber)));
 			clazz->addMethod (new Method ("setViewNumber", createMethodWrapper (&Port::setViewNumber)));
-			clazz->addMethod (new Method ("createPin", createMethodWrapper (&Port::createPin)));
-			clazz->addMethod (new Method ("getShapeRef", createMethodWrapper (&Port::getShapeRef)));
+			clazz->addMethod (new Method ("getRoutablePin", createMethodWrapper (&Port::getRoutablePin)));
+			clazz->addMethod (new Method ("setRoutablePin", createMethodWrapper (&Port::setRoutablePin)));
+			clazz->addMethod (new Method ("init", createMethodWrapper (&Port::init)));
+			clazz->addMethod (new Method ("getPosition", createMethodWrapper (&Port::getPosition)));
 		}
 	}
 	{
@@ -1327,8 +1382,6 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addBaseClassName ("Object");
 			clazz->addMethod (new Method ("getNode", createMethodWrapper (&INodeView::getNode)));
 			clazz->addMethod (new Method ("setNode", createMethodWrapper (&INodeView::setNode)));
-			clazz->addMethod (new Method ("getPorts", createMethodWrapper (&INodeView::getPorts)));
-			clazz->addMethod (new Method ("getPortPosition", createMethodWrapper (&INodeView::getPortPosition)));
 		}
 	}
 	{
@@ -1338,33 +1391,20 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 		else {
 			clazz->addBaseClassName ("INodeView");
-			clazz->addMethod (new Method ("glueInit", createMethodWrapper (&AbstractNodeView::glueInit)));
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <AbstractNodeView, void>::Level1Wrapper::newConstructorPointer ()));
 			clazz->addMethod (new Method ("getNode", createMethodWrapper (&AbstractNodeView::getNode)));
 			clazz->addMethod (new Method ("setNode", createMethodWrapper (&AbstractNodeView::setNode)));
-			clazz->addMethod (new Method ("getPorts", createMethodWrapper (&AbstractNodeView::getPorts)));
 		}
 	}
 	{
-		Class *clazz = new Class ("Button", typeid (Button &), new Reflection::PtrDeleter <Button>);
+		Class *clazz = new Class ("NodeActor", typeid (NodeActor &), new Reflection::PtrDeleter <NodeActor>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
 		}
 		else {
 			clazz->addBaseClassName ("AbstractActor");
-			clazz->addBaseClassName ("AbstractNodeView");
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Button, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addMethod (new Method ("init", createMethodWrapper (&Button::init)));
-			clazz->addMethod (new Method ("getText", createMethodWrapper (&Button::getText)));
-			clazz->addMethod (new Method ("setText", createMethodWrapper (&Button::setText)));
-			clazz->addMethod (new Method ("getFont", createMethodWrapper (&Button::getFont)));
-			clazz->addMethod (new Method ("setFont", createMethodWrapper (&Button::setFont)));
-			clazz->addMethod (new Method ("getFontColor", createMethodWrapper (&Button::getFontColor)));
-			clazz->addMethod (new Method ("setFontColor", createMethodWrapper (&Button::setFontColor)));
-			clazz->addMethod (new Method ("setNode", createMethodWrapper (&Button::setNode)));
-			clazz->addMethod (new Method ("onPress", createMethodWrapper (&Button::onPress)));
-			clazz->addMethod (new Method ("onRelease", createMethodWrapper (&Button::onRelease)));
-			clazz->addMethod (new Method ("getPortPosition", createMethodWrapper (&Button::getPortPosition)));
-			clazz->addMethod (new Method ("visit", createMethodWrapper (&Button::visit)));
+			clazz->addMethod (new Method ("init", createMethodWrapper (&NodeActor::init)));
+			clazz->addMethod (new Method ("getPorts", createMethodWrapper (&NodeActor::getPorts)));
 		}
 	}
 	{
@@ -1373,7 +1413,7 @@ void createReflectionDatabase_dataFlowGui ()
 			delete clazz;
 		}
 		else {
-			clazz->addBaseClassName ("AbstractActor");
+			clazz->addBaseClassName ("NodeActor");
 			clazz->addBaseClassName ("AbstractNodeView");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <CircularNode, void>::Level1Wrapper::newConstructorPointer ()));
 			clazz->addMethod (new Method ("init", createMethodWrapper (&CircularNode::init)));
@@ -1400,6 +1440,29 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
+		Class *clazz = new Class ("Button", typeid (Button &), new Reflection::PtrDeleter <Button>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("NodeActor");
+			clazz->addBaseClassName ("AbstractNodeView");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Button, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("init", createMethodWrapper (&Button::init)));
+			clazz->addMethod (new Method ("getText", createMethodWrapper (&Button::getText)));
+			clazz->addMethod (new Method ("setText", createMethodWrapper (&Button::setText)));
+			clazz->addMethod (new Method ("getFont", createMethodWrapper (&Button::getFont)));
+			clazz->addMethod (new Method ("setFont", createMethodWrapper (&Button::setFont)));
+			clazz->addMethod (new Method ("getFontColor", createMethodWrapper (&Button::getFontColor)));
+			clazz->addMethod (new Method ("setFontColor", createMethodWrapper (&Button::setFontColor)));
+			clazz->addMethod (new Method ("setNode", createMethodWrapper (&Button::setNode)));
+			clazz->addMethod (new Method ("onPress", createMethodWrapper (&Button::onPress)));
+			clazz->addMethod (new Method ("onRelease", createMethodWrapper (&Button::onRelease)));
+			clazz->addMethod (new Method ("getPortPosition", createMethodWrapper (&Button::getPortPosition)));
+			clazz->addMethod (new Method ("visit", createMethodWrapper (&Button::visit)));
+		}
+	}
+	{
 		Class *clazz = new Class ("IArcView", typeid (IArcView &), new Reflection::PtrDeleter <IArcView>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
@@ -1423,25 +1486,14 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
-		Class *clazz = new Class ("IConnector", typeid (IConnector &), new Reflection::PtrDeleter <IConnector>);
+		Class *clazz = new Class ("ConnectorActor", typeid (ConnectorActor &), new Reflection::PtrDeleter <ConnectorActor>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
 		}
 		else {
-			clazz->addMethod (new Method ("connect", createMethodWrapper (&IConnector::connect)));
-			clazz->addMethod (new Method ("disconnect", createMethodWrapper (&IConnector::disconnect)));
-			clazz->addMethod (new Method ("onReroute", createMethodWrapper (&IConnector::onReroute)));
-		}
-	}
-	{
-		Class *clazz = new Class ("AbstractConnector", typeid (AbstractConnector &), new Reflection::PtrDeleter <AbstractConnector>);
-		if (!Manager::add (clazz)) {
-			delete clazz;
-		}
-		else {
-			clazz->addBaseClassName ("IConnector");
-			clazz->addMethod (new Method ("connect", createMethodWrapper (&AbstractConnector::connect)));
-			clazz->addMethod (new Method ("disconnect", createMethodWrapper (&AbstractConnector::disconnect)));
+			clazz->addBaseClassName ("AbstractActor");
+			clazz->addMethod (new Method ("connect", createMethodWrapper (&ConnectorActor::connect)));
+			clazz->addMethod (new Method ("disconnect", createMethodWrapper (&ConnectorActor::disconnect)));
 		}
 	}
 	{
@@ -1450,8 +1502,7 @@ void createReflectionDatabase_dataFlowGui ()
 			delete clazz;
 		}
 		else {
-			clazz->addBaseClassName ("AbstractActor");
-			clazz->addBaseClassName ("AbstractConnector");
+			clazz->addBaseClassName ("ConnectorActor");
 			clazz->addBaseClassName ("AbstractArcView");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Connector, void>::Level1Wrapper::newConstructorPointer ()));
 			clazz->addMethod (new Method ("setParent", createMethodWrapper (&Connector::setParent)));

@@ -7,7 +7,7 @@
  ****************************************************************************/
 
 #include "SceneAPI.h"
-#include "IConnector.h"
+#include "ConnectorActor.h"
 #include "Port.h"
 #include "gui/main/IFactoryStrategy.h"
 #include <core/variant/Cast.h>
@@ -47,7 +47,7 @@ IClutterActor *SceneAPI::create (std::string const &toolName)
                 a = ocast<IClutterActor *> (v);
         }
 
-        if (dynamic_cast<IConnector *> (a)) {
+        if (dynamic_cast<ConnectorActor *> (a)) {
                 impl->allConnectors.insert (a);
         }
         else {
@@ -59,16 +59,14 @@ IClutterActor *SceneAPI::create (std::string const &toolName)
 
 /*****************************************************************************/
 
-void SceneAPI::connect (IConnector *lc, Port *pa, Port *pb)
+void SceneAPI::connect (ConnectorActor *lc, Port *pa, Port *pb)
 {
         if (!pa || !pb) {
                 return;
         }
 
-//        lc->connect (&pa->anchor, IConnector::A);
-//        lc->connect (&pb->anchor, IConnector::B);
-        lc->connect (pa, IConnector::A);
-        lc->connect (pb, IConnector::B);
+        lc->connect (pa, Side::A);
+        lc->connect (pb, Side::B);
 
 /*****************************************************************************/
 /* Connect flow::INodes                                                      */

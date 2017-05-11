@@ -12,11 +12,14 @@
 #include "Anchor.h"
 #include "primitives/Color.h"
 #include "primitives/Direction.h"
+#include "primitives/Geometry.h"
+#include "routable/RoutablePin.h"
 #include <ReflectionParserAnnotation.h>
 #include <libavoid.h>
 #include <vector>
 
-struct INodeView;
+class NodeActor;
+class RoutablePin;
 
 /**
  * The view for anchors. This is only a view. Represents a port (place on a node you can
@@ -27,8 +30,8 @@ public:
         virtual ~Port () {}
         virtual bool isInput () const = 0;
 
-        INodeView *getNodeView () { return nodeView; }
-        void setNodeView (INodeView *value) { nodeView = value; }
+        NodeActor *getNodeActor () { return nodeActor; }
+        void setNodeActor (NodeActor *value) { nodeActor = value; }
 
         int getProgramNumber () const { return programNumber; }
         void setProgramNumber (int i) { programNumber = i; }
@@ -36,27 +39,36 @@ public:
         int getViewNumber () const { return viewNumber; }
         void setViewNumber (int i) { viewNumber = i; }
 
-        void createPin ();
-        Avoid::ShapeRef *getShapeRef ();
+        RoutablePin *getRoutablePin () { return routablePin; }
+        void setRoutablePin (RoutablePin *pin) { routablePin = pin; }
+
+        void init ();
+
+        primitives::Point getPosition () const;
 
         float angle = 0.0;
         float size = 0.0;
         primitives::Color color;
 
 private:
-        INodeView *nodeView = nullptr;
+        NodeActor *nodeActor = nullptr;
         /// Number for indexing in data-flow program nodes
         int programNumber = 0;
         /// Number for indexing in views (like CircularNode).
         int viewNumber = 0;
-        Avoid::ShapeConnectionPin *pin = nullptr;
+
+        RoutablePin *routablePin = nullptr;
 };
+
+/*****************************************************************************/
 
 class __tiliae_reflect__ InputPort : public Port {
 public:
         virtual ~InputPort () {}
         virtual bool isInput () const { return true; }
 };
+
+/*****************************************************************************/
 
 class __tiliae_reflect__ OutputPort : public Port {
 public:

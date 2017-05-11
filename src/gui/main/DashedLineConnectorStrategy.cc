@@ -7,7 +7,7 @@
  ****************************************************************************/
 
 #include "DashedLineConnectorStrategy.h"
-#include "view/IConnector.h"
+#include "view/ConnectorActor.h"
 #include "view/Port.h"
 #include "view/SceneAPI.h"
 #include <core/Core.h>
@@ -44,7 +44,7 @@ bool DashedLineConnectorStrategy::onButtonRelease (const Event &e)
 
 void DashedLineConnectorStrategy::onObjectCreated (IClutterActor *a)
 {
-        IConnector *lc = dynamic_cast<IConnector *> (a);
+        ConnectorActor *lc = dynamic_cast<ConnectorActor *> (a);
 
         if (!lc) {
                 throw Core::Exception ("DashedLineStrategy::reshape could not cast actor to Line *");

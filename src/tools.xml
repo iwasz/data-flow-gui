@@ -6,13 +6,13 @@
   <!-- +===================================================+ -->
 
   <ShapeDrawStrategy id="dashedCircle" maxSize="1000, 1000">
-    <Circle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" reactive="false" routing="false"/>
+    <Circle set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" reactive="false" />
   </ShapeDrawStrategy>
 
   <dashedCircle id="dashedCircleMinSize" minSize="100, 100"/>
 
   <ShapeDrawStrategy id="dashedRect" maxSize="1000, 1000">
-    <Rect set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" reactive="false" routing="false"/>
+    <Rect set-as="actor" parent="@stage" fill="false" strokeColor="#8d8d8dff" strokeDash="5" visible="false" reactive="false" />
   </ShapeDrawStrategy>
 
   <!-- std::vector of selected actors -->
@@ -22,7 +22,7 @@
         strokeDash="10" visible="false" selectable="false" />
 
   <RectangularSelectorStrategy id="selectionDashedRect" rectangularSelector="@rectangularSelector" selectedActors="@selectedActors" scaleLayer="@scale">
-    <Rect set-as="actor" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="5" visible="false" reactive="false" routing="false" />
+    <Rect set-as="actor" parent="@stage" fill="false" strokeColor="#d1d1d1ff" strokeDash="5" visible="false" reactive="false" />
   </RectangularSelectorStrategy>
 
   <DashedLineStrategy id="dashedLine">

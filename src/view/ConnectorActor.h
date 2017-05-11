@@ -6,31 +6,26 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef DATAFLOW_DIRECTION_H
-#define DATAFLOW_DIRECTION_H
+#ifndef CONNECTORACTOR_H
+#define CONNECTORACTOR_H
 
-enum Side { A, B };
+#include "AbstractActor.h"
+#include "primitives/Direction.h"
 
-enum _Direction { NONE, EAST, SOUTH, WEST, NORTH };
-typedef enum _Direction Direction;
+class Port;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+class __tiliae_reflect__ ConnectorActor : public AbstractActor {
+public:
+        virtual ~ConnectorActor () {}
 
-Direction getOppositeDirection (Direction d);
+        virtual void connect (Port *an, Side s);
+        virtual void disconnect ();
 
-#ifdef __cplusplus
-}
-#endif
+        Port *getPort (Side s) __tiliae_no_reflect__ { return (Side::A) ? (a) : (b); }
 
-#ifdef __cplusplus
-#include <core/Exception.h>
-#include <core/variant/Variant.h>
-#include <string>
+private:
+        Port *a = nullptr;
+        Port *b = nullptr;
+};
 
-extern Core::Variant directionFromString (std::string const &s);
-#endif
-
-
-#endif // DIRECTION_H
+#endif // CONNECTORACTOR_H

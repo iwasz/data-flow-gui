@@ -44,8 +44,6 @@ public:
         ScaleLayer *getScaleLayer () const { return scaleLayer; }
         void setScaleLayer (ScaleLayer *layer);
 
-        Avoid::Router *getRouter () __tiliae_no_reflect__;
-
         /*---------------------------------------------------------------------------*/
 
         virtual bool isConnectSignals () { return true; }
@@ -60,8 +58,6 @@ public:
 private:
         GtkWidget *clutterWidget;
         ScaleLayer *scaleLayer;
-        struct Impl;
-        Impl *impl;
 };
 
 #endif // STAGE_H

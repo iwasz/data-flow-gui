@@ -9,6 +9,30 @@
 #include "CircularNode.h"
 #include "clutter/iw_circular_node.h"
 
+void NodeActor::init ()
+{
+        AbstractActor::init ();
+
+        int inputProgramNumber = 0;
+        int outputProgramNumber = 0;
+        int viewNumber = 0;
+        for (std::shared_ptr<Port> p : getPorts ()) {
+                p->setNodeActor (this);
+
+                if (p->isInput ()) {
+                        p->setProgramNumber (inputProgramNumber++);
+                        p->setViewNumber (viewNumber);
+                }
+                else {
+                        p->setProgramNumber (outputProgramNumber++);
+                        p->setViewNumber (viewNumber);
+                }
+
+                p->init ();
+                ++viewNumber;
+        }
+}
+
 /*****************************************************************************/
 
 CircularNode::CircularNode ()
@@ -17,14 +41,13 @@ CircularNode::CircularNode ()
         clutter_actor_set_reactive (self, TRUE);
         iw_circular_node_set_user_data (IW_CIRCULAR_NODE (self), this);
         setCppImplementation ();
-        setRouting (true);
 }
 
 /*****************************************************************************/
 
 void CircularNode::init ()
 {
-        AbstractActor::init ();
+        NodeActor::init ();
         iw_circular_node_set_ports_no (IW_CIRCULAR_NODE (self), getPorts ().size ());
 
         int portNumber = 0;
@@ -36,8 +59,6 @@ void CircularNode::init ()
                 iw_circular_node_set_port_user_data (IW_CIRCULAR_NODE (self), portNumber, p.get ());
                 ++portNumber;
         }
-
-        glueInit ();
 }
 
 /*****************************************************************************/
@@ -90,10 +111,11 @@ void CircularNode::setFillColor (const primitives::Color &value)
 
 /*****************************************************************************/
 
-primitives::Point CircularNode::getPortPosition (int i) const
+primitives::Point CircularNode::getPortPosition (const Port *port) const
 {
         primitives::Point p;
-        iw_circular_node_get_port_position (IW_CIRCULAR_NODE (self), i, &p.x, &p.y);
+        // TODO!!!
+//        iw_circular_node_get_port_position (IW_CIRCULAR_NODE (self), p, &p.x, &p.y);
         return p;
 }
 
@@ -140,13 +162,13 @@ void CircularNode::setTextEditable (bool b) { iw_circular_node_set_editable (IW_
 
 /*****************************************************************************/
 
-//void CircularNode::onAllocate (primitives::Box const &)
+// void CircularNode::onAllocate (primitives::Box const &)
 //{
 //}
 
 /*****************************************************************************/
 
-//extern "C" void circularNodeOnAllocate (void *circularNode, float x1, float y1, float x2, float y2)
+// extern "C" void circularNodeOnAllocate (void *circularNode, float x1, float y1, float x2, float y2)
 //{
 //        CircularNode *cn = static_cast<CircularNode *> (circularNode);
 //        cn->onAllocate (primitives::Box (primitives::Point (x1, y1), primitives::Point (x2, y2)));

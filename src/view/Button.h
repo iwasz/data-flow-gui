@@ -14,7 +14,10 @@
 #include "primitives/Geometry.h"
 #include <string>
 
-class __tiliae_reflect__ Button : public AbstractActor, public AbstractNodeView {
+// TODO change to NodeActor.h
+#include "CircularNode.h"
+
+class __tiliae_reflect__ Button : public NodeActor, public AbstractNodeView {
 public:
         Button ();
         virtual ~Button ();
@@ -34,10 +37,10 @@ public:
         /*---------------------------------------------------------------------------*/
 
         virtual void setNode (std::shared_ptr<flow::INode> n);
-//        virtual void onAllocate (primitives::Box const &b);
+        //        virtual void onAllocate (primitives::Box const &b);
         virtual void onPress ();
         virtual void onRelease ();
-        virtual primitives::Point getPortPosition (int i) const;
+        virtual primitives::Point getPortPosition (Port const *p) const;
 
         virtual void visit (IDataFileSave *d) { d->onButton (this); }
 

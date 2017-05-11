@@ -10,6 +10,8 @@
 #include <boost/lexical_cast.hpp>
 #include <core/Core.h>
 
+/*****************************************************************************/
+
 Connector::Connector ()
 {
         self = iw_connector_new ();

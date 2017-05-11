@@ -210,6 +210,9 @@ LIST (APPEND SOURCES
         "src/view/LineConnector.cc"
         "src/view/Connector.h"
         "src/view/Connector.cc"
+        "src/view/ConnectorActor.h"
+        "src/view/ConnectorActor.cc"
+        "src/view/NodeActor.h"
         "src/view/INodeView.h"
         "src/view/AbstractNodeView.h"
         "src/view/AbstractNodeView.cc"
@@ -238,6 +241,15 @@ LIST (APPEND SOURCES
         "src/config/DfDimensionRestoreDatabase.h"
         "src/mapping/ColorMapping.h"
         "src/mapping/ColorMapping.cc"
+        "src/view/routable/IRoutable.h"
+        "src/view/routable/AbstractRoutable.h"
+        "src/view/routable/AbstractRoutable.cc"
+        "src/view/routable/RoutableRoot.h"
+        "src/view/routable/NodeRoutable.h"
+        "src/view/routable/ConnectorRoutable.h"
+        "src/view/routable/ConnectorRoutable.cc"
+        "src/view/routable/RoutablePin.h"
+        "src/view/routable/RoutablePin.cc"
 )
 
 # Local includes (inside project).

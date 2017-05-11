@@ -9,19 +9,22 @@
 #ifndef CLUTTER_ICONTAINER_H
 #define CLUTTER_ICONTAINER_H
 
+#include "gui/main/IDrawingEventHandler.h"
 #include "gui/saveLoadFile/IDataFileSave.h"
 #include "primitives/Color.h"
 #include "primitives/Geometry.h"
+#include "routable/IRoutable.h"
 #include <ReflectionParserAnnotation.h>
 #include <clutter-gtk/clutter-gtk.h>
 #include <core/Object.h>
 #include <core/Typedefs.h>
-#include <libavoid/libavoid.h>
 #include <memory>
 #include <set>
 #include <string>
-#include <vector>
 
+/**
+ * Interface for views.
+ */
 struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
         virtual ~IClutterActor () {}
 
@@ -67,12 +70,22 @@ struct __tiliae_reflect__ IClutterActor : public virtual Core::Object {
 
         virtual Core::StringVector getPropertyViews () const = 0;
 
-        virtual Avoid::Router *getRouter () __tiliae_no_reflect__ = 0;
-        virtual Avoid::ShapeRef *getShapeRef () __tiliae_no_reflect__ = 0;
-
         /// Save/load files
         virtual void visit (IDataFileSave *) = 0;
         virtual std::string getId () const = 0;
+
+        virtual IRoutable *getRoutable () = 0;
+
+        /*---------------------------------------------------------------------------*/
+
+        virtual bool isConnectSignals () = 0;
+        virtual bool onButtonPress (Event const &e) = 0;
+        virtual bool onButtonRelease (Event const &e) = 0;
+        virtual bool onMotion (Event const &e) = 0;
+        virtual bool onEnter (Event const &e) = 0;
+        virtual bool onLeave (Event const &e) = 0;
+        virtual bool onScroll (Event const &e) = 0;
+        virtual bool onKeyPress (Event const &e) = 0;
 };
 
 typedef __tiliae_reflect__ std::vector<IClutterActor *> ClutterActorVector;

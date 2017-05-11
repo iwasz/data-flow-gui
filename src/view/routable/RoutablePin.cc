@@ -6,31 +6,14 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef DATAFLOW_DIRECTION_H
-#define DATAFLOW_DIRECTION_H
+#include "RoutablePin.h"
+#include "IRoutable.h"
 
-enum Side { A, B };
+Avoid::ShapeRef *RoutablePin::getShapeRef () __tiliae_no_reflect__
+{
+        if (!owner) {
+                return nullptr;
+        }
 
-enum _Direction { NONE, EAST, SOUTH, WEST, NORTH };
-typedef enum _Direction Direction;
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-Direction getOppositeDirection (Direction d);
-
-#ifdef __cplusplus
+        return owner->getShapeRef ();
 }
-#endif
-
-#ifdef __cplusplus
-#include <core/Exception.h>
-#include <core/variant/Variant.h>
-#include <string>
-
-extern Core::Variant directionFromString (std::string const &s);
-#endif
-
-
-#endif // DIRECTION_H

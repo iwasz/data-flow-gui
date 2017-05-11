@@ -6,31 +6,20 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef DATAFLOW_DIRECTION_H
-#define DATAFLOW_DIRECTION_H
+#ifndef ROUTABLEROOT_H
+#define ROUTABLEROOT_H
 
-enum Side { A, B };
+#include "AbstractRoutable.h"
 
-enum _Direction { NONE, EAST, SOUTH, WEST, NORTH };
-typedef enum _Direction Direction;
+class __tiliae_reflect__ RoutableRoot : public AbstractRoutable {
+public:
+        virtual ~RoutableRoot () {}
+        Avoid::Router *getRouter () __tiliae_no_reflect__ { return &router; }
+        bool processTransaction () { return router.processTransaction (); }
+        virtual void setParent (IRoutable *parent) __tiliae_no_reflect__ {}
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+private:
+        Avoid::Router router{ Avoid::PolyLineRouting };
+};
 
-Direction getOppositeDirection (Direction d);
-
-#ifdef __cplusplus
-}
-#endif
-
-#ifdef __cplusplus
-#include <core/Exception.h>
-#include <core/variant/Variant.h>
-#include <string>
-
-extern Core::Variant directionFromString (std::string const &s);
-#endif
-
-
-#endif // DIRECTION_H
+#endif // ROUTABLEROOT_H

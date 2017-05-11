@@ -13,11 +13,15 @@
     <ref set-as="stage" bean="stage"/>
     <value set-as="alsoOpen">consoleController,propertiesController</value>
     <ref set-as="propertiesController" bean="propertiesController" />
+    <ref set-as="routableRoot" bean="routableRoot" />
   </MainController>
 
+  <RoutableRoot id="routableRoot" />
+
   <!-- Setting parent to stage would cause cyclic reference. Stage will set parent in C++ -->
-  <ScaleLayer id="scale" />
-  <Stage id="stage" fillColor="#ecececff" scaleLayer="@scale"/>
+  <ScaleLayer id="scale" routable="@routableRoot"/>
+
+ <Stage id="stage" fillColor="#ecececff" scaleLayer="@scale"/>
 
   <MainView id="mainView" file="gui/main/mainView.ui" stage="@stage" loadWholeFile="true">
     <Mapping add-to="mappings" widget="buttonStep" property="sensitive"/>

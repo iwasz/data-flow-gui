@@ -9,22 +9,26 @@
 #include "Port.h"
 #include "IClutterActor.h"
 #include "INodeView.h"
+#include "NodeActor.h"
+#include "routable/RoutablePin.h"
 
-void Port::createPin ()
-{
-        // TODO this cast is bad, API is bad if cast is needed.
-        IClutterActor *a = dynamic_cast<IClutterActor *> (getNodeView ());
-        // TODO cope with this "+1". libavoid wont let you set 0 there.
-        pin = new Avoid::ShapeConnectionPin (a->getShapeRef (), getViewNumber () + 1, 0, 0, false, 0, Avoid::ConnDirAll);
-}
+/*****************************************************************************/
 
-Avoid::ShapeRef *Port::getShapeRef ()
+void Port::init ()
 {
-        if (!getNodeView ()) {
-                return nullptr;
+        if (routablePin && nodeActor) {
+                routablePin->init (getPosition (), nodeActor->getRoutable ());
         }
-
-        // TODO this cast is bad, API is bad if cast is needed.
-        IClutterActor *a = dynamic_cast<IClutterActor *> (getNodeView ());
-        return a->getShapeRef ();
 }
+
+/*****************************************************************************/
+
+void RoutablePin::init (primitives::Point const &p, IRoutable *owner)
+{
+        assert (owner);
+        pin = new Avoid::ShapeConnectionPin (owner->getShapeRef (), getClassNumber (), p.x, p.y, false, 0, Avoid::ConnDirAll);
+}
+
+/*****************************************************************************/
+
+primitives::Point Port::getPosition () const { return nodeActor->getPortPosition (this); }

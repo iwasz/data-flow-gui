@@ -19,13 +19,7 @@ gboolean button_callback_clutter (GtkWidget *widget, GdkEvent *event, gpointer c
 
 /*****************************************************************************/
 
-struct Stage::Impl {
-        Avoid::Router router{ Avoid::PolyLineRouting };
-};
-
-/*****************************************************************************/
-
-Stage::Stage () : scaleLayer (nullptr), impl (new Impl)
+Stage::Stage () : scaleLayer (nullptr)
 {
         clutterWidget = gtk_clutter_embed_new ();
         self = gtk_clutter_embed_get_stage (GTK_CLUTTER_EMBED (clutterWidget));
@@ -40,7 +34,7 @@ Stage::Stage () : scaleLayer (nullptr), impl (new Impl)
 
 /*****************************************************************************/
 
-Stage::~Stage () { delete impl; }
+Stage::~Stage () {}
 
 /*****************************************************************************/
 
@@ -198,7 +192,3 @@ bool Stage::onKeyPress (Event const &event)
 
         return false;
 }
-
-/*****************************************************************************/
-
-Avoid::Router *Stage::getRouter () { return &impl->router; }

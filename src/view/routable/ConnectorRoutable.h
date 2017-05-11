@@ -6,21 +6,22 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef ABSTRACTNODEVIEW_H
-#define ABSTRACTNODEVIEW_H
+#ifndef CONNECTORROUTABLE_H
+#define CONNECTORROUTABLE_H
 
-#include "INodeView.h"
+#include "AbstractRoutable.h"
 
-class __tiliae_reflect__ AbstractNodeView : public INodeView {
+class __tiliae_reflect__ ConnectorRoutable : public AbstractRoutable {
 public:
-        virtual ~AbstractNodeView () {}
-
-        virtual std::shared_ptr<flow::INode> getNode () { return node; }
-        virtual void setNode (std::shared_ptr<flow::INode> n) { node = n; }
-
+        virtual ~ConnectorRoutable () {}
+        virtual void init (primitives::Point const &p, primitives::Dimension const &d, IRoutableObserver *o = nullptr) __tiliae_no_reflect__;
+        void connect (RoutablePin *pin, Side s) __tiliae_no_reflect__;
 
 private:
-        std::shared_ptr<flow::INode> node;
+        static void onRerouteCallback (void *v);
+
+private:
+        Avoid::ConnRef *connRef = nullptr;
 };
 
-#endif // ABSTRACTNODEVIEW_H
+#endif // CONNECTORROUTABLE_H

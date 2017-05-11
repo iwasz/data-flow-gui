@@ -6,31 +6,24 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef DATAFLOW_DIRECTION_H
-#define DATAFLOW_DIRECTION_H
+#ifndef NODEACTOR_H
+#define NODEACTOR_H
 
-enum Side { A, B };
+#include "AbstractActor.h"
+#include "Port.h"
 
-enum _Direction { NONE, EAST, SOUTH, WEST, NORTH };
-typedef enum _Direction Direction;
+/**
+ * Actor with ports.
+ */
+class __tiliae_reflect__ NodeActor : public AbstractActor {
+public:
+        virtual void init ();
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+        virtual PortVector &getPorts () { return ports; }
+        virtual primitives::Point getPortPosition (Port const *port) const __tiliae_no_reflect__ = 0;
 
-Direction getOppositeDirection (Direction d);
+private:
+        PortVector ports;
+};
 
-#ifdef __cplusplus
-}
-#endif
-
-#ifdef __cplusplus
-#include <core/Exception.h>
-#include <core/variant/Variant.h>
-#include <string>
-
-extern Core::Variant directionFromString (std::string const &s);
-#endif
-
-
-#endif // DIRECTION_H
+#endif // NODEACTOR_H

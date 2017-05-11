@@ -12,9 +12,10 @@
 #include "AbstractActor.h"
 #include "AbstractArcView.h"
 #include "AbstractConnector.h"
+#include "ConnectorActor.h"
 #include "clutter/iw_connector.h"
 
-class __tiliae_reflect__ Connector : public AbstractActor, public AbstractConnector, public AbstractArcView {
+class __tiliae_reflect__ Connector : public ConnectorActor, public AbstractArcView {
 public:
         Connector ();
         virtual ~Connector () {}
@@ -44,8 +45,7 @@ public:
         virtual void visit (IDataFileSave *d) { d->onConnector (this); }
 
 private:
-
-        std::vector <CPoint> pointsCache;
+        std::vector<CPoint> pointsCache;
 };
 
 #endif // LINECONNECTOR_H

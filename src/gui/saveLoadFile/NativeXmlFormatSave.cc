@@ -20,7 +20,7 @@
 #include <iostream>
 
 struct NativeXmlFormatSave::Impl {
-        typedef std::map<INodeView *, unsigned int> NodesMap;
+        typedef std::map<NodeActor *, unsigned int> NodesMap;
         NodesMap nodesMap;
         unsigned int nodesNum = 0;
         std::ofstream *file = nullptr;
@@ -105,9 +105,8 @@ void NativeXmlFormatSave::onCircle (IClutterActor *a)
 void NativeXmlFormatSave::onCircularNode (IClutterActor *a)
 {
         CircularNode *cn = dynamic_cast<CircularNode *> (a);
-        INodeView *inv = dynamic_cast<INodeView *> (cn);
         unsigned int myIdx = impl->nodesNum++;
-        impl->nodesMap[inv] = myIdx;
+        impl->nodesMap[cn] = myIdx;
 
         // std::cerr << (void *)inv << "=" << myIdx << std::endl;
 
@@ -131,14 +130,14 @@ void NativeXmlFormatSave::onLine (IClutterActor *a)
 
 void NativeXmlFormatSave::onLineConnector (IClutterActor *a)
 {
-        AbstractConnector *lc = dynamic_cast<AbstractConnector *> (a);
+        ConnectorActor *lc = dynamic_cast<ConnectorActor *> (a);
 
-        if (!lc->getPort (IConnector::Side::A) || !lc->getPort (IConnector::Side::B)) {
+        if (!lc->getPort (Side::A) || !lc->getPort (Side::B)) {
                 throw Core::Exception ("NativeXmlFormat::onLineConnector : connector not connected");
         }
 
-        Port *pa = lc->getPort (IConnector::Side::A);
-        Port *pb = lc->getPort (IConnector::Side::B);
+        Port *pa = lc->getPort (Side::A);
+        Port *pb = lc->getPort (Side::B);
 
         if (!pa || !pb) {
                 throw Core::Exception ("NativeXmlFormat::onLineConnector : no port");
@@ -147,8 +146,8 @@ void NativeXmlFormatSave::onLineConnector (IClutterActor *a)
         unsigned int paNum = pa->getViewNumber ();
         unsigned int pbNum = pb->getViewNumber ();
 
-        unsigned int nvaNum = impl->nodesMap.at (pa->getNodeView ());
-        unsigned int nvbNum = impl->nodesMap.at (pb->getNodeView ());
+        unsigned int nvaNum = impl->nodesMap.at (pa->getNodeActor ());
+        unsigned int nvbNum = impl->nodesMap.at (pb->getNodeActor ());
 
         // std::cerr << (void *)pa->getNodeView () << "=" << nvaNum << " " << (void *)pb->getNodeView () << "=" << nvbNum << std::endl;
 

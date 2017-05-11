@@ -25,7 +25,6 @@ Button::Button ()
         clutter_actor_set_reactive (self, TRUE);
         iw_actor_set_user_data (IW_ACTOR (self), this);
         setCppImplementation ();
-        setRouting (true);
 }
 
 /*****************************************************************************/
@@ -50,7 +49,7 @@ void Button::setNode (std::shared_ptr<flow::INode> n)
 
 void Button::init ()
 {
-        AbstractActor::init ();
+        NodeActor::init ();
 
         if (!getPorts ().empty ()) {
                 Port *p = getPorts ()[0].get ();
@@ -59,13 +58,11 @@ void Button::init ()
                 iw_button_set_port_color (IW_BUTTON (self), &c);
                 iw_button_set_port_user_data (IW_BUTTON (self), p);
         }
-
-        glueInit ();
 }
 
 /*****************************************************************************/
 
-primitives::Point Button::getPortPosition (int i) const
+primitives::Point Button::getPortPosition (const Port *) const
 {
         primitives::Point p;
         iw_button_get_port_position (IW_BUTTON (self), &p.x, &p.y);
