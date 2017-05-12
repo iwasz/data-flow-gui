@@ -15,6 +15,46 @@
 extern "C" void abstractActorOnFinalize (void *ptr);
 
 /**
+ * Runs in IClutterActor::setSize, and modifies passed dimension it.
+ * May be applied to its owner and other ICluterActors as well.
+ */
+struct __tiliae_reflect__ ISizeConstraint : public Core::Object {
+        virtual ~ISizeConstraint () {}
+
+        virtual primitives::Dimension run (primitives::Dimension const &d) const __tiliae_no_reflect__ = 0;
+};
+
+class __tiliae_reflect__ AbstractSizeConstraint : public ISizeConstraint {
+public:
+        virtual ~AbstractSizeConstraint () {}
+
+        primitives::Dimension run (primitives::Dimension const &d0) const __tiliae_no_reflect__;
+        virtual primitives::Dimension runImpl (primitives::Dimension const &d) const __tiliae_no_reflect__ = 0;
+
+        AbstractSizeConstraint const *getNext () const { return next; }
+        void setNext (AbstractSizeConstraint *value) { next = value; }
+
+private:
+        AbstractSizeConstraint *next = nullptr;
+};
+
+class __tiliae_reflect__ SquareSizeConstraint : public AbstractSizeConstraint {
+public:
+        virtual ~SquareSizeConstraint () {}
+        virtual primitives::Dimension runImpl (primitives::Dimension const &d) const __tiliae_no_reflect__;
+};
+
+class __tiliae_reflect__ MinSizeConstraint : public AbstractSizeConstraint {
+public:
+        virtual ~MinSizeConstraint () {}
+};
+
+class __tiliae_reflect__ MaxSizeConstraint : public AbstractSizeConstraint {
+public:
+        virtual ~MaxSizeConstraint () {}
+};
+
+/**
  * @brief The AbstractActor class
  */
 class __tiliae_reflect__ AbstractActor : public IClutterActor, public IRoutableObserver {
@@ -78,6 +118,9 @@ public:
         void contId (std::string const &i) { id = i; }
         std::string getId () const { return id; }
 
+        void setSizeConstraint (ISizeConstraint *s) { sizeConstraint = s; }
+        ISizeConstraint const *getSizeConstraint () const { return sizeConstraint; }
+
         /*---------------------------------------------------------------------------*/
 
         virtual bool isConnectSignals () __tiliae_no_reflect__ { return false; }
@@ -112,6 +155,7 @@ private:
         primitives::Point stagePrev;
         primitives::Point parentPrev;
         IRoutable *routable = nullptr;
+        ISizeConstraint *sizeConstraint = nullptr;
 };
 
 #endif // ABSTRACTACTOR_H

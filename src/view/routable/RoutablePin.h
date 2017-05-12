@@ -20,6 +20,7 @@ public:
         virtual ~RoutablePin () {}
 
         void init (primitives::Point const &p, IRoutable *owner) __tiliae_no_reflect__;
+//        void setPosition (primitives::Point const &p);
 
         Avoid::ShapeRef *getShapeRef () __tiliae_no_reflect__;
 

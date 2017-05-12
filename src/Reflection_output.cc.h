@@ -746,6 +746,15 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
+		Class *clazz = new Class ("IRoutableObserver", typeid (IRoutableObserver &), new Reflection::PtrDeleter <IRoutableObserver>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("Object");
+		}
+	}
+	{
 		Class *clazz = new Class ("IRoutable", typeid (IRoutable &), new Reflection::PtrDeleter <IRoutable>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
@@ -826,12 +835,61 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
+		Class *clazz = new Class ("ISizeConstraint", typeid (ISizeConstraint &), new Reflection::PtrDeleter <ISizeConstraint>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("Object");
+		}
+	}
+	{
+		Class *clazz = new Class ("AbstractSizeConstraint", typeid (AbstractSizeConstraint &), new Reflection::PtrDeleter <AbstractSizeConstraint>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("ISizeConstraint");
+			clazz->addMethod (new Method ("getNext", createMethodWrapper (&AbstractSizeConstraint::getNext)));
+			clazz->addMethod (new Method ("setNext", createMethodWrapper (&AbstractSizeConstraint::setNext)));
+		}
+	}
+	{
+		Class *clazz = new Class ("SquareSizeConstraint", typeid (SquareSizeConstraint &), new Reflection::PtrDeleter <SquareSizeConstraint>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("AbstractSizeConstraint");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <SquareSizeConstraint, void>::Level1Wrapper::newConstructorPointer ()));
+		}
+	}
+	{
+		Class *clazz = new Class ("MinSizeConstraint", typeid (MinSizeConstraint &), new Reflection::PtrDeleter <MinSizeConstraint>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("AbstractSizeConstraint");
+		}
+	}
+	{
+		Class *clazz = new Class ("MaxSizeConstraint", typeid (MaxSizeConstraint &), new Reflection::PtrDeleter <MaxSizeConstraint>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("AbstractSizeConstraint");
+		}
+	}
+	{
 		Class *clazz = new Class ("AbstractActor", typeid (AbstractActor &), new Reflection::PtrDeleter <AbstractActor>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
 		}
 		else {
 			clazz->addBaseClassName ("IClutterActor");
+			clazz->addBaseClassName ("IRoutableObserver");
 			clazz->addMethod (new Method ("init", createMethodWrapper (&AbstractActor::init)));
 			clazz->addMethod (new Method ("setParent", createMethodWrapper (&AbstractActor::setParent)));
 			clazz->addMethod (new Method ("getActor", createMethodWrapper (&AbstractActor::getActor)));
@@ -866,16 +924,10 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("setPropertyView", createMethodWrapper (&AbstractActor::setPropertyView)));
 			clazz->addMethod (new Method ("getRoutable", createMethodWrapper (&AbstractActor::getRoutable)));
 			clazz->addMethod (new Method ("setRoutable", createMethodWrapper (&AbstractActor::setRoutable)));
-			clazz->addMethod (new Method ("isConnectSignals", createMethodWrapper (&AbstractActor::isConnectSignals)));
-			clazz->addMethod (new Method ("onButtonPress", createMethodWrapper (&AbstractActor::onButtonPress)));
-			clazz->addMethod (new Method ("onButtonRelease", createMethodWrapper (&AbstractActor::onButtonRelease)));
-			clazz->addMethod (new Method ("onMotion", createMethodWrapper (&AbstractActor::onMotion)));
-			clazz->addMethod (new Method ("onEnter", createMethodWrapper (&AbstractActor::onEnter)));
-			clazz->addMethod (new Method ("onLeave", createMethodWrapper (&AbstractActor::onLeave)));
-			clazz->addMethod (new Method ("onScroll", createMethodWrapper (&AbstractActor::onScroll)));
-			clazz->addMethod (new Method ("onKeyPress", createMethodWrapper (&AbstractActor::onKeyPress)));
 			clazz->addMethod (new Method ("contId", createMethodWrapper (&AbstractActor::contId)));
 			clazz->addMethod (new Method ("getId", createMethodWrapper (&AbstractActor::getId)));
+			clazz->addMethod (new Method ("setSizeConstraint", createMethodWrapper (&AbstractActor::setSizeConstraint)));
+			clazz->addMethod (new Method ("getSizeConstraint", createMethodWrapper (&AbstractActor::getSizeConstraint)));
 		}
 	}
 	{

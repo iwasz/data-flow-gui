@@ -23,4 +23,8 @@ void Port::init ()
 
 /*****************************************************************************/
 
+//void Port::reposition () { routablePin->setPosition (getPosition ()); }
+
+/*****************************************************************************/
+
 primitives::Point Port::getPosition () const { return nodeActor->getPortPosition (this); }

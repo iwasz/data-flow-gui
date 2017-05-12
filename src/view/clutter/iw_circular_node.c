@@ -170,7 +170,8 @@ static void iw_circular_node_class_init (IwCircularNodeClass *klass)
         GParamSpec *pspec;
 
         gobject_class->finalize = iw_circular_node_finalize;
-        actor_class->allocate = iw_circular_node_allocate;
+        // C++ code is doing that (it makes node square all the time).
+        //        actor_class->allocate = iw_circular_node_allocate;
         actor_class->pick = iw_circular_node_pick;
 
         g_type_class_add_private (klass, sizeof (IwCircularNodePrivate));

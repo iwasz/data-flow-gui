@@ -213,6 +213,7 @@ LIST (APPEND SOURCES
         "src/view/ConnectorActor.h"
         "src/view/ConnectorActor.cc"
         "src/view/NodeActor.h"
+        "src/view/NodeActor.cc"
         "src/view/INodeView.h"
         "src/view/AbstractNodeView.h"
         "src/view/AbstractNodeView.cc"

@@ -17,7 +17,7 @@
 class RoutablePin;
 
 /// Interface for all callbacks. One common interface to simplify things.
-struct IRoutableObserver {
+struct __tiliae_reflect__ IRoutableObserver : public virtual Core::Object {
         virtual ~IRoutableObserver () {}
         // TODO change parameter to some polygon
         virtual void onReroute (Avoid::ConnRef *) __tiliae_no_reflect__ = 0;

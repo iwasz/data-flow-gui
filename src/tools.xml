@@ -52,6 +52,9 @@
   <InputPort id="inputPort" scope="prototype" angle="2.6415" color="#d1d1d1ff" size="20" />
   <OutputPort id="outputPort" scope="prototype" angle="6.283" color="#8d8d8dff" size="20" />
 
+  <SquareSizeConstraint id="squareSizeConstraint" />
+
+
   <CircularNode scope="prototype" id="mathNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
     <inputPort add-to="ports" angle="2.6415">
       <RoutablePin scope="prototype" set-as="routablePin" classNumber="1" />
@@ -68,6 +71,7 @@
     <value set-as="text">+</value>
     <value set-as="fontColor">#ffffffff</value>
     <NodeRoutable scope="prototype" set-as="routable"/>
+    <ref set-as="sizeConstraint" bean="squareSizeConstraint"/>
   </CircularNode>
 
   <mathNode id="addNode">
@@ -132,6 +136,7 @@
     </outputPort>
     <Copy scope="prototype" set-as="node"/>
     <value set-as="text">Button</value>
+    <NodeRoutable scope="prototype" set-as="routable"/>
   </Button>
 
   <CircularNode scope="prototype" id="constNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">

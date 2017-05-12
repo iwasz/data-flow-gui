@@ -38,7 +38,12 @@ ScaleLayer::ScaleLayer () : impl (new Impl)
 
 /*****************************************************************************/
 
-ScaleLayer::~ScaleLayer () { delete impl; }
+ScaleLayer::~ScaleLayer ()
+{
+        // Prevent deletion
+        setRoutable (nullptr);
+        delete impl;
+}
 
 /*****************************************************************************/
 

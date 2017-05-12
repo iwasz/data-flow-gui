@@ -43,6 +43,7 @@ public:
         void setRoutablePin (RoutablePin *pin) { routablePin = pin; }
 
         void init ();
+//        void reposition ();
 
         primitives::Point getPosition () const;
 

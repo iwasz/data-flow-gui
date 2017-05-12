@@ -135,8 +135,14 @@ primitives::Point AbstractActor::getScaleLayerPosition () const { return convert
 
 /*****************************************************************************/
 
-void AbstractActor::setSize (primitives::Dimension const &d)
+void AbstractActor::setSize (primitives::Dimension const &d0)
 {
+        primitives::Dimension d = d0;
+
+        if (sizeConstraint) {
+                d = sizeConstraint->run (d);
+        }
+
         clutter_actor_set_size (self, d.width, d.height);
 
         if (routable) {
@@ -444,4 +450,23 @@ gboolean on_actor_key_press (ClutterActor *actor, ClutterEvent *ev, gpointer dat
         event.ctrlPressed = (event.state & CLUTTER_CONTROL_MASK ? TRUE : FALSE);
         AbstractActor *that = static_cast<AbstractActor *> (data);
         return that->onKeyPress (event);
+}
+
+primitives::Dimension AbstractSizeConstraint::run (primitives::Dimension const &d0) const __tiliae_no_reflect__
+{
+        AbstractSizeConstraint const *c = this;
+        primitives::Dimension d = d0;
+
+        do {
+                d = c->runImpl (d);
+        } while ((c = c->getNext ()));
+
+        return d;
+}
+
+primitives::Dimension SquareSizeConstraint::runImpl (primitives::Dimension const &d0) const
+{
+        primitives::Dimension d;
+        d.height = d.width = std::min (d0.width, d0.height);
+        return d;
 }
