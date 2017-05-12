@@ -27,4 +27,10 @@ void Port::init ()
 
 /*****************************************************************************/
 
-primitives::Point Port::getPosition () const { return nodeActor->getPortPosition (this); }
+//primitives::Point Port::getProportionalPosition () const { return nodeActor->getPortPosition (this); }
+
+primitives::Point Port::getPosition() const
+{
+        return proportionalPosition;
+}
+

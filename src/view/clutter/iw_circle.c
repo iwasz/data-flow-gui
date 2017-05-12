@@ -64,7 +64,7 @@ static void iw_circle_class_init (IwCircleClass *klass)
 
 static void iw_circle_init (IwCircle *self)
 {
-#if 1
+#if 0
         static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
         clutter_actor_set_background_color (CLUTTER_ACTOR (self), &c);
 #endif

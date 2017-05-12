@@ -50,7 +50,7 @@ public:
         virtual bool isTextEditable () const;
         virtual void setTextEditable (bool b);
 
-        virtual primitives::Point getPortPosition (Port const *p) const;
+//        virtual primitives::Point getPortPosition (Port const *p) const;
 
         virtual void visit (IDataFileSave *d) { d->onCircularNode (this); }
 };

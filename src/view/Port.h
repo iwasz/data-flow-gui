@@ -28,6 +28,8 @@ class RoutablePin;
 class __tiliae_reflect__ Port : public Core::Object {
 public:
         virtual ~Port () {}
+        void init ();
+
         virtual bool isInput () const = 0;
 
         NodeActor *getNodeActor () { return nodeActor; }
@@ -42,22 +44,24 @@ public:
         RoutablePin *getRoutablePin () { return routablePin; }
         void setRoutablePin (RoutablePin *pin) { routablePin = pin; }
 
-        void init ();
-//        void reposition ();
-
         primitives::Point getPosition () const;
+        void setPosition (const primitives::Point &value) { proportionalPosition = value; }
 
-        float angle = 0.0;
-        float size = 0.0;
-        primitives::Color color;
+        primitives::Color getColor () const { return color; }
+        void setColor (primitives::Color const &c) { color = c; }
+
+        void setSize (float s) { size = s; }
+        float getSize () const { return size; }
 
 private:
+        float size = 0.0;
+        primitives::Color color;
+        primitives::Point proportionalPosition;
         NodeActor *nodeActor = nullptr;
         /// Number for indexing in data-flow program nodes
         int programNumber = 0;
         /// Number for indexing in views (like CircularNode).
         int viewNumber = 0;
-
         RoutablePin *routablePin = nullptr;
 };
 

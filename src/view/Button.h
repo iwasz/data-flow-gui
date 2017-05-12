@@ -11,11 +11,9 @@
 
 #include "AbstractActor.h"
 #include "AbstractNodeView.h"
+#include "NodeActor.h"
 #include "primitives/Geometry.h"
 #include <string>
-
-// TODO change to NodeActor.h
-#include "CircularNode.h"
 
 class __tiliae_reflect__ Button : public NodeActor, public AbstractNodeView {
 public:
@@ -40,7 +38,7 @@ public:
         //        virtual void onAllocate (primitives::Box const &b);
         virtual void onPress ();
         virtual void onRelease ();
-        virtual primitives::Point getPortPosition (Port const *p) const;
+        //        virtual primitives::Point getPortPosition (Port const *p) const;
 
         virtual void visit (IDataFileSave *d) { d->onButton (this); }
 

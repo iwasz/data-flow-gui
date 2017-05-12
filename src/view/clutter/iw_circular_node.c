@@ -25,7 +25,7 @@ extern void circularNodeOnAllocate (void *circularNode, float x1, float y1, floa
  * One input.
  */
 struct _IwCircularNodePort {
-        float angle;
+        float x, y;
         ClutterActor *actor;
 };
 
@@ -117,7 +117,7 @@ static void iw_circular_node_allocate (ClutterActor *actor, const ClutterActorBo
         childBox.y2 = clutter_actor_box_get_height (&newBox);
 
         clutter_actor_allocate (priv->mainCircle, &childBox, flags);
-//        circularNodeOnAllocate (priv->userData, newBox.x1, newBox.y1, newBox.x2, newBox.y2);
+        //        circularNodeOnAllocate (priv->userData, newBox.x1, newBox.y1, newBox.x2, newBox.y2);
 }
 
 /*****************************************************************************/
@@ -201,8 +201,8 @@ static void iw_circular_node_init (IwCircularNode *self)
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->mainCircle);
 
         priv->label = clutter_text_new ();
-//        clutter_text_set_text (CLUTTER_TEXT (priv->label), "A simple test");
-//        clutter_text_set_font_name (CLUTTER_TEXT (priv->label), "22px");
+        //        clutter_text_set_text (CLUTTER_TEXT (priv->label), "A simple test");
+        //        clutter_text_set_font_name (CLUTTER_TEXT (priv->label), "22px");
         clutter_text_set_editable (CLUTTER_TEXT (priv->label), FALSE);
         clutter_text_set_selectable (CLUTTER_TEXT (priv->label), FALSE);
         clutter_text_set_single_line_mode (CLUTTER_TEXT (priv->label), TRUE);
@@ -259,11 +259,13 @@ static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocat
         float w = clutter_actor_box_get_width (allocation);
         float h = clutter_actor_box_get_height (allocation);
         float d = fmin (w, h);
-        float r = d / 2;
+        // float r = d / 2;
 
         for (int i = 0; i < priv->portsNo; ++i) {
                 float portR = clutter_actor_get_width (priv->ports[i].actor) / 2.0;
-                clutter_actor_set_position (priv->ports[i].actor, r * cos (priv->ports[i].angle) + r - portR, r * sin (priv->ports[i].angle) + r - portR);
+                // clutter_actor_set_position (priv->ports[i].actor, r * cos (priv->ports[i].angle) + r - portR, r * sin (priv->ports[i].angle) +
+                // r - portR);
+                clutter_actor_set_position (priv->ports[i].actor, priv->ports[i].x * w - portR, priv->ports[i].y * h - portR);
         }
 
         clutter_actor_set_size (priv->mainCircle, d, d);
@@ -382,10 +384,11 @@ void iw_circular_node_set_port_color (IwCircularNode *self, int i, const Clutter
 
 /*****************************************************************************/
 
-void iw_circular_node_set_port_angle (IwCircularNode *self, int i, float angle)
+void iw_circular_node_set_port_position (IwCircularNode *self, int i, float x, float y)
 {
         g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        self->priv->ports[i].angle = angle;
+        self->priv->ports[i].x = x;
+        self->priv->ports[i].y = y;
 }
 
 /*****************************************************************************/

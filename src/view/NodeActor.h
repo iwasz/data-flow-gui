@@ -20,7 +20,7 @@ public:
         virtual void init ();
 
         virtual PortVector &getPorts () { return ports; }
-        virtual primitives::Point getPortPosition (Port const *port) const __tiliae_no_reflect__ = 0;
+//        virtual primitives::Point getPortPosition (Port const *port) const __tiliae_no_reflect__ = 0;
 //        virtual void setSize (primitives::Dimension const &d);
 
 private:

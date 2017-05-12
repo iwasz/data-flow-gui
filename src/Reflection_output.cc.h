@@ -1356,6 +1356,8 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <RoutablePin, void>::Level1Wrapper::newConstructorPointer ()));
 			clazz->addMethod (new Method ("setClassNumber", createMethodWrapper (&RoutablePin::setClassNumber)));
 			clazz->addMethod (new Method ("getClassNumber", createMethodWrapper (&RoutablePin::getClassNumber)));
+			clazz->addMethod (new Method ("setExclusive", createMethodWrapper (&RoutablePin::setExclusive)));
+			clazz->addMethod (new Method ("isExclusive", createMethodWrapper (&RoutablePin::isExclusive)));
 		}
 	}
 	{
@@ -1365,9 +1367,7 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 		else {
 			clazz->addBaseClassName ("Object");
-			clazz->addField (new Field ("angle", Reflection::createFieldWrapper (&Port::angle)));
-			clazz->addField (new Field ("size", Reflection::createFieldWrapper (&Port::size)));
-			clazz->addField (new Field ("color", Reflection::createFieldWrapper (&Port::color)));
+			clazz->addMethod (new Method ("init", createMethodWrapper (&Port::init)));
 			clazz->addMethod (new Method ("isInput", createMethodWrapper (&Port::isInput)));
 			clazz->addMethod (new Method ("getNodeActor", createMethodWrapper (&Port::getNodeActor)));
 			clazz->addMethod (new Method ("setNodeActor", createMethodWrapper (&Port::setNodeActor)));
@@ -1377,8 +1377,12 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("setViewNumber", createMethodWrapper (&Port::setViewNumber)));
 			clazz->addMethod (new Method ("getRoutablePin", createMethodWrapper (&Port::getRoutablePin)));
 			clazz->addMethod (new Method ("setRoutablePin", createMethodWrapper (&Port::setRoutablePin)));
-			clazz->addMethod (new Method ("init", createMethodWrapper (&Port::init)));
 			clazz->addMethod (new Method ("getPosition", createMethodWrapper (&Port::getPosition)));
+			clazz->addMethod (new Method ("setPosition", createMethodWrapper (&Port::setPosition)));
+			clazz->addMethod (new Method ("getColor", createMethodWrapper (&Port::getColor)));
+			clazz->addMethod (new Method ("setColor", createMethodWrapper (&Port::setColor)));
+			clazz->addMethod (new Method ("setSize", createMethodWrapper (&Port::setSize)));
+			clazz->addMethod (new Method ("getSize", createMethodWrapper (&Port::getSize)));
 		}
 	}
 	{
@@ -1460,6 +1464,28 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
+		Class *clazz = new Class ("Button", typeid (Button &), new Reflection::PtrDeleter <Button>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("NodeActor");
+			clazz->addBaseClassName ("AbstractNodeView");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Button, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("init", createMethodWrapper (&Button::init)));
+			clazz->addMethod (new Method ("getText", createMethodWrapper (&Button::getText)));
+			clazz->addMethod (new Method ("setText", createMethodWrapper (&Button::setText)));
+			clazz->addMethod (new Method ("getFont", createMethodWrapper (&Button::getFont)));
+			clazz->addMethod (new Method ("setFont", createMethodWrapper (&Button::setFont)));
+			clazz->addMethod (new Method ("getFontColor", createMethodWrapper (&Button::getFontColor)));
+			clazz->addMethod (new Method ("setFontColor", createMethodWrapper (&Button::setFontColor)));
+			clazz->addMethod (new Method ("setNode", createMethodWrapper (&Button::setNode)));
+			clazz->addMethod (new Method ("onPress", createMethodWrapper (&Button::onPress)));
+			clazz->addMethod (new Method ("onRelease", createMethodWrapper (&Button::onRelease)));
+			clazz->addMethod (new Method ("visit", createMethodWrapper (&Button::visit)));
+		}
+	}
+	{
 		Class *clazz = new Class ("CircularNode", typeid (CircularNode &), new Reflection::PtrDeleter <CircularNode>);
 		if (!Manager::add (clazz)) {
 			delete clazz;
@@ -1487,31 +1513,7 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("setFontColor", createMethodWrapper (&CircularNode::setFontColor)));
 			clazz->addMethod (new Method ("isTextEditable", createMethodWrapper (&CircularNode::isTextEditable)));
 			clazz->addMethod (new Method ("setTextEditable", createMethodWrapper (&CircularNode::setTextEditable)));
-			clazz->addMethod (new Method ("getPortPosition", createMethodWrapper (&CircularNode::getPortPosition)));
 			clazz->addMethod (new Method ("visit", createMethodWrapper (&CircularNode::visit)));
-		}
-	}
-	{
-		Class *clazz = new Class ("Button", typeid (Button &), new Reflection::PtrDeleter <Button>);
-		if (!Manager::add (clazz)) {
-			delete clazz;
-		}
-		else {
-			clazz->addBaseClassName ("NodeActor");
-			clazz->addBaseClassName ("AbstractNodeView");
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Button, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addMethod (new Method ("init", createMethodWrapper (&Button::init)));
-			clazz->addMethod (new Method ("getText", createMethodWrapper (&Button::getText)));
-			clazz->addMethod (new Method ("setText", createMethodWrapper (&Button::setText)));
-			clazz->addMethod (new Method ("getFont", createMethodWrapper (&Button::getFont)));
-			clazz->addMethod (new Method ("setFont", createMethodWrapper (&Button::setFont)));
-			clazz->addMethod (new Method ("getFontColor", createMethodWrapper (&Button::getFontColor)));
-			clazz->addMethod (new Method ("setFontColor", createMethodWrapper (&Button::setFontColor)));
-			clazz->addMethod (new Method ("setNode", createMethodWrapper (&Button::setNode)));
-			clazz->addMethod (new Method ("onPress", createMethodWrapper (&Button::onPress)));
-			clazz->addMethod (new Method ("onRelease", createMethodWrapper (&Button::onRelease)));
-			clazz->addMethod (new Method ("getPortPosition", createMethodWrapper (&Button::getPortPosition)));
-			clazz->addMethod (new Method ("visit", createMethodWrapper (&Button::visit)));
 		}
 	}
 	{

@@ -52,9 +52,9 @@ void CircularNode::init ()
 
         int portNumber = 0;
         for (std::shared_ptr<Port> p : getPorts ()) {
-                iw_circular_node_set_port_angle (IW_CIRCULAR_NODE (self), portNumber, p->angle);
-                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (self), portNumber, p->size);
-                ClutterColor c = p->color.toClutterColor ();
+                iw_circular_node_set_port_position (IW_CIRCULAR_NODE (self), portNumber, p->getPosition ().x, p->getPosition ().y);
+                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (self), portNumber, p->getSize ());
+                ClutterColor c = p->getColor ().toClutterColor ();
                 iw_circular_node_set_port_color (IW_CIRCULAR_NODE (self), portNumber, &c);
                 iw_circular_node_set_port_user_data (IW_CIRCULAR_NODE (self), portNumber, p.get ());
                 ++portNumber;
@@ -111,13 +111,13 @@ void CircularNode::setFillColor (const primitives::Color &value)
 
 /*****************************************************************************/
 
-primitives::Point CircularNode::getPortPosition (const Port *port) const
-{
-        primitives::Point p;
-        // TODO!!!
-//        iw_circular_node_get_port_position (IW_CIRCULAR_NODE (self), p, &p.x, &p.y);
-        return p;
-}
+// primitives::Point CircularNode::getPortPosition (const Port *port) const
+//{
+//        primitives::Point p;
+//        // TODO!!!
+////        iw_circular_node_get_port_position (IW_CIRCULAR_NODE (self), p, &p.x, &p.y);
+//        return p;
+//}
 
 /*****************************************************************************/
 

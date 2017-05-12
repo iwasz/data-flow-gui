@@ -102,7 +102,8 @@ void iw_circular_node_set_fill (IwCircularNode *self, gboolean b);
 gboolean iw_circular_node_is_fill (IwCircularNode *self);
 
 void iw_circular_node_set_port_color (IwCircularNode *self, int i, const ClutterColor *color);
-void iw_circular_node_set_port_angle (IwCircularNode *self, int i, float angle);
+// Proportional 0.0 : 1.0
+void iw_circular_node_set_port_position (IwCircularNode *self, int i, float x, float y);
 void iw_circular_node_set_port_size (IwCircularNode *self, int i, float s);
 void iw_circular_node_set_ports_no (IwCircularNode *self, int i);
 
