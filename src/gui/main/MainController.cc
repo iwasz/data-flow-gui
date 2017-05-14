@@ -377,7 +377,11 @@ void MainController::onProgramRun ()
         updateButtons ();
 }
 
-void MainController::onProgramStep () { impl->program->step (); }
+void MainController::onProgramStep () {
+
+        impl->program->step ();
+        // impl->routableRoot->outputInstanceToSVG ("debug.svg");
+}
 
 /*****************************************************************************/
 

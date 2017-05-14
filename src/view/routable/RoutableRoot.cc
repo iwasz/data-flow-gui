@@ -6,18 +6,11 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#include "ConnectorActor.h"
-#include "Port.h"
+#include "RoutableRoot.h"
 
-void ConnectorActor::connect (Port *port, Side s)
+RoutableRoot::RoutableRoot () : router (Avoid::PolyLineRouting)
 {
-        getRoutable ()->connect (port->getRoutablePin (), s);
-}
-
-/*****************************************************************************/
-
-void ConnectorActor::disconnect (/*Side s*/)
-{
-        // TODO
-        a = b = nullptr;
+        //                router.setRoutingOption ();
+        //                                router.setRoutingParameter ();
+        router.setRoutingPenalty (Avoid::RoutingParameter::segmentPenalty, 1);
 }
