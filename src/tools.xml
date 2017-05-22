@@ -59,13 +59,23 @@
   <SquareSizeConstraint id="squareSizeConstraint" />
 
   <CircularNode scope="prototype" id="mathNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
-    <inputPort add-to="ports" position="0.061,0.74">
+<!--    <inputPort add-to="ports" position="0.061,0.74">
       <RoutablePin scope="prototype" set-as="routablePin" classNumber="1" exclusive="false" />
     </inputPort>
     <inputPort add-to="ports" position="0.061,0.26">
       <RoutablePin scope="prototype" set-as="routablePin" classNumber="2" exclusive="false" />
     </inputPort>
     <outputPort add-to="ports" position="0.99,0.5">
+      <RoutablePin scope="prototype" set-as="routablePin" classNumber="3" exclusive="false" />
+    </outputPort>-->
+
+    <inputPort add-to="ports" position="0,0.74">
+      <RoutablePin scope="prototype" set-as="routablePin" classNumber="1" exclusive="false" />
+    </inputPort>
+    <inputPort add-to="ports" position="0,0.26">
+      <RoutablePin scope="prototype" set-as="routablePin" classNumber="2" exclusive="false" />
+    </inputPort>
+    <outputPort add-to="ports" position="1,0.5">
       <RoutablePin scope="prototype" set-as="routablePin" classNumber="3" exclusive="false" />
     </outputPort>
 

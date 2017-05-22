@@ -10,7 +10,8 @@
 
 RoutableRoot::RoutableRoot () : router (Avoid::PolyLineRouting)
 {
-        //                router.setRoutingOption ();
-        //                                router.setRoutingParameter ();
         router.setRoutingPenalty (Avoid::RoutingParameter::segmentPenalty, 1);
+        router.setRoutingOption (Avoid::nudgeOrthogonalSegmentsConnectedToShapes, true);
+        router.setRoutingOption (Avoid::nudgeOrthogonalTouchingColinearSegments, true);
+//        router.setRoutingParameter (Avoid::shapeBufferDistance, 30);
 }
