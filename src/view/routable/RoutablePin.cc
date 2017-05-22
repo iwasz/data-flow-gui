@@ -24,7 +24,7 @@ void RoutablePin::init (primitives::Point const &p, IRoutable *owner)
 {
         assert (owner);
         this->owner = owner;
-        pin = new Avoid::ShapeConnectionPin (owner->getShapeRef (), getClassNumber (), p.x, p.y, true, 0, Avoid::ConnDirAll);
+        pin = new Avoid::ShapeConnectionPin (owner->getShapeRef (), getClassNumber (), p.x, p.y, true, 20, Avoid::ConnDirRight);
         pin->setExclusive (exclusive);
 }
 
