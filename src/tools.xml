@@ -58,7 +58,6 @@
 
   <SquareSizeConstraint id="squareSizeConstraint" />
 
-
   <CircularNode scope="prototype" id="mathNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
     <inputPort add-to="ports" position="0.061,0.74">
       <RoutablePin scope="prototype" set-as="routablePin" classNumber="1" exclusive="false" />
@@ -107,6 +106,7 @@
     <value set-as="text">copy</value>
     <value set-as="fontColor">#ffffffff</value>
     <NodeRoutable scope="prototype" set-as="routable"/>
+    <ref set-as="sizeConstraint" bean="squareSizeConstraint"/>
   </CircularNode>
 
   <CircularNode scope="prototype" id="testNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
@@ -126,6 +126,7 @@
     <value set-as="text">test</value>
     <value set-as="fontColor">#ff0000ff</value>
     <NodeRoutable scope="prototype" set-as="routable"/>
+    <ref set-as="sizeConstraint" bean="squareSizeConstraint"/>
   </CircularNode>
 
   <CircularNode scope="prototype" id="consoleNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">
@@ -135,6 +136,7 @@
     <ConsoleNode scope="prototype" set-as="node"/>
     <value set-as="propertyView">consoleNodePropertiesView</value>
     <NodeRoutable scope="prototype" set-as="routable"/>
+    <ref set-as="sizeConstraint" bean="squareSizeConstraint"/>
   </CircularNode>
 
   <Button scope="prototype" id="buttonNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" fontColor="#ecececff" visible="false">
@@ -144,6 +146,7 @@
     <Copy scope="prototype" set-as="node"/>
     <value set-as="text">Button</value>
     <NodeRoutable scope="prototype" set-as="routable"/>
+    <ref set-as="sizeConstraint" bean="squareSizeConstraint"/>
   </Button>
 
   <CircularNode scope="prototype" id="constNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">
@@ -153,6 +156,7 @@
     <Const scope="prototype" set-as="node"/>
     <value set-as="propertyView">constPropertiesView</value>
     <NodeRoutable scope="prototype" set-as="routable"/>
+    <ref set-as="sizeConstraint" bean="squareSizeConstraint"/>
   </CircularNode>
 
   <Connector scope="prototype" id="angleConnector" parent="@scale" strokeColor="#0096c6c9" visible="false" strokeWidth="5" selectable="false">

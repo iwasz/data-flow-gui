@@ -7,7 +7,10 @@
  ****************************************************************************/
 
 #include "SceneAPI.h"
+#include "AbstractArcView.h"
+#include "AbstractNodeView.h"
 #include "ConnectorActor.h"
+#include "NodeActor.h"
 #include "Port.h"
 #include "gui/main/IFactoryStrategy.h"
 #include <core/variant/Cast.h>
@@ -68,17 +71,17 @@ void SceneAPI::connect (ConnectorActor *lc, Port *pa, Port *pb)
         lc->connect (pa, Side::A);
         lc->connect (pb, Side::B);
 
-/*****************************************************************************/
-/* Connect flow::INodes                                                      */
-/*****************************************************************************/
+        /*****************************************************************************/
+        /* Connect flow::INodes                                                      */
+        /*****************************************************************************/
 
-//        TODO
-#if 0
-        assert (lc->getArc ());
-        flow::Arc *arc = lc->getArc ().get ();
+        AbstractArcView *aav = dynamic_cast<AbstractArcView *> (lc);
+        assert (aav->getArc ());
+        flow::Arc *arc = aav->getArc ().get ();
 
-        if (pa->getNodeView () && pa->getNodeView ()->getNode ()) {
-                flow::INode *startNode = pa->getNodeView ()->getNode ().get ();
+        if (pa->getNodeActor ()) {
+                AbstractNodeView *anv = dynamic_cast<AbstractNodeView *> (pa->getNodeActor ());
+                flow::INode *startNode = anv->getNode ().get ();
 
                 if (pa->isInput ()) {
                         startNode->setInput (pa->getProgramNumber (), arc);
@@ -88,8 +91,9 @@ void SceneAPI::connect (ConnectorActor *lc, Port *pa, Port *pb)
                 }
         }
 
-        if (pb->getNodeView () && pb->getNodeView ()->getNode ()) {
-                flow::INode *endNode = pb->getNodeView ()->getNode ().get ();
+        if (pb->getNodeActor ()) {
+                AbstractNodeView *anv = dynamic_cast<AbstractNodeView *> (pb->getNodeActor ());
+                flow::INode *endNode = anv->getNode ().get ();
 
                 if (pb->isInput ()) {
                         endNode->setInput (pb->getProgramNumber (), arc);
@@ -98,7 +102,6 @@ void SceneAPI::connect (ConnectorActor *lc, Port *pa, Port *pb)
                         endNode->addOutput (pb->getProgramNumber (), arc);
                 }
         }
-#endif
 }
 
 /*****************************************************************************/
