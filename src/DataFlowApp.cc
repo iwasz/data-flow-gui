@@ -9,6 +9,7 @@
 #include "DataFlowApp.h"
 #include "primitives/Color.h"
 #include "primitives/Direction.h"
+#include "view/routable/RoutablePin.h"
 
 /*---------------------------------------------------------------------------*/
 
@@ -29,5 +30,6 @@ std::unique_ptr<Container::BeanFactoryContainer> DataFlowApp::createContainer (P
         std::unique_ptr<Container::BeanFactoryContainer> container (Container::ContainerFactory::create (metaContainer, true));
         container->addConversion (typeid (primitives::Color), new primitives::ColorEditor); // Auto delete is on.
         container->addConversion (typeid (Direction), directionFromString);
+        container->addConversion (typeid (Avoid::ConnDirFlag), avoidDirectionFromString);
         return container;
 }

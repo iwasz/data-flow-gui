@@ -108,7 +108,9 @@ void NativeXmlFormatSave::onCircularNode (IClutterActor *a)
         unsigned int myIdx = impl->nodesNum++;
         impl->nodesMap[cn] = myIdx;
 
-        // std::cerr << (void *)inv << "=" << myIdx << std::endl;
+#if 1
+        std::cerr << (void *)cn << "=" << myIdx << std::endl;
+#endif
 
         *impl->file << std::string ("<") << a->getId () << " index=\"" << myIdx << "\" ";
         clutterActorArguments (a);

@@ -348,7 +348,6 @@ void MainController::onProgramStop ()
         impl->runProgram = false;
         impl->program->reset ();
         updateButtons ();
-        //        impl->stage->getRouter ()->processTransaction ();
 }
 
 /*****************************************************************************/

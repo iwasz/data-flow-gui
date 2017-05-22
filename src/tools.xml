@@ -59,24 +59,14 @@
   <SquareSizeConstraint id="squareSizeConstraint" />
 
   <CircularNode scope="prototype" id="mathNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
-<!--    <inputPort add-to="ports" position="0.061,0.74">
-      <RoutablePin scope="prototype" set-as="routablePin" classNumber="1" exclusive="false" />
-    </inputPort>
-    <inputPort add-to="ports" position="0.061,0.26">
-      <RoutablePin scope="prototype" set-as="routablePin" classNumber="2" exclusive="false" />
-    </inputPort>
-    <outputPort add-to="ports" position="0.99,0.5">
-      <RoutablePin scope="prototype" set-as="routablePin" classNumber="3" exclusive="false" />
-    </outputPort>-->
-
     <inputPort add-to="ports" position="0,0.74">
-      <RoutablePin scope="prototype" set-as="routablePin" classNumber="1" exclusive="false" />
+      <RoutablePin scope="prototype" set-as="routablePin" classNumber="1" exclusive="false" direction="LEFT" />
     </inputPort>
     <inputPort add-to="ports" position="0,0.26">
-      <RoutablePin scope="prototype" set-as="routablePin" classNumber="2" exclusive="false" />
+      <RoutablePin scope="prototype" set-as="routablePin" classNumber="2" exclusive="false" direction="LEFT" />
     </inputPort>
     <outputPort add-to="ports" position="1,0.5">
-      <RoutablePin scope="prototype" set-as="routablePin" classNumber="3" exclusive="false" />
+      <RoutablePin scope="prototype" set-as="routablePin" classNumber="3" exclusive="false" direction="RIGHT" />
     </outputPort>
 
     <value set-as="propertyView">circularNodePropertiesView,addNodePropertiesView</value>
@@ -104,11 +94,11 @@
   </mathNode>
 
   <CircularNode scope="prototype" id="copyNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
-    <inputPort add-to="ports" position="0.01,0.5">
-      <RoutablePin scope="prototype" set-as="routablePin" classNumber="4" exclusive="false" />
+    <inputPort add-to="ports" position="0,0.5">
+      <RoutablePin scope="prototype" set-as="routablePin" classNumber="4" exclusive="false" direction="LEFT" />
     </inputPort>
-    <outputPort add-to="ports" position="0.99,0.5">
-      <RoutablePin scope="prototype" set-as="routablePin" classNumber="5" exclusive="false" />
+    <outputPort add-to="ports" position="1,0.5">
+      <RoutablePin scope="prototype" set-as="routablePin" classNumber="5" exclusive="false" direction="RIGHT" />
     </outputPort>
     <Copy scope="prototype" set-as="node"/>
     <value set-as="propertyView">copyNodePropertiesView</value>
@@ -120,17 +110,17 @@
   </CircularNode>
 
   <CircularNode scope="prototype" id="testNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#0096c6c9" visible="false">
-    <inputPort add-to="ports"  position="0.01,0.5">
-      <RoutablePin scope="prototype" set-as="routablePin" classNumber="6" />
+    <inputPort add-to="ports"  position="0,0.5">
+      <RoutablePin scope="prototype" set-as="routablePin" classNumber="6" direction="LEFT" />
     </inputPort>
-    <inputPort add-to="ports" position="0.5,0.01">
-      <RoutablePin scope="prototype" set-as="routablePin" classNumber="7" />
+    <inputPort add-to="ports" position="0.5,0">
+      <RoutablePin scope="prototype" set-as="routablePin" classNumber="7" direction="UP" />
     </inputPort>
-    <outputPort add-to="ports"  position="0.99,0.5">
-      <RoutablePin scope="prototype" set-as="routablePin" classNumber="8" />
+    <outputPort add-to="ports"  position="1,0.5">
+      <RoutablePin scope="prototype" set-as="routablePin" classNumber="8" direction="RIGHT" />
     </outputPort>
-    <outputPort add-to="ports" position="0.5,0.99">
-      <RoutablePin scope="prototype" set-as="routablePin" classNumber="9" />
+    <outputPort add-to="ports" position="0.5,1">
+      <RoutablePin scope="prototype" set-as="routablePin" classNumber="9" direction="DOWN" />
     </outputPort>
     <value set-as="font">22px</value>
     <value set-as="text">test</value>
@@ -140,8 +130,8 @@
   </CircularNode>
 
   <CircularNode scope="prototype" id="consoleNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">
-    <inputPort add-to="ports"  position="0.01,0.5">
-      <RoutablePin scope="prototype" set-as="routablePin" classNumber="10" exclusive="false" />
+    <inputPort add-to="ports"  position="0,0.5">
+      <RoutablePin scope="prototype" set-as="routablePin" classNumber="10" exclusive="false" direction="LEFT" />
     </inputPort>
     <ConsoleNode scope="prototype" set-as="node"/>
     <value set-as="propertyView">consoleNodePropertiesView</value>
@@ -150,8 +140,8 @@
   </CircularNode>
 
   <Button scope="prototype" id="buttonNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" fontColor="#ecececff" visible="false">
-    <outputPort add-to="ports" position="0.99,0.5">
-      <RoutablePin scope="prototype" set-as="routablePin" classNumber="11" />
+    <outputPort add-to="ports" position="1,0.5">
+      <RoutablePin scope="prototype" set-as="routablePin" classNumber="11" direction="RIGHT" />
     </outputPort>
     <Copy scope="prototype" set-as="node"/>
     <value set-as="text">Button</value>
@@ -160,8 +150,8 @@
   </Button>
 
   <CircularNode scope="prototype" id="constNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">
-    <outputPort add-to="ports" position="0.99,0.5">
-      <RoutablePin scope="prototype" set-as="routablePin" classNumber="12" />
+    <outputPort add-to="ports" position="1,0.5">
+      <RoutablePin scope="prototype" set-as="routablePin" classNumber="12" direction="RIGHT" />
     </outputPort>
     <Const scope="prototype" set-as="node"/>
     <value set-as="propertyView">constPropertiesView</value>

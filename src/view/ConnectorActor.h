@@ -21,7 +21,7 @@ public:
         virtual void connect (Port *an, Side s);
         virtual void disconnect ();
 
-        Port *getPort (Side s) __tiliae_no_reflect__ { return (Side::A) ? (a) : (b); }
+        Port *getPort (Side s) __tiliae_no_reflect__ { return (s == Side::A) ? (a) : (b); }
 
 private:
         Port *a = nullptr;

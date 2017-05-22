@@ -143,7 +143,6 @@ static void iw_connector_init (IwConnector *self)
         priv->label = clutter_text_new ();
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->label);
         clutter_text_set_font_name (CLUTTER_TEXT (priv->label), "18px");
-        clutter_text_set_text (CLUTTER_TEXT (priv->label), "A");
         clutter_text_set_editable (CLUTTER_TEXT (priv->label), FALSE);
         clutter_text_set_selectable (CLUTTER_TEXT (priv->label), TRUE);
         clutter_text_set_single_line_mode (CLUTTER_TEXT (priv->label), TRUE);
@@ -153,9 +152,9 @@ static void iw_connector_init (IwConnector *self)
 #if 0
         static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
         clutter_actor_set_background_color (CLUTTER_ACTOR (self), &c);
-        static ClutterColor c2 = { 0xff, 0x00, 0x88, 0x88 };
-        clutter_actor_set_background_color (CLUTTER_ACTOR (self->priv->label), &c2);
 #endif
+        static ClutterColor c2 = { 0x88, 0x88, 0x88, 0x88 };
+        clutter_actor_set_background_color (CLUTTER_ACTOR (self->priv->label), &c2);
 }
 
 /*****************************************************************************/

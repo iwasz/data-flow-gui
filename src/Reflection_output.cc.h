@@ -1359,6 +1359,12 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("getClassNumber", createMethodWrapper (&RoutablePin::getClassNumber)));
 			clazz->addMethod (new Method ("setExclusive", createMethodWrapper (&RoutablePin::setExclusive)));
 			clazz->addMethod (new Method ("isExclusive", createMethodWrapper (&RoutablePin::isExclusive)));
+			clazz->addMethod (new Method ("isRelative", createMethodWrapper (&RoutablePin::isRelative)));
+			clazz->addMethod (new Method ("setRelative", createMethodWrapper (&RoutablePin::setRelative)));
+			clazz->addMethod (new Method ("getInsideOffset", createMethodWrapper (&RoutablePin::getInsideOffset)));
+			clazz->addMethod (new Method ("setInsideOffset", createMethodWrapper (&RoutablePin::setInsideOffset)));
+			clazz->addMethod (new Method ("getDirection", createMethodWrapper (&RoutablePin::getDirection)));
+			clazz->addMethod (new Method ("setDirection", createMethodWrapper (&RoutablePin::setDirection)));
 		}
 	}
 	{
