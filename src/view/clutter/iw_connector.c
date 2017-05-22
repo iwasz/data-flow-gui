@@ -20,6 +20,11 @@ struct _IwConnectorPrivate {
         CPoint *points;
         size_t len;
         ClutterActor *label;
+
+        int textPivotSegmentNumber;
+        float textPivotDistance;
+        float textPivotSegmentAx, textPivotSegmentAy;
+        float textPivotSegmentBx, textPivotSegmentBy;
 };
 
 static gboolean draw_line (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data);
@@ -34,9 +39,7 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
                 0,
         };
 
-        gfloat width, height;
         clutter_actor_get_allocation_box (actor, &allocation);
-        clutter_actor_box_get_size (&allocation, &width, &height);
 
         cogl_path_new ();
         cogl_set_source_color4ub (color->red, color->green, color->blue, color->alpha);
@@ -48,7 +51,7 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
 
         for (int i = 0; i < len; ++i) {
                 CPoint *p = points + i;
-                cogl_path_line_to (p->x, p->y);
+                cogl_path_line_to (p->x - allocation.x1, p->y - allocation.y1);
         }
 
         cogl_path_stroke ();
@@ -61,8 +64,10 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
                 double complex c1 = (p1->x - p2->x) + (p1->y - p2->y) * I;
                 double arg = carg (c1);
 
+#if 0
                 printf ("len = %d, p1 = %f, %f, p2 = %f, %f | c1 = [%f, %f]\n", len, p1->x, p1->y, p2->x, p2->y, creal (c1), cimag (c1));
                 printf ("arg = %f\n", arg);
+#endif
 
                 float arrowArmLength = 20;
                 float arrowArmAngle = M_PI / 15;
@@ -72,9 +77,9 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
                 a2.x = arrowArmLength * cos (arg - arrowArmAngle) + p2->x;
                 a2.y = arrowArmLength * sin (arg - arrowArmAngle) + p2->y;
 
-                cogl_path_line_to (a1.x, a1.y);
-                cogl_path_line_to (a2.x, a2.y);
-                cogl_path_line_to (p2->x, p2->y);
+                cogl_path_line_to (a1.x - allocation.x1, a1.y - allocation.y1);
+                cogl_path_line_to (a2.x - allocation.x1, a2.y - allocation.y1);
+                cogl_path_line_to (p2->x - allocation.x1, p2->y - allocation.y1);
         }
 
         cogl_path_fill ();
@@ -121,7 +126,7 @@ static void iw_connector_class_init (IwConnectorClass *klass)
 static void on_text_changed (ClutterText *self, gpointer user_data)
 {
         IwConnector *line = (IwConnector *)user_data;
-        //        iw_connector_resize_accordingly (line);
+        iw_connector_resize_accordingly (line);
         onTextChangedConnector (iw_actor_get_user_data (IW_ACTOR (line)), clutter_text_get_text (self));
 }
 
@@ -132,10 +137,13 @@ static void iw_connector_init (IwConnector *self)
         IwConnectorPrivate *priv = self->priv = IW_CONNECTOR_GET_PRIVATE (self);
         priv->points = NULL;
         priv->len = 0;
+        priv->textPivotSegmentNumber = 0;
+        priv->textPivotDistance = 0;
 
         priv->label = clutter_text_new ();
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->label);
         clutter_text_set_font_name (CLUTTER_TEXT (priv->label), "18px");
+        clutter_text_set_text (CLUTTER_TEXT (priv->label), "A");
         clutter_text_set_editable (CLUTTER_TEXT (priv->label), FALSE);
         clutter_text_set_selectable (CLUTTER_TEXT (priv->label), TRUE);
         clutter_text_set_single_line_mode (CLUTTER_TEXT (priv->label), TRUE);
@@ -145,48 +153,56 @@ static void iw_connector_init (IwConnector *self)
 #if 0
         static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
         clutter_actor_set_background_color (CLUTTER_ACTOR (self), &c);
-        clutter_actor_set_background_color (CLUTTER_ACTOR (self->priv->label), &c);
+        static ClutterColor c2 = { 0xff, 0x00, 0x88, 0x88 };
+        clutter_actor_set_background_color (CLUTTER_ACTOR (self->priv->label), &c2);
 #endif
 }
 
 /*****************************************************************************/
 
-#if 0
+#if 1
 static void iw_connector_resize_accordingly (IwConnector *self)
 {
         gfloat strokeWidth = iw_actor_get_stroke_width (IW_ACTOR (self));
         float lw = 0; // strokeWidth;
-        float ax = self->priv->ax;
-        float ay = self->priv->ay;
-        float bx = self->priv->bx;
-        float by = self->priv->by;
-        float px = fmin (ax, bx);
-        float py = fmin (ay, by);
-        clutter_actor_set_position (CLUTTER_ACTOR (self), px - lw, py - lw);
+        float ax = self->priv->textPivotSegmentAx;
+        float ay = self->priv->textPivotSegmentAy;
+        float bx = self->priv->textPivotSegmentBx;
+        float by = self->priv->textPivotSegmentBy;
 
-        float qx = fmax (ax, bx);
-        float qy = fmax (ay, by);
-        clutter_actor_set_size (CLUTTER_ACTOR (self), qx - px + 2 * lw, qy - py + 2 * lw);
+        ClutterActorBox allocation = {
+                0,
+        };
+        clutter_actor_get_allocation_box (CLUTTER_ACTOR (self), &allocation);
+        float offsetX = ax - allocation.x1;
+        float offsetY = ay - allocation.y1;
 
         if (clutter_text_get_text (CLUTTER_TEXT (self->priv->label)) != NULL && ax != bx) {
-                float angle = atan ((ay - by) / (ax - bx));
+
+                // double complex c1 = (ax - bx) + (ay - by) * I;
+                double complex c1 = (bx - ax) + (by - ay) * I;
+                double angle = carg (c1);
+
+                //                float angle = atan ((ay - by) / (ax - bx));
                 clutter_actor_set_rotation_angle (self->priv->label, CLUTTER_Z_AXIS, angle * 180 / M_PI);
                 // printf ("%f, %f, %f, %f, %f\n", angle, ax, ay, bx, by);
 
                 double c = cos (angle);
                 double s = sin (angle);
 
-                float tw = clutter_actor_get_width (CLUTTER_ACTOR (self->priv->label));
-                float px = c * tw;
-                float py = s * tw;
+                //                float tw = clutter_actor_get_width (CLUTTER_ACTOR (self->priv->label));
+                //                float px = c * tw;
+                //                float py = s * tw;
 
-                float lh = strokeWidth;
-                px += s * lh;
-                py -= c * lh;
+                //                float lh = strokeWidth;
+                //                px += s * lh;
+                //                py -= c * lh;
 
-                float w = clutter_actor_get_width (CLUTTER_ACTOR (self)) - px;
-                float h = clutter_actor_get_height (CLUTTER_ACTOR (self)) - py;
-                clutter_actor_set_position (CLUTTER_ACTOR (self->priv->label), w / 2, h / 2);
+                //                float w = clutter_actor_get_width (CLUTTER_ACTOR (self)) - px;
+                //                float h = clutter_actor_get_height (CLUTTER_ACTOR (self)) - py;
+
+                clutter_actor_set_position (CLUTTER_ACTOR (self->priv->label), self->priv->textPivotDistance * c + offsetX,
+                                            self->priv->textPivotDistance * s + offsetY);
         }
         else {
                 float tw = clutter_actor_get_width (CLUTTER_ACTOR (self->priv->label));
@@ -196,6 +212,81 @@ static void iw_connector_resize_accordingly (IwConnector *self)
         clutter_text_set_editable (CLUTTER_TEXT (self->priv->label), TRUE);
 }
 #endif
+
+/*****************************************************************************/
+
+void iw_connector_set_points (IwConnector *self, CPoint points[], size_t len)
+{
+        g_return_if_fail (IW_IS_CONNECTOR (self));
+
+        float minX = INFINITY, minY = INFINITY, maxX = -INFINITY, maxY = -INFINITY;
+        float halfLength = 0;
+
+        // Calculate length and bounding box
+        for (int i = 0; i < len; ++i) {
+                double px = points[i].x;
+                double py = points[i].y;
+
+                if (px > maxX) {
+                        maxX = px;
+                }
+
+                if (px < minX) {
+                        minX = px;
+                }
+
+                if (py > maxY) {
+                        maxY = py;
+                }
+
+                if (py < minY) {
+                        minY = py;
+                }
+
+                if (i > 0) {
+                        halfLength += sqrt (pow (fabs (px - points[i - 1].x), 2) + pow (fabs (py - points[i - 1].y), 2));
+                }
+        }
+
+        clutter_actor_set_position (CLUTTER_ACTOR (self), minX, minY);
+        clutter_actor_set_size (CLUTTER_ACTOR (self), maxX - minX, maxY - minY);
+
+        halfLength /= 2.0;
+
+        // Calculate which segment has middlePoint (point which is equally far from both ends).
+        float length = 0;
+
+        for (int i = 0; i < len; ++i) {
+                double px = points[i].x;
+                double py = points[i].y;
+
+                if (i > 0) {
+                        float actualLength = sqrt (pow (fabs (px - points[i - 1].x), 2) + pow (fabs (py - points[i - 1].y), 2));
+                        length += actualLength;
+
+                        if (length >= halfLength) {
+                                // Store information regarding the segment which has text-pivot point.
+                                self->priv->textPivotSegmentNumber = i - 1;
+                                self->priv->textPivotDistance = actualLength - length + halfLength;
+                                self->priv->textPivotSegmentAx = points[i - 1].x;
+                                self->priv->textPivotSegmentAy = points[i - 1].y;
+                                self->priv->textPivotSegmentBx = px;
+                                self->priv->textPivotSegmentBy = py;
+                                break;
+                        }
+                }
+        }
+
+        //                printf ("%f, %f, %f, %f, segNo : %d\n", self->priv->textPivotSegmentAx, self->priv->textPivotSegmentAy,
+        //                self->priv->textPivotSegmentBx,
+        //                        self->priv->textPivotSegmentBy, self->priv->textPivotSegmentNumber);
+        //                printf ("remaining : %f\n", self->priv->textPivotDistance);
+
+        self->priv->points = points;
+        self->priv->len = len;
+        iw_connector_resize_accordingly (self);
+        clutter_actor_queue_redraw (CLUTTER_ACTOR (self));
+}
 
 /*****************************************************************************/
 
@@ -263,14 +354,4 @@ void iw_connector_set_editable (IwConnector *self, gboolean b)
 {
         g_return_if_fail (IW_IS_CONNECTOR (self));
         clutter_text_set_editable (CLUTTER_TEXT (self->priv->label), b);
-}
-
-/*****************************************************************************/
-
-void iw_connector_set_points (IwConnector *self, CPoint points[], size_t len)
-{
-        g_return_if_fail (IW_IS_CONNECTOR (self));
-        self->priv->points = points;
-        self->priv->len = len;
-        clutter_actor_queue_redraw (CLUTTER_ACTOR (self));
 }
