@@ -1141,6 +1141,7 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addBaseClassName ("AbstractRoutable");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <RoutableRoot, void>::Level1Wrapper::newConstructorPointer ()));
 			clazz->addMethod (new Method ("processTransaction", createMethodWrapper (&RoutableRoot::processTransaction)));
+			clazz->addMethod (new Method ("outputInstanceToSVG", createMethodWrapper (&RoutableRoot::outputInstanceToSVG)));
 		}
 	}
 	{
@@ -1571,6 +1572,17 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("onReroute", createMethodWrapper (&Connector::onReroute)));
 			clazz->addMethod (new Method ("onTextChanged", createMethodWrapper (&Connector::onTextChanged)));
 			clazz->addMethod (new Method ("visit", createMethodWrapper (&Connector::visit)));
+		}
+	}
+	{
+		Class *clazz = new Class ("Ellipse", typeid (Ellipse &), new Reflection::PtrDeleter <Ellipse>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("AbstractActor");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <Ellipse, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("visit", createMethodWrapper (&Ellipse::visit)));
 		}
 	}
 	{

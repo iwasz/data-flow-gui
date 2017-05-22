@@ -6,23 +6,17 @@
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
 
-#ifndef NODEACTOR_H
-#define NODEACTOR_H
+#ifndef DATA_FLOW_ELLIPSE_H
+#define DATA_FLOW_ELLIPSE_H
 
 #include "AbstractActor.h"
-#include "Port.h"
+#include <ReflectionParserAnnotation.h>
 
-/**
- * Actor with ports.
- */
-class __tiliae_reflect__ NodeActor : public AbstractActor {
+class __tiliae_reflect__ Ellipse : public AbstractActor {
 public:
-        virtual void init ();
-
-        virtual PortVector &getPorts () { return ports; }
-
-private:
-        PortVector ports;
+        Ellipse ();
+        virtual ~Ellipse () {}
+        virtual void visit (IDataFileSave *d) { /*d->onCircle (this);*/}
 };
 
-#endif // NODEACTOR_H
+#endif // CIRCLE_H

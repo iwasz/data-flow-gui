@@ -11,7 +11,6 @@
 
 #include "AbstractActor.h"
 #include "AbstractArcView.h"
-#include "AbstractConnector.h"
 #include "ConnectorActor.h"
 #include "clutter/iw_connector.h"
 

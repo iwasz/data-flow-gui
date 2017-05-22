@@ -24,9 +24,6 @@ struct __tiliae_reflect__ INodeView : public virtual Core::Object {
 
         virtual std::shared_ptr<flow::INode> getNode () = 0;
         virtual void setNode (std::shared_ptr<flow::INode> n) = 0;
-
-//        virtual PortVector &getPorts () = 0;
-//        virtual primitives::Point getPortPosition (int i) const = 0;
 };
 
 #endif // INODEVIEW_H

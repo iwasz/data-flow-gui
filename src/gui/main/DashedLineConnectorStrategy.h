@@ -12,7 +12,6 @@
 #include "IDrawStrategy.h"
 #include <ReflectionParserAnnotation.h>
 #include <iostream>
-#include <view/LineConnector.h>
 #include <view/Line.h>
 
 class __tiliae_reflect__ DashedLineConnectorStrategy : public IDrawStrategy {

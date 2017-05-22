@@ -14,7 +14,6 @@
 #include "gui/main/RectangularSelectorStrategy.h"
 #include "gui/properties/PropertiesController.h"
 #include "view/INodeView.h"
-#include "view/LineConnector.h"
 #include "view/Rectangle.h"
 #include "view/RectangularSelector.h"
 #include "view/ScaleLayer.h"
@@ -377,7 +376,8 @@ void MainController::onProgramRun ()
         updateButtons ();
 }
 
-void MainController::onProgramStep () {
+void MainController::onProgramStep ()
+{
 
         impl->program->step ();
         // impl->routableRoot->outputInstanceToSVG ("debug.svg");

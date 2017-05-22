@@ -68,7 +68,7 @@ static void iw_circular_node_finalize (GObject *gobject)
 }
 
 /*****************************************************************************/
-
+#if 0
 static void iw_circular_node_allocate (ClutterActor *actor, const ClutterActorBox *box, ClutterAllocationFlags flags)
 {
 #if 0
@@ -119,7 +119,7 @@ static void iw_circular_node_allocate (ClutterActor *actor, const ClutterActorBo
         clutter_actor_allocate (priv->mainCircle, &childBox, flags);
         //        circularNodeOnAllocate (priv->userData, newBox.x1, newBox.y1, newBox.x2, newBox.y2);
 }
-
+#endif
 /*****************************************************************************/
 
 static void iw_circular_node_pick (ClutterActor *actor, const ClutterColor *pick_color)
@@ -133,8 +133,6 @@ static void iw_circular_node_pick (ClutterActor *actor, const ClutterColor *pick
                 clutter_actor_paint (iter);
         }
 
-        //        IwCircularNodePrivate *priv = IW_CIRCULAR_NODE_GET_PRIVATE (actor);
-        //        clutter_actor_paint (priv->mainCircle);
         return;
 
 #if 0
@@ -219,32 +217,6 @@ static void iw_circular_node_init (IwCircularNode *self)
         // g_signal_connect (CLUTTER_ACTOR (self), "notify::width", G_CALLBACK (on_dimension_changed), NULL);
         // g_signal_connect (CLUTTER_ACTOR (self), "notify::height", G_CALLBACK (on_dimension_changed), NULL);
 }
-
-/*****************************************************************************/
-
-// void on_dimension_changed (GObject *gobject, GParamSpec *pspec, gpointer user_data)
-//{
-//        //        gint x_value = 0;
-
-//        //        /* Round the X coordinate to the nearest pixel */
-//        //        x_value = floorf (clutter_actor_get_x (CLUTTER_ACTOR (gobject))) + 0.5;
-
-//        //        g_print ("The new X coordinate is '%d' pixels\n", x_value);
-
-//        IwCircularNodePrivate *priv = IW_CIRCULAR_NODE_GET_PRIVATE (gobject);
-
-//        float w = clutter_actor_get_width (CLUTTER_ACTOR (gobject));
-//        float h = clutter_actor_get_height (CLUTTER_ACTOR (gobject));
-//        float d = fmin (w, h);
-//        float r = d / 2;
-
-//        for (int i = 0; i < priv->portsNo; ++i) {
-//                float portR = clutter_actor_get_width (priv->ports[i].actor) / 2.0;
-//                clutter_actor_set_position (priv->ports[i].actor, r * cos (priv->ports[i].angle) + r - portR, r * sin (priv->ports[i].angle) + r - portR);
-//        }
-
-//        clutter_actor_set_size (priv->mainCircle, d, d);
-//}
 
 /*****************************************************************************/
 

@@ -48,6 +48,10 @@
 
   <Line scope="prototype" id="line" parent="@scale" strokeColor="#0096c6c9" visible="false" strokeWidth="1"/>
 
+  <Ellipse scope="prototype" id="ellipse" parent="@scale" strokeWidth="1" fill="false" fillColor="#0096c6c9" visible="false">
+    <ObstacleRoutable scope="prototype" set-as="routable"/>
+  </Ellipse>
+
 <!--  <InputPort id="inputPort" scope="prototype" angle="2.6415" color="#d1d1d1ff" size="20" facing="W" />-->
   <InputPort id="inputPort" scope="prototype" color="#d1d1d1ff" size="20" />
   <OutputPort id="outputPort" scope="prototype" color="#8d8d8dff" size="20" />
@@ -216,6 +220,9 @@
       </ToolI>
       <ToolI add-to="tools" name="circle" drawStrategy="@dashedCircle">
         <ContainerFactoryStrategy set-as="factoryStrategy" beanName="circle" container="@#container"/>
+      </ToolI>
+      <ToolI add-to="tools" name="ellipse" drawStrategy="@dashedRect">
+        <ContainerFactoryStrategy set-as="factoryStrategy" beanName="ellipse" container="@#container"/>
       </ToolI>
       <ToolI add-to="tools" name="rect" drawStrategy="@dashedRect">
         <ContainerFactoryStrategy set-as="factoryStrategy" beanName="rect" container="@#container"/>

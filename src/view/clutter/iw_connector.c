@@ -8,6 +8,7 @@
 
 #include "iw_connector.h"
 #include "drawing_stuff.h"
+#include <complex.h>
 #include <math.h>
 #include <memory.h>
 #include <stdbool.h>
@@ -40,159 +41,7 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
         cogl_path_new ();
         cogl_set_source_color4ub (color->red, color->green, color->blue, color->alpha);
 
-        float lw = iw_actor_get_stroke_width (IW_ACTOR (actor));
-
-#if 0
-        cogl_path_move_to (ax, ay);
-
-        //        cogl_path_arc (getX (actor, 0), getY (actor, 0), 10, 10, 0, 90);
-
-        cogl_path_rel_line_to (getX (actor, 0), getY (actor, 0));
-        cogl_path_rel_line_to (getX (actor, 1), getY (actor, 1));
-        cogl_path_rel_line_to (getX (actor, 2), getY (actor, 2));
-        cogl_path_move_to (bx, by);
-        cogl_path_rel_line_to (getX (actor, 4), getY (actor, 4));
-        cogl_path_rel_line_to (getX (actor, 3), getY (actor, 3));
-        cogl_path_stroke ();
-#endif
-
-#if 0
-        primitives::Point a = { ax, ay };
-        primitives::Point b = { bx, by };
-        Line s0 = rayNew (ax, ay, aDir);
-        Line s1;
-        Line s2;
-        Line s3;
-        Line s4;
-        Line s5 = rayNew (bx, by, bDir);
-
-        // printf ("%d, %d\n", aDir, bDir);
-
-        // Todo decrease number of elements
-        primitives::Point pointsFromA[10];
-        primitives::Point pointsFromB[10];
-
-        int pFACnt = 0;
-        int pFBCnt = 0;
-
-        // Step 1. Draw 2 rays from both points (a and b) in correct directions. Check if they corss or connec
-        primitives::Point p, t1, t2;
-
-        // Sum of angles 90 (number of angles 1)
-        if (raysCross (&s0, &s5, &p) || raysConnect (&s0, &s5, &p)) {
-                // Special case : right angle.
-                addPoint (pointsFromA, p.x, p.y, &pFACnt);
-                addPoint (pointsFromB, p.x, p.y, &pFBCnt);
-        }
-
-        // Sum of angles 0 (number of angles 0, 2, 4)
-        // Step 2.0 Compute segments s1 and s4 if s0 and s5 did not cross.
-        else {
-                // Ray s1
-                float d = distance (&a, &b, s0.direction);
-                p = advance (&a, s0.direction, MIN_SEGMENT_LENGTH);
-                float d2 = distance (&p, &b, s0.direction);
-
-                // Compare distance between head and tail before and after the advance.
-                if (d2 < d) { // If distance decreased
-                        // Make right turn in half the way between a and b.
-                        p = advance (&a, s0.direction, d / 2.0);
-                }
-                // ELSE (distance increased or stayed the same) Make right turn in point p (MIN_SEGMENT_LENGTH distance from a).
-
-                addPoint (pointsFromA, p.x, p.y, &pFACnt);
-                s1 = rayPerpendicular (&s0 /*Perpendicular to*/, &b /*Towards point*/, &p /*Starting at point*/);
-
-                // Ray s4
-                d = distance (&b, &a, s5.direction);
-                p = advance (&b, s5.direction, MIN_SEGMENT_LENGTH);
-                d2 = distance (&p, &a, s5.direction);
-
-                // Compare distance between head and tail before and after the advance.
-                if (d2 < d) { // If distance decreased
-                        // Make right turn in half the way between a and b.
-                        p = advance (&b, s5.direction, d / 2.0);
-                }
-                // ELSE (distance increased or stayed the same) Make right turn in point p (MIN_SEGMENT_LENGTH distance from a).
-
-                addPoint (pointsFromB, p.x, p.y, &pFBCnt);
-                s4 = rayPerpendicular (&s5 /*Perpendicular to*/, &a /*Towards point*/, &p /*Starting at point*/);
-
-                // Step 2.1
-                if (raysConnect (&s1, &s4, &p)) {
-                        addPoint (pointsFromA, p.x, p.y, &pFACnt);
-                        addPoint (pointsFromB, p.x, p.y, &pFBCnt);
-                }
-                if (raysCross (&s1, &s5, &p)) {
-                        // Special case 1 : sum of angles = 180
-                        addPoint (pointsFromA, p.x, p.y, &pFACnt);
-                        addPoint (pointsFromA, b.x, b.y, &pFACnt);
-                }
-                else if (raysCross (&s4, &s0, &p)) {
-                        // Special case 2 : sum of angles = 180
-                        addPoint (pointsFromB, p.x, p.y, &pFBCnt);
-                        addPoint (pointsFromB, a.x, a.y, &pFBCnt);
-                }
-                else {
-                        a.x = s1.ax;
-                        a.y = s1.ay;
-                        b.x = s4.ax;
-                        b.y = s4.ay;
-
-                        // Ray s2
-                        float d = distance (&a, &b, s1.direction);
-                        p = advance (&a, s1.direction, MIN_SEGMENT_LENGTH);
-
-                        // Compare distance between head and tail before and after the advance.
-                        if (distance (&p, &b, s1.direction) < d) { // If distance decreased
-                                // Make right turn in half the way between a and b.
-                                p = advance (&a, s1.direction, d / 2.0);
-                        }
-                        // ELSE (distance increased or stayed the same) Make right turn in point p (MIN_SEGMENT_LENGTH distance from a).
-
-                        addPoint (pointsFromA, p.x, p.y, &pFACnt);
-                        s2 = rayPerpendicular (&s1 /*Perpendicular to*/, &b /*Towards point*/, &p /*Starting at point*/);
-
-                        // Ray s3
-                        d = distance (&b, &a, s4.direction);
-                        p = advance (&b, s4.direction, MIN_SEGMENT_LENGTH);
-
-                        // Compare distance between head and tail before and after the advance.
-                        if (distance (&p, &a, s4.direction) < d) { // If distance decreased
-                                // Make right turn in half the way between a and b.
-                                p = advance (&b, s4.direction, d / 2.0);
-                        }
-                        // ELSE (distance increased or stayed the same) Make right turn in point p (MIN_SEGMENT_LENGTH distance from a).
-
-                        addPoint (pointsFromB, p.x, p.y, &pFBCnt);
-                        s3 = rayPerpendicular (&s4 /*Perpendicular to*/, &a /*Towards point*/, &p /*Starting at point*/);
-
-                        // Step 2.1
-                        if (raysCross (&s2, &s3, &p) || raysConnect (&s2, &s3, &p)) {
-                                addPoint (pointsFromA, p.x, p.y, &pFACnt);
-                                addPoint (pointsFromB, p.x, p.y, &pFBCnt);
-                        }
-                        else {
-                                printf ("Warning! Rays mismatch!");
-                        }
-                }
-        }
-        /// Step x. Draw.
-
-        cogl_path_move_to (ax, ay);
-
-        for (int i = 0; i < pFACnt; ++i) {
-                cogl_path_line_to (pointsFromA[i].x, pointsFromA[i].y);
-        }
-
-        cogl_path_move_to (bx, by);
-
-        for (int i = 0; i < pFBCnt; ++i) {
-                cogl_path_line_to (pointsFromB[i].x, pointsFromB[i].y);
-        }
-
-        cogl_path_stroke ();
-#endif
+        // float lw = iw_actor_get_stroke_width (IW_ACTOR (actor));
 
         CPoint *points = IW_CONNECTOR (actor)->priv->points;
         size_t len = IW_CONNECTOR (actor)->priv->len;
@@ -204,6 +53,31 @@ static void iw_connector_paint_priv (ClutterActor *actor, const ClutterColor *co
 
         cogl_path_stroke ();
 
+        // Arrow
+        if (len > 1) {
+                CPoint *p1 = &points[len - 2];
+                CPoint *p2 = &points[len - 1];
+
+                double complex c1 = (p1->x - p2->x) + (p1->y - p2->y) * I;
+                double arg = carg (c1);
+
+                printf ("len = %d, p1 = %f, %f, p2 = %f, %f | c1 = [%f, %f]\n", len, p1->x, p1->y, p2->x, p2->y, creal (c1), cimag (c1));
+                printf ("arg = %f\n", arg);
+
+                float arrowArmLength = 20;
+                float arrowArmAngle = M_PI / 15;
+                CPoint a1, a2;
+                a1.x = arrowArmLength * cos (arg + arrowArmAngle) + p2->x;
+                a1.y = arrowArmLength * sin (arg + arrowArmAngle) + p2->y;
+                a2.x = arrowArmLength * cos (arg - arrowArmAngle) + p2->x;
+                a2.y = arrowArmLength * sin (arg - arrowArmAngle) + p2->y;
+
+                cogl_path_line_to (a1.x, a1.y);
+                cogl_path_line_to (a2.x, a2.y);
+                cogl_path_line_to (p2->x, p2->y);
+        }
+
+        cogl_path_fill ();
         ClutterActor *iter = clutter_actor_get_first_child (actor);
 
         if (iter) {

@@ -9,7 +9,6 @@
 #ifndef VISIBLE_PORT_H
 #define VISIBLE_PORT_H
 
-#include "Anchor.h"
 #include "primitives/Color.h"
 #include "primitives/Direction.h"
 #include "primitives/Geometry.h"
