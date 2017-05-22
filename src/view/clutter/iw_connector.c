@@ -179,13 +179,10 @@ static void iw_connector_resize_accordingly (IwConnector *self)
 
         if (clutter_text_get_text (CLUTTER_TEXT (self->priv->label)) != NULL && ax != bx) {
 
-                // double complex c1 = (ax - bx) + (ay - by) * I;
                 double complex c1 = (bx - ax) + (by - ay) * I;
                 double angle = carg (c1);
 
-                //                float angle = atan ((ay - by) / (ax - bx));
                 clutter_actor_set_rotation_angle (self->priv->label, CLUTTER_Z_AXIS, angle * 180 / M_PI);
-                // printf ("%f, %f, %f, %f, %f\n", angle, ax, ay, bx, by);
 
                 double c = cos (angle);
                 double s = sin (angle);
