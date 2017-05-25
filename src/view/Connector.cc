@@ -94,10 +94,10 @@ void Connector::onTextChanged (std::string const &text)
         try {
                 if (text.empty ()) {
                         // Clear the arc.
-                        arc->get ();
+                        arc->clear ();
                 }
                 else {
-                        arc->put (boost::lexical_cast<int> (text));
+                        arc->init (boost::lexical_cast<int> (text));
                 }
         }
         catch (boost::bad_lexical_cast const &e) {

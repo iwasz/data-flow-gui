@@ -239,7 +239,8 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 		else {
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <flow::Arc, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <flow::Arc, int>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("clear", createMethodWrapper (&flow::Arc::clear)));
+			clazz->addMethod (new Method ("reset", createMethodWrapper (&flow::Arc::reset)));
 			clazz->addMethod (new Method ("isFull", createMethodWrapper (&flow::Arc::isFull)));
 			clazz->addMethod (new Method ("get", createMethodWrapper (&flow::Arc::get)));
 			clazz->addMethod (new Method ("put", createMethodWrapper (&flow::Arc::put)));
