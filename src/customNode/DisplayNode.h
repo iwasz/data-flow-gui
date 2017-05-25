@@ -5,24 +5,20 @@
  *  License : see COPYING file for details.                                 *
  *  ~~~~~~~~~                                                               *
  ****************************************************************************/
-#ifndef ABSTRACTARCVIEW_H
-#define ABSTRACTARCVIEW_H
 
-#include "IArcView.h"
-#include <core/IFlowObserver.h>
+#ifndef DISPLAY_NODE_H
+#define DISPLAY_NODE_H
 
-class __tiliae_reflect__ AbstractArcView : public IArcView {
+#include <core/CommonSinks.h>
+
+class __tiliae_reflect__ DisplayNode : public flow::Sink {
 public:
-        virtual ~AbstractArcView () {}
-        std::shared_ptr<flow::Arc> getArc () { return arc; }
-        void setArc (std::shared_ptr<flow::Arc> a)
-        {
-                arc = a;
-                arc->setObserver (dynamic_cast<flow::IFlowObserver *> (this));
-        }
+        virtual ~DisplayNode () {}
+        virtual void process ();
+        virtual void setObserver (flow::IFlowObserver *o) { this->observer = o; }
 
 private:
-        std::shared_ptr<flow::Arc> arc;
+        flow::IFlowObserver *observer = nullptr;
 };
 
-#endif // ABSTRACTARCVIEW_H
+#endif // CONSOLENODE_H

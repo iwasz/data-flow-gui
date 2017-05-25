@@ -65,7 +65,7 @@ void iw_connector_set_points (IwConnector *self, CPoint points[], size_t len);
 //Direction iw_connector_get_b_facing (IwConnector *self);
 
 const gchar *iw_connector_get_text (IwConnector *self);
-void iw_connector_set_text (IwConnector *self, const gchar *s);
+void iw_connector_set_text (IwConnector *self, const gchar *s, gboolean emit);
 
 const gchar *iw_connector_get_font (IwConnector *self);
 void iw_connector_set_font (IwConnector *self, const gchar *s);

@@ -26,7 +26,7 @@ std::string Connector::getText () const { return iw_connector_get_text (IW_CONNE
 
 /*****************************************************************************/
 
-void Connector::setText (std::string const t) { iw_connector_set_text (IW_CONNECTOR (self), t.c_str ()); }
+void Connector::setText (std::string const t) { iw_connector_set_text (IW_CONNECTOR (self), t.c_str (), true); }
 
 /*****************************************************************************/
 
@@ -128,4 +128,17 @@ extern "C" void onTextChangedConnector (void *connector, const char *text)
 {
         Connector *cn = static_cast<Connector *> (connector);
         cn->onTextChanged (std::string (text));
+}
+
+/*****************************************************************************/
+
+void Connector::onValueChange (Core::Variant const &v)
+{
+        if (v.getType () == Core::Variant::INT) {
+                iw_connector_set_text (IW_CONNECTOR (self), boost::lexical_cast<std::string> (vcast<int> (v)).c_str (), false);
+        }
+        else if (v.isNone ()) {
+                iw_connector_set_text (IW_CONNECTOR (self), "", false);
+        }
+        // else....
 }

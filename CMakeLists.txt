@@ -233,6 +233,8 @@ LIST (APPEND SOURCES
         "src/primitives/PrimitiveOperations.cc"
         "src/customNode/ConsoleNode.h"
         "src/customNode/ConsoleNode.cc"
+        "src/customNode/DisplayNode.h"
+        "src/customNode/DisplayNode.cc"
         "src/config/UserConfig.h"
         "src/config/UserConfig.cc"
         "src/config/DfDimensionRestoreDatabase.cc"

@@ -25,6 +25,8 @@ struct _IwConnectorPrivate {
         float textPivotDistance;
         float textPivotSegmentAx, textPivotSegmentAy;
         float textPivotSegmentBx, textPivotSegmentBy;
+
+        gulong handlerId;
 };
 
 static gboolean draw_line (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data);
@@ -147,7 +149,7 @@ static void iw_connector_init (IwConnector *self)
         clutter_text_set_selectable (CLUTTER_TEXT (priv->label), TRUE);
         clutter_text_set_single_line_mode (CLUTTER_TEXT (priv->label), TRUE);
         clutter_actor_set_reactive (priv->label, TRUE);
-        g_signal_connect (priv->label, "text-changed", G_CALLBACK (on_text_changed), self);
+        priv->handlerId = g_signal_connect (priv->label, "text-changed", G_CALLBACK (on_text_changed), self);
 
 #if 0
         static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
@@ -298,10 +300,19 @@ const gchar *iw_connector_get_text (IwConnector *self)
 
 /*****************************************************************************/
 
-void iw_connector_set_text (IwConnector *self, const gchar *s)
+void iw_connector_set_text (IwConnector *self, const gchar *s, gboolean emit)
 {
         g_return_if_fail (IW_IS_CONNECTOR (self));
+
+        if (!emit) {
+                g_signal_handler_block (self->priv->label, self->priv->handlerId);
+        }
+
         clutter_text_set_text (CLUTTER_TEXT (self->priv->label), s);
+
+        if (!emit) {
+                g_signal_handler_unblock (self->priv->label, self->priv->handlerId);
+        }
 }
 
 /*****************************************************************************/

@@ -13,8 +13,9 @@
 #include "AbstractArcView.h"
 #include "ConnectorActor.h"
 #include "clutter/iw_connector.h"
+#include <core/IFlowObserver.h>
 
-class __tiliae_reflect__ Connector : public ConnectorActor, public AbstractArcView {
+class __tiliae_reflect__ Connector : public ConnectorActor, public AbstractArcView, public flow::IFlowObserver {
 public:
         Connector ();
         virtual ~Connector () {}
@@ -38,8 +39,14 @@ public:
 
         /*---------------------------------------------------------------------------*/
 
+        /// Callback called from the router
         virtual void onReroute (Avoid::ConnRef *);
+        /// Callback fired from clutter stuff.
         virtual void onTextChanged (std::string const &text);
+        /// Callback called when data-flow program gets or puts from an Arc.
+        virtual void onValueChange (Core::Variant const &v);
+
+        /*---------------------------------------------------------------------------*/
 
         virtual void visit (IDataFileSave *d) { d->onConnector (this); }
 
