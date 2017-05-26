@@ -151,12 +151,23 @@ void NativeXmlFormatSave::onLineConnector (IClutterActor *a)
         unsigned int nvaNum = impl->nodesMap.at (pa->getNodeActor ());
         unsigned int nvbNum = impl->nodesMap.at (pb->getNodeActor ());
 
-        // std::cerr << (void *)pa->getNodeView () << "=" << nvaNum << " " << (void *)pb->getNodeView () << "=" << nvbNum << std::endl;
+#if 0
+         std::cerr << (void *)pa->getNodeView () << "=" << nvaNum << " " << (void *)pb->getNodeView () << "=" << nvbNum << std::endl;
+#endif
+
+        AbstractArcView *aav = dynamic_cast<AbstractArcView *> (a);
+        flow::Arc *arc = aav->getArc ().get ();
+        std::string initialValue;
+
+        if (arc) {
+                initialValue = boost::lexical_cast<std::string> (arc->getInitialValue ());
+        }
 
         *impl->file << "<" << a->getId () << " ";
         clutterActorArgumentsStroke (a);
         *impl->file << " objA=\"" << nvaNum << "\" portA=\"" << paNum << "\""
-                    << " objB=\"" << nvbNum << "\" portB=\"" << pbNum << "\" />\n";
+                    << " objB=\"" << nvbNum << "\" portB=\"" << pbNum
+                    << "\" initVal=\"" + initialValue + "\" initFull=\"" + ((arc->getInitialFull ()) ? ("1") : ("0")) + "\" />\n";
 }
 
 /*****************************************************************************/

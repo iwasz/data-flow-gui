@@ -7,6 +7,7 @@
  ****************************************************************************/
 
 #include "NativeXmlFormatLoad.h"
+#include "view/AbstractArcView.h"
 #include "view/ConnectorActor.h"
 #include "view/IClutterActor.h"
 #include "view/NodeActor.h"
@@ -169,8 +170,27 @@ void NativeXmlFormatLoad::Impl::onOpenElement (mxml_node_t *node)
 
                         ConnectorActor *lc = dynamic_cast<ConnectorActor *> (actor);
                         sceneApi->connect (lc, pa, pb);
+
+                        /*---------------------------------------------------------------------------*/
+
+                        AbstractArcView *aav = dynamic_cast<AbstractArcView *> (lc);
+                        flow::Arc *arc = aav->getArc ().get ();
+
+                        if (arc) {
+                                const char *initialValueStr = mxmlElementGetAttr (node, "initVal");
+                                const char *initialFullStr = mxmlElementGetAttr (node, "initFull");
+
+                                if (initialValueStr && initialFullStr) {
+                                        int initialValue = boost::lexical_cast<int> (initialValueStr);
+                                        bool initialFull = boost::lexical_cast<bool> (initialFullStr);
+
+                                        if (initialFull) {
+                                                arc->init (initialValue);
+                                        }
+                                }
+                        }
                 }
-                else if (name == "objB" || name == "portA" || name == "portB") {
+                else if (name == "objB" || name == "portA" || name == "portB" || name == "initVal" || name == "initFull") {
                         // skip
                 }
                 else {
