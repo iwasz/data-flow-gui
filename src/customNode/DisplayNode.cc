@@ -11,4 +11,4 @@
 #include <boost/lexical_cast.hpp>
 #include <string>
 
-void DisplayNode::process () { observer->onValueChange (Core::Variant (input->get ())); }
+void DisplayNode::process() { observer->onValueChange (Core::Variant (input->get ())); }

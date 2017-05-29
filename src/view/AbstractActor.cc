@@ -380,14 +380,13 @@ gboolean on_actor_motion (ClutterActor *stage, ClutterEvent *ev, gpointer data)
 
         if (clutter_event_get_state (ev) & CLUTTER_BUTTON1_MASK) {
                 event.stageDelta = event.positionStageCoords - that->stagePrev;
-                event.parentDelta.x = event.positionParentCoords.x - that->parentPrev.x;
-                event.parentDelta.y = event.positionParentCoords.y - that->parentPrev.y;
+                event.parentDelta = event.positionParentCoords - that->parentPrev;
                 that->stagePrev = event.positionStageCoords;
                 that->parentPrev = event.positionParentCoords;
         }
         else {
                 event.stageDelta = primitives::Dimension ();
-                event.parentDelta = primitives::Point ();
+                event.parentDelta = primitives::Dimension ();
         }
 
 #if 0

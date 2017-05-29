@@ -212,10 +212,10 @@ void MainController::Impl::configureMachine ()
         machine.state (MOVE)
                 ->transition (MOVE)->when (eq ("stage.motion"))->then ([this] (const char *, void *arg) {
                         Event *event = static_cast <Event *> (arg);
-                        rectangularSelector->move (event->stageDelta);
+                        rectangularSelector->move (event->parentDelta);
 
                         for (IClutterActor *actor : *selectedActors) {
-                                actor->move (event->stageDelta);
+                                actor->move (event->parentDelta);
                         }
 
                         return true;

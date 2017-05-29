@@ -32,7 +32,7 @@ struct Event {
         double scrollX = 0;
         double scrollY = 0;
         primitives::Dimension stageDelta;
-        primitives::Point parentDelta;
+        primitives::Dimension parentDelta;
 };
 
 #endif // EVENT_H
