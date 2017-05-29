@@ -83,11 +83,13 @@ void SceneAPI::connect (ConnectorActor *lc, Port *pa, Port *pb)
                 AbstractNodeView *anv = dynamic_cast<AbstractNodeView *> (pa->getNodeActor ());
                 flow::INode *startNode = anv->getNode ().get ();
 
-                if (pa->isInput ()) {
-                        startNode->setInput (pa->getProgramNumber (), arc);
-                }
-                else {
-                        startNode->addOutput (pa->getProgramNumber (), arc);
+                if (startNode) {
+                        if (pa->isInput ()) {
+                                startNode->setInput (pa->getProgramNumber (), arc);
+                        }
+                        else {
+                                startNode->addOutput (pa->getProgramNumber (), arc);
+                        }
                 }
         }
 
@@ -95,11 +97,13 @@ void SceneAPI::connect (ConnectorActor *lc, Port *pa, Port *pb)
                 AbstractNodeView *anv = dynamic_cast<AbstractNodeView *> (pb->getNodeActor ());
                 flow::INode *endNode = anv->getNode ().get ();
 
-                if (pb->isInput ()) {
-                        endNode->setInput (pb->getProgramNumber (), arc);
-                }
-                else {
-                        endNode->addOutput (pb->getProgramNumber (), arc);
+                if (endNode) {
+                        if (pb->isInput ()) {
+                                endNode->setInput (pb->getProgramNumber (), arc);
+                        }
+                        else {
+                                endNode->addOutput (pb->getProgramNumber (), arc);
+                        }
                 }
         }
 }
