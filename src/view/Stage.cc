@@ -23,8 +23,9 @@ Stage::Stage () : scaleLayer (nullptr)
 {
         clutterWidget = gtk_clutter_embed_new ();
         self = gtk_clutter_embed_get_stage (GTK_CLUTTER_EMBED (clutterWidget));
-        gtk_widget_set_can_focus (clutterWidget, TRUE);
-        gtk_widget_set_focus_on_click (clutterWidget, TRUE);
+        // Why gtk_widget_set_focus_on_click does not work!?
+        // gtk_widget_set_can_focus (clutterWidget, TRUE);
+        // gtk_widget_set_focus_on_click (clutterWidget, TRUE);
         clutter_stage_set_minimum_size (CLUTTER_STAGE (self), 100, 100);
 
         g_signal_connect (self, "allocation-changed", G_CALLBACK (on_stage_resize), this);

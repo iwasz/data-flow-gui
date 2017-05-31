@@ -344,12 +344,19 @@ void processEvent (ClutterActor *stage, ClutterEvent *ev, Event *event)
         else {
                 event->positionParentCoords = event->positionStageCoords;
         }
+
+#if 0
+        std::cerr << event->positionParentCoords << std::endl;
+#endif
 }
 
 /*****************************************************************************/
 
 gboolean on_actor_button_press (ClutterActor *actor, ClutterEvent *ev, gpointer data)
 {
+#if 0
+        std::cerr << "on_actor_button_press" << std::endl;
+#endif
         static Event event;
         processEvent (actor, ev, &event);
         event.button = clutter_event_get_button (ev);
@@ -410,6 +417,9 @@ gboolean on_actor_motion (ClutterActor *stage, ClutterEvent *ev, gpointer data)
 
 gboolean on_actor_enter (ClutterActor *stage, ClutterEvent *ev, gpointer data)
 {
+#if 0
+        std::cerr << "on_actor_enter" << std::endl;
+#endif
         static Event event;
         processEvent (stage, ev, &event);
         AbstractActor *that = static_cast<AbstractActor *> (data);
@@ -420,6 +430,9 @@ gboolean on_actor_enter (ClutterActor *stage, ClutterEvent *ev, gpointer data)
 
 gboolean on_actor_leave (ClutterActor *stage, ClutterEvent *ev, gpointer data)
 {
+#if 0
+        std::cerr << "on_actor_leave" << std::endl;
+#endif
         static Event event;
         processEvent (stage, ev, &event);
         AbstractActor *that = static_cast<AbstractActor *> (data);
@@ -442,6 +455,9 @@ gboolean on_actor_scroll (ClutterActor *actor, ClutterEvent *ev, gpointer data)
 
 gboolean on_actor_key_press (ClutterActor *actor, ClutterEvent *ev, gpointer data)
 {
+#if 0
+        std::cerr << "on_actor_key_press" << std::endl;
+#endif
         static Event event;
         event.key = clutter_event_get_key_symbol (ev);
         event.state = clutter_event_get_state (ev);

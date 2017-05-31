@@ -15,7 +15,7 @@
 #include "clutter/iw_connector.h"
 #include <core/IFlowObserver.h>
 
-class __tiliae_reflect__ Connector : public ConnectorActor, public AbstractArcView, public flow::IFlowObserver {
+class __tiliae_reflect__ Connector : public ConnectorActor, public AbstractArcView, public flow::IFlowObserver  {
 public:
         Connector ();
         virtual ~Connector () {}

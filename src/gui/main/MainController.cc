@@ -295,6 +295,21 @@ void MainController::onIdle ()
         if (impl->routableRoot) {
                 impl->routableRoot->processTransaction ();
         }
+
+#if 0
+        static int i = 0;
+
+        if (++i > 50) {
+                GtkForms::ViewVector v = getViews ();
+                assert (v.size () == 1);
+                GtkBin *cb = GTK_BIN (v.front ()->getUiOrThrow ("content"));
+                GtkWidget *clutterWidget = gtk_bin_get_child (cb);
+
+                std::cerr << "canFoc = " << gtk_widget_get_can_focus (clutterWidget) << ", canDef = " << gtk_widget_get_can_default (clutterWidget)
+                          << ", hasFoc = " << gtk_widget_has_focus (clutterWidget) << ", hasDef = " << gtk_widget_has_default (clutterWidget)
+                          << ", isFoc = " << gtk_widget_is_focus (clutterWidget) << std::endl;
+        }
+#endif
 }
 
 /****************************************************************************/

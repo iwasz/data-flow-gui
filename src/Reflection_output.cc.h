@@ -245,10 +245,13 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("get", createMethodWrapper (&flow::Arc::get)));
 			clazz->addMethod (new Method ("put", createMethodWrapper (&flow::Arc::put)));
 			clazz->addMethod (new Method ("getValue", createMethodWrapper (&flow::Arc::getValue)));
+			clazz->addMethod (new Method ("getInitialValue", createMethodWrapper (&flow::Arc::getInitialValue)));
+			clazz->addMethod (new Method ("getInitialFull", createMethodWrapper (&flow::Arc::getInitialFull)));
 			clazz->addMethod (new Method ("getNodeInputSide", createMethodWrapper (&flow::Arc::getNodeInputSide)));
 			clazz->addMethod (new Method ("setNodeInputSide", createMethodWrapper (&flow::Arc::setNodeInputSide)));
 			clazz->addMethod (new Method ("getNodeOutputSide", createMethodWrapper (&flow::Arc::getNodeOutputSide)));
 			clazz->addMethod (new Method ("setNodeOutputSide", createMethodWrapper (&flow::Arc::setNodeOutputSide)));
+			clazz->addMethod (new Method ("setObserver", createMethodWrapper (&flow::Arc::setObserver)));
 			clazz->addMethod (new Method ("disconnect", createMethodWrapper (&flow::Arc::disconnect)));
 		}
 	}
@@ -1578,6 +1581,7 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("setTextEditable", createMethodWrapper (&Connector::setTextEditable)));
 			clazz->addMethod (new Method ("onReroute", createMethodWrapper (&Connector::onReroute)));
 			clazz->addMethod (new Method ("onTextChanged", createMethodWrapper (&Connector::onTextChanged)));
+			clazz->addMethod (new Method ("onValueChange", createMethodWrapper (&Connector::onValueChange)));
 			clazz->addMethod (new Method ("visit", createMethodWrapper (&Connector::visit)));
 		}
 	}
