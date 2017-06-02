@@ -7,7 +7,7 @@
  ****************************************************************************/
 
 #include "iw_abstract_node.h"
-#include "iw_circle.h"
+#include "iw_ellipse.h"
 #include "view/clutter/iw_actor.h"
 #include <math.h>
 
@@ -38,6 +38,7 @@ struct _IwAbstractNodePrivate {
         int portsNo;
         IwAbstractNodePort ports[MAX_PORTS_NO];
         ClutterActor *portLayer;
+        ClutterLayoutManager *layout;
 };
 
 static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocation, ClutterAllocationFlags flags, gpointer user_data);
@@ -54,14 +55,23 @@ static void iw_abstract_node_class_init (IwAbstractNodeClass *klass)
 
 static void iw_abstract_node_init (IwAbstractNode *self)
 {
-        IwAbstractNodePrivate *priv;
+        IwAbstractNodePrivate *priv = self->priv = IW_ABSTRACT_NODE_GET_PRIVATE (self);
 
-        priv = self->priv = IW_ABSTRACT_NODE_GET_PRIVATE (self);
+        // This does not work, causing ports to be displayed incorrectly (not clipped, but kind of resized, and offset).
+        // GValue gVal = G_VALUE_INIT;
+        // g_value_init (&gVal, CLUTTER_TYPE_RECT);
+        // g_value_set_boxed (&gVal, NULL);
+        // g_object_set_property (G_OBJECT (self), "clip-rect", &gVal);
+        // g_value_unset (&gVal);
+
+        // This helps.
+        priv->layout = clutter_bin_layout_new (CLUTTER_BIN_ALIGNMENT_CENTER, CLUTTER_BIN_ALIGNMENT_CENTER);
+        clutter_actor_set_layout_manager (CLUTTER_ACTOR (self), priv->layout);
+
         priv->portsNo = 0;
-
         priv->portLayer = clutter_actor_new ();
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->portLayer);
-#if 1
+#if 0
         static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
         clutter_actor_set_background_color (priv->portLayer, &c);
 #endif
@@ -90,8 +100,8 @@ static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocat
 
         //        clutter_actor_set_position (priv->portLayer, allocation->x1 - 10, allocation->y1 - 10);
         //        clutter_actor_set_size (priv->portLayer, w + 10, h + 10);
-        clutter_actor_set_position (priv->portLayer, -10, -10);
-        clutter_actor_set_size (priv->portLayer, w + 100, h + 100);
+        //        clutter_actor_set_position (priv->portLayer, -10, -10);
+        clutter_actor_set_size (priv->portLayer, w, h);
 }
 
 /*****************************************************************************/
@@ -121,7 +131,7 @@ void iw_abstract_node_set_ports_no (IwAbstractNode *self, int i)
         self->priv->portsNo = i;
 
         for (int i = 0; i < self->priv->portsNo; ++i) {
-                ClutterActor *a = self->priv->ports[i].actor = iw_circle_new ();
+                ClutterActor *a = self->priv->ports[i].actor = iw_ellipse_new ();
                 iw_actor_set_fill (IW_ACTOR (a), TRUE);
                 iw_actor_set_stroke_width (IW_ACTOR (a), 0);
                 clutter_actor_add_child (CLUTTER_ACTOR (self->priv->portLayer), a);

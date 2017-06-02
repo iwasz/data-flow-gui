@@ -16,8 +16,7 @@ public:
         virtual ~AbstractNodeView () {}
 
         virtual std::shared_ptr<flow::INode> getNode () { return node; }
-        virtual void setNode (std::shared_ptr<flow::INode> n) { node = n; }
-
+        virtual void setNode (std::shared_ptr<flow::INode> n);
 
 private:
         std::shared_ptr<flow::INode> node;

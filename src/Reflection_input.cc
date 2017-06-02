@@ -1,6 +1,7 @@
 #include "config/DfDimensionRestoreDatabase.h"
 #include "config/UserConfig.h"
 #include "customNode/ConsoleNode.h"
+#include "customNode/DisplayNode.h"
 #include "gui/addNode/AddNodeController.h"
 #include "gui/addNode/AddNodeTableFilterMapping.h"
 #include "gui/console/ConsoleBuffer.h"

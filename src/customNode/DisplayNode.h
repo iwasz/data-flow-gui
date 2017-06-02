@@ -15,10 +15,6 @@ class __tiliae_reflect__ DisplayNode : public flow::Sink {
 public:
         virtual ~DisplayNode () {}
         virtual void process ();
-        virtual void setObserver (flow::IFlowObserver *o) { this->observer = o; }
-
-private:
-        flow::IFlowObserver *observer = nullptr;
 };
 
 #endif // CONSOLENODE_H

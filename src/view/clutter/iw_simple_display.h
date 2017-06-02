@@ -39,6 +39,8 @@ struct _IwSimpleDisplayClass {
 
 ClutterActor *iw_simple_display_new (void);
 
+void iw_simple_display_set_text (IwSimpleDisplay *d, const char *text);
+
 #ifdef __cplusplus
 }
 #endif

@@ -190,6 +190,7 @@ static void iw_circular_node_init (IwCircularNode *self)
         priv->mainCircle = iw_circle_new ();
         clutter_actor_set_reactive (priv->mainCircle, TRUE);
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->mainCircle);
+        clutter_actor_set_child_below_sibling (CLUTTER_ACTOR (self), priv->mainCircle, NULL);
 
         priv->label = clutter_text_new ();
         //        clutter_text_set_text (CLUTTER_TEXT (priv->label), "A simple test");

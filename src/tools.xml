@@ -57,7 +57,7 @@
       <RoutablePin scope="prototype" set-as="routablePin" classNumber="1" exclusive="false" direction="LEFT" />
     </inputPort>
     <NodeRoutable scope="prototype" set-as="routable"/>
-    <ConsoleNode scope="prototype" set-as="node"/>
+    <DisplayNode scope="prototype" set-as="node"/>
   </SimpleDisplay>
 
   <InputPort id="inputPort" scope="prototype" color="#d1d1d1ff" size="20" />
@@ -153,7 +153,6 @@
     <Copy scope="prototype" set-as="node"/>
     <value set-as="text">Button</value>
     <NodeRoutable scope="prototype" set-as="routable"/>
-    <ref set-as="sizeConstraint" bean="squareSizeConstraint"/>
   </Button>
 
   <CircularNode scope="prototype" id="constNode" parent="@scale" strokeWidth="0" fill="true" fillColor="#D50074ff" visible="false">
@@ -224,7 +223,7 @@
         <ContainerFactoryStrategy set-as="factoryStrategy" beanName="angleConnector" container="@#container"/>
       </ToolI>
       <ToolI add-to="tools" name="simpleDisplay" drawStrategy="@dashedRect">
-        <ContainerFactoryStrategy set-as="factoryStrategy" beanName="simpleDisplay" container="@#container"/>
+        <NodeContainerFactoryStrategy set-as="factoryStrategy" beanName="simpleDisplay" container="@#container" program="@program"/>
       </ToolI>
     </ToolCategory>
 

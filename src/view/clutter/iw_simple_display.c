@@ -144,3 +144,11 @@ static void iw_simple_display_init (IwSimpleDisplay *self)
 /*****************************************************************************/
 
 ClutterActor *iw_simple_display_new (void) { return g_object_new (IW_TYPE_SIMPLE_DISPLAY, NULL); }
+
+/*****************************************************************************/
+
+void iw_simple_display_set_text (IwSimpleDisplay *d, const char *text)
+{
+        g_return_if_fail (IW_IS_SIMPLE_DISPLAY (d));
+        clutter_text_set_text (CLUTTER_TEXT (d->priv->label), text);
+}

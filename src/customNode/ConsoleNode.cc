@@ -11,4 +11,4 @@
 #include <boost/lexical_cast.hpp>
 #include <string>
 
-void ConsoleNode::process() { console->append (boost::lexical_cast<std::string> (input->get ()) + "\n"); }
+void ConsoleNode::process() { console->append (boost::lexical_cast<std::string> (inputs[0]->get ()) + "\n"); }

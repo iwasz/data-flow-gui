@@ -271,6 +271,8 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("disconnectOutput", createMethodWrapper (&flow::INode::disconnectOutput)));
 			clazz->addMethod (new Method ("disconnectInput", createMethodWrapper (&flow::INode::disconnectInput)));
 			clazz->addMethod (new Method ("setProgram", createMethodWrapper (&flow::INode::setProgram)));
+			clazz->addMethod (new Method ("setObserver", createMethodWrapper (&flow::INode::setObserver)));
+			clazz->addMethod (new Method ("getObserver", createMethodWrapper (&flow::INode::getObserver)));
 		}
 	}
 	{
@@ -292,6 +294,16 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addBaseClassName ("Console");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <ConsoleNode, void>::Level1Wrapper::newConstructorPointer ()));
 			clazz->addMethod (new Method ("process", createMethodWrapper (&ConsoleNode::process)));
+		}
+	}
+	{
+		Class *clazz = new Class ("DisplayNode", typeid (DisplayNode &), new Reflection::PtrDeleter <DisplayNode>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <DisplayNode, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("process", createMethodWrapper (&DisplayNode::process)));
 		}
 	}
 	{
@@ -1605,6 +1617,7 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addBaseClassName ("AbstractNodeView");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <SimpleDisplay, void>::Level1Wrapper::newConstructorPointer ()));
 			clazz->addMethod (new Method ("visit", createMethodWrapper (&SimpleDisplay::visit)));
+			clazz->addMethod (new Method ("onValueChange", createMethodWrapper (&SimpleDisplay::onValueChange)));
 		}
 	}
 	{
