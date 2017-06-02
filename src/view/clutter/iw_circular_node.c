@@ -14,7 +14,7 @@
 /* convenience macro for GType implementations; see:
  * http://library.gnome.org/devel/gobject/2.27/gobject-Type-Information.html#G-DEFINE-TYPE:CAPS
  */
-G_DEFINE_TYPE (IwCircularNode, iw_circular_node, CLUTTER_TYPE_ACTOR);
+G_DEFINE_TYPE (IwCircularNode, iw_circular_node, IW_TYPE_ABSTRACT_NODE);
 
 /* macro for accessing the object's private structure */
 #define IW_CIRCULAR_NODE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IW_TYPE_CIRCULAR_NODE, IwCircularNodePrivate))
@@ -38,10 +38,6 @@ struct _IwCircularNodePrivate {
         ClutterLayoutManager *layout;
         ClutterActor *mainCircle;
         ClutterActor *label;
-//        void *userData;
-
-        int portsNo;
-        IwCircularNodePort ports[MAX_PORTS_NO];
 };
 
 static gboolean do_draw (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data);
@@ -180,10 +176,7 @@ static void iw_circular_node_class_init (IwCircularNodeClass *klass)
  */
 static void iw_circular_node_init (IwCircularNode *self)
 {
-        IwCircularNodePrivate *priv;
-
-        priv = self->priv = IW_CIRCULAR_NODE_GET_PRIVATE (self);
-        priv->portsNo = 0;
+        IwCircularNodePrivate *priv = self->priv = IW_CIRCULAR_NODE_GET_PRIVATE (self);
 
 #if 0
         static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
@@ -212,10 +205,6 @@ static void iw_circular_node_init (IwCircularNode *self)
         clutter_actor_add_child (CLUTTER_ACTOR (self), priv->label);
 
         g_signal_connect (CLUTTER_ACTOR (self), "allocation-changed", G_CALLBACK (on_actor_resize), NULL);
-
-        // TODO This does not work as expected. It gets called when object is moved.
-        // g_signal_connect (CLUTTER_ACTOR (self), "notify::width", G_CALLBACK (on_dimension_changed), NULL);
-        // g_signal_connect (CLUTTER_ACTOR (self), "notify::height", G_CALLBACK (on_dimension_changed), NULL);
 }
 
 /*****************************************************************************/
@@ -223,43 +212,11 @@ static void iw_circular_node_init (IwCircularNode *self)
 /// TODO this handler gets called on move, which is inefficient. It should be called only when dimensions are changed.
 static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocation, ClutterAllocationFlags flags, gpointer user_data)
 {
-        //        clutter_canvas_set_size (CLUTTER_CANVAS (clutter_actor_get_content (actor)), ceilf (clutter_actor_box_get_width (allocation)),
-        //                                 ceilf (clutter_actor_box_get_height (allocation)));
-
-        IwCircularNodePrivate *priv = IW_CIRCULAR_NODE_GET_PRIVATE (actor);
-
+        IwCircularNodePrivate *priv = IW_CIRCULAR_NODE (actor)->priv;
         float w = clutter_actor_box_get_width (allocation);
         float h = clutter_actor_box_get_height (allocation);
         float d = fmin (w, h);
-        // float r = d / 2;
-
-        for (int i = 0; i < priv->portsNo; ++i) {
-                float portR = clutter_actor_get_width (priv->ports[i].actor) / 2.0;
-                // clutter_actor_set_position (priv->ports[i].actor, r * cos (priv->ports[i].angle) + r - portR, r * sin (priv->ports[i].angle) +
-                // r - portR);
-                clutter_actor_set_position (priv->ports[i].actor, priv->ports[i].x * w - portR, priv->ports[i].y * h - portR);
-        }
-
         clutter_actor_set_size (priv->mainCircle, d, d);
-}
-
-/*****************************************************************************/
-
-void iw_circular_node_get_port_position (IwCircularNode *self, int i, float *x, float *y)
-{
-        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        float px, py;
-        ClutterActor *port = self->priv->ports[i].actor;
-        clutter_actor_get_position (port, &px, &py);
-
-        px += clutter_actor_get_width (port) / 2.0;
-        py += clutter_actor_get_height (port) / 2.0;
-
-        float ax, ay;
-        clutter_actor_get_position (CLUTTER_ACTOR (self), &ax, &ay);
-
-        *x = px + ax;
-        *y = py + ay;
 }
 
 /*****************************************************************************/
@@ -330,70 +287,7 @@ gboolean iw_circular_node_is_fill (IwCircularNode *self)
 
 /*****************************************************************************/
 
-static gboolean portMotionEvent (ClutterActor *actor, ClutterEvent *event, gpointer user_data) { return CLUTTER_EVENT_STOP; }
-
-void iw_circular_node_set_ports_no (IwCircularNode *self, int i)
-{
-        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        self->priv->portsNo = i;
-
-        for (int i = 0; i < self->priv->portsNo; ++i) {
-                ClutterActor *a = self->priv->ports[i].actor = iw_circle_new ();
-                iw_actor_set_fill (IW_ACTOR (a), TRUE);
-                iw_actor_set_stroke_width (IW_ACTOR (a), 0);
-                clutter_actor_add_child (CLUTTER_ACTOR (self->priv->mainCircle), a);
-                clutter_actor_set_reactive (a, TRUE);
-        }
-}
-
-/*****************************************************************************/
-
-void iw_circular_node_set_port_color (IwCircularNode *self, int i, const ClutterColor *color)
-{
-        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        iw_actor_set_fill_color (IW_ACTOR (self->priv->ports[i].actor), color);
-}
-
-/*****************************************************************************/
-
-void iw_circular_node_set_port_position (IwCircularNode *self, int i, float x, float y)
-{
-        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        self->priv->ports[i].x = x;
-        self->priv->ports[i].y = y;
-}
-
-/*****************************************************************************/
-
-void iw_circular_node_set_port_size (IwCircularNode *self, int i, float s)
-{
-        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        g_return_if_fail (i >= 0);
-        g_return_if_fail (i < self->priv->portsNo);
-        //        self->priv->ports[i].size = s;
-        //        clutter_content_invalidate (self->priv->canvas);
-        clutter_actor_set_size (CLUTTER_ACTOR (self->priv->ports[i].actor), s, s);
-}
-
-/*****************************************************************************/
-
 ClutterActor *iw_circular_node_new (void) { return g_object_new (IW_TYPE_CIRCULAR_NODE, NULL); }
-
-/*****************************************************************************/
-
-void iw_circular_node_set_port_user_data (IwCircularNode *self, int i, void *p)
-{
-        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        g_object_set_data (G_OBJECT (self->priv->ports[i].actor), CPP_IMPLEMENTATION_KEY, p);
-}
-
-/*****************************************************************************/
-
-void *iw_circular_node_get_port_user_data (IwCircularNode *self, int i)
-{
-        g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), NULL);
-        return g_object_get_data (G_OBJECT (self->priv->ports[i].actor), CPP_IMPLEMENTATION_KEY);
-}
 
 /*****************************************************************************/
 

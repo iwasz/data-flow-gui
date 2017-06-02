@@ -35,26 +35,15 @@ typedef struct _IwAbstractNodePort IwAbstractNodePort;
  * Private structures.
  */
 struct _IwAbstractNodePrivate {
-//        ClutterLayoutManager *layout;
-//        ClutterActor *mainCircle;
-//        ClutterActor *label;
-
         int portsNo;
         IwAbstractNodePort ports[MAX_PORTS_NO];
+        ClutterActor *portLayer;
 };
 
-static gboolean do_draw (ClutterCanvas *canvas, cairo_t *cr, int width, int height, gpointer *data);
 static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocation, ClutterAllocationFlags flags, gpointer user_data);
-static void on_dimension_changed (GObject *gobject, GParamSpec *pspec, gpointer user_data);
-static gboolean idle_resize (gpointer data);
 
-/* GObject class and instance initialization functions; note that
- * these have been placed after the Clutter implementation, as
- * they refer to the static function implementations above
- */
-/* class init: attach functions to superclasses, define properties
- * and signals
- */
+/*****************************************************************************/
+
 static void iw_abstract_node_class_init (IwAbstractNodeClass *klass)
 {
         ClutterActorClass *actor_class = CLUTTER_ACTOR_CLASS (klass);
@@ -69,6 +58,14 @@ static void iw_abstract_node_init (IwAbstractNode *self)
 
         priv = self->priv = IW_ABSTRACT_NODE_GET_PRIVATE (self);
         priv->portsNo = 0;
+
+        priv->portLayer = clutter_actor_new ();
+        clutter_actor_add_child (CLUTTER_ACTOR (self), priv->portLayer);
+#if 1
+        static ClutterColor c = { 0xff, 0x00, 0x00, 0x88 };
+        clutter_actor_set_background_color (priv->portLayer, &c);
+#endif
+
         g_signal_connect (CLUTTER_ACTOR (self), "allocation-changed", G_CALLBACK (on_actor_resize), NULL);
 }
 
@@ -85,10 +82,16 @@ static void on_actor_resize (ClutterActor *actor, const ClutterActorBox *allocat
 
         for (int i = 0; i < priv->portsNo; ++i) {
                 float portR = clutter_actor_get_width (priv->ports[i].actor) / 2.0;
-                clutter_actor_set_position (priv->ports[i].actor, priv->ports[i].x * w - portR, priv->ports[i].y * h - portR);
+                float portX = priv->ports[i].x * w - portR;
+                float portY = priv->ports[i].y * h - portR;
+                //                printf ("port [%d], %f, %f\n", i, portX, portY);
+                clutter_actor_set_position (priv->ports[i].actor, portX, portY);
         }
 
-//        clutter_actor_set_size (priv->mainCircle, d, d);
+        //        clutter_actor_set_position (priv->portLayer, allocation->x1 - 10, allocation->y1 - 10);
+        //        clutter_actor_set_size (priv->portLayer, w + 10, h + 10);
+        clutter_actor_set_position (priv->portLayer, -10, -10);
+        clutter_actor_set_size (priv->portLayer, w + 100, h + 100);
 }
 
 /*****************************************************************************/
@@ -121,7 +124,7 @@ void iw_abstract_node_set_ports_no (IwAbstractNode *self, int i)
                 ClutterActor *a = self->priv->ports[i].actor = iw_circle_new ();
                 iw_actor_set_fill (IW_ACTOR (a), TRUE);
                 iw_actor_set_stroke_width (IW_ACTOR (a), 0);
-                clutter_actor_add_child (CLUTTER_ACTOR (self), a);
+                clutter_actor_add_child (CLUTTER_ACTOR (self->priv->portLayer), a);
                 clutter_actor_set_reactive (a, TRUE);
         }
 }

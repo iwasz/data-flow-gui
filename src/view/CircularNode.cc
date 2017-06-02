@@ -34,17 +34,18 @@ void NodeActor::init ()
                 ++viewNumber;
         }
 
-//        iw_abstract_node_set_ports_no (IW_ABSTRACT_NODE (self), getPorts ().size ());
+        iw_abstract_node_set_ports_no (IW_ABSTRACT_NODE (self), getPorts ().size ());
 
-//        int portNumber = 0;
-//        for (std::shared_ptr<Port> p : getPorts ()) {
-//                iw_abstract_node_set_port_position (IW_ABSTRACT_NODE (self), portNumber, p->getPosition ().x, p->getPosition ().y);
-//                iw_abstract_node_set_port_size (IW_ABSTRACT_NODE (self), portNumber, p->getSize ());
-//                ClutterColor c = p->getColor ().toClutterColor ();
-//                iw_abstract_node_set_port_color (IW_ABSTRACT_NODE (self), portNumber, &c);
-//                iw_abstract_node_set_port_user_data (IW_ABSTRACT_NODE (self), portNumber, p.get ());
-//                ++portNumber;
-//        }
+        // TODO make 1 loop after other issues are resolved.
+        int portNumber = 0;
+        for (std::shared_ptr<Port> p : getPorts ()) {
+                iw_abstract_node_set_port_position (IW_ABSTRACT_NODE (self), portNumber, p->getPosition ().x, p->getPosition ().y);
+                iw_abstract_node_set_port_size (IW_ABSTRACT_NODE (self), portNumber, p->getSize ());
+                ClutterColor c = p->getColor ().toClutterColor ();
+                iw_abstract_node_set_port_color (IW_ABSTRACT_NODE (self), portNumber, &c);
+                iw_abstract_node_set_port_user_data (IW_ABSTRACT_NODE (self), portNumber, p.get ());
+                ++portNumber;
+        }
 }
 
 /*****************************************************************************/
@@ -58,21 +59,21 @@ CircularNode::CircularNode ()
 
 /*****************************************************************************/
 
-void CircularNode::init ()
-{
-        NodeActor::init ();
-        iw_circular_node_set_ports_no (IW_CIRCULAR_NODE (self), getPorts ().size ());
+//void CircularNode::init ()
+//{
+//        NodeActor::init ();
+//        iw_circular_node_set_ports_no (IW_CIRCULAR_NODE (self), getPorts ().size ());
 
-        int portNumber = 0;
-        for (std::shared_ptr<Port> p : getPorts ()) {
-                iw_circular_node_set_port_position (IW_CIRCULAR_NODE (self), portNumber, p->getPosition ().x, p->getPosition ().y);
-                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (self), portNumber, p->getSize ());
-                ClutterColor c = p->getColor ().toClutterColor ();
-                iw_circular_node_set_port_color (IW_CIRCULAR_NODE (self), portNumber, &c);
-                iw_circular_node_set_port_user_data (IW_CIRCULAR_NODE (self), portNumber, p.get ());
-                ++portNumber;
-        }
-}
+//        int portNumber = 0;
+//        for (std::shared_ptr<Port> p : getPorts ()) {
+//                iw_circular_node_set_port_position (IW_CIRCULAR_NODE (self), portNumber, p->getPosition ().x, p->getPosition ().y);
+//                iw_circular_node_set_port_size (IW_CIRCULAR_NODE (self), portNumber, p->getSize ());
+//                ClutterColor c = p->getColor ().toClutterColor ();
+//                iw_circular_node_set_port_color (IW_CIRCULAR_NODE (self), portNumber, &c);
+//                iw_circular_node_set_port_user_data (IW_CIRCULAR_NODE (self), portNumber, p.get ());
+//                ++portNumber;
+//        }
+//}
 
 /*****************************************************************************/
 

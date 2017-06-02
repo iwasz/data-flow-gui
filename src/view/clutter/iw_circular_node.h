@@ -11,8 +11,8 @@
 #define __IW_CIRCULAR_NODE_H__
 
 /* include any dependencies */
+#include "iw_abstract_node.h"
 #include <clutter/clutter.h>
-#include "iw_circle.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -58,7 +58,7 @@ typedef struct _IwCircularNodeClass IwCircularNodeClass;
 /* object structure */
 struct _IwCircularNode {
         /*<private>*/
-        ClutterActor parent_instance;
+        IwAbstractNode parent_instance;
 
         /* structure containing private members */
         /*<private>*/
@@ -68,7 +68,7 @@ struct _IwCircularNode {
 /* class structure */
 struct _IwCircularNodeClass {
         /*<private>*/
-        ClutterActorClass parent_class;
+        IwAbstractNodeClass parent_class;
 };
 
 /* public API */
@@ -101,17 +101,6 @@ void iw_circular_node_set_fill (IwCircularNode *self, gboolean b);
 // TODO move to base class
 gboolean iw_circular_node_is_fill (IwCircularNode *self);
 
-void iw_circular_node_set_port_color (IwCircularNode *self, int i, const ClutterColor *color);
-// Proportional 0.0 : 1.0
-void iw_circular_node_set_port_position (IwCircularNode *self, int i, float x, float y);
-void iw_circular_node_set_port_size (IwCircularNode *self, int i, float s);
-void iw_circular_node_set_ports_no (IwCircularNode *self, int i);
-
-void iw_circular_node_set_port_user_data (IwCircularNode *self, int i, void *p);
-void *iw_circular_node_get_port_user_data (IwCircularNode *self, int i);
-
-void iw_circular_node_get_port_position (IwCircularNode *self, int i, float *x, float *y);
-
 /*---------------------------------------------------------------------------*/
 
 const gchar *iw_circular_node_get_font (IwCircularNode *self);
@@ -125,13 +114,6 @@ void iw_circular_node_set_text (IwCircularNode *self, const gchar *s);
 
 gboolean iw_circular_node_is_editable (IwCircularNode *self);
 void iw_circular_node_set_editable (IwCircularNode *self, gboolean b);
-
-/*---------------------------------------------------------------------------*/
-
-//// TODO move to base class
-//void iw_circular_node_set_user_data (IwCircularNode *self, void *p);
-//// TODO move to base class
-//void *iw_circular_node_get_user_data (IwCircularNode *self);
 
 #ifdef __cplusplus
 }

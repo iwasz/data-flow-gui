@@ -1505,7 +1505,6 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addBaseClassName ("NodeActor");
 			clazz->addBaseClassName ("AbstractNodeView");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <CircularNode, void>::Level1Wrapper::newConstructorPointer ()));
-			clazz->addMethod (new Method ("init", createMethodWrapper (&CircularNode::init)));
 			clazz->addMethod (new Method ("isFill", createMethodWrapper (&CircularNode::isFill)));
 			clazz->addMethod (new Method ("setFill", createMethodWrapper (&CircularNode::setFill)));
 			clazz->addMethod (new Method ("getStrokeWidth", createMethodWrapper (&CircularNode::getStrokeWidth)));

@@ -20,7 +20,7 @@ class __tiliae_reflect__ CircularNode : public NodeActor, public AbstractNodeVie
 public:
         CircularNode ();
         virtual ~CircularNode () {}
-        virtual void init ();
+//        virtual void init ();
 
         bool isFill () const;
         void setFill (bool value);
