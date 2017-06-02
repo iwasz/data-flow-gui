@@ -52,7 +52,10 @@
     <ObstacleRoutable scope="prototype" set-as="routable"/>
   </Ellipse>
 
-<!--  <InputPort id="inputPort" scope="prototype" angle="2.6415" color="#d1d1d1ff" size="20" facing="W" />-->
+  <SimpleDisplay scope="prototype" id="simpleDisplay" parent="@scale" visible="false">
+    <ObstacleRoutable scope="prototype" set-as="routable"/>
+  </SimpleDisplay>
+
   <InputPort id="inputPort" scope="prototype" color="#d1d1d1ff" size="20" />
   <OutputPort id="outputPort" scope="prototype" color="#8d8d8dff" size="20" />
 
@@ -215,6 +218,9 @@
       </ToolI>
       <ToolI add-to="tools" name="angleConnector" drawStrategy="@dashedAngleConnector">
         <ContainerFactoryStrategy set-as="factoryStrategy" beanName="angleConnector" container="@#container"/>
+      </ToolI>
+      <ToolI add-to="tools" name="simpleDisplay" drawStrategy="@dashedRect">
+        <ContainerFactoryStrategy set-as="factoryStrategy" beanName="simpleDisplay" container="@#container"/>
       </ToolI>
     </ToolCategory>
 

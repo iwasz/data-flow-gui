@@ -1597,6 +1597,17 @@ void createReflectionDatabase_dataFlowGui ()
 		}
 	}
 	{
+		Class *clazz = new Class ("SimpleDisplay", typeid (SimpleDisplay &), new Reflection::PtrDeleter <SimpleDisplay>);
+		if (!Manager::add (clazz)) {
+			delete clazz;
+		}
+		else {
+			clazz->addBaseClassName ("AbstractActor");
+			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <SimpleDisplay, void>::Level1Wrapper::newConstructorPointer ()));
+			clazz->addMethod (new Method ("visit", createMethodWrapper (&SimpleDisplay::visit)));
+		}
+	}
+	{
 		Class *clazz = new Class ("Rect", typeid (Rect &), new Reflection::PtrDeleter <Rect>);
 		if (!Manager::add (clazz)) {
 			delete clazz;

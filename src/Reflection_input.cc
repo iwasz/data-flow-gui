@@ -27,6 +27,7 @@
 #include "view/CircularNode.h"
 #include "view/Connector.h"
 #include "view/Ellipse.h"
+#include "view/SimpleDisplay.h"
 #include "view/Line.h"
 #include "view/Rectangle.h"
 #include "view/RectangularSelector.h"
