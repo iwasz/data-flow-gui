@@ -38,7 +38,7 @@ struct _IwCircularNodePrivate {
         ClutterLayoutManager *layout;
         ClutterActor *mainCircle;
         ClutterActor *label;
-        void *userData;
+//        void *userData;
 
         int portsNo;
         IwCircularNodePort ports[MAX_PORTS_NO];
@@ -378,22 +378,6 @@ void iw_circular_node_set_port_size (IwCircularNode *self, int i, float s)
 /*****************************************************************************/
 
 ClutterActor *iw_circular_node_new (void) { return g_object_new (IW_TYPE_CIRCULAR_NODE, NULL); }
-
-/*****************************************************************************/
-
-void iw_circular_node_set_user_data (IwCircularNode *self, void *p)
-{
-        g_return_if_fail (IW_IS_CIRCULAR_NODE (self));
-        self->priv->userData = p;
-}
-
-/*****************************************************************************/
-
-void *iw_circular_node_get_user_data (IwCircularNode *self)
-{
-        g_return_val_if_fail (IW_IS_CIRCULAR_NODE (self), NULL);
-        return self->priv->userData;
-}
 
 /*****************************************************************************/
 

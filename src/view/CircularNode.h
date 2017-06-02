@@ -9,7 +9,6 @@
 #ifndef CIRCULARNODE_H
 #define CIRCULARNODE_H
 
-#include "AbstractActor.h"
 #include "AbstractNodeView.h"
 #include "primitives/Geometry.h"
 #include "NodeActor.h"

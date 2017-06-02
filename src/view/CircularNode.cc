@@ -9,6 +9,8 @@
 #include "CircularNode.h"
 #include "clutter/iw_circular_node.h"
 
+#include "clutter/iw_abstract_node.h"
+
 void NodeActor::init ()
 {
         AbstractActor::init ();
@@ -31,6 +33,18 @@ void NodeActor::init ()
                 p->init ();
                 ++viewNumber;
         }
+
+//        iw_abstract_node_set_ports_no (IW_ABSTRACT_NODE (self), getPorts ().size ());
+
+//        int portNumber = 0;
+//        for (std::shared_ptr<Port> p : getPorts ()) {
+//                iw_abstract_node_set_port_position (IW_ABSTRACT_NODE (self), portNumber, p->getPosition ().x, p->getPosition ().y);
+//                iw_abstract_node_set_port_size (IW_ABSTRACT_NODE (self), portNumber, p->getSize ());
+//                ClutterColor c = p->getColor ().toClutterColor ();
+//                iw_abstract_node_set_port_color (IW_ABSTRACT_NODE (self), portNumber, &c);
+//                iw_abstract_node_set_port_user_data (IW_ABSTRACT_NODE (self), portNumber, p.get ());
+//                ++portNumber;
+//        }
 }
 
 /*****************************************************************************/
@@ -39,7 +53,6 @@ CircularNode::CircularNode ()
 {
         self = iw_circular_node_new ();
         clutter_actor_set_reactive (self, TRUE);
-        iw_circular_node_set_user_data (IW_CIRCULAR_NODE (self), this);
         setCppImplementation ();
 }
 

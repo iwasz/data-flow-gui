@@ -128,10 +128,10 @@ void iw_circular_node_set_editable (IwCircularNode *self, gboolean b);
 
 /*---------------------------------------------------------------------------*/
 
-// TODO move to base class
-void iw_circular_node_set_user_data (IwCircularNode *self, void *p);
-// TODO move to base class
-void *iw_circular_node_get_user_data (IwCircularNode *self);
+//// TODO move to base class
+//void iw_circular_node_set_user_data (IwCircularNode *self, void *p);
+//// TODO move to base class
+//void *iw_circular_node_get_user_data (IwCircularNode *self);
 
 #ifdef __cplusplus
 }

@@ -53,7 +53,11 @@
   </Ellipse>
 
   <SimpleDisplay scope="prototype" id="simpleDisplay" parent="@scale" visible="false">
-    <ObstacleRoutable scope="prototype" set-as="routable"/>
+    <inputPort add-to="ports" position="0,0.5">
+      <RoutablePin scope="prototype" set-as="routablePin" classNumber="1" exclusive="false" direction="LEFT" />
+    </inputPort>
+    <NodeRoutable scope="prototype" set-as="routable"/>
+    <ConsoleNode scope="prototype" set-as="node"/>
   </SimpleDisplay>
 
   <InputPort id="inputPort" scope="prototype" color="#d1d1d1ff" size="20" />

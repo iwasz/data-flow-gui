@@ -9,10 +9,11 @@
 #ifndef DATA_FLOW_SIMPLEDISPLAY_H
 #define DATA_FLOW_SIMPLEDISPLAY_H
 
-#include "AbstractActor.h"
-#include <ReflectionParserAnnotation.h>
+#include "AbstractNodeView.h"
+#include "NodeActor.h"
+#include "primitives/Geometry.h"
 
-class __tiliae_reflect__ SimpleDisplay : public AbstractActor {
+class __tiliae_reflect__ SimpleDisplay : public NodeActor, public AbstractNodeView {
 public:
         SimpleDisplay ();
         virtual ~SimpleDisplay () {}

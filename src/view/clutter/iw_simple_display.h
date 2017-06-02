@@ -9,7 +9,7 @@
 #ifndef __IW_SIMPLE_DISPLAY_H__
 #define __IW_SIMPLE_DISPLAY_H__
 
-#include "iw_actor.h"
+#include "iw_abstract_node.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,12 +29,12 @@ typedef struct _IwSimpleDisplay IwSimpleDisplay;
 typedef struct _IwSimpleDisplayClass IwSimpleDisplayClass;
 
 struct _IwSimpleDisplay {
-        IwActor parent_instance;
+        IwAbstractNode parent_instance;
         IwSimpleDisplayPrivate *priv;
 };
 
 struct _IwSimpleDisplayClass {
-        IwActorClass parent_class;
+        IwAbstractNodeClass parent_class;
 };
 
 ClutterActor *iw_simple_display_new (void);

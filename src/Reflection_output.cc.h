@@ -1602,7 +1602,8 @@ void createReflectionDatabase_dataFlowGui ()
 			delete clazz;
 		}
 		else {
-			clazz->addBaseClassName ("AbstractActor");
+			clazz->addBaseClassName ("NodeActor");
+			clazz->addBaseClassName ("AbstractNodeView");
 			clazz->addConstructor (new Constructor (Reflection::ConstructorPointerWrapper2 <SimpleDisplay, void>::Level1Wrapper::newConstructorPointer ()));
 			clazz->addMethod (new Method ("visit", createMethodWrapper (&SimpleDisplay::visit)));
 		}

@@ -178,6 +178,8 @@ LIST (APPEND SOURCES
         "src/view/clutter/iw_actor.h"
         "src/view/clutter/iw_rectangle.c"
         "src/view/clutter/iw_rectangle.h"
+        "src/view/clutter/iw_abstract_node.c"
+        "src/view/clutter/iw_abstract_node.h"
         "src/view/clutter/iw_circular_node.c"
         "src/view/clutter/iw_circular_node.h"
         "src/view/clutter/iw_line.c"

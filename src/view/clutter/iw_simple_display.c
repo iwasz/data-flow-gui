@@ -11,7 +11,7 @@
 #include <cogl-pango/cogl-pango.h>
 #include <math.h>
 
-G_DEFINE_TYPE (IwSimpleDisplay, iw_simple_display, IW_TYPE_ACTOR);
+G_DEFINE_TYPE (IwSimpleDisplay, iw_simple_display, IW_TYPE_ABSTRACT_NODE);
 
 #define IW_SIMPLE_DISPLAY_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), IW_TYPE_SIMPLE_DISPLAY, IwSimpleDisplayPrivate))
 
@@ -58,18 +58,16 @@ static void iw_simple_display_paint (ClutterActor *actor)
         guint8 real_opacity;
 
         CoglColor color;
-//        ClutterText *text = CLUTTER_TEXT (actor);
-        ClutterColor text_color = {
-                0,0, 0, 0xff
-        };
+        //        ClutterText *text = CLUTTER_TEXT (actor);
+        ClutterColor text_color = { 0, 0, 0, 0xff };
 
         IwSimpleDisplayPrivate *priv = IW_SIMPLE_DISPLAY (actor)->priv;
 
         /* Get the PangoLayout that the Text actor is going to paint */
-        layout = clutter_text_get_layout (priv->label);
+        layout = clutter_text_get_layout (CLUTTER_TEXT (priv->label));
 
         /* Get the color of the text, to extract the alpha component */
-        clutter_text_get_color (priv->label, &text_color);
+        clutter_text_get_color (CLUTTER_TEXT (priv->label), &text_color);
 
         /* Composite the opacity so that the shadow is correctly blended */
         real_opacity = clutter_actor_get_paint_opacity (actor) * text_color.alpha / 255;
@@ -115,7 +113,7 @@ static void iw_simple_display_class_init (IwSimpleDisplayClass *klass)
         ClutterActorClass *actor_class = CLUTTER_ACTOR_CLASS (klass);
 
         //        actor_class->pick = iw_simple_display_pick;
-        actor_class->paint = iw_simple_display_paint;
+        //        actor_class->paint = iw_simple_display_paint;
 
         g_type_class_add_private (klass, sizeof (IwSimpleDisplayPrivate));
 }
