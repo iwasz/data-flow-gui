@@ -98,6 +98,10 @@ pkg_check_modules (AVOID REQUIRED "libavoid")
 INCLUDE_DIRECTORIES (${AVOID_INCLUDE_DIRS})
 link_directories(${AVOID_LIBRARY_DIRS})
 
+pkg_check_modules (TINYB REQUIRED "tinyb")
+INCLUDE_DIRECTORIES (${TINYB_INCLUDE_DIRS})
+link_directories(${TINYB_LIBRARY_DIRS})
+
 # +-------------------------------+
 # | Generate reflection database. |
 # +-------------------------------+
@@ -258,6 +262,18 @@ LIST (APPEND SOURCES
         "src/view/routable/ConnectorRoutable.cc"
         "src/view/routable/RoutablePin.h"
         "src/view/routable/RoutablePin.cc"
+        "src/connectivity/IDevice.h"
+        "src/connectivity/AbstractDevice.h"
+        "src/connectivity/AbstractDevice.cc"
+        "src/connectivity/BleDevice.h"
+        "src/connectivity/BleDevice.cc"
+        "src/connectivity/ITransport.h"
+        "src/connectivity/BleTransport.h"
+        "src/connectivity/BleTransport.cc"
+        "src/connectivity/LocalTransport.h"
+        "src/connectivity/LocalTransport.cc"
+        "src/connectivity/DeviceRepository.h"
+        "src/connectivity/DeviceRepository.cc"
 )
 
 # Local includes (inside project).
@@ -282,6 +298,7 @@ TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${STATEMACHINE_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${DATAFLOW_LIBRARIES})
 
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${AVOID_STATIC_LIBRARIES})
+TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${TINYB_STATIC_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${CLUTTER_GTK_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${GTK_LIBRARIES})
 TARGET_LINK_LIBRARIES (${CMAKE_PROJECT_NAME} ${Boost_LIBRARIES})
