@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <beans>
   <ConsoleBuffer id="console" />
-  <ConsoleController id="consoleController" console="@console" consoleView="@consoleView" />
-  <ConsoleView id="consoleView" file="gui/console/consoleView.ui" console="@console" />
+  <ConsoleController scope="prototype" console="@console" deleteOnClose="true" id="consoleController" consoleView="@consoleView" alsoOpen="tabLabelConsoleController" />
+  <ConsoleView id="consoleView" scope="prototype" deleteOnClose="true" file="gui/console/consoleView.ui" console="@console" />
+
+  <DummyController scope="prototype" deleteOnClose="true" id="tabLabelConsoleController" view="tabLabelConsoleView->bottomSlot->label" />
+  <BuilderView scope="prototype" deleteOnClose="true" id="tabLabelConsoleView" file="gui/console/consoleView.ui"/>
 </beans>

@@ -20,6 +20,7 @@ class __tiliae_reflect__ ConsoleView : public GtkForms::BuilderView {
 public:
         virtual ~ConsoleView () {}
         virtual void loadUi (GtkForms::App *app);
+        virtual void destroyUi ();
 
 public:
         ConsoleBuffer *console = nullptr;
@@ -28,6 +29,7 @@ public:
 private:
 
         static void onInsertText (GtkTextBuffer *textBuffer, GtkTextIter *location, gchar *text, gint len, gpointer userData);
+        gulong connectionId = 0;
 };
 
 #endif // MAINVIEW_H

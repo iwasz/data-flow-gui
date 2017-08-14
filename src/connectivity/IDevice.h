@@ -47,9 +47,7 @@ struct IDevice {
         /* Program manipulation                                                      */
         /*---------------------------------------------------------------------------*/
 
-        virtual void run () = 0;
-        virtual void step () = 0;
-        virtual void reset () = 0;
+
 };
 
 typedef std::vector<IDevice *> DeviceVector;

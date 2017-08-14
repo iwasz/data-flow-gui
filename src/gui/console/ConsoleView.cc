@@ -18,7 +18,15 @@ void ConsoleView::loadUi (GtkForms::App *app)
         GtkTextView *textView = GTK_TEXT_VIEW (getUiOrThrow (">console"));
         gtk_text_view_set_buffer (textView, console->getGtkTextBuffer ());
 
-        g_signal_connect (console->getGtkTextBuffer (), "insert-text", G_CALLBACK (&ConsoleView::onInsertText), this);
+        connectionId = g_signal_connect (console->getGtkTextBuffer (), "insert-text", G_CALLBACK (&ConsoleView::onInsertText), this);
+}
+
+/*****************************************************************************/
+
+void ConsoleView::destroyUi ()
+{
+        g_signal_handler_disconnect (console->getGtkTextBuffer (), connectionId);
+        BuilderView::destroyUi ();
 }
 
 /*****************************************************************************/

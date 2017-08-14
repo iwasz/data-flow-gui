@@ -128,6 +128,8 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("preSubmit", createMethodWrapper (&GtkForms::IPageDecorator::preSubmit)));
 			clazz->addMethod (new Method ("postRefresh", createMethodWrapper (&GtkForms::IPageDecorator::postRefresh)));
 			clazz->addMethod (new Method ("preClose", createMethodWrapper (&GtkForms::IPageDecorator::preClose)));
+			clazz->addMethod (new Method ("preReparent", createMethodWrapper (&GtkForms::IPageDecorator::preReparent)));
+			clazz->addMethod (new Method ("postReparent", createMethodWrapper (&GtkForms::IPageDecorator::postReparent)));
 		}
 	}
 	{
@@ -165,6 +167,8 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("preSubmit", createMethodWrapper (&GtkForms::AbstractPageDecorator::preSubmit)));
 			clazz->addMethod (new Method ("postRefresh", createMethodWrapper (&GtkForms::AbstractPageDecorator::postRefresh)));
 			clazz->addMethod (new Method ("preClose", createMethodWrapper (&GtkForms::AbstractPageDecorator::preClose)));
+			clazz->addMethod (new Method ("preReparent", createMethodWrapper (&GtkForms::AbstractPageDecorator::preReparent)));
+			clazz->addMethod (new Method ("postReparent", createMethodWrapper (&GtkForms::AbstractPageDecorator::postReparent)));
 		}
 	}
 	{
@@ -573,6 +577,8 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("getController", createMethodWrapper (&GtkForms::AbstractView::getController)));
 			clazz->addMethod (new Method ("setController", createMethodWrapper (&GtkForms::AbstractView::setController)));
 			clazz->addMethod (new Method ("setConfig", createMethodWrapper (&GtkForms::AbstractView::setConfig)));
+			clazz->addMethod (new Method ("isDeleteOnClose", createMethodWrapper (&GtkForms::AbstractView::isDeleteOnClose)));
+			clazz->addMethod (new Method ("setDeleteOnClose", createMethodWrapper (&GtkForms::AbstractView::setDeleteOnClose)));
 		}
 	}
 	{
@@ -620,6 +626,8 @@ void createReflectionDatabase_dataFlowGui ()
 			clazz->addMethod (new Method ("replace", createMethodWrapper (&GtkForms::AbstractController::replace)));
 			clazz->addMethod (new Method ("getName", createMethodWrapper (&GtkForms::AbstractController::getName)));
 			clazz->addMethod (new Method ("contId", createMethodWrapper (&GtkForms::AbstractController::contId)));
+			clazz->addMethod (new Method ("isDeleteOnClose", createMethodWrapper (&GtkForms::AbstractController::isDeleteOnClose)));
+			clazz->addMethod (new Method ("setDeleteOnClose", createMethodWrapper (&GtkForms::AbstractController::setDeleteOnClose)));
 			clazz->addMethod (new Method ("findByName", createMethodWrapper (&GtkForms::AbstractController::findByName)));
 			clazz->addMethod (new Method ("validate", createMethodWrapper (&GtkForms::AbstractController::validate)));
 			clazz->addMethod (new Method ("getValidators", createMethodWrapper (&GtkForms::AbstractController::getValidators)));
